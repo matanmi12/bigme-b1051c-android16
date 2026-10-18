@@ -1,0 +1,6 @@
+  PASS slot_suffix = _b
+  PASS boot_completed = 1
+  PASS microSD cap (DT max-frequency) = 02faf080
+  PASS veritymode = disabled
+  PASS build.type = userdebug
+  PASS fingerprint is TrebleDroid

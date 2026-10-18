@@ -6,6 +6,14 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <!-- package visibility (Android 11+): every launchable app, for per-app profiles and the icon check -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
     <!-- publish the front-light values for the QS sliders; granted with `pm grant` (development permission) -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
 
@@ -26,10 +34,22 @@
                 android:value="Re-applies e-ink display settings and switches the frontlight off while the screen sleeps" />
         </service>
 
+        <!-- maintenance actions for adb (root/shell may target a non-exported receiver explicitly):
+             am broadcast -n org.b1051c.einkctl/.ActionReceiver -a org.b1051c.einkctl.WHITE_WALLPAPER -->
+        <receiver android:name=".ActionReceiver" android:exported="false" />
+        <!-- KOReader's Bigme patch (full refresh, front light); harmless actions only, see KoBridgeReceiver -->
+        <receiver android:name=".KoBridgeReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="org.b1051c.einkctl.KO_REFRESH" />
+                <action android:name="org.b1051c.einkctl.KO_LIGHT" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <!-- an update kills the foreground keeper and Android does not restart it -->
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
 
@@ -64,6 +84,10 @@
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
         </service>
         <service android:name=".TileAntiShake" android:label="@string/tile_antishake" android:icon="@drawable/ic_tile_antishake"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileColorRestore" android:label="@string/tile_colorrestore" android:icon="@drawable/ic_tile_colorrestore"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
         </service>

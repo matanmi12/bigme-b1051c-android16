@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="config_displayColorFadeDisabled">true</bool>
+    <!-- App icon shape = squircle (path from AOSP IconShapeSquircleOverlay, Apache 2.0), close to Bigme's own
+         icon frame. TrebleDroid's auto-generated product RRO (priority 27) sets a circle; this overlay is above it. -->
+    <string name="config_icon_mask" translatable="false">"M50,0 C10,0 0,10 0,50 0,90 10,100 50,100 90,100 100,90 100,50 100,10 90,0 50,0 Z"</string>
+    <!-- Wi-Fi-only tablet: the vendor VINTF manifest declares IRadio but no modem/rild ever starts, so with these true
+         RIL.mIsCellularSupported is set and com.android.phone blocks in IRadio.getService() until its startup ANR
+         (restart loop every 5-10 s). Paired with system/etc/permissions/b1051c-wifi-only.xml (telephony features off),
+         since TelephonyManager.hasCapability() returns true whenever the feature exists. -->
+    <bool name="config_voice_capable">false</bool>
+    <bool name="config_sms_capable">false</bool>
+    <bool name="config_mobile_data_capable">false</bool>
 </resources>

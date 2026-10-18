@@ -2,7 +2,7 @@
 """Catch the preloader (or reuse a live DA session) and shut the DA down with bootmode=2 (FASTBOOT),
 so LK boots straight into fastboot. No partition is read or written."""
 import sys, os, runpy
-MTK = os.path.expanduser(os.environ.get("MTK", "~/Desktop/Bigme/work/ref/mtkclient"))
+MTK = "~/Desktop/Bigme/work/ref/mtkclient"
 sys.path.insert(0, MTK); os.chdir(MTK)
 from mtkclient.Library.DA import mtk_daloader
 _orig = mtk_daloader.DAloader.shutdown

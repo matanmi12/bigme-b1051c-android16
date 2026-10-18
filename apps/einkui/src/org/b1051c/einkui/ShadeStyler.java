@@ -200,6 +200,7 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         }
         if (v.getVisibility() == View.GONE) return;
         if (id == idFooterActions && id != 0) { styleFooter(v); return; }
+        if (v.getClass().getName().endsWith(".QSTileViewImpl")) noMarquee(v);
         if (mode != 0) {
             String cn = v.getClass().getName();
             if (cn.endsWith(".QSTileViewImpl")) { styleTile(v); return; }
@@ -213,6 +214,18 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         if (v instanceof ViewGroup) {
             ViewGroup g = (ViewGroup) v;
             for (int i = 0; i < g.getChildCount(); i++) walk(g.getChildAt(i), header, inNotif);
+        }
+    }
+
+    /** Long tile labels scroll (marquee) forever; on e-ink that is a panel update every frame while the shade is
+     *  open (seen 2026-10-19: "Refresh mode", "Colour inversion", "Aeroplane mode"). Truncate with an ellipsis. */
+    private static void noMarquee(View v) {
+        if (v instanceof TextView) {
+            TextView tv = (TextView) v;
+            if (tv.getEllipsize() == android.text.TextUtils.TruncateAt.MARQUEE) tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        } else if (v instanceof ViewGroup) {
+            ViewGroup g = (ViewGroup) v;
+            for (int i = 0; i < g.getChildCount(); i++) noMarquee(g.getChildAt(i));
         }
     }
 

@@ -1,17 +1,16 @@
 #!/bin/bash
-# Static framework RRO (config_displayColorFadeDisabled=true): the panel keeps the last image while asleep.
-# Output: build/B1051cFrameworkOverlay.apk (goes to the module's system/product/overlay/).
+# Static framework RRO for the b1051c-eink-compat module. Output: build/B1051cFrameworkOverlay.apk
+# (copy to work/module/b1051c-eink-compat/system/product/overlay/). Signature is irrelevant for a preinstalled
+# overlay; signed with the project debug key (work/app/debug.keystore) like v0.1.4–0.1.7, so the cert never changes.
 set -euo pipefail
 cd "$(dirname "$0")"
-SDK=${ANDROID_SDK:-/opt/homebrew/share/android-commandlinetools}
+SDK=/opt/homebrew/share/android-commandlinetools
 BT=$SDK/build-tools/36.0.0
 AJ=$SDK/platforms/android-35/android.jar
 rm -rf build && mkdir -p build
 "$BT/aapt2" compile --dir res -o build/res.zip
-"$BT/aapt2" link -o build/unsigned.apk -I "$AJ" --manifest AndroidManifest.xml build/res.zip
+"$BT/aapt2" link -o build/unsigned.apk -I "$AJ" --manifest AndroidManifest.xml build/res.zip \
+  --min-sdk-version 31 --target-sdk-version 35
 "$BT/zipalign" -f -p 4 build/unsigned.apk build/aligned.apk
-KS=../debug.keystore
-[ -f "$KS" ] || keytool -genkeypair -keystore "$KS" -storepass android -keypass android -alias einkctl \
-  -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=local build" >/dev/null 2>&1
-"$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --ks-key-alias einkctl --out build/B1051cFrameworkOverlay.apk build/aligned.apk
-echo "built build/B1051cFrameworkOverlay.apk"
+"$BT/apksigner" sign --ks ../debug.keystore --ks-pass pass:android --ks-key-alias einkctl --out build/B1051cFrameworkOverlay.apk build/aligned.apk
+shasum -a 256 build/B1051cFrameworkOverlay.apk

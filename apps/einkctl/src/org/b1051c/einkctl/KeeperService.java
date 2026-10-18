@@ -22,13 +22,21 @@ public class KeeperService extends Service {
         }
     };
 
+    /** ACTION_SHUTDOWN is not exempt from the implicit-broadcast limits, so it is registered here, not in the manifest. */
+    private final BroadcastReceiver shutdown = new BroadcastReceiver() {
+        @Override public void onReceive(Context c, Intent i) {
+            PendingResult r = goAsync();
+            ShutdownScreen.show(c, r::finish);
+        }
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
         NotificationManager nm = getSystemService(NotificationManager.class);
         nm.createNotificationChannel(new NotificationChannel(CH, "E-Ink Control", NotificationManager.IMPORTANCE_MIN));
         Notification n = new Notification.Builder(this, CH)
-                .setSmallIcon(R.drawable.ic_eink)
+                .setSmallIcon(R.drawable.ic_stat_eink)
                 .setContentTitle("E-Ink Control active")
                 .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class),
                         PendingIntent.FLAG_IMMUTABLE))
@@ -37,27 +45,17 @@ public class KeeperService extends Service {
         IntentFilter f = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         f.addAction(Intent.ACTION_SCREEN_ON);
         registerReceiver(screen, f);
+        registerReceiver(shutdown, new IntentFilter(Intent.ACTION_SHUTDOWN));
         getContentResolver().registerContentObserver(
                 android.provider.Settings.System.getUriFor(android.provider.Settings.System.SCREEN_BRIGHTNESS),
                 false, brightness);
         getContentResolver().registerContentObserver(android.provider.Settings.Secure.getUriFor(Eink.KEY_COLD), false, qsLight);
         getContentResolver().registerContentObserver(android.provider.Settings.Secure.getUriFor(Eink.KEY_WARM), false, qsLight);
+        Profiles.seed(this);
         Eink.applyAll(this);
-        tick.postDelayed(scheduleCheck, 60_000);
+        // started while asleep (app update, late boot broadcast): applyAll lit the panel — keep it dark until SCREEN_ON
+        if (!getSystemService(android.os.PowerManager.class).isInteractive()) Eink.frontlightOff();
     }
-
-    /** Re-evaluate the night schedule once a minute; only touches the light when day/night actually flips. */
-    private final android.os.Handler tick = new android.os.Handler(android.os.Looper.getMainLooper());
-    private Boolean lastNight = null;
-    private final Runnable scheduleCheck = new Runnable() {
-        @Override public void run() {
-            boolean night = Eink.nightNow(Eink.prefs(KeeperService.this));
-            android.os.PowerManager pm = getSystemService(android.os.PowerManager.class);
-            if (lastNight != null && night != lastNight && pm.isInteractive()) Eink.applyFrontlight(KeeperService.this);
-            lastNight = night;
-            tick.postDelayed(this, 60_000);
-        }
-    };
 
     private final android.database.ContentObserver brightness =
             new android.database.ContentObserver(new android.os.Handler(android.os.Looper.getMainLooper())) {
@@ -75,8 +73,8 @@ public class KeeperService extends Service {
     @Override public int onStartCommand(Intent i, int flags, int id) { return START_STICKY; }
 
     @Override public void onDestroy() {
-        tick.removeCallbacks(scheduleCheck);
         unregisterReceiver(screen);
+        unregisterReceiver(shutdown);
         getContentResolver().unregisterContentObserver(brightness);
         getContentResolver().unregisterContentObserver(qsLight);
         super.onDestroy();

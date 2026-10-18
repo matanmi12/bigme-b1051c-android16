@@ -7,8 +7,7 @@ cd "$(dirname "$0")"
 SDK=/opt/homebrew/share/android-commandlinetools
 BT=$SDK/build-tools/36.0.0
 AJ=$SDK/platforms/android-35/android.jar
-KEYS="${KEYS:-../../keys}"
-[ -f "$KEYS/platform.pk8" ] || { echo "missing $KEYS/platform.pk8: run tools/fetch-aosp-testkeys.sh" >&2; exit 1; }
+KEYS=../../sysui/keys
 export JAVA_HOME=/opt/homebrew/opt/openjdk@17
 export PATH="$JAVA_HOME/bin:$PATH"
 rm -rf build && mkdir -p build/gen/org/b1051c/einkui build/stubs build/classes build/dex

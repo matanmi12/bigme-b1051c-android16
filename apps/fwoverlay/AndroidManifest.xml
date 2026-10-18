@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.b1051c.overlay.framework"
-    android:versionCode="1" android:versionName="1.0">
+    android:versionCode="2" android:versionName="1.1">
     <!-- E-ink: no fade-to-black before the screen sleeps, so the panel keeps the last image (it needs no power) -->
     <overlay android:targetPackage="android" android:isStatic="true" android:priority="910" />
     <application android:hasCode="false" />

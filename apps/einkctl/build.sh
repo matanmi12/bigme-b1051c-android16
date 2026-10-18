@@ -9,7 +9,8 @@ export JAVA_HOME=/opt/homebrew/opt/openjdk@17
 export PATH="$JAVA_HOME/bin:$PATH"
 rm -rf build && mkdir -p build/gen build/classes build/dex
 "$BT/aapt2" compile --dir res -o build/res.zip
-"$BT/aapt2" link -o build/base.apk -I "$AJ" --manifest AndroidManifest.xml --java build/gen build/res.zip \
+ASSETS=(); [ -d assets ] && ASSETS=(-A assets)   # private shutdown logo (work/bootlogo), never in the public repo
+"$BT/aapt2" link -o build/base.apk -I "$AJ" --manifest AndroidManifest.xml --java build/gen build/res.zip "${ASSETS[@]}" \
   --min-sdk-version 31 --target-sdk-version 35 --version-code "${VERSION_CODE:-1}" --version-name "${VERSION_NAME:-0.1.0}"
 javac -Xlint:-options -source 17 -target 17 -encoding UTF-8 -classpath "$AJ" -d build/classes $(find src build/gen -name '*.java')
 "$BT/d8" --lib "$AJ" --min-api 31 --release --output build/dex $(find build/classes -name '*.class')

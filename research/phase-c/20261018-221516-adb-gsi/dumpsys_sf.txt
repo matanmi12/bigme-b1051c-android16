@@ -1,0 +1,826 @@
+Build configuration: [sf PRESENT_TIME_OFFSET=0 FORCE_HWC_FOR_RBG_TO_YUV=1 MAX_VIRT_DISPLAY_DIM=0 RUNNING_WITHOUT_SYNC_FRAMEWORK=0 NUM_FRAMEBUFFER_SURFACE_BUFFERS=3]
+
+Display identification data:
+Display 0 (HWC display 0): no display identification data
+
+Wide-Color information:
+Device supports wide color: 0
+DisplayColorSetting: Unmanaged
+Display 0 color modes:
+    ColorMode::NATIVE (0)
+    Current color mode: ColorMode::NATIVE (0)
+
+Sync configuration: [using: EGL_ANDROID_native_fence_sync EGL_KHR_wait_sync]
+
+Scheduler:
+Features
+    PresentFences=true
+    KernelIdleTimer=false
+    ContentDetection=true
+
+Policy
+    pacesetterDisplayId=0
+    layerHistory={size=88, active=1}
+	GameFrameRateOverrides=
+		(uid, gameModeOverride, gameDefaultOverride)=
+    touchTimer=200.000 ms
+    displayPowerTimer=nullopt
+
+FrameRateOverrides=none
+
+           app phase:            1 ns	         SF phase:    -13333333 ns
+           app duration:  20000000 ns	         SF duration:  30000000 ns
+     early app phase:            1 ns	   early SF phase:    -13333333 ns
+     early app duration:  20000000 ns	   early SF duration:  30000000 ns
+  GL early app phase:            1 ns	GL early SF phase:    -13333333 ns
+  GL early app duration:  20000000 ns	GL early SF duration:  30000000 ns
+       HWC min duration:  23000000 ns
+
+ScreenOff: 0d00:00:57.017
+60.00 Hz: 0d00:14:48.975
+
+Pacesetter Display 0
+    renderRate=60.00 Hz
+    activeMode={id=0, hwcId=0, resolution=2480x1860, vsyncRate=60.00 Hz, dpi=1004.66x425.62, group=0, vrrConfig=N/A, supportedHdrTypes=INVALID}
+    displayModes=
+        {id=0, hwcId=0, resolution=2480x1860, vsyncRate=60.00 Hz, dpi=1004.66x425.62, group=0, vrrConfig=N/A, supportedHdrTypes=INVALID}
+    displayManagerPolicy={defaultModeId=0, allowGroupSwitching=false, primaryRanges={physical=[0.00 Hz, 61.00 Hz], render=[0.00 Hz, 61.00 Hz]}, appRequestRanges={physical=[0.00 Hz, 61.00 Hz], render=[0.00 Hz, 61.00 Hz]} idleScreenConfig=nullptr}
+    frameRateOverrideConfig=Enabled
+    idleTimer=
+        interval=nullopt
+        controller=Platform
+    Total missed frame count: 72
+    HWC missed frame count: 7
+    GPU missed frame count: 65
+
+
+debugDisplayModeSetByBackdoor=false
+
+app: state=Idle VSyncState={displayId=0, count=781}
+mWorkDuration=20.00 mReadyDuration=30.00 last vsync time -18929.64ms relative to now
+ with vsync committed at -18946.30ms  pending events (count=0):
+  connections (count=21):
+    Connection{0xb40000709841ebd0, VSyncRequest::None}
+    Connection{0xb40000709841b150, VSyncRequest::None}
+    Connection{0xb40000709841f110, VSyncRequest::None}
+    Connection{0xb40000709841e390, VSyncRequest::None}
+    Connection{0xb40000709841b390, VSyncRequest::None}
+    Connection{0xb40000709841cdd0, VSyncRequest::None}
+    Connection{0xb40000709841ea50, VSyncRequest::None}
+    Connection{0xb400007098424210, VSyncRequest::None}
+    Connection{0xb40000709841a250, VSyncRequest::None}
+    Connection{0xb400007098428b90, VSyncRequest::None}
+    Connection{0xb400007098416050, VSyncRequest::None}
+    Connection{0xb400007098423010, VSyncRequest::None}
+    Connection{0xb400007098419890, VSyncRequest::None}
+    Connection{0xb40000709841dcd0, VSyncRequest::None}
+    Connection{0xb400007098426310, VSyncRequest::None}
+    Connection{0xb400007098426910, VSyncRequest::None}
+    Connection{0xb40000709841e2d0, VSyncRequest::None}
+    Connection{0xb40000709841d0d0, VSyncRequest::None}
+    Connection{0xb40000709841e090, VSyncRequest::None}
+    Connection{0xb400007098420310, VSyncRequest::None}
+    Connection{0xb400007098425ad0, VSyncRequest::None}
+
+VsyncSchedule for pacesetter 0:
+hwVsyncState=Disabled
+pendingHwVsyncState=Disabled
+
+VsyncController:
+VsyncReactor in use
+Has 1 unfired fences
+mInternalIgnoreFences=0 mExternalIgnoreFences=0
+mMoreSamplesNeeded=0 mPeriodConfirmationInProgress=0
+mModePtrTransitioningTo=nullptr
+No Last HW vsync
+VSyncTracker:
+	mDisplayModePtr={id=0, hwcId=0, resolution=2480x1860, vsyncRate=60.00 Hz, dpi=1004.66x425.62, group=0, vrrConfig=N/A, supportedHdrTypes=INVALID}
+	Refresh Rate Map:
+		For ideal period 16.67ms: period = 16.54ms, intercept = 269703
+	mTimelines.size()=1
+VsyncDispatch:
+	Timer:
+		DebugState: Waiting
+	mTimerSlack: 0.50ms mMinVsyncDistance: 3.00ms
+	mIntendedWakeupTime: 9223370964992.00ms from now
+	mLastTimerCallback: 18209.59ms ago mLastTimerSchedule: 18220.89ms ago
+	Callbacks:
+		sf:  
+			workDuration: 30.00ms readyDuration: 0.00ms lastVsync: -18213.06ms relative to now committedVsync: -18213.06ms relative to now
+			mLastDispatchTime: 18179.73ms ago
+		app:  
+			workDuration: 20.00ms readyDuration: 30.00ms lastVsync: -18946.40ms relative to now committedVsync: -18946.40ms relative to now
+			mLastDispatchTime: 18929.74ms ago
+		appSf:  
+			workDuration: 16.67ms readyDuration: 30.00ms lastVsync: -84918.69ms relative to now committedVsync: -84918.69ms relative to now
+			mLastDispatchTime: 84902.02ms ago
+
+SurfaceFlinger New Frontend Enabled:true
+Active Layers - layers with client handles (count = 88)
+
+Composition list (bottom to top)
+LayerStack=0
+  Layer [68] Wallpaper BBQ wrapper#68
+    visible reason= buffer=21071109554176 frame=1 color{< 0, 0, 0, 1 >}
+    bounds={-93,-124,2604,1953} toDisplayTransform={ scale x=1.1000 y=1.1000  tx=-93.0000 ty=-124.0000 }
+    input{(NO_INPUT_CHANNEL) touchableRegion={-92,-123,-123,-92}}
+  Layer [91] app.lawnchair/app.lawnchair.LawnchairLauncher#91
+    visible reason= buffer=24043226923019 frame=2 color{< 0, 0, 0, 1 >}
+    bounds={0,0,2480,1860}
+    input{(DUPLICATE_TOUCH_TO_WALLPAPER) canOccludePresentation touchableRegion={0,0,2480,1860}}
+  Layer [80] StatusBar#80
+    visible reason= buffer=21071109554190 frame=23 color{< 0, 0, 0, 1 >}
+    bounds={0,0,53,1860}
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY) touchableRegion={0,0,53,1860}}
+  Layer [87] Taskbar#87
+    visible reason= buffer=22226455756808 frame=25 color{< 0, 0, 0, 1 >}
+    bounds={0,2209,2480,1860} toDisplayTransform={ tx=0.0000 ty=2209.0000 }
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY | WATCH_OUTSIDE_TOUCH | SLIPPERY) touchableRegion={0,2357,2480,1860}}
+  Layer [102] EinkNavRefresh#102
+    visible reason= buffer=24103356465156 frame=10 color{< 0, 0, 0, 1 >}
+    bounds={164,2370,2466,260} toDisplayTransform={ tx=164.0000 ty=2370.0000 }
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY) canOccludePresentation touchableRegion={164,2370,2466,260}}
+
+Input list
+LayerStack=0
+  Layer [102] EinkNavRefresh#102
+    visible reason= buffer=24103356465156 frame=10 color{< 0, 0, 0, 1 >}
+    bounds={164,2370,2466,260} toDisplayTransform={ tx=164.0000 ty=2370.0000 }
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY) canOccludePresentation touchableRegion={164,2370,2466,260}}
+  Layer [87] Taskbar#87
+    visible reason= buffer=22226455756808 frame=25 color{< 0, 0, 0, 1 >}
+    bounds={0,2209,2480,1860} toDisplayTransform={ tx=0.0000 ty=2209.0000 }
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY | WATCH_OUTSIDE_TOUCH | SLIPPERY) touchableRegion={0,2357,2480,1860}}
+  Layer [80] StatusBar#80
+    visible reason= buffer=21071109554190 frame=23 color{< 0, 0, 0, 1 >}
+    bounds={0,0,53,1860}
+    input{(NOT_FOCUSABLE | TRUSTED_OVERLAY) touchableRegion={0,0,53,1860}}
+  Layer [64] Dim layer#64
+    invisible reason=hidden by parent or layer flag
+    bounds={-18600,-24800,24800,18600}
+    input{(NO_INPUT_CHANNEL | NOT_VISIBLE) touchableRegion={0,0,0,0}}
+  Layer [63] Dim layer#63
+    invisible reason=hidden by parent or layer flag
+    bounds={-18600,-24800,24800,18600}
+    input{(NO_INPUT_CHANNEL | NOT_VISIBLE) touchableRegion={0,0,0,0}}
+  Layer [91] app.lawnchair/app.lawnchair.LawnchairLauncher#91
+    visible reason= buffer=24043226923019 frame=2 color{< 0, 0, 0, 1 >}
+    bounds={0,0,2480,1860}
+    input{(DUPLICATE_TOUCH_TO_WALLPAPER) canOccludePresentation touchableRegion={0,0,2480,1860}}
+  Layer [93] 5cde322 ActivityRecordInputSink app.lawnchair/.LawnchairLauncher#93
+    invisible reason=nothing to draw
+    bounds={-18600,-24800,24800,18600}
+    input{(NO_INPUT_CHANNEL | NOT_FOCUSABLE) replaceTouchableRegionWithCrop touchableRegion={-18600,-24800,24800,18600}}
+  Layer [68] Wallpaper BBQ wrapper#68
+    visible reason= buffer=21071109554176 frame=1 color{< 0, 0, 0, 1 >}
+    bounds={-93,-124,2604,1953} toDisplayTransform={ scale x=1.1000 y=1.1000  tx=-93.0000 ty=-124.0000 }
+    input{(NO_INPUT_CHANNEL) touchableRegion={-92,-123,-123,-92}}
+  Layer [67] com.android.systemui.wallpapers.ImageWallpaper#67
+    invisible reason=nothing to draw
+    bounds={-18600,-24800,24800,18600} toDisplayTransform={ scale x=1.1000 y=1.1000  tx=-93.0000 ty=-124.0000 }
+    input{(NOT_FOCUSABLE | NOT_TOUCHABLE | IS_WALLPAPER) touchableRegion={-92,-123,-123,-92}}
+
+Layer Hierarchy
+ ROOT
+ ├─ Display 0 name="Built-in Screen"#47 pid=4497 uid=1000
+ │  ├─ WindowedMagnification:0:31#3 pid=4497 uid=1000
+ │  │  ├─ HideDisplayCutout:0:14#4 pid=4497 uid=1000
+ │  │  │  └─ OneHanded:0:14#5 pid=4497 uid=1000
+ │  │  │     ├─ AppZoomOut:0:0#6 pid=4497 uid=1000
+ │  │  │     │  └─ Leaf:0:0#7 pid=4497 uid=1000
+ │  │  │     ├─ Leaf:1:1#8 pid=4497 uid=1000
+ │  │  │     │  └─ WallpaperWindowToken{4a844da showWhenLocked=false}#65 pid=4497 uid=1000
+ │  │  │     │     └─ d8e94b6 com.android.systemui.wallpapers.ImageWallpaper#66 pid=4497 uid=1000
+ │  │  │     │        └─ com.android.systemui.wallpapers.ImageWallpaper#67 pid=4906 uid=10113
+ │  │  │     │           └─ Wallpaper BBQ wrapper#68 pid=4906 uid=10113
+ │  │  │     └─ AppZoomOut:2:14#9 pid=4497 uid=1000
+ │  │  │        ├─ DefaultTaskDisplayArea#10 pid=4497 uid=1000
+ │  │  │        │  ├─ Task=1#51 pid=4497 uid=1000
+ │  │  │        │  │  ├─ Task=113#81 pid=4497 uid=1000
+ │  │  │        │  │  │  └─ ActivityRecord{36323763 u0 app.lawnchair/.LawnchairLauncher#82 pid=4497 uid=1000
+ │  │  │        │  │  │     ├─ 5cde322 ActivityRecordInputSink app.lawnchair/.LawnchairLauncher#93 pid=4497 uid=1000
+ │  │  │        │  │  │     ├─ 56aac12 app.lawnchair/app.lawnchair.LawnchairLauncher#89 pid=4497 uid=1000
+ │  │  │        │  │  │     │  ├─ app.lawnchair/app.lawnchair.LawnchairLauncher#91 requestedFrameRate: {0.00 Hz FrameRateCompatibility::Default FrameRateCategory::NoPreference} pid=5598 uid=10172
+ │  │  │        │  │  │     │  └─ (Relative) ImeContainer#13 parent=82 pid=4497 uid=1000
+ │  │  │        │  │  │     │     └─ WindowToken{4867004 type=2011 android.os.Binder@9398417}#97 pid=4497 uid=1000
+ │  │  │        │  │  │     │        └─ Surface(name=abffc72 InputMethod)/@0[...]mation-leash of insets_animation#100 pid=4497 uid=1000
+ │  │  │        │  │  │     │           └─ abffc72 InputMethod#98 pid=4497 uid=1000
+ │  │  │        │  │  └─ home_task_overlay_container#52 pid=4906 uid=10113
+ │  │  │        │  └─ Task=3#58 pid=4497 uid=1000
+ │  │  │        │     ├─ Task=4#59 pid=4497 uid=1000
+ │  │  │        │     │  └─ Dim layer#63 pid=4906 uid=10113
+ │  │  │        │     └─ Task=5#60 pid=4497 uid=1000
+ │  │  │        │        └─ Dim layer#64 pid=4906 uid=10113
+ │  │  │        ├─ Leaf:3:12#11 pid=4497 uid=1000
+ │  │  │        │  └─ WindowToken{7934cbe type=2038 android.os.BinderProxy@d6c9329}#61 pid=4497 uid=1000
+ │  │  │        │     └─ d7e2bc3 ShellDropTarget#62 pid=4497 uid=1000
+ │  │  │        └─ ImePlaceholder:13:14#12 pid=4497 uid=1000
+ │  │  ├─ OneHanded:15:15#14 pid=4497 uid=1000
+ │  │  │  └─ Leaf:15:15#15 pid=4497 uid=1000
+ │  │  │     └─ WindowToken{8d48fd4 type=2000 android.os.BinderProxy@d85e7e6}#76 pid=4497 uid=1000
+ │  │  │        └─ Surface(name=84c057d StatusBar)/@0x9[...]mation-leash of insets_animation#114 pid=4497 uid=1000
+ │  │  │           └─ 84c057d StatusBar#77 pid=4497 uid=1000
+ │  │  │              └─ StatusBar#80 requestedFrameRate: {0.00 Hz FrameRateCompatibility::Default FrameRateCategory::NoPreference} pid=4906 uid=10113
+ │  │  ├─ HideDisplayCutout:16:16#16 pid=4497 uid=1000
+ │  │  │  └─ OneHanded:16:16#17 pid=4497 uid=1000
+ │  │  │     └─ AppZoomOut:16:16#18 pid=4497 uid=1000
+ │  │  │        └─ Leaf:16:16#19 pid=4497 uid=1000
+ │  │  ├─ OneHanded:17:17#20 pid=4497 uid=1000
+ │  │  │  └─ Leaf:17:17#21 pid=4497 uid=1000
+ │  │  │     └─ WindowToken{201a41a type=2040 android.os.BinderProxy@ae2450e}#74 pid=4497 uid=1000
+ │  │  │        └─ fb40928 NotificationShade#75 pid=4497 uid=1000
+ │  │  ├─ HideDisplayCutout:18:23#22 pid=4497 uid=1000
+ │  │  │  └─ OneHanded:18:23#23 pid=4497 uid=1000
+ │  │  │     ├─ AppZoomOut:18:18#24 pid=4497 uid=1000
+ │  │  │     │  └─ Leaf:18:18#25 pid=4497 uid=1000
+ │  │  │     ├─ Leaf:19:19#26 pid=4497 uid=1000
+ │  │  │     ├─ AppZoomOut:20:21#27 pid=4497 uid=1000
+ │  │  │     │  └─ Leaf:20:21#28 pid=4497 uid=1000
+ │  │  │     ├─ Leaf:22:22#29 pid=4497 uid=1000
+ │  │  │     └─ AppZoomOut:23:23#30 pid=4497 uid=1000
+ │  │  │        └─ Leaf:23:23#31 pid=4497 uid=1000
+ │  │  ├─ Leaf:24:25#32 pid=4497 uid=1000
+ │  │  │  └─ WindowToken{63797fa type=2019 android.os.BinderProxy@225fd4d}#85 pid=4497 uid=1000
+ │  │  │     └─ Surface(name=23dee1c Taskbar)/@0x249[...]mation-leash of insets_animation#113 pid=4497 uid=1000
+ │  │  │        └─ 23dee1c Taskbar#86 pid=4497 uid=1000
+ │  │  │           └─ Taskbar#87 requestedFrameRate: {0.00 Hz FrameRateCompatibility::Default FrameRateCategory::NoPreference} pid=5175 uid=10109
+ │  │  └─ HideDisplayCutout:26:31#33 pid=4497 uid=1000
+ │  │     └─ OneHanded:26:31#34 pid=4497 uid=1000
+ │  │        └─ AppZoomOut:26:31#35 pid=4497 uid=1000
+ │  │           └─ Leaf:26:31#36 pid=4497 uid=1000
+ │  │              └─ WindowToken{220e520 type=2032 android.os.Binder@9e66c23}#84 pid=4497 uid=1000
+ │  │                 └─ 2f593a9 EinkNavRefresh#101 pid=4497 uid=1000
+ │  │                    └─ EinkNavRefresh#102 requestedFrameRate: {0.00 Hz FrameRateCompatibility::Default FrameRateCategory::NoPreference} pid=5612 uid=10144
+ │  ├─ HideDisplayCutout:32:35#37 pid=4497 uid=1000
+ │  │  ├─ OneHanded:32:32#38 pid=4497 uid=1000
+ │  │  │  └─ AppZoomOut:32:32#39 pid=4497 uid=1000
+ │  │  │     └─ Leaf:32:32#40 pid=4497 uid=1000
+ │  │  ├─ AppZoomOut:33:33#41 pid=4497 uid=1000
+ │  │  │  └─ Leaf:33:33#42 pid=4497 uid=1000
+ │  │  └─ OneHanded:34:35#43 pid=4497 uid=1000
+ │  │     └─ AppZoomOut:34:35#44 pid=4497 uid=1000
+ │  │        └─ Leaf:34:35#45 pid=4497 uid=1000
+ │  ├─ Leaf:36:36#46 pid=4497 uid=1000
+ │  ├─ Accessibility Overlays#50 pid=4497 uid=1000
+ │  ├─ Input Overlays#49 pid=4497 uid=1000
+ │  └─ Display Overlays#48 pid=4497 uid=1000
+ ├─ Input Consumer recents_animation_input_consumer#83 pid=4497 uid=1000
+ ├─ WindowToken{a439766 type=2024 android.os.BinderProxy@1d303c1}#69 pid=4497 uid=1000
+ │  └─ 5ccbaa7 ScreenDecorOverlay#70 pid=4497 uid=1000
+ └─ WindowToken{e44579f type=2024 android.os.BinderProxy@dc42d3e}#71 pid=4497 uid=1000
+    └─ 9c5f0ec ScreenDecorOverlayBottom#72 pid=4497 uid=1000
+Offscreen Hierarchy
+ ROOT
+ └─ NotificationShade#109 requestedFrameRate: {0.00 Hz FrameRateCompatibility::Default FrameRateCategory::HighHint} pid=4906 uid=10113
+
+Display 0 (active) HWC layers:
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Layer name
+           Z |  Window Type |  Comp Type |  Transform |   Disp Frame (LTRB) |          Source Crop (LTRB) |     Frame Rate (Explicit) (Seamlessness) [Focused]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Wallpaper BBQ wrapper#68
+           1 |            0 |     CLIENT |          0 |    0    0 2480 1860 |  113.0   85.0 2367.0 1775.0 |                                              [ ]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ app.lawnchair/app.lawnchair.LawnchairLauncher#91
+           3 |            1 |     CLIENT |          0 |    0    0 2480 1860 |    0.0    0.0 2480.0 1860.0 |        Cat::NoPreference           Default    [*]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ StatusBar#80
+           6 |         2000 |     CLIENT |          0 |    0    0   53 1860 |    0.0    0.0   53.0 1860.0 |        Cat::NoPreference           Default    [ ]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Taskbar#87
+           7 |         2019 |     CLIENT |          0 | 2209    0 2480 1860 |    0.0    0.0  271.0 1860.0 |        Cat::NoPreference           Default    [ ]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ EinkNavRefresh#102
+           8 |         2032 |     CLIENT |          0 | 2370 1600 2466 1696 |    0.0    0.0   96.0   96.0 |        Cat::NoPreference           Default    [ ]
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Window Infos:
+  max send vsync id: -1
+  max send delay (ns): 0 ns
+  unsent messages: 0
+
+Displays (1 entries)
+Display 0
+    port=0
+    connectionType=Internal
+    colorModes=
+        ColorMode::NATIVE
+    deviceProductInfo=nullopt
+    name="Primary display"
+    powerMode=On
+    optimizationPolicy=optimizeForPerformance
+    renderRate=60.00 Hz
+    activeMode={id=0, hwcId=0, resolution=2480x1860, vsyncRate=60.00 Hz, dpi=1004.66x425.62, group=0, vrrConfig=N/A, supportedHdrTypes=INVALID}
+    displayModes=
+        {id=0, hwcId=0, resolution=2480x1860, vsyncRate=60.00 Hz, dpi=1004.66x425.62, group=0, vrrConfig=N/A, supportedHdrTypes=INVALID}
+    displayManagerPolicy={defaultModeId=0, allowGroupSwitching=false, primaryRanges={physical=[0.00 Hz, 61.00 Hz], render=[0.00 Hz, 61.00 Hz]}, appRequestRanges={physical=[0.00 Hz, 61.00 Hz], render=[0.00 Hz, 61.00 Hz]} idleScreenConfig=nullptr}
+    frameRateOverrideConfig=Enabled
+    idleTimer=
+        interval=nullopt
+        controller=Platform
+
+Display 0 (physical, "Primary display")
+   Composition Display State:
+   isEnabled=true isSecure=true usesDeviceComposition=false 
+   usesClientComposition=true flipClientTarget=false reusedClientComposition=false 
+   layerFilter={layerStack=0 toInternalDisplay=true }
+   transform (ROT_270) (ROTATE TRANSLATE)
+    0.0000  1.0000  0.0000
+    -1.0000  0.0000  1860.0000
+    0.0000  0.0000  1.0000
+   layerStackSpace=ProjectionSpace{bounds=Rect(0, 0, 1860, 2480), content=Rect(0, 0, 1860, 2480), orientation=ROTATION_0} 
+   framebufferSpace=ProjectionSpace{bounds=Rect(0, 0, 2480, 1860), content=Rect(0, 0, 2480, 1860), orientation=ROTATION_270} 
+   orientedDisplaySpace=ProjectionSpace{bounds=Rect(0, 0, 1860, 2480), content=Rect(0, 0, 1860, 2480), orientation=ROTATION_0} 
+   displaySpace=ProjectionSpace{bounds=Rect(0, 0, 2480, 1860), content=Rect(0, 0, 2480, 1860), orientation=ROTATION_270} 
+   needsFiltering=false 
+   colorMode=NATIVE (0) renderIntent=COLORIMETRIC (0) dataspace=UNKNOWN (0) 
+   colorTransformMatrix=[[1.000,0.000,0.000,0.000][0.000,1.000,0.000,0.000][0.000,0.000,1.000,0.000][0.000,0.000,0.000,1.000]] 
+   displayBrightnessNits=-1.000000 sdrWhitePointNits=-1.000000 clientTargetBrightness=1.000000 displayBrightness=nullopt 
+   compositionStrategyPredictionState=SUCCESS 
+   
+   treat170mAsSrgb=false 
+
+   Composition Display Color State:
+   HWC Support: wideColorGamut=false hdr10plus=true hdr10=true hlg=true dv=false metadata=7 
+   Hdr Luminance Info:desiredMinLuminance=0.000000 desiredMaxLuminance=500.000000 desiredMaxAverageLuminance=500.000000 
+
+   Composition RenderSurface State:
+   size=[2480 1860] ANativeWindow=0xb4000071184572d0 (format 1) 
+   FramebufferSurface
+      mDataspace=Default (0)
+      mAbandoned=0
+      - BufferQueue mMaxAcquiredBufferCount=2 mMaxDequeuedBufferCount=1
+        mDequeueBufferCannotBlock=0 mAsyncMode=0
+        mQueueBufferCanDrop=0 mLegacyBufferDrop=1
+        default-size=[2480x1860] default-format=1         transform-hint=00 frame-counter=305
+        mTransformHintInUse=00 mAutoPrerotation=0
+      FIFO(0):
+      (mConsumerName=FramebufferSurface, mConnectedApi=1, mConsumerUsageBits=6656, mId=113900000000, producer=[4409:/system/bin/surfaceflinger], consumer=[4409:/system/bin/surfaceflinger])
+      Slots:
+       >[01:0xb4000071384361a0] state=ACQUIRED 0xb400007078416690 frame=305 [2480x1860:2480,  1]
+        [00:0xb4000071384371b0] state=FREE     0xb400007078414b10 frame=303 [2480x1860:2480,  1]
+        [02:0xb400007138435190] state=FREE     0xb400007078417870 frame=304 [2480x1860:2480,  1]
+
+   5 Layers
+  - Output Layer 0xb4000071184f6e70(Wallpaper BBQ wrapper#68)
+        Region visibleRegion (this=0xb4000071184f6e88, count=1)
+    [-93, -124, 1953, 2604]
+        Region visibleNonTransparentRegion (this=0xb4000071184f6ef0, count=1)
+    [-93, -124, 1953, 2604]
+        Region coveredRegion (this=0xb4000071184f6f58, count=1)
+    [  0,   0, 1860, 2480]
+        Region output visibleRegion (this=0xb4000071184f7030, count=1)
+    [  0,   0, 2480, 1860]
+        Region shadowRegion (this=0xb4000071184f7098, count=1)
+    [  0,   0,   0,   0]
+        Region outputSpaceBlockingRegionHint (this=0xb4000071184f7130, count=1)
+    [  0,   0,   0,   0]
+      forceClientComposition=true clearClientTarget=false displayFrame=[0 0 2480 1860] sourceCrop=[113.000000 85.000000 2367.000000 1775.000000] bufferTransform=0 (0) dataspace=V0_SRGB (142671872) whitePointNits=-1.000000 dimmingRatio=1.000000 override buffer=0x0 override acquire fence=0x0 override display frame=[0 0 -1 -1] override dataspace=UNKNOWN (0) override display space=ProjectionSpace{bounds=Rect(0, 0, -1, -1), content=Rect(0, 0, -1, -1), orientation=ROTATION_0} override damage region=  Region  (this=0xb4000071184f71e8, count=1)
+    [  0,   0,  -1,  -1]
+ override visible region=  Region  (this=0xb4000071184f7250, count=1)
+    [  0,   0,   0,   0]
+ override peekThroughLayer=0x0 override disableBackgroundBlur=false 
+      hwc: layer=0x0815 composition=CLIENT (1) 
+  - Output Layer 0xb4000071184eedb0(app.lawnchair/app.lawnchair.LawnchairLauncher#91)
+        Region visibleRegion (this=0xb4000071184eedc8, count=1)
+    [  0,   0, 1860, 2480]
+        Region visibleNonTransparentRegion (this=0xb4000071184eee30, count=1)
+    [  0,   0, 1860, 2480]
+        Region coveredRegion (this=0xb4000071184eee98, count=2)
+    [  0,   0, 1860,  53]
+    [  0, 2209, 1860, 2480]
+        Region output visibleRegion (this=0xb4000071184eef70, count=1)
+    [  0,   0, 2480, 1860]
+        Region shadowRegion (this=0xb4000071184eefd8, count=1)
+    [  0,   0,   0,   0]
+        Region outputSpaceBlockingRegionHint (this=0xb4000071184ef070, count=1)
+    [  0,   0,   0,   0]
+      forceClientComposition=true clearClientTarget=false displayFrame=[0 0 2480 1860] sourceCrop=[0.000000 0.000000 2480.000000 1860.000000] bufferTransform=0 (0) dataspace=V0_SRGB (142671872) whitePointNits=-1.000000 dimmingRatio=1.000000 override buffer=0x0 override acquire fence=0x0 override display frame=[0 0 -1 -1] override dataspace=UNKNOWN (0) override display space=ProjectionSpace{bounds=Rect(0, 0, -1, -1), content=Rect(0, 0, -1, -1), orientation=ROTATION_0} override damage region=  Region  (this=0xb4000071184ef128, count=1)
+    [  0,   0,  -1,  -1]
+ override visible region=  Region  (this=0xb4000071184ef190, count=1)
+    [  0,   0,   0,   0]
+ override peekThroughLayer=0x0 override disableBackgroundBlur=false 
+      hwc: layer=0x0814 composition=CLIENT (1) 
+  - Output Layer 0xb4000071184ddf50(StatusBar#80)
+        Region visibleRegion (this=0xb4000071184ddf68, count=1)
+    [  0,   0, 1860,  53]
+        Region visibleNonTransparentRegion (this=0xb4000071184ddfd0, count=1)
+    [  0,   0, 1860,  53]
+        Region coveredRegion (this=0xb4000071184de038, count=1)
+    [  0,   0,   0,   0]
+        Region output visibleRegion (this=0xb4000071184de110, count=1)
+    [  0,   0,  53, 1860]
+        Region shadowRegion (this=0xb4000071184de178, count=1)
+    [  0,   0,   0,   0]
+        Region outputSpaceBlockingRegionHint (this=0xb4000071184de210, count=1)
+    [  0,   0,   0,   0]
+      forceClientComposition=true clearClientTarget=false displayFrame=[0 0 53 1860] sourceCrop=[0.000000 0.000000 53.000000 1860.000000] bufferTransform=0 (0) dataspace=UNKNOWN (0) whitePointNits=-1.000000 dimmingRatio=1.000000 override buffer=0x0 override acquire fence=0x0 override display frame=[0 0 -1 -1] override dataspace=UNKNOWN (0) override display space=ProjectionSpace{bounds=Rect(0, 0, -1, -1), content=Rect(0, 0, -1, -1), orientation=ROTATION_0} override damage region=  Region  (this=0xb4000071184de2c8, count=1)
+    [  0,   0,  -1,  -1]
+ override visible region=  Region  (this=0xb4000071184de330, count=1)
+    [  0,   0,   0,   0]
+ override peekThroughLayer=0x0 override disableBackgroundBlur=false 
+      hwc: layer=0x0813 composition=CLIENT (1) 
+  - Output Layer 0xb4000071184f0770(Taskbar#87)
+        Region visibleRegion (this=0xb4000071184f0788, count=1)
+    [  0, 2209, 1860, 2480]
+        Region visibleNonTransparentRegion (this=0xb4000071184f07f0, count=1)
+    [  0, 2209, 1860, 2480]
+        Region coveredRegion (this=0xb4000071184f0858, count=1)
+    [164, 2370, 260, 2466]
+        Region output visibleRegion (this=0xb4000071184f0930, count=1)
+    [2209,   0, 2480, 1860]
+        Region shadowRegion (this=0xb4000071184f0998, count=1)
+    [  0,   0,   0,   0]
+        Region outputSpaceBlockingRegionHint (this=0xb4000071184f0a30, count=1)
+    [  0,   0,   0,   0]
+      forceClientComposition=true clearClientTarget=false displayFrame=[2209 0 2480 1860] sourceCrop=[0.000000 0.000000 271.000000 1860.000000] bufferTransform=0 (0) dataspace=V0_SRGB (142671872) whitePointNits=-1.000000 dimmingRatio=1.000000 override buffer=0x0 override acquire fence=0x0 override display frame=[0 0 -1 -1] override dataspace=UNKNOWN (0) override display space=ProjectionSpace{bounds=Rect(0, 0, -1, -1), content=Rect(0, 0, -1, -1), orientation=ROTATION_0} override damage region=  Region  (this=0xb4000071184f0ae8, count=1)
+    [  0,   0,  -1,  -1]
+ override visible region=  Region  (this=0xb4000071184f0b50, count=1)
+    [  0,   0,   0,   0]
+ override peekThroughLayer=0x0 override disableBackgroundBlur=false 
+      hwc: layer=0x08c composition=CLIENT (1) 
+  - Output Layer 0xb4000071184ef420(EinkNavRefresh#102)
+        Region visibleRegion (this=0xb4000071184ef438, count=1)
+    [164, 2370, 260, 2466]
+        Region visibleNonTransparentRegion (this=0xb4000071184ef4a0, count=1)
+    [164, 2370, 260, 2466]
+        Region coveredRegion (this=0xb4000071184ef508, count=1)
+    [  0,   0,   0,   0]
+        Region output visibleRegion (this=0xb4000071184ef5e0, count=1)
+    [2370, 1600, 2466, 1696]
+        Region shadowRegion (this=0xb4000071184ef648, count=1)
+    [  0,   0,   0,   0]
+        Region outputSpaceBlockingRegionHint (this=0xb4000071184ef6e0, count=1)
+    [  0,   0,   0,   0]
+      forceClientComposition=true clearClientTarget=false displayFrame=[2370 1600 2466 1696] sourceCrop=[0.000000 0.000000 96.000000 96.000000] bufferTransform=0 (0) dataspace=V0_SRGB (142671872) whitePointNits=-1.000000 dimmingRatio=1.000000 override buffer=0x0 override acquire fence=0x0 override display frame=[0 0 -1 -1] override dataspace=UNKNOWN (0) override display space=ProjectionSpace{bounds=Rect(0, 0, -1, -1), content=Rect(0, 0, -1, -1), orientation=ROTATION_0} override damage region=  Region  (this=0xb4000071184ef798, count=1)
+    [  0,   0,  -1,  -1]
+ override visible region=  Region  (this=0xb4000071184ef800, count=1)
+    [  0,   0,   0,   0]
+ override peekThroughLayer=0x0 override disableBackgroundBlur=false 
+      hwc: layer=0x08d composition=CLIENT (1) 
+
+
+SurfaceFlinger global state:
+
+ ------------RE GLES (Ganesh)------------
+EGL implementation : 1.4 Android META-EGL
+EGL_ANDROID_front_buffer_auto_refresh EGL_ANDROID_get_native_client_buffer EGL_ANDROID_presentation_time EGL_EXT_surface_CTA861_3_metadata EGL_EXT_surface_SMPTE2086_metadata EGL_KHR_get_all_proc_addresses EGL_KHR_swap_buffers_with_damage EGL_ANDROID_get_frame_timestamps EGL_ANDROID_image_native_buffer EGL_ANDROID_native_fence_sync EGL_ANDROID_recordable EGL_EXT_create_context_robustness EGL_EXT_image_gl_colorspace EGL_EXT_pixel_format_float EGL_EXT_yuv_surface EGL_IMG_context_priority EGL_KHR_config_attribs EGL_KHR_create_context EGL_KHR_fence_sync EGL_KHR_gl_colorspace EGL_KHR_gl_renderbuffer_image EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_image EGL_KHR_image_base EGL_KHR_mutable_render_buffer EGL_KHR_no_config_context EGL_KHR_partial_update EGL_KHR_surfaceless_context EGL_KHR_wait_sync EGL_NV_context_priority_realtime 
+GLES: ARM, Mali-G68 MC4, OpenGL ES 3.2 v1.r32p1-01eac0.b8cf1793b1173c0bb23abcfef1974de4
+GL_EXT_debug_marker GL_ARM_rgba8 GL_ARM_mali_shader_binary GL_OES_depth24 GL_OES_depth_texture GL_OES_depth_texture_cube_map GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_EXT_read_format_bgra GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_standard_derivatives GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_texture_npot GL_OES_vertex_half_float GL_OES_required_internalformat GL_OES_vertex_array_object GL_OES_mapbuffer GL_EXT_texture_format_BGRA8888 GL_EXT_texture_rg GL_EXT_texture_type_2_10_10_10_REV GL_OES_fbo_render_mipmap GL_OES_element_index_uint GL_EXT_shadow_samplers GL_OES_texture_compression_astc GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_sliced_3d GL_EXT_texture_compression_astc_decode_mode GL_EXT_texture_compression_astc_decode_mode_rgb9e5 GL_KHR_debug GL_EXT_occlusion_query_boolean GL_EXT_disjoint_timer_query GL_EXT_blend_minmax GL_EXT_discard_framebuffer GL_OES_get_program_binary GL_OES_texture_3D GL_EXT_texture_storage GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_OES_surfaceless_context GL_OES_texture_stencil8 GL_EXT_shader_pixel_local_storage GL_ARM_shader_framebuffer_fetch GL_ARM_shader_framebuffer_fetch_depth_stencil GL_ARM_mali_program_binary GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_texture_sRGB_decode GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_RG8 GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_OES_texture_storage_multisample_2d_array GL_OES_shader_image_atomic GL_EXT_robustness GL_EXT_draw_buffers_indexed GL_OES_draw_buffers_indexed GL_EXT_texture_border_clamp GL_OES_texture_border_clamp GL_EXT_texture_cube_map_array GL_OES_texture_cube_map_array GL_OES_sample_variables GL_OES_sample_shading GL_OES_shader_multisample_interpolation GL_EXT_shader_io_blocks GL_OES_shader_io_blocks GL_EXT_tessellation_shader GL_OES_tessellation_shader GL_EXT_primitive_bounding_box GL_OES_primitive_bounding_box GL_EXT_geometry_shader GL_OES_geometry_shader GL_ANDROID_extension_pack_es31a GL_EXT_gpu_shader5 GL_OES_gpu_shader5 GL_EXT_texture_buffer GL_OES_texture_buffer GL_EXT_copy_image GL_OES_copy_image GL_EXT_shader_non_constant_global_initializers GL_EXT_color_buffer_half_float GL_EXT_unpack_subimage GL_EXT_color_buffer_float GL_EXT_float_blend GL_EXT_YUV_target GL_OVR_multiview GL_OVR_multiview2 GL_OVR_multiview_multisampled_render_to_texture GL_KHR_robustness GL_KHR_robust_buffer_access_behavior GL_EXT_draw_elements_base_vertex GL_OES_draw_elements_base_vertex GL_EXT_protected_textures GL_EXT_buffer_storage GL_EXT_external_buffer GL_EXT_EGL_image_array GL_EXT_texture_filter_anisotropic GL_OES_texture_float_linear GL_ARM_texture_unnormalized_coordinates GL_EXT_shader_framebuffer_fetch 
+RenderEngine supports protected context: 0
+RenderEngine is in protected context: 0
+RenderEngine shaders cached since last dump/primeCache: 93
+Skia CPU Caches:  0 bytes, 0.00 bytes (0.00 bytes is purgeable)
+Skia's GPU Caches:  658116 bytes, 642.69 KB (130.57 KB is purgeable)
+  Texture/RenderBuffer: 128.00 KB (1 entry)
+    skia/gpu_resources/resource_306/texture_renderbuffer: size[128.00 KB] type[RenderTarget] label[TextureRenderTarget_FullyLazyProxy] category[Scratch] purgeable_size[128.00 KB]
+  Texture: 192.00 bytes (2 entries)
+    skia/gpu_resources/resource_55/texture: size[64.00 bytes] type[Texture] label[ProxyProvider_CreateNonMippedProxyFromBitmap] category[Image] purgeable_size[64.00 bytes]
+    skia/gpu_resources/resource_15/texture: size[128.00 bytes] type[Texture] label[ProxyProvider_CreateNonMippedProxyFromBitmap] category[Scratch]
+  Other: 514.50 KB (5 entries)
+    skia/gpu_resources/resource_307: size[272.00 bytes] type[Buffer Object] label[MakeGlBuffer] category[Other] purgeable_size[272.00 bytes]
+    skia/gpu_resources/resource_309: size[512.00 KB] type[StencilAttachment] label[GLAttachmentMakeStencil] category[Other]
+    skia/gpu_resources/resource_308: size[192.00 bytes] type[Buffer Object] label[MakeGlBuffer] category[Other] purgeable_size[192.00 bytes]
+    skia/gpu_resources/resource_5: size[1.88 KB] type[Buffer Object] label[MakeGlBuffer] category[Other] purgeable_size[1.88 KB]
+    skia/gpu_resources/resource_4: size[180.00 bytes] type[Buffer Object] label[MakeGlBuffer] category[Other] purgeable_size[180.00 bytes]
+Skia's Wrapped Objects:
+RenderEngine tracked buffers: 0
+Dumping buffer ids...
+RenderEngine AHB/BackendTexture cache size: 0
+Dumping buffer ids...
+
+Skia's GPU Protected Caches:  0 bytes, 0.00 bytes (0.00 bytes is purgeable)
+Skia's Protected Wrapped Objects:
+
+RenderEngine runtime effects: 5
+- inputDataspace: (deprecated) sRGB sRGB Full range
+- outputDataspace: DCI-P3 sRGB Full range
+undoPremultipliedAlpha: true
+- inputDataspace: (deprecated) sRGB sRGB Full range
+- outputDataspace: (deprecated) sRGB sRGB Full range
+undoPremultipliedAlpha: true
+- inputDataspace: (deprecated) sRGB sRGB Full range
+- outputDataspace: (deprecated) sRGB sRGB Full range
+undoPremultipliedAlpha: false
+- inputDataspace: (deprecated) sRGB sRGB Full range
+- outputDataspace: DCI-P3 sRGB Full range
+undoPremultipliedAlpha: false
+- inputDataspace: Default
+- outputDataspace: (deprecated) sRGB sRGB Full range
+undoPremultipliedAlpha: false
+
+ClientCache state:
+ Cache owner: 0xb40000717842fdb0
+	ID: 21071109554190, size: 53x1860
+	ID: 21071109554188, size: 53x1860
+	ID: 21071109554176, size: 2480x1860
+	ID: 21071109554186, size: 53x1860
+	ID: 21071109554192, size: 53x1860
+ Cache owner: 0xb400007178434f80
+	ID: 22226455756834, size: 271x1860
+	ID: 22226455756832, size: 271x1860
+	ID: 22226455756833, size: 271x1860
+	ID: 22226455756808, size: 271x1860
+ Cache owner: 0xb40000717843b490
+ Cache owner: 0xb400007178467a10
+	ID: 24103356465154, size: 96x96
+	ID: 24103356465155, size: 96x96
+	ID: 24103356465156, size: 96x96
+	ID: 24103356465153, size: 96x96
+ Cache owner: 0xb400007178481740
+	ID: 24043226923019, size: 2480x1860
+	ID: 24043226923015, size: 2480x1860
+  Region undefinedRegion (this=0xb400007118456158, count=1)
+    [  0,   0, 2480, 1860]
+  orientation=ROTATION_0, isPoweredOn=1
+  transaction-flags         : 00000000
+  peak-refresh-rate         : 60.00 Hz
+  x-dpi                     : 1004.66
+  y-dpi                     : 425.62
+  transaction time: 0.000000 us
+
+Transaction tracing: enabled
+  queued transactions=0 created layers=0 states=0
+  number of entries: 422 (0.07MB / 0.50MB) duration: 934727ms
+
+Planner is disabled
+h/w composer state:
+  h/w composer disabled
+Display(0)
+ visible_layers:5 invisible_layers:0 commit_layers:1 ct_handle:0xb400007875379370 ct_fbdc:0 hbm:0
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+| layer id |             handle / alloc_id |      fmt | blend |                                 comp | tr|         ds |c|        pq   |      usage | gralloc range  |   caps |
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+|       21 | 0xb400007875377270 /       95 |        2 |   PRE | CLI(     INV,CLI,CLI, HWCL:  237)   0|  0|  142671872 |0|0,  0,0,0,0,0|         b00|        80000000|       0|
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+|       20 | 0xb4000078753761f0 /      176 |        1 |   PRE | CLI(     INV,CLI,CLI, HWCL:  237)   0|  0|  142671872 |0|0,  0,0,0,0,0|         b00|        80000000|       0|
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+|       19 | 0xb40000787537a130 /      109 |        1 |   PRE | CLI(     INV,CLI,CLI, HWCL:  237)   0|  0|          0 |0|0,  0,0,0,0,0|         b00|        80000000|       0|
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+|       12 | 0xb400007875375010 /      121 |        1 |   PRE | CLI(     INV,CLI,CLI, HWCL:  237)   0|  0|  142671872 |0|0,  0,0,0,0,0|         b00|        80000000|       0|
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+|       13 | 0xb40000787537dc50 /      165 |        1 |   PRE | CLI(     INV,CLI,CLI, HWCL:  237)   0|  0|  142671872 |0|0,  0,0,0,0,0|         b00|        80000000|       0|
++----------+-------------------------------+----------+-------+--------------------------------------+---+------------+-+-------------+------------+----------------+--------+
+       21: Wallpaper#0(BLAST Consumer)0, usage: 0x0 flags: 0x1
+       20: VRI[LawnchairLauncher]#1(BLAST Consumer)1, usage: 0x0 flags: 0x0
+       19: VRI[StatusBar]#2(BLAST Consumer)2, usage: 0x0 flags: 0x0
+       12: VRI[Taskbar]#0(BLAST Consumer)0, usage: 0x0 flags: 0x0
+       13: VRI[EinkNavRefresh]#0(BLAST Consumer)0, usage: 0x0 flags: 0x0
+Color Mode & Render Intent
+	current state: color_mode[0] render_intent[0] pq_mode_id[-1]
+	ColorMode 0: RenderIntent[0](id=-1 range=0),
+
+CpuSet & Scenario:
+	cpu_set: 0x0
+	scenario_hint: 0x0
+
+Color Matrix
+[ 1.000000 0.000000 0.000000 0.000000 ]
+[ 0.000000 1.000000 0.000000 0.000000 ]
+[ 0.000000 0.000000 1.000000 0.000000 ]
+[ 0.000000 0.000000 0.000000 1.000000 ]
+----------DRMDEV Color Matrix----------
+Result Error No: 0
+    0,     0,     0,     0
+    0,     0,     0,     0
+    0,     0,     0,     0
+    0,     0,     0,     0
+---------------------------------------
+dpy 0, fb_cache:
+cache, id: 2, alloc_id 12, fb_id 199, fmt 0x2b
+dpy 1, fb_cache:
+dpy 2, fb_cache:
+Current fb in DrmModeResource
+fb_id: 199
+fb_id: 193
+fb_id: 192
+     FPS ring buffer:
+     (0) 22:09:00.97  fps=0.05  dur=59996.99      max=59314.14      min=22.61
+     (1) 22:10:00.97  fps=0.05  dur=60000.37      max=59297.14      min=26.60
+     (2) 22:11:00.102 fps=0.05  dur=60004.31      max=59284.28      min=27.27
+     (3) 22:11:29.732 fps=0.10  dur=29630.48      max=28932.60      min=25.78
+     (4) 22:12:00.114 fps=0.03  dur=30382.22      max=30382.22      min=30382.22
+     (5) 22:13:00.115 fps=0.03  dur=60000.52      max=59315.22      min=685.31
+     (6) 22:13:53.835 fps=0.06  dur=53719.80      max=53033.31      min=24.72
+     (7) 22:13:55.471 fps=10.39 dur=1636.46       max=689.51        min=12.21
+     (8) 22:14:00.106 fps=0.22  dur=4634.58       max=4634.58       min=4634.58
+     (9) 22:15:00.121 fps=0.03  dur=60015.11      max=59315.38      min=699.73
+[HRT DRM] [(0) mode:0 g(0, 4)] [(0) s_wh:2254,1690 d_xywh:0,0,2480,1860 caps:0] [(1) s_wh:2480,1860 d_xywh:0,0,2480,1860 caps:0] [(2) s_wh:53,1860 d_xywh:0,0,53,1860 caps:0] [(3) s_wh:271,1860 d_xywh:2209,0,271,1860 caps:0] [(4) s_wh:96,96 d_xywh:2370,1600,96,96 caps:0]
+
+[HWC Compose State (0)]
+  (0) f=0x1 x=0 y=0 w=2480 h=1860 -> x=0 y=0 w=2480 h=1860
+  Total size: 18451200 bytes
+
+[HWC DBG Dump] log threshold:I
+  DBGLBM: 13/99 used
+
+[HWC Statistics]
+  0 - displayFrame over range
+
+[Driver Support]
+  res_switch:0
+  rpo:1 max_w,h:1088,4096 ui_max_src_width:0
+  partial_update:0
+  waits_fences:0
+  ConstantAlphaForRGBA:1
+  ext_path_for_virtual:1
+  self_refresh:1
+  lcm_color_mode:0
+  3x4_disp_color_transform:1
+
+[HWC Property]
+  force_full_invalidate(vendor.debug.hwc.forceFullInvalidate):0
+  wait_fence_for_display(vendor.debug.hwc.waitFenceForDisplay):0
+  rgba_rotate(vendor.debug.hwc.rgba_rotate):1
+  rgba_rotate(vendor.debug.hwc.rgbx_scaling):1
+  compose_level(vendor.debug.hwc.compose_level):0,   mirror_state(vendor.debug.hwc.mirror_state):4
+  enableUBL(vendor.debug.hwc.enableUBL):1
+  prexformUI(vendor.debug.hwc.prexformUI):1
+  log_level(persist.vendor.debug.hwc.log):I,   skip_period_log(vendor.debug.hwc.skip_log):1
+  mhl_output(vendor.debug.hwc.mhl_output):0
+  profile_level(vendor.debug.hwc.profile_level):7
+  mir_scale_ratio(vendor.debug.hwc.mir_scale_ratio):0.000000
+  ext layer:1(vendor.debug.hwc.ext_layer)
+  trigger_by_vsync(vendor.debug.hwc.trigger_by_vsync):1
+  AV_grouping(vendor.debug.hwc.av_grouping):0
+  AV_grouping type(vendor.debug.hwc.grouping_type):0x1
+  DumpBuf(vendor.debug.hwc.dump_buf):A-0, DumpBufCont(debug.hwc.dump_buf_cont):A-0 log:0
+  fill_black_debug(vendor.debug.hwc.fill_black_debug):0
+  Always_Setup_Private_Handle(vendor.debug.hwc.always_setup_priv_hnd):0
+  wdt_trace(vendor.debug.hwc.wdt_trace):1
+  only_wfd_by_hwc(vendor.debug.hwc.only_wfd_by_hwc):0
+  blitdev_for_virtual(vendor.debug.hwc.blitdev_for_virtual):0
+  is_skip_validate(vendor.debug.hwc.is_skip_validate):1
+  support_color_transform(vendor.debug.hwc.color_transform):1
+  mdp_scaling_percentage(vendor.debug.hwc.mdp_scale_percentage):0.10
+  ExtendMDP(vendor.debug.hwc.extend_mdp_cap):0
+  disp_support_decompress(vendor.debug.hwc.disp_support_decompress):1
+  mdp_support_decompress(vendor.debug.hwc.mdp_support_decompress):1
+  mdp_support_compress(vendor.debug.hwc.mdp_support_compress):0
+  mdp_support_decompress(vendor.debug.hwc.remove_invisible_layers):1
+  force_mdp_output_format(vendor.debug.hwc.force_mdp_output_format):0
+  use_datapace_for_yuv(vendor.debug.hwc.use_dataspace_for_yuv):0
+  hdr_support (vendor.debug.hwc.hdr):1
+  hdr_support (vendor.debug.hwc.fill_hwdec_hdr):0
+  is_support_mdp_pmqos(vendor.debug.hwc.is_support_mdp_pmqos):1
+  is_support_mdp_pmqos_debug(vendor.debug.hwc.is_support_mdp_pmqos_debug):0
+  force_pq_index(vendor.debug.hwc.force_pq_index):-1
+  is_support_game_pq(vendor.debug.hwc.is_support_game_pq):0
+  dbg_mdp_always_blit(vendor.debug.hwc.dbg_mdp_always_blit):0
+  dbg_present_delay_time(vendor.debug.hwc.dbg_present_delay_time):0
+  is_client_clear_support(vendor.debug.hwc.is_client_clear_support):1
+  game_hdr(vendor.debug.hwc.game_hdr):0
+  is_skip_hrt(vendor.debug.hwc.is_skip_hrt):1
+  cache_CT_private_hnd(vendor.debug.hwc.cache_CT_private_hnd):1
+  tolerance_time_to_refresh(vendor.debug.hwc.tolerance_time_to_refresh):4000000
+  is_support_sf_present_fence(vendor.debug.hwc.is_support_sf_present_fence):0
+  check_skip_client_color_transform(vendor.debug.hwc.check_skip_client_color_transform):1
+  plat_switch(vendor.debug.hwc.plat_switch):0x10
+  mml_switch(vendor.debug.hwc.mml_switch):1
+  support_mml(vendor.debug.hwc.is_support_mml):0
+  AI_PQ:0
+  test_mml(vendor.debug.hwc.test_mml):0
+  has_glai(ro.vendor.game_aisr_enable):0
+
+[PQ Support]
+  useColorTransformIoctl(vendor.debug.hwc.useColorTransformIoctl):1
+  pq_video_whitelist_support:0
+  video transition:0
+  mtk_pq_support:0
+  hdr_video or hdr_display:1
+
+[MM Buffer]
+  enable_mm_buffer_dump(vendor.debug.hwc.enable_mm_buffer_dump):0
+  dump_ovl_bits(vendor.debug.hwc.dump_ovl_bits):0
+
+[Layer Hint]
+  hint_id(vendor.debug.hwc.hint_id):0
+  hint_hwlayer_type(vendor.debug.hwc.hint_hwlayer_type):NON
+dpy 0, m_packages size 0
+dpy 1, m_packages size 0
+dpy 2, m_packages size 0
+
+[ComposerExt]
+client_list[0]
+
+OverlayProperties:
+supportMixedColorSpaces: 0
+SupportedBufferCombinations(0 entries)
+GraphicBufferAllocator buffers:
+            Handle |         Size |     W (Stride) x H | Layers |   Format |      Usage | Requestor
+0xb400007078414b10 | 18018.75 KiB | 2480 (2480) x 1860 |      1 |        1 | 0x    1b00 | FramebufferSurface
+0xb400007078416690 | 18018.75 KiB | 2480 (2480) x 1860 |      1 |        1 | 0x    1b00 | FramebufferSurface
+0xb400007078417870 | 18018.75 KiB | 2480 (2480) x 1860 |      1 |        1 | 0x    1b00 | FramebufferSurface
+Total allocated by GraphicBufferAllocator (estimate): 54056.25 KB
+Imported gralloc buffers:
++ name:VRI[NotificationShade]#4(BLAST Consumer)4, id:5454608466102, size:18018.75KiB, w/h:2480x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[LawnchairLauncher]#1(BLAST Consumer)1, id:5454608466096, size:18018.75KiB, w/h:2480x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[EinkNavRefresh]#0(BLAST Consumer)0, id:5454608466084, size:36.00KiB, w/h:96x96, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:96x96, stride:384 bytes, size:36864
++ name:VRI[EinkNavRefresh]#0(BLAST Consumer)0, id:5454608466085, size:36.00KiB, w/h:96x96, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:96x96, stride:384 bytes, size:36864
++ name:VRI[EinkNavRefresh]#0(BLAST Consumer)0, id:5454608466082, size:36.00KiB, w/h:96x96, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:96x96, stride:384 bytes, size:36864
++ name:VRI[LawnchairLauncher]#1(BLAST Consumer)1, id:5454608466077, size:18018.75KiB, w/h:2480x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[Taskbar]#0(BLAST Consumer)0, id:5454608466073, size:1976.25KiB, w/h:271x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:271x1860, stride:1088 bytes, size:2023680
++ name:VRI[Taskbar]#0(BLAST Consumer)0, id:5454608466070, size:1976.25KiB, w/h:271x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:271x1860, stride:1088 bytes, size:2023680
++ name:VRI[StatusBar]#2(BLAST Consumer)2, id:5454608466029, size:465.00KiB, w/h:53x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:53x1860, stride:256 bytes, size:476160
++ name:VRI[Taskbar]#0(BLAST Consumer)0, id:5454608466041, size:1976.25KiB, w/h:271x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:271x1860, stride:1088 bytes, size:2023680
++ name:VRI[StatusBar]#2(BLAST Consumer)2, id:5454608466025, size:465.00KiB, w/h:53x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:53x1860, stride:256 bytes, size:476160
++ name:FramebufferSurface, id:5454608466003, size:18018.75KiB, w/h:2480x1860, usage: 0x1b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x0, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:Wallpaper#0(BLAST Consumer)0, id:5454608466015, size:18018.75KiB, w/h:2480x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:FramebufferSurface, id:5454608466001, size:18018.75KiB, w/h:2480x1860, usage: 0x1b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x0, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[EinkNavRefresh]#0(BLAST Consumer)0, id:5454608466083, size:36.00KiB, w/h:96x96, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:96x96, stride:384 bytes, size:36864
++ name:FramebufferSurface, id:5454608466002, size:18018.75KiB, w/h:2480x1860, usage: 0x1b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x0, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[NotificationShade]#4(BLAST Consumer)4, id:5454608466101, size:18018.75KiB, w/h:2480x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:2480x1860, stride:9920 bytes, size:18451200
++ name:VRI[Taskbar]#0(BLAST Consumer)0, id:5454608466072, size:1976.25KiB, w/h:271x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:271x1860, stride:1088 bytes, size:2023680
++ name:VRI[StatusBar]#2(BLAST Consumer)2, id:5454608466031, size:465.00KiB, w/h:53x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:53x1860, stride:256 bytes, size:476160
++ name:VRI[StatusBar]#2(BLAST Consumer)2, id:5454608466027, size:465.00KiB, w/h:53x1860, usage: 0x40000000000b00, req fmt:1, fourcc/mod:875708993/0, dataspace: 0x8810000, compressed: false
+	planes: R/G/B/A:	 w/h:53x1860, stride:256 bytes, size:476160
+Total imported by gralloc: 154059.00KiB
+FlagManager values: 
+debug.sf.disable_sched_fifo_sf: false
+debug.sf.disable_sched_fifo_sf_binder: false
+debug.sf.disable_sched_fifo_sf_sched: false
+debug.sf.disable_sched_fifo_re: false
+debug.sf.disable_sched_fifo_composer: false
+debug.sf.disable_sched_fifo_composer_callback: false
+use_adpf_cpu_hint: false
+use_skia_tracing: false
+adpf_gpu_sf: true
+adpf_native_session_manager: true
+adpf_use_fmq_channel: true
+correct_virtual_display_power_state: true
+graphite_renderengine_preview_rollout: false
+increase_missed_frame_jank_threshold: false
+monitor_buffer_fences: false
+refresh_rate_overlay_on_external_display: false
+vsync_predictor_recovery: false
+add_sf_skipped_frames_to_trace: true
+adpf_fmq_sf: true
+allow_n_vsyncs_in_targeter: true
+arr_setframerate_gte_enum: true
+begone_bright_hlg: true
+cache_when_source_crop_layer_only_moved: false
+commit_not_composited: true
+connected_display_hdr: true
+correct_dpi_with_display_size: true
+deprecate_frame_tracker: false
+deprecate_vsync_sf: false
+detached_mirror: true
+display_config_error_hal: true
+display_protected: true
+dont_skip_on_early_ro: true
+enable_fro_dependent_features: true
+enable_layer_command_batching: true
+enable_small_area_detection: true
+filter_frames_before_trace_starts: true
+flush_buffer_slots_to_uncache: true
+force_compile_graphite_renderengine: false
+fp16_client_target: false
+frame_rate_category_mrr: false
+game_default_frame_rate: true
+graphite_renderengine: false
+hdcp_level_hal: true
+hdcp_negotiation: false
+idle_screen_refresh_rate_timeout: true
+latch_unsignaled_with_auto_refresh_changed: true
+local_tonemap_screenshots: true
+misc1: true
+no_vsyncs_on_screen_off: false
+override_trusted_overlay: true
+protected_if_client: true
+reject_dupe_layerstacks: true
+renderable_buffer_usage: false
+restore_blur_step: true
+skip_invisible_windows_in_input: false
+stable_edid_ids: false
+synced_resolution_switch: false
+trace_frame_rate_override: true
+true_hdr_screenshots: true
+use_known_refresh_rate_for_fps_consistency: false
+vrr_bugfix_24q4: true
+vrr_bugfix_dropped_frame: true
+vrr_config: true
+vulkan_renderengine: false
+window_blur_kawase2: false
+TimeStats miniDump:
+Number of layers currently being tracked is 0
+Number of layers in the stats pool is 0
+

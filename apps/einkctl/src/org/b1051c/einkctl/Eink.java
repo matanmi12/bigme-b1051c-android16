@@ -46,16 +46,7 @@ final class Eink {
             int warmth = p.getInt("warmth", 50);                                        // 0 = all cold, 100 = all warm
             return new int[] {level * (100 - warmth) / 100, level * warmth / 100};
         }
-        if (nightNow(p)) return new int[] {p.getInt("night_cold", 0), p.getInt("night_warm", 30)};
         return new int[] {p.getInt("cold", 40), p.getInt("warm", 40)};
-    }
-
-    /** True inside the night window [start, end) when the schedule is on; the window may wrap past midnight. */
-    static boolean nightNow(SharedPreferences p) {
-        if (!p.getBoolean("night_schedule", false)) return false;
-        int h = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
-        int s = p.getInt("night_start", 21), e = p.getInt("night_end", 7);
-        return s <= e ? (h >= s && h < e) : (h >= s || h < e);
     }
 
     static void applyFrontlight(Context c) {
@@ -112,7 +103,7 @@ final class Eink {
         }
     }
 
-    /** A QS slider moved: adopt the values as the light (day or night slot) and apply them. */
+    /** A QS slider moved: adopt the values as the light and apply them. */
     static void lightFromSystemUi(Context c) {
         android.content.ContentResolver cr = c.getContentResolver();
         int cold, warm;
@@ -123,17 +114,25 @@ final class Eink {
             return;
         }
         if (cold < 0 || warm < 0) return;
+        setLight(c, cold, warm, false);
+    }
+
+    /** Adopt cold/warm (raw 0..FL_MAX) as the light and apply it. From the QS sliders (already published) or from
+     *  KOReader (publish, so the QS sliders follow; the echo comes back through lightFromSystemUi and stops here). */
+    static void setLight(Context c, int cold, int warm, boolean publish) {
+        cold = clamp(cold, 0, FL_MAX);
+        warm = clamp(warm, 0, FL_MAX);
         int[] cur = frontlightValues(c);
         if (cur[0] == cold && cur[1] == warm) return;   // echo of our own publish
         SharedPreferences p = prefs(c);
         SharedPreferences.Editor e = p.edit().putBoolean("light_on", cold + warm > 0);
         if (cold + warm > 0) {
             e.putBoolean("link_brightness", false);
-            boolean night = nightNow(p);
-            e.putInt(night ? "night_cold" : "cold", clamp(cold, 0, FL_MAX)).putInt(night ? "night_warm" : "warm", clamp(warm, 0, FL_MAX));
+            e.putInt("cold", clamp(cold, 0, FL_MAX)).putInt("warm", clamp(warm, 0, FL_MAX));
         }
         e.apply();
         Root.async(frontlightCmd(cold, warm));
+        if (publish) publishLight(c, new int[] {cold, warm});
     }
 
     static void frontlightOff() { Root.async(frontlightCmd(0, 0)); }
@@ -158,10 +157,17 @@ final class Eink {
         return normMode(m != UNSET ? m : p.getInt("mode", 0));
     }
 
-    static String modeCmd(int mode) { return "setprop vendor.xrz.global_refresh_mode " + normMode(mode); }
+    /** The mode, plus the kernel anti-alias switch: on only in Fast (178, also the HWC default for Auto), like stock.
+     *  Owner test 2026-10-18: slightly sharper text, but grey backgrounds turn into stripes -> off by default. */
+    static String modeCmd(Context c, int mode) {
+        mode = normMode(mode);
+        boolean aa = prefs(c).getBoolean("anti_alias", false) && (mode == 178 || mode == 0);
+        return "setprop vendor.xrz.global_refresh_mode " + mode + "; echo " + (aa ? 1 : 0) + " > " + ED + "anti_alias";
+    }
 
+    /** Global refresh setting changed: the profile engine decides what the current app gets. */
     static void applyRefreshMode(Context c) {
-        Root.async(modeCmd(modeFor(c, AppProfileService.currentPackage())));
+        Profiles.apply(c, AppProfileService.currentPackage(), true);
     }
 
     static int modeIndex(int mode) {
@@ -170,11 +176,14 @@ final class Eink {
         return 0;
     }
 
-    /** One full-screen GC16 refresh: the shim rewrites the next commits to mode 4, then lets go. */
+    /**
+     * One full-screen GC16 of the settled screen. The shim (2026-10-19) re-sends the final frame as GC16 once commits
+     * have been quiet for ~350 ms, so a screen change flashes once (the old 1.2 s commit_mode-4 window turned every
+     * frame of a transition into a flash: owner "too many flashes") and a static screen works too (the vendor HWC
+     * commits nothing for an unchanged frame, which is why the nav button needed a pressed-state trick before).
+     */
     static void clearScreen(Context c) {
-        Root.async("setprop vendor.debug.hwc.shim.commit_mode 4; service call SurfaceFlinger 1008 i32 0 >/dev/null; "
-                + "sleep 0.25; service call SurfaceFlinger 1008 i32 1 >/dev/null; sleep 1.2; "
-                + "setprop vendor.debug.hwc.shim.commit_mode -1");
+        Root.async("setprop vendor.debug.hwc.shim.gc16_req " + (android.os.SystemClock.uptimeMillis() % 1_000_000_000L));
     }
 
     // ---- colour profiles (stock Eink Center presets; rendered by the HWC shim's port of Bigme's shader) --
@@ -202,29 +211,20 @@ final class Eink {
     }
 
     // ---- image knobs ------------------------------------------------------------------------------
+    /** Device-wide image knobs; colour, anti-shake and full-refresh-every-N go through the profile engine. */
     static void applyImage(Context c) {
         SharedPreferences p = prefs(c);
-        int prof = p.getInt("profile", 0);
-        int[] v = PRESETS[clamp(prof, 0, PRESETS.length - 1)];
-        int vivid = v[1] >= 0 ? v[1] : p.getInt("vivid", 0);
-        int con = v[2] >= 0 ? v[2] : p.getInt("contrast", 0);
-        int bri = v[3] >= 0 ? v[3] : p.getInt("cbright", 0);
-        boolean af = p.getBoolean("anti_flicker", false), ac = p.getBoolean("auto_clean", false);
+        boolean ac = p.getBoolean("auto_clean", false), cr = p.getBoolean("color_restoration", false);
         StringBuilder sb = new StringBuilder();
-        // colour pipeline (HWC shim) — same props as Bigme's framework
-        sb.append("setprop vendor.xrz.global_color_enhance ").append(clamp(vivid, 0, 100)).append("; ");
-        sb.append("setprop vendor.xrz.global_contrast ").append(clamp(con, 0, 100)).append("; ");
-        sb.append("setprop vendor.xrz.global_brightness_level ").append(clamp(bri, 0, 100)).append("; ");
-        sb.append("setprop vendor.xrz.global_color_mode ").append(v[4]).append("; ");
-        // anti-shake: the HWC writes eink_debug/anti_flicker itself before each commit when this is 1
-        sb.append("setprop vendor.xrz.anti_flicker_enabled ").append(af ? 1 : 0).append("; ");
         // auto clean: prop + kernel clean_a2 (stock setAutoCleanEnable)
         sb.append("setprop vendor.xrz.auto_clean_enabled ").append(ac ? 1 : 0).append("; ");
         sb.append("echo ").append(ac ? 1 : 0).append(" > ").append(ED).append("clean_a2; ");
-        sb.append("setprop vendor.xrz.clean_frequency ").append(clamp(p.getInt("clean_every", 0), 0, 50)).append("; ");
+        // colour restoration: the HWC uses dither 3 instead of 6 in Fast / Extreme (stock B1051C 4.6.6 checkbox)
+        sb.append("setprop vendor.xrz.color_restoration_enabled ").append(cr ? 1 : 0).append("; ");
         // undo the kernel-node experiments of app 0.3-0.5 (not used by stock; no proper effect)
         sb.append("for n in saturation contrast brightness; do echo 0 > ").append(ED).append("$n; done; ");
         Root.async(sb.toString());
+        Profiles.apply(c, AppProfileService.currentPackage(), true);
     }
 
     static void applyAll(Context c) {
@@ -232,6 +232,55 @@ final class Eink {
         applyRefreshMode(c);
         applyImage(c);
         applyFrontlight(c);
+    }
+
+    // ---- export / import (roadmap 32: one JSON for the layer backup) -------------------------------------
+    /** /sdcard/Android/data/org.b1051c.einkctl/files/einkctl-settings.json (no storage permission needed). */
+    static java.io.File exportFile(Context c) {
+        return new java.io.File(c.getExternalFilesDir(null), "einkctl-settings.json");
+    }
+
+    static String exportSettings(Context c) {
+        try (java.io.FileOutputStream o = new java.io.FileOutputStream(exportFile(c))) {
+            o.write(Profiles.exportAll(c).toString(1).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return "Exported to " + exportFile(c);
+        } catch (Exception e) {
+            return "Export failed: " + e;
+        }
+    }
+
+    /** adb restores drop the JSON here (root can set the owner; Android/data files from adb are not the app's). */
+    static java.io.File importDropFile(Context c) { return new java.io.File(c.getFilesDir(), "einkctl-import.json"); }
+
+    static String importSettings(Context c) {
+        java.io.File drop = importDropFile(c), src = drop.exists() ? drop : exportFile(c);
+        try (java.io.FileInputStream in = new java.io.FileInputStream(src)) {
+            Profiles.importAll(c, new org.json.JSONObject(new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8)));
+            if (src == drop) drop.delete();
+            applyAll(c);
+            return "Imported " + src;
+        } catch (Exception e) {
+            return "Import failed: " + e;
+        }
+    }
+
+    // ---- wallpaper ----------------------------------------------------------------------------------
+    /** Plain white on home and lock screen: the TrebleDroid default is almost all dark navy, which reads as a
+     *  black screen on e-ink (owner, 2026-10-18). Not on the UI thread. */
+    static void whiteWallpaper(Context c) {
+        android.util.DisplayMetrics dm = c.getResources().getDisplayMetrics();
+        android.graphics.Bitmap b = android.graphics.Bitmap.createBitmap(Math.max(1, dm.widthPixels),
+                Math.max(1, dm.heightPixels), android.graphics.Bitmap.Config.ARGB_8888);
+        b.eraseColor(android.graphics.Color.WHITE);
+        try {
+            android.app.WallpaperManager.getInstance(c).setBitmap(b, null, true,
+                    android.app.WallpaperManager.FLAG_SYSTEM | android.app.WallpaperManager.FLAG_LOCK);
+            android.util.Log.i("einkctl", "white wallpaper set (home + lock)");
+        } catch (java.io.IOException | SecurityException e) {
+            android.util.Log.w("einkctl", "white wallpaper failed: " + e);
+        } finally {
+            b.recycle();
+        }
     }
 
     // ---- dual system (DSU) ------------------------------------------------------------------------
