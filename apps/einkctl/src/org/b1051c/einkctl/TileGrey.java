@@ -19,7 +19,7 @@ public class TileGrey extends TileService {
         } catch (SecurityException e) {              // WRITE_SECURE_SETTINGS not granted: go through root
             Root.async("settings put secure " + MODE + " 0; settings put secure " + ENABLED + " " + (on ? 1 : 0));
         }
-        Tiles.show(this, "Greyscale", on ? "on" : "off", on);
+        Tiles.show(this, "Grayscale", on ? "on" : "off", on);
     }
 
     private boolean isOn() {
@@ -27,5 +27,5 @@ public class TileGrey extends TileService {
                 && Settings.Secure.getInt(getContentResolver(), MODE, -1) == 0;
     }
 
-    private void update() { boolean on = isOn(); Tiles.show(this, "Greyscale", on ? "on" : "off", on); }
+    private void update() { boolean on = isOn(); Tiles.show(this, "Grayscale", on ? "on" : "off", on); }
 }

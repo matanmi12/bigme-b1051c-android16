@@ -1,7 +1,7 @@
 #!/bin/bash
 # Shared helpers. Every device WRITE goes through confirm_write() or confirm_phrase(), which print the exact
 # operation and require the operator to type the confirmation. Nothing in these scripts writes without it.
-BIGME="${BIGME:-$HOME/Desktop/Bigme}"
+BIGME="${BIGME:-~/Desktop/Bigme}"
 DUMP="$BIGME/BIGME_B1051C_system_dump"; WORK="$BIGME/work"; RES="$BIGME/research"; PHC="$WORK/phase-c"
 ADB="${ADB:-adb}"; FB="${FB:-fastboot}"
 PY="${PY:-/opt/homebrew/bin/python3.12}"

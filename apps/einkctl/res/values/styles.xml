@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Pick lists opened from the QS tiles: white card with an ink outline, black controls, nothing dimmed behind
+         (a dim scrim turns into a grey smear on e-ink). -->
+    <style name="TileDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_card</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:colorAccent">#FF000000</item>
+        <item name="android:textColorPrimary">#FF000000</item>
+        <item name="android:textColorSecondary">#FF000000</item>
+    </style>
+</resources>

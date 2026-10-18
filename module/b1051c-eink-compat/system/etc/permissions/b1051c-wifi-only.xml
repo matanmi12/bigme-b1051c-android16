@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wi-Fi-only tablet (no modem; stock never starts vendor.ril-daemon-mtk). The GSI's android.hardware.telephony.gsm.xml
+     and the vendor one declare telephony, which makes com.android.phone wait forever for IRadio/slot1 and ANR-loop.
+     SystemConfig.readAllPermissions() removes <unavailable-feature> entries after reading every file, so file order
+     does not matter. android.software.telecom / connectionservice stay (VoIP apps). Paired with the fwoverlay
+     config_voice_capable / config_sms_capable / config_mobile_data_capable = false. -->
+<permissions>
+    <unavailable-feature name="android.hardware.telephony" />
+    <unavailable-feature name="android.hardware.telephony.gsm" />
+    <unavailable-feature name="android.hardware.telephony.ims" />
+    <unavailable-feature name="android.hardware.telephony.calling" />
+    <unavailable-feature name="android.hardware.telephony.data" />
+    <unavailable-feature name="android.hardware.telephony.messaging" />
+    <unavailable-feature name="android.hardware.telephony.radio.access" />
+    <unavailable-feature name="android.hardware.telephony.subscription" />
+</permissions>

@@ -152,7 +152,7 @@ enum {
     FN_SET_CLIENT_TARGET = 23, FN_SET_LAYER_BLEND_MODE = 27, FN_SET_LAYER_BUFFER = 28,
     FN_SET_LAYER_COMPOSITION_TYPE = 30, FN_SET_LAYER_DATASPACE = 31,
     FN_SET_LAYER_DISPLAY_FRAME = 32, FN_SET_LAYER_PLANE_ALPHA = 33,
-    FN_SET_LAYER_SOURCE_CROP = 35, FN_SET_LAYER_TRANSFORM = 37, FN_SET_LAYER_Z_ORDER = 39,
+    FN_SET_LAYER_SOURCE_CROP = 35, FN_SET_LAYER_SURFACE_DAMAGE = 36, FN_SET_LAYER_TRANSFORM = 37, FN_SET_LAYER_Z_ORDER = 39,
     FN_SET_POWER_MODE = 41, FN_VALIDATE_DISPLAY = 43,
     // Bigme extension. Recovered from the vendor composer@2.3-service: its
     // initDispatch requests descriptor 71 into the slot used by
@@ -178,6 +178,7 @@ typedef int32_t (*PFN_setLayerDataspace)(hwc2_device_t*, hwc2_display_t, hwc2_la
 typedef int32_t (*PFN_setLayerDisplayFrame)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, hwc_rect_t);
 typedef int32_t (*PFN_setLayerPlaneAlpha)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, float);
 typedef int32_t (*PFN_setLayerSourceCrop)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, hwc_frect_t);
+typedef int32_t (*PFN_setLayerSurfaceDamage)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, hwc_region_t);
 typedef int32_t (*PFN_setLayerTransform)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, int32_t);
 typedef int32_t (*PFN_setLayerZOrder)(hwc2_device_t*, hwc2_display_t, hwc2_layer_t, uint32_t);
 typedef int32_t (*PFN_setPowerMode)(hwc2_device_t*, hwc2_display_t, int32_t);
@@ -213,6 +214,26 @@ static ColorParams g_cp_want = {0, 0, 0, 0}, g_cp_built = {-1, -1, -1, -1};
 // full-area commit in the current mode; our commits are always full-area, so on the GSI it changes nothing.
 // We count page turns the same way (check_commit raised by einkd, >= 800 ms apart) and make every N-th a GC16.
 static int g_clean_freq = 0, g_check_commit = 0, g_auto_gc16 = 1;
+// Settled full refresh: ONE GC16 of the final frame instead of GC16 on every frame of a screen change (owner
+// 2026-10-18: "too many flashes"). vendor.debug.hwc.shim.gc16_req is a counter the app bumps; each new value, and
+// every clean_frequency-th page turn (auto_gc16 1; 2 = the old in-place rewrite), asks for one GC16 once commits
+// have been quiet for vendor.debug.hwc.shim.gc16_quiet_ms (default 350, at most 2.5 s after the request). A helper
+// thread re-sends the last commit with mode 4, so it also works on a static screen, where the HWC commits nothing.
+static pthread_mutex_t g_commit_lock = PTHREAD_MUTEX_INITIALIZER;   // one mtk_commit at a time (HWC + helper)
+static uint64_t g_last_commit_ms;   // atomic
+static int g_gc16_internal;         // atomic: auto-N request from the HWC thread
+static int g_turns;                 // page turns since the last GC16 (HWC thread; reset by the helper too)
+// Stock counts a "page" only when the update covers >= 40 % of the screen (HWC countFlushLimit, const 0.4); we
+// counted every touch-driven commit (ours are always full-area), so small taps added up too. SF's surface damage
+// is no help (it is not re-sent for static layers, so stale full damage lingers), so we measure the picture:
+// one sample per 8x8 cell of the client target, compared with the frame at the previous candidate.
+static int g_page_min_pct = 40;     // vendor.debug.hwc.shim.page_min_pct (0 = count every touch-driven commit)
+static uint8_t g_thumb[(2480 / 8) * (1860 / 8)];
+static bool g_thumb_valid;
+
+// True Regal: with global_refresh_mode 180 the vendor HWC commits 177 unless a layer carries 180 (none does on
+// the GSI; verified 2026-10-18: Regal requested, 0xb1 committed). vendor.debug.hwc.shim.force_regal 0 = vendor behaviour.
+static int g_global_mode = 0, g_force_regal = 1;
 static int  g_color_enable = 1, g_color_threads = 4;
 
 static int (*real_gralloc_extra_query)(buffer_handle_t, int, void*);
@@ -306,6 +327,9 @@ static void refresh_knobs() {
     g_clean_freq = prop_int("vendor.xrz.clean_frequency", 0);
     g_check_commit = prop_int("vendor.xrz.check_commit", 0);
     g_auto_gc16 = prop_int("vendor.debug.hwc.shim.auto_gc16", 1);
+    g_page_min_pct = prop_int("vendor.debug.hwc.shim.page_min_pct", 40);
+    g_global_mode = prop_int("vendor.xrz.global_refresh_mode", 0);
+    g_force_regal = prop_int("vendor.debug.hwc.shim.force_regal", 1);
     if (g_cp_want.sat < 0) g_cp_want.sat = 0; if (g_cp_want.sat > 100) g_cp_want.sat = 100;
     if (g_cp_want.con < 0) g_cp_want.con = 0; if (g_cp_want.con > 100) g_cp_want.con = 100;
     if (g_cp_want.bri < 0) g_cp_want.bri = 0; if (g_cp_want.bri > 100) g_cp_want.bri = 100;
@@ -443,6 +467,40 @@ static void* map_dmabuf(int fd, size_t need, bool rw) {
 static void dmabuf_sync(int fd, uint64_t flags) {
     struct dma_buf_sync s = {flags};
     ioctl(fd, DMA_BUF_IOCTL_SYNC, &s);
+}
+
+// Like stock's dirty area: % of the screen covered by the bounding box of the 8x8 cells that changed since the
+// last call (a cell = mean luma of 4 samples, changed by more than ~8 %). A page of text on white changes only the
+// cells with ink, so a plain changed-cell count would miss page turns; the box does not. HWC thread only.
+static int frame_change_pct(int fd, int w, int h, int stride_px) {
+    if (fd < 0 || w <= 0 || h <= 0 || w > 2480 || h > 1860) return 100;
+    size_t need = (size_t)stride_px * h * 4;
+    const uint8_t* p = (const uint8_t*)map_dmabuf(fd, need, false);
+    if (!p) return 100;
+    dmabuf_sync(fd, DMA_BUF_SYNC_START | DMA_BUF_SYNC_READ);
+    int tw = w / 8, th = h / 8, x0 = tw, x1 = -1, y0 = th, y1 = -1;
+    for (int ty = 0; ty < th; ty++) {
+        const uint8_t* r0 = p + ((size_t)(ty * 8 + 2) * stride_px) * 4;
+        const uint8_t* r1 = p + ((size_t)(ty * 8 + 6) * stride_px) * 4;
+        for (int tx = 0; tx < tw; tx++) {
+            size_t a = (size_t)(tx * 8 + 2) * 4, b = (size_t)(tx * 8 + 6) * 4;
+            const uint8_t* s4[4] = {r0 + a, r0 + b, r1 + a, r1 + b};
+            int sum = 0;
+            for (int k = 0; k < 4; k++) sum += (s4[k][0] * 77 + s4[k][1] * 150 + s4[k][2] * 29) >> 8;
+            uint8_t y = (uint8_t)(sum >> 2);
+            uint8_t& t = g_thumb[ty * tw + tx];
+            if (g_thumb_valid && (y > t ? y - t : t - y) > 20) {
+                if (tx < x0) x0 = tx; if (tx > x1) x1 = tx;
+                if (ty < y0) y0 = ty; if (ty > y1) y1 = ty;
+            }
+            t = y;
+        }
+    }
+    dmabuf_sync(fd, DMA_BUF_SYNC_END | DMA_BUF_SYNC_READ);
+    bool first = !g_thumb_valid;
+    g_thumb_valid = true;
+    if (first) return 100;
+    return x1 < 0 ? 0 : (x1 - x0 + 1) * (y1 - y0 + 1) * 100 / (tw * th);
 }
 
 struct ColorJob { const uint8_t* src; uint8_t* dst; size_t pitch; int x0, x1, y0, y1; };
@@ -885,20 +943,47 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
     if (g_commit_height > 0 && mod.height != (uint32_t)g_commit_height) { mod.height = g_commit_height; rewritten = true; }
     if (g_commit_format >= 0 && mod.format != (uint32_t)g_commit_format) { mod.format = g_commit_format; rewritten = true; }
     if (g_commit_mode >= 0 && mod.mode != (uint32_t)g_commit_mode) { mod.mode = g_commit_mode; rewritten = true; }
-    if (g_auto_gc16 && g_clean_freq > 0) {        // only the HWC dispatcher thread commits: plain statics are fine
-        static int s_turns = 0;
+    // Regal requested but the HWC fell back to 177: commit 180 (dither and flag bits kept). Logged at the
+    // normal rate, not as a rewrite, since it happens on every commit while Regal is on.
+    bool regal = false;
+    {
+        static bool s_regal_said = false;
+        if (g_force_regal && (g_global_mode & 0xffff) == 180 && (mod.mode & 0xffff) == 177) {
+            mod.mode = (mod.mode & ~0xffffu) | 180;
+            regal = true;
+            if (!s_regal_said) { s_regal_said = true; LOGI("Regal: HWC committed 177, forcing 180"); }
+        } else if (s_regal_said && (g_global_mode & 0xffff) != 180) {
+            s_regal_said = false;
+        }
+    }
+    if (g_auto_gc16 && g_clean_freq > 0) {
         static uint64_t s_last_ms = 0;
         if ((mod.mode & 0xffff) == 4) {
-            s_turns = 0;                            // any full refresh (manual clear too) restarts the count
+            __atomic_store_n(&g_turns, 0, __ATOMIC_RELAXED);   // any full refresh (manual clear too) restarts the count
         } else if (g_check_commit) {
             uint64_t ms = now_ns() / 1000000;
-            if (ms - s_last_ms >= 800) {
+            int pct = 100;
+            if (ms - s_last_ms >= 800 && g_page_min_pct > 0) {
+                int fd = (g_ct_src == 0 && !g_build_id_ok && g_ct_ion_fd >= 0) ? g_ct_ion_fd : g_last_ct_fd;
+                pct = frame_change_pct(fd, g_ct_buf.w, g_ct_buf.h, g_ct_buf.stride > 0 ? g_ct_buf.stride : g_ct_buf.w);
+                static Limiter LS = {0, 20, 100};
+                if (pct < g_page_min_pct && lim(LS)) LOGI("page update not counted: %d%% changed (< %d%%)", pct, g_page_min_pct);
+            }
+            if (ms - s_last_ms >= 800 && pct >= g_page_min_pct) {
                 s_last_ms = ms;
-                if (++s_turns >= g_clean_freq) {
-                    s_turns = 0;
-                    mod.mode = 4;
-                    rewritten = true;
-                    LOGI("auto full refresh: GC16 after %d page updates", g_clean_freq);
+                int n = __atomic_add_fetch(&g_turns, 1, __ATOMIC_RELAXED);
+                static Limiter LP = {0, 20, 50};
+                if (lim(LP)) LOGI("page update counted: %d%% changed (%d/%d)", pct, n, g_clean_freq);
+                if (n >= g_clean_freq) {
+                    __atomic_store_n(&g_turns, 0, __ATOMIC_RELAXED);
+                    if (g_auto_gc16 == 2) {
+                        mod.mode = 4;
+                        rewritten = true;
+                        LOGI("auto full refresh: GC16 after %d page updates", g_clean_freq);
+                    } else {
+                        __atomic_store_n(&g_gc16_internal, 1, __ATOMIC_RELEASE);
+                        LOGI("auto full refresh: GC16 requested after %d page updates", g_clean_freq);
+                    }
                 }
             }
         }
@@ -923,18 +1008,75 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
                           g_cp_built.sat, g_cp_built.con, g_cp_built.bri, g_cp_built.mode, mod.left, mod.top, mod.right,
                           mod.bottom, g_use3d ? "3D" : "1D", color_us);
     }
-    if (rewritten) u = &mod;
+    bool use_mod = rewritten || regal;
+    if (use_mod) u = &mod;
     bool pv = take_preview();
     if (pv) preview_commit_buffer(u);
+    pthread_mutex_lock(&g_commit_lock);
     uint64_t t0 = now_ns();
     int ret = real_mtk_commit(u);
-    uint64_t dt = (now_ns() - t0) / 1000;
+    uint64_t t1 = now_ns(), dt = (t1 - t0) / 1000;
     pthread_mutex_lock(&g_lock); g_last_update = *u; g_last_update_seq++; pthread_mutex_unlock(&g_lock);
+    __atomic_store_n(&g_last_commit_ms, t1 / 1000000, __ATOMIC_RELEASE);
+    pthread_mutex_unlock(&g_commit_lock);
     if (lim(L) || pv || rewritten) {
-        if (rewritten) log_eink_update("EINK_UPDATE(mtk_commit) ORIGINAL", orig, 0, 0);
-        log_eink_update(rewritten ? "EINK_UPDATE(mtk_commit) REWRITTEN" : "EINK_UPDATE(mtk_commit)", u, ret, dt);
+        if (use_mod) log_eink_update("EINK_UPDATE(mtk_commit) ORIGINAL", orig, 0, 0);
+        log_eink_update(use_mod ? "EINK_UPDATE(mtk_commit) REWRITTEN" : "EINK_UPDATE(mtk_commit)", u, ret, dt);
     }
     return ret;
+}
+
+// Settled full refresh (see g_commit_lock above): re-send the last commit as GC16.
+static void recommit_gc16(const char* why) {
+    pthread_mutex_lock(&g_commit_lock);
+    pthread_mutex_lock(&g_lock); drm_eink_update u = g_last_update; uint64_t seq = g_last_update_seq; pthread_mutex_unlock(&g_lock);
+    // The fd must still be a buffer of the committed size (the HWC keeps its commit buffers; SF keeps the client
+    // target while the screen is static) -- otherwise skip rather than show something else.
+    off_t size = u.fd >= 0 ? lseek(u.fd, 0, SEEK_END) : -1;
+    if (seq == 0 || !real_mtk_commit || size < (off_t)u.stride * u.height) {
+        pthread_mutex_unlock(&g_commit_lock);
+        LOGW("full refresh (%s) skipped: no usable last commit (seq %" PRIu64 ", fd %d, size %lld)", why, seq, u.fd, (long long)size);
+        return;
+    }
+    u.mode = 4;
+    uint64_t t0 = now_ns();
+    int ret = real_mtk_commit(&u);
+    uint64_t t1 = now_ns();
+    pthread_mutex_lock(&g_lock); g_last_update = u; g_last_update_seq++; pthread_mutex_unlock(&g_lock);
+    __atomic_store_n(&g_last_commit_ms, t1 / 1000000, __ATOMIC_RELEASE);
+    __atomic_store_n(&g_turns, 0, __ATOMIC_RELAXED);
+    pthread_mutex_unlock(&g_commit_lock);
+    LOGI("full refresh (%s): last frame re-sent as GC16 area=[%d,%d,%d,%d] fd=%d ret=%d %" PRIu64 "us",
+         why, u.left, u.top, u.right, u.bottom, u.fd, ret, (t1 - t0) / 1000);
+}
+
+static void* gc16_thread(void*) {
+    int seen = prop_int("vendor.debug.hwc.shim.gc16_req", 0);   // a value left from before a restart is not a request
+    uint64_t req_ms = 0;                                         // 0 = nothing pending
+    for (;;) {
+        usleep(50 * 1000);
+        uint64_t now = now_ns() / 1000000;
+        int r = prop_int("vendor.debug.hwc.shim.gc16_req", 0);
+        if (r != seen) { seen = r; if (!req_ms) req_ms = now; }
+        if (__atomic_exchange_n(&g_gc16_internal, 0, __ATOMIC_ACQ_REL) && !req_ms) req_ms = now;
+        if (!req_ms) continue;
+        uint64_t quiet = (uint64_t)prop_int("vendor.debug.hwc.shim.gc16_quiet_ms", 350);
+        uint64_t last = __atomic_load_n(&g_last_commit_ms, __ATOMIC_ACQUIRE);
+        bool settled = now - req_ms >= quiet && now - last >= quiet;
+        if (!settled && now - req_ms < 2500) continue;
+        req_ms = 0;
+        recommit_gc16(settled ? "settled" : "timeout");
+    }
+    return nullptr;
+}
+
+static void start_gc16_thread() {
+    static bool started;
+    if (started) return;
+    pthread_t th;
+    started = pthread_create(&th, nullptr, gc16_thread, nullptr) == 0;
+    if (started) pthread_detach(th);
+    LOGI("settled full refresh helper %s", started ? "running" : "NOT started");
 }
 
 // ioctl -- catches the eink ioctls whether or not they go through mtk_commit.
@@ -1121,6 +1263,28 @@ static int32_t hook_setLayerSourceCrop(hwc2_device_t* dev, hwc2_display_t displa
     pthread_mutex_lock(&g_lock); LayerState* l = get_layer(display, layer); if (l) l->crop = c; pthread_mutex_unlock(&g_lock);
     return ((PFN_setLayerSourceCrop)g_real_fn[FN_SET_LAYER_SOURCE_CROP])(dev, display, layer, c);
 }
+// HWC2: "If damage.numRects == 0, then the whole source buffer must be treated as if it has been modified"; one
+// empty rect means unchanged. The vendor HWC treats 0 rects as no change ("[POLICY] skip: No dirty region find for
+// commit", dirty ratio 0), so CPU-drawn windows that post full damage (KOReader: ANativeWindow lock/unlockAndPost)
+// never reached the panel (owner 2026-10-18). Hand it the whole source crop instead.
+// vendor.debug.hwc.shim.full_damage 0 = pass through.
+static int32_t hook_setLayerSurfaceDamage(hwc2_device_t* dev, hwc2_display_t display, hwc2_layer_t layer, hwc_region_t damage) {
+    PFN_setLayerSurfaceDamage real = (PFN_setLayerSurfaceDamage)g_real_fn[FN_SET_LAYER_SURFACE_DAMAGE];
+    hwc_rect_t whole = {0, 0, 16384, 16384};
+    pthread_mutex_lock(&g_lock);
+    LayerState* l = find_layer(layer, false);
+    if (l && l->crop.right > l->crop.left && l->crop.bottom > l->crop.top)
+        whole = {(int32_t)l->crop.left, (int32_t)l->crop.top, (int32_t)ceilf(l->crop.right), (int32_t)ceilf(l->crop.bottom)};
+    else if (l && l->buf.valid && l->buf.w > 0 && l->buf.h > 0)
+        whole = {0, 0, l->buf.w, l->buf.h};
+    pthread_mutex_unlock(&g_lock);
+    if (damage.numRects != 0 || prop_int("vendor.debug.hwc.shim.full_damage", 1) == 0) return real(dev, display, layer, damage);
+    static Limiter L = {0, 5, 600};
+    if (lim(L)) LOGI("surface damage L%" PRIu64 ": full (0 rects) -> [%d,%d,%d,%d]", layer, whole.left, whole.top, whole.right, whole.bottom);
+    hwc_region_t full = {1, &whole};
+    return real(dev, display, layer, full);
+}
+
 static int32_t hook_setLayerTransform(hwc2_device_t* dev, hwc2_display_t display, hwc2_layer_t layer, int32_t t) {
     pthread_mutex_lock(&g_lock); LayerState* l = get_layer(display, layer); if (l) l->transform = t; pthread_mutex_unlock(&g_lock);
     return ((PFN_setLayerTransform)g_real_fn[FN_SET_LAYER_TRANSFORM])(dev, display, layer, t);
@@ -1142,7 +1306,10 @@ static int32_t hook_setClientTarget(hwc2_device_t* dev, hwc2_display_t display, 
     static Limiter L = {0, 20, 300};
     BufInfo bi; query_buf(target, &bi);
     pthread_mutex_lock(&g_lock);
-    bool changed = target != g_ct_handle || !g_ct_buf.valid || bufinfo_differs(&g_ct_buf, &bi) || dataspace != g_ct_dataspace;
+    // SF cycles through ~3 client-target buffers, so a new handle every frame is normal: log only when the
+    // buffer geometry/format or dataspace changes (logging every handle flooded logcat in ~1 min).
+    bool changed = !g_ct_buf.valid || bufinfo_differs(&g_ct_buf, &bi) || dataspace != g_ct_dataspace ||
+                   (g_log >= 2 && target != g_ct_handle);
     g_ct_handle = target; g_ct_buf = bi; g_ct_dataspace = dataspace;
     { int32_t v = -1; g_ct_ion_fd = (target && real_gralloc_extra_query && real_gralloc_extra_query(target, 1, &v) == 0 && v >= 0) ? v : -1; }
     g_ct_handle_fd0 = (target && target->numFds > 0) ? target->data[0] : -1;
@@ -1302,6 +1469,7 @@ static hwc2_function_pointer_t shim_getFunction(hwc2_device_t* dev, int32_t desc
         case FN_SET_LAYER_DISPLAY_FRAME:      return (hwc2_function_pointer_t)hook_setLayerDisplayFrame;
         case FN_SET_LAYER_PLANE_ALPHA:        return (hwc2_function_pointer_t)hook_setLayerPlaneAlpha;
         case FN_SET_LAYER_SOURCE_CROP:        return (hwc2_function_pointer_t)hook_setLayerSourceCrop;
+        case FN_SET_LAYER_SURFACE_DAMAGE:     return g_real_fn[FN_SET_LAYER_SURFACE_DAMAGE] ? (hwc2_function_pointer_t)hook_setLayerSurfaceDamage : nullptr;
         case FN_SET_LAYER_TRANSFORM:          return (hwc2_function_pointer_t)hook_setLayerTransform;
         case FN_SET_LAYER_Z_ORDER:            return (hwc2_function_pointer_t)hook_setLayerZOrder;
         case FN_SET_POWER_MODE:               return (hwc2_function_pointer_t)hook_setPowerMode;
@@ -1358,6 +1526,7 @@ static int shim_open(const hw_module_t* /*module*/, const char* name, hw_device_
         g_dev->getFunction = shim_getFunction;
         probe_functions(g_dev);
         install_out_hooks();
+        start_gc16_thread();
     }
     *device = dev;
     return 0;

@@ -1,8 +1,50 @@
-# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-18, 05:00)
+# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-18, 23:30)
 
 Plan: `~/.claude/plans/pasted-content-id-25ff-bigme-mellow-sutton.md` (approved; **Revision 2** at its top).
 Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-verity-warning-2026-10-17.md`,
-`research/codex-recovery-2026-10-17/RECOVERY.md`.
+`research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
+Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
+
+## Overnight 2026-10-19 00:00–00:30 (owner-approved; supersedes the versions listed in the next section)
+- **Module `b1051c-eink-compat` 0.1.11** (zip `d714838d…`, shim `7597ce3b…`), verified after a reboot (00:20):
+  (1) `setLayerSurfaceDamage` with 0 rects (HWC2 "whole buffer") is passed as one full rect: the Bigme HWC read 0
+  rects as "no change" and skipped every frame of CPU-drawn apps (KOReader; = vbbot issue #6). (2) Settled full
+  refresh: `vendor.debug.hwc.shim.gc16_req` (and auto-N) -> one GC16 re-send of the final frame after 350 ms quiet,
+  also on a static screen; replaces the 1.2 s commit_mode-4 window that flashed every frame of a transition.
+- **E-Ink Control 0.10.9 build 32** (refresh/color tiles open an e-ink pick list; clearScreen = gc16_req; US
+  spelling), **SystemUI plugin 0.2.6 build 17** (gap under the light sliders, no marquee in tile labels).
+- **KOReader** v2026.07.1 (owner-installed) restored from the stock backup with `research/koreader/build_restore.py`:
+  ZenOS + settings + history + statistics + 8 sidecars; books on the SD card `/storage/EEDD-A114/Books`, 70 renamed
+  to Hebrew (`research/koreader/rename-plan.json`, undo script next to it). Profile: Regal + preset "KOReader"
+  (contrast 30) + N 6. derainbowify.koplugin built from source (`work/koreader/`). Icon pack rebuilt (KOReader A).
+- After a reboot adbd is not root: `getprop vendor.xrz.*` from the shell reads empty — use `su -c getprop` or
+  `adb root` (build-iconpack.py needs `adb root`).
+- Rollbacks: shim `/data/local/tmp/shim-e548e050.so` (+ module zip 0.1.10); KOReader `koreader.fresh-20261019`;
+  layer backup `backups/layer-20261019-000113`.
+
+## Current state — 2026-10-18 23:30 (sections below this one are history)
+- **Partitions:** slot `_b`; boot_b = `57d07a2b…` (stock Mar-2026 kernel + Magisk 30.7 + microSD 50 MHz DTB cap,
+  WRITE 6); vbmeta_b flags=1; system_b = TD16 GSI; misc/seccfg clean (no verity warning, cold boot OK 13:26).
+  No partition write pending. Only planned ones: logo (wave 7) and the ROM flash (Phase E), each with approval.
+- **Magisk modules:** `b1051c-eink-compat` **0.1.10** (zip `aec1f8de…`: shim `e548e050…` with Bigme colour
+  pipeline, force_regal, auto GC16 every N; einkd; SF watchdog + 1008 guard; stock IDC; phh-su stub; framework RRO
+  1.1 = squircle icon mask + Wi-Fi-only configs; Wi-Fi-only and no-fingerprint feature files), `b1051c-gapps`
+  (MindTheGapps subset, FRP never armed), `b1051c-icons` 0.1.3 (private Bigme icon RROs).
+- **Apps / overlays in /data:** E-Ink Control **0.10.5 build 28** (`b3ebcdbd…`; 0.10.6 build 29 built, not yet
+  installed: refresh/colour tiles open a pick list instead of cycling); SystemUI plugin `org.b1051c.einkui` 0.2.4
+  build 15; Lawnchair 15 Beta 3 = default home + private icon pack `org.b1051c.iconpack`; Launcher3 runtime RRO
+  `org.b1051c.overlay.launcher` 1.1 (search bar hidden, nav-row height fix).
+- **Fixed this evening (other sessions, see the log):** microSD (WRITE 6 + SD guard in every boot-writing script),
+  taskbar long-press crash with Lawnchair as home (stale hotseat item removed; any taskbar-icon long-press still
+  crashes Launcher3 — avoid it), com.android.phone ANR loop (module 0.1.9), fingerprint IVirtualHal loop (0.1.10),
+  nav-row refresh button on a static home screen (app 0.10.5).
+- **Waves:** 0 and 1 done; 2 implemented, waiting for the owner's panel review; next = wave 3 (colour). KOReader
+  work deferred to wave 8 until the owner says otherwise.
+- **Owner feedback 23:15 (to do):** refresh/colour tiles should open a dialog (done in 0.10.6, to install); the
+  lower QS light slider overlaps the tiles (needs a look on the device); question about the nav-button layout
+  (end-aligned tablet taskbar) and auto-hide.
+- **Backups:** layer backups `backups/layer-20261018-{123754,163435}` (a new one is due before wave 3); dump and
+  settings backup copied off-machine by the owner (Google Drive, 2026-10-18 evening); dump folder made read-only.
 
 ## Phase C result — 2026-10-18 00:45 (owner-verified on the device)
 TrebleDroid Android 16 + Magisk 30.7 + module v0.1.3 on slot B: **full-screen colour picture** (dark), **touch smooth
@@ -10,7 +52,17 @@ and correctly oriented, stylus works, Wi-Fi works**, density 300 good, faster wi
 power-press routine; the module keeps SF unwedged (watchdog) and HW overlays off (SF 1008, so the shim always has a
 client target). Not yet checked: frontlight, sleep/wake, BT, audio. Next = Phase D (e-ink feature parity with stock).
 
-## Phase D state — 2026-10-18 05:00 (current; details in research/phase-d/CONCLUSIONS.md §2b/§2c)
+## Feature roadmap — 2026-10-18 12:30
+Owner answered FEATURES-NEXT (`bigme features.docx`). Waves 0–7, then ≥2 weeks soak, then Phase E (dedicated GSI ROM):
+`docs/ROADMAP.md`. Test log: `docs/FEATURE-TESTS.md`. Wave-0 probes 12:33 (read-only): FRP off verified (`ro.frp.pst`
+empty, no persistent_data_block); kernel has `hall_key` (event1), `bt_key`, `pt_mt`, Wacom; MTK LIGHT + PROXIMITY sensors
+listed, but system_server's light activation logged PERMISSION_DENIED/BAD_VALUE (needs a test in wave 5); load avg ~16
+is D-state MTK kthreads (CPU 785% idle), not a problem. Logo partition format: `research/boot-logo/LOGO-FORMAT.md`.
+Wave 0 done so far (12:45): layer backup `backups/layer-20261018-123754`; app **0.9.0 build 17** (night schedule removed, Colour
+restoration toggle + QS tile, keeper restarts on update and keeps the light off when started asleep); plugin **0.2.4 build 15**
+(flame icon). Waiting for the owner: cold boot from full power-off, anti-alias look, hall/touch-off/pen-button getevent, Regal log.
+
+## Phase D state — 2026-10-18 05:00 (superseded by "Current state"; details in research/phase-d/CONCLUSIONS.md §2b/§2c)
 - **Installed and verified after a reboot (04:27):** Magisk modules `b1051c-eink-compat` **v0.1.6** (shim with Bigme
   colour pipeline + processImage crash guard, SF-1008 guard loop every 10 s, `einkd` check_commit pulser) and
   `b1051c-gapps` (MindTheGapps 16 subset: Play services, Services Framework, Play Store; GMS self-updated to 26.40.32).
@@ -139,12 +191,42 @@ client target). Not yet checked: frontlight, sleep/wake, BT, audio. Next = Phase
   to be honoured (stock system_ext would break the compile); 46 vendor types have no 31.0 mapping (incl. Bigme
   `vendor_xrz_prop`, `xrz_debugfs`, `xrz_system_file`) → expect denials, relevant to the compat module's props.
 
-## Next (owner actions / approvals)
+## microSD (2026-10-18) — FIXED by WRITE 6
+Owner's 128 GB FAT32 card: detected and read fine, but every write at SDR104/96 MHz ended in a data-CRC storm and
+MediaTek's `msdc_set_bad_card_and_remove` (card then ignored until re-insert). Same kernel for every ROM → "no ROM
+recognises it". **WRITE 6 21:55 (owner-approved):** boot_b ← `work/sdcard/boot_b_magisk_sd50mhz.bin` (sha
+`57d07a2b…`) = the Magisk boot_b with the DTB value `mmc@11240000/max-frequency` 100 → 50 MHz (4 bytes at
+boot_b+0x195957c). Pre-read = `170538a9…` as expected, readback = `57d07a2b…`
+(`research/phase-c/20261018-215432-sd50-boot/`). Verified after boot: slot _b, veritymode disabled, Magisk 30.7 +
+3 modules, `/proc/device-tree/mmc@11240000/max-frequency` = `02faf080`, card mounts by itself at SDR104 48 MHz,
+128 MiB + 16 MiB (after a sleep/wake cycle) written and md5-verified, 0 CRC / bad-SD events, ~19 MB/s.
+Rollback: `tools/scripts/flash-sd50.sh rollback`. Evidence: `research/sdcard/`.
+**boot_b is now `57d07a2b…`**: a future boot image (Magisk re-patch from stock, new kernel) must carry the same
+4-byte DTB patch or the card breaks again.
+
+**SD guard (22:00–22:20, owner: "guard it so it survives switching ROMs"):** the cap lives in boot_b, so system-only
+switches (another GSI, a TD update) keep it automatically. Every path that writes boot_b now enforces it:
+- `phasec_check.py sd-status | sd-patch | boot` — one shared guard; `boot` refuses any image whose DTB is not
+  stock + cap. Tested: official + WRITE 4 images refused, capped images pass, `sd-patch` of the WRITE 4 image
+  reproduces the live `57d07a2b…` byte for byte, patching is idempotent.
+- `restore-stock.sh boot|all` → stock kernel + Magisk 30.7 + cap (`57d07a2b…`); `boot-plain` → stock + cap, no
+  Magisk (`work/sdcard/boot_b_stock_sd50mhz.bin`, `bc82b1b6…`); `boot-official` = untouched official image,
+  emergency only, with an SD warning line.
+- `flash-gsi.sh boot` auto-makes a capped copy of an uncapped Magisk image; live pre-image kept as exact rollback;
+  `mtk-check` reports the cap of the live boot_b; `adb-check` asserts `/proc/device-tree/.../max-frequency = 02faf080`.
+- `magisk-patch.sh` now patches the capped plain image and checks input and output (ran it: output capped,
+  `work/sdcard/boot_b.magisk-v30.7.sd50-repatch.img`). Magisk's own re-patch of the live image (= app update) also
+  verified to keep the cap.
+- Magisk restore/uninstall: `/data/magisk_backup_566c9a01…/boot.img.gz` = plain stock + cap (root-only, 0600);
+  `flash-sd50.sh magisk-backup` recreates it (needed again after any /data wipe).
+- Not guardable from here: Bigme OTA / SP Flash Tool full flash (both write an uncapped boot) → `adb-check` catches it.
+
+## Phase C next steps (historical — all done 2026-10-17/18)
 1. Owner: finish setup, enable + authorize USB debugging → `flash-gsi.sh adb-check stock` (read-only).
 2. `flash-gsi.sh mtk-check` (read-only DA session; needs a reboot into the preloader — announced).
 3. WRITE 1 (vbmeta_b) → stock boot check → WRITE 2 (system_b) + WRITE 3 (wipe) → first GSI boot → baseline → WRITE 4 (Magisk boot) → module.
-Open owner items: off-machine copy of `BIGME_B1051C_system_dump/` and `settings-backup-2026-10-17/`; the dump folder is
-still writable (`chmod -R a-w` pending); optional `brew install scrcpy`.
+Owner items from then: off-machine copy of the dump + settings backup — **done** (Google Drive); dump folder
+read-only — **done** 2026-10-18 23:30 (`chmod -R u+w` to undo); optional `brew install scrcpy`.
 
 ## History (earlier today; superseded statements are listed in the table above)
 - Phase 1 recon + Phase 0 prep: device identity (plan §1); May dump re-verified; super proven consistent with slot-B

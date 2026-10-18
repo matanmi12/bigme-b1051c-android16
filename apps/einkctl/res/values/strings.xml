@@ -5,8 +5,9 @@
     <string name="tile_clear">Clear screen</string>
     <string name="tile_light">Front light</string>
     <string name="tile_rom">Switch system</string>
-    <string name="tile_colour">Colour</string>
-    <string name="tile_grey">Greyscale</string>
+    <string name="tile_colour">Color</string>
+    <string name="tile_grey">Grayscale</string>
     <string name="tile_antishake">Anti-shake</string>
-    <string name="a11y_desc">Detects which app is in the foreground so E-Ink Control can apply that app\'s refresh mode, and places the refresh button next to the navigation buttons (it reads only the position and colour of those buttons). No other screen content is read.</string>
+    <string name="tile_colorrestore">Color restore</string>
+    <string name="a11y_desc">Detects which app is in the foreground so E-Ink Control can apply that app\'s refresh mode, and places the refresh button next to the navigation buttons (it reads only the position and color of those buttons). No other screen content is read.</string>
 </resources>

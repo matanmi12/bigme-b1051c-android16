@@ -6,8 +6,16 @@ Exit 0 = check passed, 1 = failed (message on stderr). Run with: python3.12 -I p
   misc  <misc.bin>            BCB empty, bootctrl CRC ok, suffix _b, B active+successful, A not preferred
   super <super-head.bin>      live LP metadata slot 1 (B) == backup; system_b extent 0 == expected
   zeros <file> [len]          file is all zero (and has the given length)
-  boot  <candidate.img> <stock-boot.img>   header v2 sanity; kernel+DTB byte-identical to stock
+  boot  <candidate.img> <stock-boot.img>   header v2 sanity; kernel byte-identical to stock; DTB identical to stock
+                              EXCEPT the microSD clock cap, which the candidate MUST carry (SD guard, see below)
+  boot-kernel <img> <stock-boot.img>       kernel byte-identical to stock (sanity check for a live pre-image)
   avb   <vbmeta.bin>          print AVB header flags / rollback index (info only)
+
+SD guard (research/sdcard/SDCARD-2026-10-18.md): at the DT default of 100 MHz (SDR104, 96 MHz actual) every microSD
+write on this slot ends in data-CRC errors and MediaTek's bad-card removal. Every boot image we write must carry
+mmc@11240000/max-frequency = 50 MHz, in every FDT inside the image.
+  sd-status <img>...          print the SD cap of each image; exit 1 if any image is not capped
+  sd-patch  <in> <out>        write a copy with the cap set (only those 4-byte values change; verified)
 """
 import hashlib, struct, sys, zlib
 
@@ -104,12 +112,96 @@ def boot_sections(path):
     return b, kern, rd, dtb
 
 
+# ---- SD guard -------------------------------------------------------------------------------------------------
+SD_NODE, SD_PROP = b'mmc@11240000', 'max-frequency'
+SD_CAP, SD_DEFAULT = 50_000_000, 100_000_000
+FDT_MAGIC = b'\xd0\x0d\xfe\xed'
+
+
+def fdts(b):
+    """Yield (offset, size) of every well-formed FDT blob anywhere in b."""
+    i = b.find(FDT_MAGIC)
+    while i != -1:
+        if i + 40 <= len(b):
+            total, o_struct, o_strings, _, ver = struct.unpack_from('>5I', b, i + 4)
+            if 0 < total <= len(b) - i and ver in (16, 17) and o_struct < total and o_strings < total:
+                yield i, total
+                i = b.find(FDT_MAGIC, i + total); continue
+        i = b.find(FDT_MAGIC, i + 4)
+
+
+def sd_props(b):
+    """Absolute offsets of every 4-byte <SD_NODE>/<SD_PROP> value in every FDT of b."""
+    found = []
+    for base, total in fdts(b):
+        o_struct, o_strings = struct.unpack_from('>2I', b, base + 8)
+        pos, path = base + o_struct, []
+        while pos < base + total:
+            tok = struct.unpack_from('>I', b, pos)[0]; pos += 4
+            if tok == 1:                                    # BEGIN_NODE
+                e = b.index(b'\0', pos); path.append(b[pos:e]); pos = base + ((e + 1 - base + 3) & ~3)
+            elif tok == 2: path.pop()                       # END_NODE
+            elif tok == 3:                                  # PROP
+                ln, nameoff = struct.unpack_from('>2I', b, pos); v = pos + 8
+                s = base + o_strings + nameoff; name = b[s:b.index(b'\0', s)].decode()
+                if path and path[-1] == SD_NODE and name == SD_PROP:
+                    if ln != 4: fail(f'{SD_NODE.decode()}/{SD_PROP} has length {ln}, expected 4')
+                    found.append(v)
+                pos = base + ((v + ln - base + 3) & ~3)
+            elif tok == 4: pass                             # NOP
+            elif tok == 9: break                            # END
+            else: fail(f'malformed FDT at {base:#x} (token {tok} at {pos - 4:#x})')
+    return found
+
+
+def sd_values(b):
+    return [(o, struct.unpack_from('>I', b, o)[0]) for o in sd_props(b)]
+
+
+def sd_status(*paths):
+    bad = False
+    for p in paths:
+        vals = sd_values(open(p, 'rb').read())
+        if not vals: print(f'{p}: no {SD_NODE.decode()}/{SD_PROP} found — NOT CAPPED'); bad = True; continue
+        capped = all(v == SD_CAP for _, v in vals)
+        bad |= not capped
+        print(f'{p}: ' + ', '.join(f'{v / 1e6:g} MHz @ {o:#x}' for o, v in vals) + (' — CAPPED' if capped else ' — NOT CAPPED'))
+    sys.exit(1 if bad else 0)
+
+
+def sd_patch(src, dst):
+    a = open(src, 'rb').read(); b = bytearray(a)
+    offs = sd_props(a)
+    if not offs: fail(f'{src}: no {SD_NODE.decode()}/{SD_PROP} found — refusing to guess')
+    for o in offs: struct.pack_into('>I', b, o, SD_CAP)
+    allowed = {o + k for o in offs for k in range(4)}
+    diff = [i for i in range(len(a)) if a[i] != b[i]]
+    if not set(diff) <= allowed: fail('internal: patch touched bytes outside the SD values')
+    if [v for _, v in sd_values(bytes(b))] != [SD_CAP] * len(offs): fail('internal: re-read after patch is not capped')
+    open(dst, 'wb').write(b)
+    ok(f'{dst}: {len(offs)} SD value(s) set to {SD_CAP / 1e6:g} MHz; {len(diff)} byte(s) changed vs {src}')
+
+
 def check_boot(cand, stock):
     cb, ck, cr, cd = boot_sections(cand); sb, sk, sr, sd = boot_sections(stock)
     if len(cb) > 0x2800000: fail(f'{cand}: {len(cb)} bytes > boot_b partition')
     if ck != sk: fail('kernel differs from stock boot_b')
-    if cd != sd: fail('DTB differs from stock boot_b')
-    ok(f'boot: header v2, kernel ({len(ck)} B) and DTB ({len(cd)} B) identical to stock; ramdisk {len(sr)} -> {len(cr)} B; image {len(cb)} B')
+    if len(cd) != len(sd): fail('DTB size differs from stock boot_b')
+    vals = sd_values(cd)
+    if not vals: fail(f'{SD_NODE.decode()}/{SD_PROP} not found in the candidate DTB')
+    if any(v != SD_CAP for _, v in vals):
+        fail(f'SD GUARD: candidate DTB is not capped ({[v for _, v in vals]}); the microSD card would fail. '
+             f'Make a capped copy: phasec_check.py sd-patch <in> <out>')
+    allowed = {o + k for o, _ in vals for k in range(4)}
+    other = [i for i in range(len(cd)) if cd[i] != sd[i] and i not in allowed]
+    if other: fail(f'DTB differs from stock boot_b outside the SD cap (first at dtb+{other[0]:#x})')
+    ok(f'boot: header v2, kernel ({len(ck)} B) identical to stock; DTB ({len(cd)} B) = stock + SD cap '
+       f'{SD_CAP / 1e6:g} MHz; ramdisk {len(sr)} -> {len(cr)} B; image {len(cb)} B')
+
+
+def check_boot_kernel(img, stock):
+    if boot_sections(img)[1] != boot_sections(stock)[1]: fail(f'{img}: kernel differs from stock boot_b')
+    ok(f'{img}: kernel identical to stock boot_b')
 
 
 def check_avb(path):
@@ -121,4 +213,5 @@ def check_avb(path):
 if __name__ == '__main__':
     cmd, args = sys.argv[1], sys.argv[2:]
     {'gpt': check_gpt, 'misc': check_misc, 'super': check_super, 'zeros': check_zeros,
-     'boot': check_boot, 'avb': check_avb}[cmd](*args)
+     'boot': check_boot, 'boot-kernel': check_boot_kernel, 'avb': check_avb,
+     'sd-status': sd_status, 'sd-patch': sd_patch}[cmd](*args)

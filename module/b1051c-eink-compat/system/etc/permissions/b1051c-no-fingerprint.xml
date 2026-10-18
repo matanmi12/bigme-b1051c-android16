@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- No usable fingerprint on the A16 GSI: FingerprintService.getDeclaredInstances() always appends "virtual", and
+     AuthService adds HIDL sensors only when the AIDL list is empty, so the vendor's HIDL 2.1 HAL (microarray) is never
+     used. With "virtual" as the only sensor, the FingerprintHandler thread waits forever for
+     IVirtualHal/virtual, which TrebleDroid does not ship (servicemanager ctl.interface_start every 1 s).
+     SystemServer starts FingerprintService only with this feature; without it AuthService logs
+     "Fingerprint configuration exists, but FingerprintService is null." and nothing waits. -->
+<permissions>
+    <unavailable-feature name="android.hardware.fingerprint" />
+</permissions>

@@ -8,7 +8,8 @@
 #  * system_b: the GSI is written into system_b's existing extent 0 (super+0x23d00000); LP metadata untouched.
 #    The target range is first read back and must equal the stock system_b bytes (proves the mapping).
 #  * Data reset by writing zeros (never mtkclient e/es/ess: their result check is inverted locally).
-#  * boot: only a Magisk image patched from the CURRENT stock boot_b (kernel+DTB must be byte-identical).
+#  * boot: only a Magisk image patched from the stock boot_b (kernel byte-identical). SD GUARD (2026-10-18): the DTB
+#    must be stock + microSD cap 50 MHz; an uncapped image gets a capped copy (phasec_check.py sd-patch) automatically.
 #  * Nothing reboots unless you run `reset`. Every boot hits LK's hidden dm-verity warning: do the
 #    power-press routine (runbook §0) or LK powers off after 5 s, which is NOT a GSI failure.
 #
@@ -25,6 +26,7 @@ SYS_ABS=0x72d00000; SYS_LEN=0x83cf5000             # super 0x4f000000 + system_b
 SUPER_ABS=0x4f000000; UD_ABS=0x34f000000; UD_HEAD=0x4000000
 DIGEST_STOCK=e9211d4a1da0847afc55b59d83b18a6aa084efd1d2900eea9bf7ed8e0ab29671   # predicted ro.boot.vbmeta.digest, stock
 DIGEST_NOHT=5a084f7abaac13cc6de1d08d05e00f9ededbd76b0f981bfcd82495cc63eedad7    # predicted, after WRITE 1 (stock boot_b)
+SD_CAP_HEX=02faf080                                                               # /proc/device-tree/mmc@11240000/max-frequency, 50 MHz
 
 pre_misc() { mtk r misc "$RUN/misc.pre.bin" >/dev/null; check misc "$RUN/misc.pre.bin"; }
 # mtkclient's getint() turns an unparsable offset into 0 (= GPT). Assert every constant arithmetically.
@@ -66,7 +68,9 @@ adb-check)  # read-only; never writes
   g() { grep -E "^$1 " "$RUN/props.txt" | awk '{print $2}'; }
   expect() { if [ "$2" = "$3" ]; then echo "  PASS $1 = $2"; else echo "  FAIL $1 = '$2' (expected '$3')"; fi; }
   say "Assertions ($mode)"
+  sdcap=$($ADB shell xxd -p /proc/device-tree/mmc@11240000/max-frequency 2>/dev/null | tr -d '\r\n'); echo "sd max-frequency: $sdcap" >> "$RUN/props.txt"
   { expect slot_suffix "$(g ro.boot.slot_suffix)" _b; expect boot_completed "$(g sys.boot_completed)" 1
+    expect "microSD cap (DT max-frequency)" "$sdcap" $SD_CAP_HEX
     case "$mode" in
       stock)  expect veritymode "$(g ro.boot.veritymode)" eio; expect vbmeta.digest "$(g ro.boot.vbmeta.digest)" $DIGEST_STOCK;;
       vbmeta) expect veritymode "$(g ro.boot.veritymode)" disabled; expect vbmeta.digest "$(g ro.boot.vbmeta.digest)" $DIGEST_NOHT
@@ -87,7 +91,8 @@ mtk-check)  # read-only DA session; leaves the DA connected for a following writ
   for f in vbmeta_b vbmeta_system_b vbmeta_vendor_b boot_b; do printf '%-16s %s\n' $f "$(sha "$RUN/$f.bin")"; done | tee "$RUN/hashes.txt"
   vb=$(sha "$RUN/vbmeta_b.bin"); bt=$(sha "$RUN/boot_b.bin")
   [ "$vb" = $VB_STOCK_SHA ] && echo "vbmeta_b: STOCK"; [ "$vb" = $VB_NOHT_SHA ] && echo "vbmeta_b: HASHTREE_DISABLED (write 1 done)"
-  [ "$bt" = $BOOT_STOCK_SHA ] && echo "boot_b: official stock (Mar-2026 kernel), no Magisk"
+  [ "$bt" = $BOOT_STOCK_SHA ] && echo "boot_b: official stock (Mar-2026 kernel), no Magisk, NO SD cap"
+  "$PY" -I "$CHECK" sd-status "$RUN/boot_b.bin" || echo "WARNING: live boot_b lacks the microSD cap — restore-stock.sh boot / flash-sd50.sh"
   cmp -s "$RUN/vbmeta_system_b.bin" "$DUMP/vbmeta_system_b.bin" && cmp -s "$RUN/vbmeta_vendor_b.bin" "$DUMP/vbmeta_vendor_b.bin" \
     && echo "vbmeta_system_b / vbmeta_vendor_b: identical to backup" || echo "WARNING: vbmeta_system_b/vendor_b differ from backup"
   cmp -s "$RUN/seccfg.bin" "$DUMP/seccfg.bin" && echo "seccfg: identical to May backup" || echo "seccfg: differs from May backup (expected: LK's dm-verity state) — evidence only, NEVER written by us"
@@ -167,19 +172,24 @@ boot)  # WRITE 4 (only after the GSI baseline is recorded)
   img="${2:?usage: flash-gsi.sh boot <magisk_patched.img>}"; [ -s "$img" ] || die "no such image: $img"
   img="$(cd "$(dirname "$img")" && pwd)/$(basename "$img")"   # mtkclient runs from its own dir: absolute path required
   run_dir boot; need_hash "$BOOT_STOCK" $BOOT_STOCK_SHA
+  if ! "$PY" -I "$CHECK" sd-status "$img"; then   # SD GUARD: never write an uncapped boot image
+    capped="$RUN/$(basename "${img%.*}").sd50.img"
+    "$PY" -I "$CHECK" sd-patch "$img" "$capped" || die "could not add the microSD cap to $img"
+    say "Image lacked the microSD cap — using the capped copy: $capped"; img="$capped"
+  fi
   check boot "$img" "$BOOT_STOCK"; cand=$(sha "$img"); csize=$(stat -f%z "$img")
   [ "$csize" -eq $((0x2800000)) ] || die "image is $csize B, not the full 40 MiB partition — stop and inspect"
   mtk_session; pre_misc
-  mtk r boot_b "$RUN/boot_b.pre.bin" >/dev/null; pre=$(sha "$RUN/boot_b.pre.bin")
+  mtk r boot_b "$RUN/boot_b.pre.bin" </dev/null >/dev/null; pre=$(sha "$RUN/boot_b.pre.bin")
   [ "$pre" = "$cand" ] && { say "boot_b already holds this image"; exit 0; }
-  [ "$pre" = $BOOT_STOCK_SHA ] || die "live boot_b is not the official stock image ($pre)"
+  check boot-kernel "$RUN/boot_b.pre.bin" "$BOOT_STOCK"   # live boot_b must be from our lineage; it is the exact rollback
   confirm_phrase "WRITE boot_b" \
     "Operation: mtkclient w boot_b $img  (+ readback)   sha ${cand:0:12}…" \
-    "Checked  : header v2; kernel + DTB byte-identical to current stock boot_b (Mar-2026 kernel)" \
+    "Checked  : header v2; kernel byte-identical to stock boot_b (Mar-2026 kernel); DTB = stock + microSD cap 50 MHz" \
     "Risk     : bad ramdisk patch -> no boot (LK + vbmeta unaffected)." \
-    "Rollback : restore-stock.sh boot  (official stock boot_b, sha ${BOOT_STOCK_SHA:0:12}…)" \
-    "Verify   : readback sha == candidate; after boot: magisk -v, su -c id"
-  mtk multi "w boot_b $img;r boot_b $RUN/boot_b.post.bin"
+    "Rollback : mtkclient w boot_b $RUN/boot_b.pre.bin (live pre-image, sha ${pre:0:12}…) or restore-stock.sh boot" \
+    "Verify   : readback sha == candidate; after boot: magisk -v, su -c id, adb-check gsi (microSD cap)"
+  mtk multi "w boot_b $img;r boot_b $RUN/boot_b.post.bin" </dev/null
   [ "$(sha "$RUN/boot_b.post.bin")" = "$cand" ] && say "READBACK OK: boot_b == candidate. Next: reset -> press routine -> adb-check gsi" \
     || { say "READBACK MISMATCH. DA still connected — run: tools/scripts/restore-stock.sh boot"; exit 1; }
   ;;

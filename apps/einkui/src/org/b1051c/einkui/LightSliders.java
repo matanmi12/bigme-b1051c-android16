@@ -39,6 +39,7 @@ final class LightSliders {
     private LinearLayout box;
     private SeekBar cold, warm;
     private int styledMode = -1;
+    private int gap;                 // QS tile row spacing, also kept between the sliders and the tiles
     private boolean tracking;
     private boolean writeFailed;
 
@@ -79,6 +80,9 @@ final class LightSliders {
             ViewGroup.MarginLayoutParams m = new ViewGroup.MarginLayoutParams((ViewGroup.MarginLayoutParams) lp);
             m.width = ViewGroup.LayoutParams.MATCH_PARENT;
             m.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            // The brightness slider's own spacing sized one slider; with two, the warm one ran into the first tile
+            // row (owner 2026-10-18). Keep the tile-row gap below the box.
+            m.bottomMargin = Math.max(m.bottomMargin, gap);
             return lp instanceof LinearLayout.LayoutParams ? new LinearLayout.LayoutParams(m) : m;
         }
         return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -93,7 +97,7 @@ final class LightSliders {
         int h = src != null && src.getLayoutParams() != null && src.getLayoutParams().height > 0
                 ? src.getLayoutParams().height : dp(c, 48);
         int gapId = c.getResources().getIdentifier("qs_tile_margin_vertical", "dimen", "com.android.systemui");
-        int gap = gapId != 0 ? c.getResources().getDimensionPixelSize(gapId) : dp(c, 8);
+        gap = gapId != 0 ? c.getResources().getDimensionPixelSize(gapId) : dp(c, 8);
 
         box = new LinearLayout(c);
         box.setOrientation(LinearLayout.VERTICAL);
