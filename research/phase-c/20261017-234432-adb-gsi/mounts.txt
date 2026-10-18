@@ -1,0 +1,3 @@
+/dev/block/dm-3 on /vendor type ext4 (ro,seclabel,relatime)
+/dev/block/sdc14 on /metadata type ext4 (rw,seclabel,nosuid,nodev,noatime,discard)
+/dev/block/dm-51 on /data type f2fs (rw,lazytime,seclabel,nosuid,nodev,noatime,background_gc=on,discard,no_heap,user_xattr,inline_xattr,acl,inline_data,inline_dentry,extent_cache,mode=adaptive,active_logs=6,reserve_root=55050,resuid=0,resgid=1065,inlinecrypt,alloc_mode=default,fsync_mode=nobarrier)

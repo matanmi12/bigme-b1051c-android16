@@ -1,0 +1,107 @@
+fuse library not installed
+Preloader - Status: Waiting for PreLoader VCOM, please reconnect mobile/iot device to brom mode
+
+Port - Hint:
+
+Power off the phone before connecting.
+For brom mode, press and hold vol up, vol dwn, or all hw buttons and connect usb.
+For preloader mode, don't press any hw button and connect usb.
+If it is already connected and on, hold power for 10 seconds to reset.
+
+
+...........
+
+Port - Hint:
+
+Power off the phone before connecting.
+For brom mode, press and hold vol up, vol dwn, or all hw buttons and connect usb.
+For preloader mode, don't press any hw button and connect usb.
+If it is already connected and on, hold power for 10 seconds to reset.
+
+
+Port - Device detected :)
+Preloader - Detected regular mode !
+Preloader - 	CPU:			MT6877/MT6877V/MT8791N(Dimensity 900/1080/7050)
+Preloader - 	HW version:		0x0
+Preloader - 	WDT:			0x10007000
+Preloader - 	Uart:			0x11002000
+Preloader - 	Brom payload addr:	0x100a00
+Preloader - 	DA payload addr:	0x201000
+Preloader - 	CQ_DMA addr:		0x10212000
+Preloader - 	Var1:			0xa
+Preloader - Disabling Watchdog...
+Preloader - HW code:			0x959
+Preloader - Target config:		0x0
+Preloader - 	SBC enabled:		False
+Preloader - 	SLA enabled:		False
+Preloader - 	DAA enabled:		False
+Preloader - 	SWJTAG enabled:		False
+Preloader - 	EPP_PARAM at 0x600 after EMMC_BOOT/SDMMC_BOOT:	False
+Preloader - 	Root cert required:	False
+Preloader - 	Mem read auth:		False
+Preloader - 	Mem write auth:		False
+Preloader - 	Cmd 0xC8 blocked:	False
+Preloader - Get Target info
+Preloader - 	HW subcode:		0x8a00
+Preloader - 	HW Ver:			0xca00
+Preloader - 	SW Ver:			0x0
+Preloader - ME_ID:			<ME_ID>
+Preloader - SOC_ID:			<SOC_ID>
+DaHandler - Device is unprotected.
+DaHandler - Device is in Preloader-Mode.
+DAXFlash - Uploading xflash stage 1 from MTK_DA_V5.bin
+XFlashExt - Patching da1 ...
+Mtk - Patched "Patched loader msg" in preloader
+Mtk - Patched "hash_check" in preloader
+Mtk - Patched "Patched loader msg" in preloader
+Mtk - Patched "get_vfy_policy" in preloader
+XFlashExt - Patching da2 ...
+XFlashExt - Security check patched
+XFlashExt - DA version anti-rollback patched
+XFlashExt - SBC patched to be disabled
+XFlashExt - Register read/write not allowed patched
+DAXFlash - Successfully uploaded stage 1, jumping ..
+Preloader - Jumping to 0x200000
+Preloader - Jumping to 0x200000: ok.
+DAXFlash - Successfully received DA sync
+DAXFlash - Uploading stage 2...
+DAXFlash - Upload data was accepted. Jumping to stage 2...
+DAXFlash - Boot to succeeded.
+DAXFlash - Successfully uploaded stage 2
+DAXFlash - DA SLA is disabled
+DAXFlash - UFS Blocksize: 0x1000
+DAXFlash - UFS ID:       H9HQ15AECMBDAR
+DAXFlash - UFS MID:      0xad
+DAXFlash - UFS CID:      <STORAGE_CID>
+DAXFlash - UFS FWVer:    41303433
+DAXFlash - UFS Serial:   <STORAGE_SERIAL>
+DAXFlash - UFS LU0 Size: 0x1dcb000000
+DAXFlash - UFS LU1 Size: 0x400000
+DAXFlash - UFS LU2 Size: 0x400000
+DAXFlash - Starting DA extensions ...
+DAXFlash - Extensions were accepted. Jumping to extensions...
+DAXFlash - Boot to succeeded.
+DAXFlash - DA Extensions successfully added at 0x4fff0000
+
+Done |----------| 5.0% Write: (0x200000/0x2800000),0.00 MB/s
+Progress: |█---------| 10.0% Write: (0x400000/0x2800000), 14.89 MB/s 02s left 
+Progress: |██--------| 15.0% Write: (0x600000/0x2800000), 8.1 MB/s 02s left 
+Progress: |██--------| 20.0% Write: (0x800000/0x2800000), 8.12 MB/s 03s left 
+Progress: |██--------| 25.0% Write: (0xA00000/0x2800000), 8.1 MB/s 03s left 
+Progress: |███-------| 30.0% Write: (0xC00000/0x2800000), 8.13 MB/s 02s left 
+Progress: |████------| 35.0% Write: (0xE00000/0x2800000), 8.16 MB/s 02s left 
+Progress: |████------| 40.0% Write: (0x1000000/0x2800000), 8.1 MB/s 02s left 
+Progress: |████------| 45.0% Write: (0x1200000/0x2800000), 8.16 MB/s 02s left 
+Progress: |█████-----| 50.0% Write: (0x1400000/0x2800000), 8.21 MB/s 02s left 
+Progress: |██████----| 55.0% Write: (0x1600000/0x2800000), 8.15 MB/s 02s left 
+Progress: |██████----| 60.0% Write: (0x1800000/0x2800000), 8.07 MB/s 01s left 
+Progress: |██████----| 65.0% Write: (0x1A00000/0x2800000), 8.2 MB/s 01s left 
+Progress: |███████---| 70.0% Write: (0x1C00000/0x2800000), 8.25 MB/s 01s left 
+Progress: |████████--| 75.0% Write: (0x1E00000/0x2800000), 8.23 MB/s 01s left 
+Progress: |████████--| 80.0% Write: (0x2000000/0x2800000), 8.31 MB/s  
+Progress: |████████--| 85.0% Write: (0x2200000/0x2800000), 8.26 MB/s  
+Progress: |█████████-| 90.0% Write: (0x2400000/0x2800000), 8.22 MB/s  
+Progress: |██████████| 95.0% Write: (0x2600000/0x2800000), 7.85 MB/s  
+Progress: |██████████| 100.0% Write: (0x2800000/0x2800000), 8.2 MB/s  
+Wrote ~/Desktop/Bigme/BIGME_B1051C_system_dump/boot_a.bin to sector 285952 with sector count 10240.
+Reset command was sent. Disconnect usb cable to power off.

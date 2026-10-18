@@ -1,0 +1,5 @@
+#!/system/bin/sh
+# b1051c-eink-compat stub. TrebleDroid's phh-su daemon bind-mounts itself (nosuid) over Magisk's binaries, which
+# makes init's `magisk --service` / `--boot-complete` fail (nosuid_transition) on this GSI. While this module is
+# active the sudaemon service runs this stub instead; root comes from Magisk (and adb root on userdebug).
+exec /system/bin/sleep 2147483647

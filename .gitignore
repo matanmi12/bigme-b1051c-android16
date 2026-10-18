@@ -1,0 +1,20 @@
+# keys: never commit (see keys/README.md)
+keys/*
+!keys/README.md
+*.pk8
+*.pem
+*.keystore
+*.jks
+# build outputs and proprietary/large inputs
+build/
+out/
+*.apk
+*.so
+*.zip
+*.img
+*.bin
+*.bmp
+shim/lut_data.h
+einkd/einkd
+module/b1051c-eink-compat/bin/
+.DS_Store

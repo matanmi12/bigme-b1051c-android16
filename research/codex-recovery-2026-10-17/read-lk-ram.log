@@ -1,0 +1,8 @@
+fuse library not installed
+Main - Handling da commands ...
+
+Done |██--------| 25.0% Peek: (0x10000/0x40000),0.00 MB/s
+Progress: |█████-----| 50.0% Peek: (0x20000/0x40000), 2.73 MB/s  
+Progress: |████████--| 75.0% Peek: (0x30000/0x40000), 2.89 MB/s  
+Progress: |██████████| 100.0% Peek: (0x40000/0x40000), 2.93 MB/s  
+DaHandler - Successfully wrote data from 0x7ffbf000, length 0x40000 to ~/Desktop/Bigme/research/codex-recovery-2026-10-17/lk-ram.bin

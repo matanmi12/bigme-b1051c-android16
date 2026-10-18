@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.b1051c.einkctl">
+    <uses-sdk android:minSdkVersion="31" android:targetSdkVersion="35" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- publish the front-light values for the QS sliders; granted with `pm grant` (development permission) -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+
+    <application android:label="@string/app_name" android:icon="@drawable/ic_eink"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false">
+
+        <activity android:name=".MainActivity" android:exported="true"
+            android:configChanges="orientation|screenSize|density|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".KeeperService" android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Re-applies e-ink display settings and switches the frontlight off while the screen sleeps" />
+        </service>
+
+        <receiver android:name=".BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".AppProfileService" android:exported="true" android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter><action android:name="android.accessibilityservice.AccessibilityService" /></intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility" />
+        </service>
+
+        <service android:name=".TileRefresh" android:icon="@drawable/ic_tile_mode" android:label="@string/tile_refresh"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileClear" android:icon="@drawable/ic_tile_clear" android:label="@string/tile_clear"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileLight" android:icon="@drawable/ic_tile_light" android:label="@string/tile_light"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileRom" android:icon="@drawable/ic_tile_rom" android:label="@string/tile_rom"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileColour" android:label="@string/tile_colour" android:icon="@drawable/ic_tile_colour"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileGrey" android:label="@string/tile_grey" android:icon="@drawable/ic_tile_grey"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileAntiShake" android:label="@string/tile_antishake" android:icon="@drawable/ic_tile_antishake"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+    </application>
+</manifest>

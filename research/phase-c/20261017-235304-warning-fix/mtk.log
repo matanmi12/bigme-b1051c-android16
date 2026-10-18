@@ -1,0 +1,15 @@
++ mtk r misc ~/Desktop/Bigme/research/phase-c/20261017-235304-warning-fix/misc.pre.bin
+fuse library not installed
+Main - Handling da commands ...
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "misc"
+
+Done |█---------| 12.5% Read: (0x10000/0x80000),0.00 MB/s
+Progress: |██--------| 25.0% Read: (0x20000/0x80000), 12.59 MB/s  
+Progress: |████------| 37.5% Read: (0x30000/0x80000), 29.37 MB/s  
+Progress: |█████-----| 50.0% Read: (0x40000/0x80000), 29.76 MB/s  
+Progress: |██████----| 62.5% Read: (0x50000/0x80000), 30.25 MB/s  
+Progress: |████████--| 75.0% Read: (0x60000/0x80000), 30.77 MB/s  
+Progress: |█████████-| 87.5% Read: (0x70000/0x80000), 31.27 MB/s  
+Progress: |██████████| 100.0% Read: (0x80000/0x80000), 28.66 MB/s  
+DaHandler - Dumped sector 8 with sector count 128 as ~/Desktop/Bigme/research/phase-c/20261017-235304-warning-fix/misc.pre.bin.

@@ -1,0 +1,33 @@
+fuse library not installed
+DAXFlash
+DAXFlash - [LIB]: [31mStatus error: Wrong magic[0m
+DAXFlash
+DAXFlash - [LIB]: [31mError on sending dev ctrl 0x4000c: Unknown: -0x1[0m
+DeviceClass - USBError(5, 'Input/Output Error')
+Traceback (most recent call last):
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtk.py", line 350, in <module>
+    sys.exit(main() or 0)
+             ^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtk.py", line 346, in main
+    return mtk.run(parser)
+           ^^^^^^^^^^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/mtk_main.py", line 453, in run
+    mtk = da_handler.connect(mtk, directory)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/mtk_da_handler.py", line 132, in connect
+    mtk.daloader.reinit()
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/mtk_daloader.py", line 192, in reinit
+    self.da.reinit()
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/xflash/xflash_lib.py", line 1004, in reinit
+    self.emmc = self.get_emmc_info(display)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/xflash/xflash_lib.py", line 441, in get_emmc_info
+    resp = self.send_devctrl(self.cmd.GET_EMMC_INFO)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/xflash/xflash_lib.py", line 194, in send_devctrl
+    status[0] = self.status()
+                ^^^^^^^^^^^^^
+  File "~/Desktop/Bigme/work/ref/mtkclient/mtkclient/Library/DA/xflash/xflash_lib.py", line 140, in status
+    magic, _, length = unpack("<III", hdr)
+                       ^^^^^^^^^^^^^^^^^^^
+struct.error: unpack requires a buffer of 12 bytes

@@ -1,0 +1,5 @@
+/dev/block/dm-9 on /system_ext type ext4 (ro,seclabel,relatime)
+/dev/block/dm-10 on /vendor type ext4 (ro,seclabel,relatime)
+/dev/block/dm-11 on /product type ext4 (ro,seclabel,relatime)
+/dev/block/sdc14 on /metadata type ext4 (rw,seclabel,nosuid,nodev,noatime,discard)
+/dev/block/dm-48 on /data type f2fs (rw,lazytime,seclabel,nosuid,nodev,noatime,background_gc=on,discard,no_heap,user_xattr,inline_xattr,acl,inline_data,inline_dentry,extent_cache,mode=adaptive,active_logs=6,reserve_root=55054,resuid=0,resgid=1065,inlinecrypt,alloc_mode=default,fsync_mode=nobarrier)

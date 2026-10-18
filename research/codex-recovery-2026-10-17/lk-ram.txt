@@ -1,0 +1,551 @@
+PL_LOG_STORE:set ram_header->sig = 0xABCD1234
+#T#bldr_param=14
+Pll init start...
+mfg0 mtcmos Start..
+mfg0 mtcmos Done!
+mfg1 mtcmos Start..
+mfg1 mtcmos Done!
+INFRA_BUS_DCM_CTRL: 0x787FE0, MODULE_SW_CG_0: 0x0, MODULE_SW_CG_1: 0x0, MODULE_SW_CG_2: 0x0, MODULE_SW_CG_3: 0x1000000, MODULE_SW_CG_4: 0x0, PERI_BUS_DCM_CTRL: 0x4787FE0
+PERIAXI_SI0_CTL: 0x80800300
+MSDC_NEW_RX_CFG: 0x0, PATCH_BIT1: 0xFFE64309
+disp mtcmos Start..
+disp mtcmos Done!
+MMSYS_CG_0: 0xFFFFFFFF, MMSYS_CG_2: 0xFFFFFFFF
+MDPSYS_CG_0: 0xFFFFFFFF, MDPSYS_CG_2: 0xFFFFFFFF
+Pll init Done!!
+#T#PLL=17
+effuse register: 0x11F101B4 = 0x9781FF
+bandgap filter: 0x1000C404 = 0xF0000
+#T#GPIO=1
+[RGU] rst from: ?
+[RGU] STA from reg:       0x0
+[RGU] MODE:               0x4D
+[RGU] STA:                0x0
+[RGU] LENGTH:             0x1FFFE0
+[RGU] INTERVAL:           0xFFF
+[RGU] SWSYSRST:           0x0
+[RGU] LATCH_CTL:          0x0
+[RGU] LATCH_CTL2:         0x0
+[RGU] NONRST_REG:         0x0
+[RGU] NONRST_REG2:        0x20000000
+[RGU] REQ_MODE:           0x3F00FB
+[RGU] REQ_IRQ_EN:         0x3F00FF
+[RGU] DEBUG_CTL:          0x0
+[RGU] parse g_rgu_status: 0 (0x0)
+[RGU] Set NONRST_REG to 0x0
+[RGU] mtk_wdt_mode_config mode value=34, tmp:22000034
+[DOE_ENV]get_env apwdt_en
+[RGU] mtk_wdt_mode_config mode value=7D, tmp:2200007D
+[RGU] mtk_wdt_reset_deglitch_enable: MTK_WDT_RSTDEG_EN1(8000A357), MTK_WDT_RSTDEG_EN2(800067D2)
+[RGU] rgu_update_reg: 0, bits: 0xC000, addr: 0x10007040, val: 0x0
+[RGU] rgu_update_reg: 0, bits: 0x300, addr: 0x100070A0, val: 0x0
+[RGU] mtk_wdt_pre_init: MTK_WDT_DEBUG_CTL(0x0)
+[RGU] mtk_wdt_pre_init: MTK_WDT_DEBUG_CTL2(0x0)
+[RGU] mtk_wdt_pre_init: MTK_WDT_LATCH_CTL(0x21E71)
+[RGU] mtk_wdt_pre_init: MTK_WDT_REQ_MODE(3F00F2), MTK_WDT_REQ_IRQ_EN(3B00F0)
+#T#WDT_PRE=12
+abist meter[37] = 233084 Khz(div: 1)
+abist meter[37] = 295036 Khz(div: 1)
+abist meter[37] = 260304 Khz(div: 1)
+abist meter[37] = 276756 Khz(div: 1)
+abist meter[37] = 268124 Khz(div: 1)
+abist meter[37] = 264364 Khz(div: 1)
+abist meter[37] = 263552 Khz(div: 1)
+abist meter[37] = 260404 Khz(div: 1)
+abist meter[37] = 263656 Khz(div: 1)
+abist meter[37] = 260304 Khz(div: 1)
+[PMIF] ULPOSC1 K done: 260M, PLL_ULPOSC1_CON0/1/2 0x3CA94F 0x2900 0x41
+[pmifclkmgr_set_spmi_clk] done
+[pmifclkmgr_set_spi_clk] done
+#T#PMIFCLKMGR=7
+[PMIF] Latest cmd lists before reboot
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[PMIF] [swinf:0, cmd:0x0, rw:0x0, slvid:0, bytecnt:0, (addr 0x0=0x0)]
+[SPMI] spmi_read_check done, slvid:6
+[SPMI] non-rcs dly:1, pol:0, sampl:0x2
+[SPMI] spmi_read_check done, slvid:3
+[SPMI] non-rcs dly:1, pol:0, sampl:0x2
+#T#SPMI=27
+#T#SPMI_P_SRCLKEN_RC=0
+[PWRAP] pwrap_init_preloader
+[PWRAP] is_pwrap_init_done 0
+[PWRAP] pwrap_init start!!!!!!!!!!!!!
+[PWRAP] Reset SPISLV ok
+[PWRAP] Set Read Dummy Cycle ok
+[PWRAP] _pwrap_init_dio ok
+[PWRAP] _pwrap_init_reg_clock ok
+[PWRAP] __pwrap_InitSPISLV ok
+[PWRAP] si_sampling_ck_dly = 0, si_sampling_ck_pol = 0
+[PWRAP] si_sample_ctrl = 0, rdata = D6A9
+[PWRAP] First Valid Sampling Clock Found!!!
+[PWRAP] si_sampling_ck_dly = 0, si_sampling_ck_pol = 1
+[PWRAP] si_sample_ctrl = 20, rdata = 5AA5
+[PWRAP] si_dly = 0, *RG_SPI_CON2 = 0, rdata = 1B27
+[PWRAP] si_dly = 1, *RG_SPI_CON2 = 1, rdata = 1B27
+[PWRAP] si_dly = 2, *RG_SPI_CON2 = 2, rdata = 1B27
+[PWRAP] si_dly = 3, *RG_SPI_CON2 = 3, rdata = 1B27
+[PWRAP] si_dly = 4, *RG_SPI_CON2 = 4, rdata = 1B27
+[PWRAP] si_dly = 5, *RG_SPI_CON2 = 5, rdata = 1B27
+[PWRAP] Data Boundary is Found !!!
+[PWRAP] si_dly = 6, rdata = 1A65
+[PWRAP] si_sample_ctrl=0x20(before)
+[PWRAP] si_sample_ctrl=0x40(after)(non-FPGA)
+[PWRAP] SI Strobe Calibration For PMIC 0 Done
+[PWRAP] si_sample_ctrl = 40, si_dly = 6
+[PWRAP] _pwrap_init_sistrobe Read Test ok
+[PWRAP] _pwrap_init_sistrobe ok
+[PWRAP] _pwrap_lock_SPISLVReg ok
+[PWRAP] _pwrap_wacs2_write_test ok
+[PWRAP] Enable CRC ok
+[PWRAP] _pwrap_InitStaUpd ok
+[PWRAP] write MODEM_TEMP_SHARE_CTRL start
+[PWRAP] write MODEM_TEMP_SHARE_CTRL ok
+[PWRAP] MODEM_TEMP_SHARE_CTRL:F0
+[PWRAP] _pwrap_config_mpu ok
+[PWRAP] start pwrap_read_test
+[PWRAP] rdata=0x5AA5
+[PWRAP] Read Test pass, return_value = 0x0
+[PWRAP] start pwrap_write_test
+[PWRAP] after pwrap_write_test
+[PWRAP] rdata=0xA55A (read back)
+[PWRAP] Write Test pass
+[PWRAP] channel pass
+[PWRAP] REC_CMD0:0xA08 (The last one adr)
+[PWRAP] REC_WDATA0:0x0 (The last one wdata)
+[PWRAP] REC_CMD1:0x5C2 (The second-last adr)
+[PWRAP] REC_WDATA1:0x1 (The second-last wdata)
+[PWRAP] REC_CMD2:0x588 (The third-last adr)
+[PWRAP] REC_WDATA2:0x4301 (The third-last wdata)
+[PWRAP] REC_CMD3:0x5C2 (The fourth-last adr)
+[PWRAP] REC_WDATA3:0x1 (The fourth-last wdata)
+[PWRAP] REC_CMD4:0x5BC (The fifth-last adr)
+[PWRAP] REC_WDATA4:0x9136 (The fifth-last wdata)
+[PWRAP] REC_CMD5:0x5C2 (The sixth-last adr)
+[PWRAP] REC_WDATA5:0x1 (The sixth-last wdata)
+[PWRAP] enable spi debug ok
+[PWRAP] clear record command ok
+[PWRAP] PMIC_WRAP_MONITOR_MODE = Logging Mode
+[PWRAP] PMIF_SPI_PMIF_MONITOR_CTRL = 0x5
+[PWRAP] PMIF_SPI_PMIF_MONITOR_TARGET_CHAN_0 = 0x1FBFFF
+[PWRAP] PMIF_SPI_PMIF_MONITOR_TARGET_ADDR_0 = 0x0
+[PWRAP] PMIF_SPI_PMIF_MONITOR_TARGET_WDATA_0 = 0x0
+[PWRAP] init pass, ret=0.
+#T#PWRAP=29
+PL_LOG_STORE, last PMIC boot up phase is 0x22:0x220.
+PL_LOG_STORE, last boot up phase is 2, return 0.
+#T#LOGSTORE_BOOT=1
+[TIA] trigger addr setup ok
+[TIA] trigger value setup ok
+[TIA] read back addr setup ok
+[TIA] delay setup ok
+[TIA] lock TIA_AUXADC register ok
+[TIA] TIA init done
+#T#TIA=2
+Enter mtk_kpd_gpio_set! 
+mtk detect key function pmic_detect_homekey MTK_PMIC_RST_KEY = 17
+Log Turned Off.
+#T#UART DYNAMIC SWITCH=35
+Current RTC time:[2026/10/17 16:34:33]
+#T#I2C=0
+DATE_CODE_YY:5, DATE_CODE_WW:1D
+[SegCode] Segment Code:0x3, PROJECT_CODE:0x0, FAB_CODE:0x3, RW_STA:0x0, CTL:0x0, DCM:0x7
+#T#DEVINFO=1
+[PMIC]Preloader Start
+[PMIC] CHIP Code = 0x5920
+[PMIC]POWER_HOLD :0x1
+[PMIC]TOP_RST_STATUS[0x150]=0x4F
+[PMIC]PONSTS[0xC]=0x4
+[PMIC]POFFSTS[0xE]=0x80
+[PMIC]PG_SDN_STS0[0x16]=0xFFFF
+[PMIC]PG_SDN_STS1[0x18]=0xFFF8
+[PMIC]OC_SDN_STS0[0x1A]=0x0
+[PMIC]OC_SDN_STS1[0x1C]=0x0
+[PMIC]BUCK_OC_SDN_STATUS[0x1430]=0x0
+[PMIC]BUCK_OC_SDN_EN[0x1440]=0x7FF
+[PMIC]THERMALSTATUS[0x1E]=0x0
+[PMIC]STRUP_CON4[0xA1A]=0x0
+[PMIC]STRUP_CON12[0xA12]=0x21E0
+[PMIC]TOP_RST_MISC[0x14A]=0x200
+[PMIC]TOP_CLK_TRIM[0x388]=0x6CC0
+latch VCORE(VGPU11) 400000 uV(0x0)
+latch VPU(VPROC1) 400000 uV(0x0)
+latch VGPU(VPROC2) 400000 uV(0x0)
+latch VRF_DIG(VPU) 400000 uV(0x0)
+latch VSRAM_PROC1 850000 uV(0x24)
+latch VSRAM_PROC2 850000 uV(0x24)
+latch VSRAM_OTHERS 750000 uV(0x3C)
+latch VSRAM_GPU(VSRAM_MD) 750000 uV(0x3C)
+[PMIC]just_rst = 0
+[PMIC]RG_RSV_SWREG[0xA0E]=0x2100
+[pwrkey_dbg_status] powerkey:0 count=0(ms) g_pwrkey_release=0
+[pmic_wdt_set] TOP_RST_MISC=0x221
+register vsram_core OK
+register vsram_proc1 OK
+register vsram_proc2 OK
+register vsram_gpu OK
+register vpu OK
+register vgpu OK
+register vcore OK
+register vrf_dig OK
+register vio18 OK
+register vm18 OK
+[MT6315]S6 RG_SLV_ID[0x136]=0xB6
+[MT6315]S6 TOP_RST_STATUS[0x129]=0x0
+[MT6315]S6 POFFSTS[0xC]=0x0
+[MT6315]S6 RGS_POFFSTS[0xA0F]=0x15
+[MT6315]S6 PG_SDN_STS0[0xF]=0xF
+[MT6315]S6 OC_SDN_STS0[0x10]=0x0
+[MT6315]S6 BUCK_OC_SDN_STS[0x1416]=0x0
+[MT6315]S6 BUCK_OC_SDN_EN[0x1451]=0x1F
+[MT6315]S6 TOP_RST_MISC[0x126]=0x0
+[MT6315]S3 RG_SLV_ID[0x136]=0xB3
+[MT6315]S3 TOP_RST_STATUS[0x129]=0x0
+[MT6315]S3 POFFSTS[0xC]=0x0
+[MT6315]S3 RGS_POFFSTS[0xA0F]=0x15
+[MT6315]S3 PG_SDN_STS0[0xF]=0xF
+[MT6315]S3 OC_SDN_STS0[0x10]=0x0
+[MT6315]S3 BUCK_OC_SDN_STS[0x1416]=0x0
+[MT6315]S3 BUCK_OC_SDN_EN[0x1451]=0x1F
+[MT6315]S3 TOP_RST_MISC[0x126]=0x0
+register vproc1 OK
+[MT6315]latch vproc1 0 uV(0x0)
+register vproc2 OK
+[MT6315]latch vproc2 0 uV(0x0)
+register LP5_VDDQ OK
+[MT6315]latch LP5_VDDQ 0 uV(0x0)
+register vmodem OK
+[MT6315]latch vmodem 0 uV(0x0)
+register vufs12 OK
+[MT6315]latch vufs12 0 uV(0x0)
+register vsram_md OK
+[MT6315]latch vsram_md 0 uV(0x0)
+[MT6315]S6 set TOP_RST_MISC=0x3
+[MT6315]S3 set TOP_RST_MISC=0x3
+0xFFFF:0xFFFF:0xFFFF:0xFFFF:0x6BA7:0xC0B6:0x6B1:0x602B:(S3)
+[MT6315]mt6315_spmi_probe done
+mt6360_pmic_i2c_probe
+mt6360_pmic_enable_crc_check: crc_en = 0xC0
+mt6360_pmic_enable_crc_check: no need
+mt6360_pmic_enable_poweroff_sequence: en = 0
+mt6360_set_buck1_fsw
+mt6360_set_sys_short_protect
+register LP4X_VDD2_LP5_VDD2H OK
+register LP4X_VDDQ_LP5_VDD2L OK
+register VMDDR OK
+register VDRAM2 OK
+mt6360_pmic_init: read 0x26 = 0x0
+mt6360_pmic_i2c_probe: reg[0xd8] = 0x96
+mt6360_pmic_i2c_probe: reg[0xDC] = 0x0
+mt6360_pmic_i2c_probe: reg[0xDD] = 0x0
+mt6360_pmic_i2c_probe: reg[0xDE] = 0x0
+mt6360_pmic_i2c_probe: reg[0xDF] = 0x0
+mt6360_ldo_i2c_probe: ++
+mt6360_ldo_i2c_probe: --
+[PMIC]Init done
+[pmic_enable_smart_reset] smart_en:0, smart_sdn_en:0
+#T#PMIC=50
+vproc/vsram run as hw default
+[UFS] ufs_aio_init_mphy: ufs res0 value=0x0
+device descriptor length = 0x59
+power descriptor length = 0x62
+interconnect descriptor length = 0x6
+configuration descriptor length = 0xE6
+unit descriptor length = 0x2D
+geometry descriptor length = 0x57
+[UFS] UFS version 2.20
+[UFS] Device Desc:
+59 0 0 0 0 0 3 4 1 1 1 7F 0 1 4 0 
+2 20 5 22 1 2 3 4 1 AD 16 1A 2 0 0 B1 
+3 20 44 6 20 0 0 0 0 0 5 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+1 3 1 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 1 B1 1 0 0 0 0 0 
+Try selector: 0x0
+Dev. Descr. F. Support: 0xB1
+Dev. Descr. Ext. F. Support: 0xB1 0x1
+HPB Version = 1.0.3, Control mode = 1
+TW Reduction = 1, TW Type = 0
+Shared WB Buffer AU = 0x0
+ud0_base_offset = 22, ud_config_len = 26
+[UFS] quirk_sel: 0x0
+[UFS] vendor id: 0x1AD
+[UFS] ufs id: H9HQ15AECMBDAR
+[UFS] ufs fwver: A043
+[UFS] ufs serial number: 25304F2FB9E0
+[UFS] dev_quirk = 0x0
+[UFS] ufs_aio_check_lu_cfg: original Configuration Desc:
+E6 1 0 1 1 1 7F 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 
+1 1 0 3 0 0 0 3 1 C 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+1 2 0 3 0 0 0 3 1 C 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+2 0 0 0 0 0 77 2C 0 C 2 0 0 0 0 0 1D CB 0 0 0 0 0 0 8 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+[UFS] Sense Data: ASC=29, ASCQ=2
+[UFS] Sense Data(all): 70 0 6 0 0 0 0 A 0 0 0 0 29 2 0 0 0 0 
+[UFS] Sense Data: ASC=29, ASCQ=2
+[UFS] Sense Data(all): 70 0 6 0 0 0 0 A 0 0 0 0 29 2 0 0 0 0 
+[UFS] Sense Data: ASC=29, ASCQ=2
+[UFS] Sense Data(all): 70 0 6 0 0 0 0 A 0 0 0 0 29 2 0 0 0 0 
+[UFS] Sense Data: ASC=29, ASCQ=2
+[UFS] Sense Data(all): 70 0 6 0 0 0 0 A 0 0 0 0 29 2 0 0 0 0 
+[UFS] info: RX HS-G3, setting is 4
+[UFS] info: TX HS-G3, setting is 4
+[UFS] info: HS-G3-2, 1 lane
+[ufs_set_write_protect]: RPMB partition = 1, wp_type = 4, blknr = 0xx, blkcnt = 0x0
+[ufshcd_authensss_wcnt_read_rsp_check]: RPMB Fail in checking result : Authentication Key not yet programmed 
+[rpmb_authen_read_counter]: RPMB WriteCounter Read Resp Check Fail, ret = -2 
+[rpmb_ufs_clr_wp]: RPMB rpmb_authen_read_counter fail! ret = -2
+[ufs_set_write_protect]: RPMB rpmb_ufs_clear_wp err-2
+[ufs_clr_write_protect]: Clear UFS_LU_BOOT1 write protect fail
+#T#Boot dev init=142
+[PLFM] Init Boot Device: OK(0)
+metadata.slot_info[0].priority = 14, 15
+metadata.slot_info[0].retry = 0, 7
+[AB] Current boot: Preloader_b
+[AB] ab_suffix: _b, ab_retry: 7
+[AB] boot_success is 1!
+#T#ab_ota_boot_check @EARLY_PARTITION_ACCESS=36
+#T#Long Pressed Reboot=0
+[PLFM] Init PMIC: OK(0)
+[PLFM] chip_ver[0]
+Unmask all EINT event mask
+bus_parity_init: start
+bus_parity_init: end
+[BLDR] Build Time: 20250123-150836
+[ROM_INFO] 'v131074'
+[SEC] Loading SEC config
+[SEC] Name = 
+[SEC] Config = 0x22, 0x11
+0x31,0x41,0x35,0x32
+[SEC] read '0xF000000'
+0x4D,0x4D,0x4D,0x4D,0x4,0x0,0x0,0x0,
+[SEC] seclib_img_auth_load_sig [SEC] CFG read size '0x1000' '0x3C'
+0x4D4D4D4D
+[SEC] SEC CFG 'v4' exists
+[LIB] HW DEC
+[SEC] SEC CFG is valid. Lock state is 3 
+#T#Sec lib init=15
+[DOE_ENV] No doconfig setting
+[DOE_ENV]read_env_area fail, ret = -1
+#T#dconfig init=25
+#T#lastpc=0
+pmwrap_interface_init: PMIF_VLD_RDY
+M00: 0x1C029C9A
+M01: 0x1C029C9A
+M02: 0x1C029C9A
+M03: 0x1C029C9A
+M04: 0x1C029C9A
+M05: 0x1C029C9A
+M06: 0x1C029C9A
+M07: 0x1C029C9A
+M08: 0xC9C
+M09: 0x1C029C9A
+M010: 0x1C029C9A
+M011: 0xC9C
+M012: 0xC9C
+M01 FPM SWITCH: 0x1C029C8A
+M02 FPM SWITCH: 0x1C029C8A
+M03 FPM SWITCH: 0x1C029C8A
+M04 FPM SWITCH: 0x1C029C8A
+M05 FPM SWITCH: 0x1C029C8A
+M06 FPM SWITCH: 0x1C029C8A
+M07 FPM SWITCH: 0x1C029C8A
+M08 FPM SWITCH: 0xC8C
+M09 FPM SWITCH: 0x1C029C8A
+M010 FPM SWITCH: 0x1C029C8A
+M011 FPM SWITCH: 0xC8C
+M012 FPM SWITCH: 0xC8C
+M02 BBLPM SWITCH: 0x1C029CAA
+M00: 0x1C029C92
+M01: 0x1C029C82
+M02: 0x1C029CA2
+M04: 0x1C029C82
+M05: 0x1C029C82
+M06: 0x1C029C82
+M07: 0x1C029C82
+M08: 0xC84
+M09: 0x1C029C82
+SRCLKEN_RC_CFG:0x10
+RC_CENTRAL_CFG1:0x10401425
+RC_CENTRAL_CFG2:0x1010
+RC_CENTRAL_CFG3:0x400F
+RC_CENTRAL_CFG4:0x20800
+RC_DCXO_FPM_CFG:0x8
+SUBSYS_INTF_CFG = 0x1041EFB
+RC_SPI_STA_0:0x40030698
+RC_PI_PO_STA:0xD15C3
+M00: 0x1C029C92
+M01: 0x1C029C82
+M02: 0x1C029CA2
+M03: 0x1C029C8A
+M04: 0x1C029C82
+M05: 0x1C029C82
+M06: 0x1C029C82
+M07: 0x1C029C82
+M08: 0xC84
+M09: 0x1C029C82
+M010: 0x1C029C8A
+M011: 0xC8C
+M012: 0xC8C
+#T#srclken_rc=8
+clk_buf_dump_dts_log: PMIC_CLK_BUF?_STATUS 1/2/3/4/7=2 1 1 2 1
+clk_buf_dump_dts_log: PMIC_CLK_BUF?_OUTPUT_IMPEDANCE 1/2/3/4/7=3 4 3 4 3
+clk_buf_dump_dts_log: PMIC_CLK_BUF?_CONTROLS_FOR_DESENSE 2/3/4=4 0 4
+clk_buf_dump_clkbuf_log DCXO_CW00/09/12/13/15/19=0x6A4D 53F0 8100 4C F0F 71C6
+clk_buf_dump_clkbuf_log spi_con1/ldo_rf_op/ldo_bb_op/ldo_rf_en/ldo_bb_en=0x1 0 0 1 1
+clk_buf_dump_clkbuf_log clk buf vrfck_hv_en=0x0
+[clk_buf_init_pmic_clkbuf] XO_SOC_VOTER(0x5)
+[clk_buf_init_pmic_clkbuf] XO_WCN_VOTER(0xF2)
+[clk_buf_init_pmic_clkbuf] XO_NFC_VOTER(0x200)
+[clk_buf_init_pmic_clkbuf] XO_CEL_VOTER(0x12)
+[clk_buf_init_pmic_clkbuf] XO_EXT_VOTER(0xF0)
+clk_buf_dump_clkbuf_log DCXO_CW00/09/12/13/15/19=0x4A4D 51F0 8100 4C F0F 71C6
+clk_buf_dump_clkbuf_log spi_con1/ldo_rf_op/ldo_bb_op/ldo_rf_en/ldo_bb_en=0x1 1 1 0 0
+clk_buf_dump_clkbuf_log clk buf vrfck_hv_en=0x0
+pmwrap_interface_init: PMIF_VLD_RDY
+clk_buf_init_pmic_wrap: DCXO_CMD_ADR0/WDATA0=0x4580458/10000
+clk_buf_init_pmic_wrap: DCXO_CMD_ADR1/WDATA1=0x78A078C/1000100
+#T#clk_buf_init=6
+[RTC]rtc_enable_dcxo con = 0x486, osc32con = 0xDE6D, sec = 0x2407
+[RTC]get_frequency_meter: input=0x0, ouput=5
+[RTC]get_frequency_meter: input=0x0, ouput=5
+[RTC]get_frequency_meter: input=0x0, ouput=3979
+[RTC]rtc_init#1 powerkey1 = 0xA357, powerkey2 = 0x67D2, without LPD
+[RTC]bbpu = 0x1, con = 0x486, osc32con = 0xDE6D, sec = 0x2407, yea = 0xC73A
+[RTC]rtc_init#2 powerkey1 = 0xA357, powerkey2 = 0x67D2
+[RTC]rtc_init Writeif_unlock
+[RTC]eosc_cali: RG_FQMTR_CKSEL=0x4A
+[RTC]get_frequency_meter: input=0xF, ouput=827
+[RTC]eosc_cali: val=0x33B
+[RTC]get_frequency_meter: input=0x7, ouput=702
+[RTC]eosc_cali: val=0x2BE
+[RTC]get_frequency_meter: input=0xB, ouput=765
+[RTC]eosc_cali: val=0x2FD
+[RTC]get_frequency_meter: input=0xD, ouput=796
+[RTC]eosc_cali: val=0x31C
+[RTC]EOSC cali val = 0xDE4D
+[RTC]RTC_SPAR0=0x0 
+[RTC]32k-less mode
+[RTC]rtc_2sec_reboot_check 0x2407, without 2sec reboot, type 0x2
+[RTC]rtc 2sec reboot is not enabled
+[RTC]secure_rtc_set_ck 
+[RTC]RTC_SEC_DSN_ID[0x600]=0x3200, RTC_SEC_DSN_REV0[0x602]=0x1000
+[RTC]SCK_TOP_CKPDN_CON0[0x514]=0x46, RTC_SEC_CK_PDN[0x616]=0x1
+#T#rtc=59
+VAUX18=1840.0mV (0x50), VBG12=1204.50mV (0x7E)
+[PMIC] pmic_init_setting end. v210121
+[DOE_ENV]get_env vproc1
+vproc1 0
+[DOE_ENV]get_env vproc2
+vproc2 0
+[DOE_ENV]get_env vproc1_rrate
+vproc1_rrate 0
+[DOE_ENV]get_env vproc1_frate
+vproc1_frate 0
+[DOE_ENV]get_env vproc2_rrate
+vproc2_rrate 0
+[DOE_ENV]get_env vproc2_frate
+vproc2_frate 0
+[MT6359] 1 1,40
+[MT6359] 1 2,47
+[MT6315]1 14,104
+[MT6315]1 15,111
+[MT6359] 1 3,40
+[MT6359] 1 5,56
+[MT6359] get volt 0, 40, 750000
+vsram_core = 750000 uV
+[MT6359] get volt 1, 40, 750000
+vsram_proc1 = 750000 uV
+[MT6359] get volt 2, 47, 793750
+vsram_proc2 = 793750 uV
+[MT6359] get volt 3, 40, 750000
+vsram_gpu = 750000 uV
+[MT6315]get volt 19, 132, 825000
+vsram_md = 825000 uV
+[MT6359] get volt 6, 56, 750000
+vcore = 750000 uV
+[MT63100000007FFFF000
+[DOE_ENV]get_env emi_isu
+mblock_alloc_range: start: 0x00000000D0200000, sz: 0x0000000000200000 lower_bound: 0x0000000000000000 limit: 0xFFFFFFFFFFFFFFFF map:1 name:RKP_NS align: 0x0000000000100000
+mblock_alloc_range: start: 0x00000000D0000000, sz: 0x0000000000200000 lower_bound: 0x0000000000000000 limit: 0xFFFFFFFFFFFFFFFF map:0 name:RKP align: 0x0000000000100000
+[GZINIT] rkp_memory_reserve_fixed_addr RKP=0x00000000D0000000, sz=0x200000, RKP_NS=0x00000000D0200000, sz=0x200000
+#T#Get DRAM Info=12
+[delsel_H240] (0) reg=0xC53CD20,	 read=0x24,	 set=0x24
+[delsel_H240] (1) reg=0xC53CD24,	 read=0xB24,	 set=0xB24
+[delsel_H240] (2) reg=0xC53CD28,	 read=0x24,	 set=0x24
+#T#cache_delsel_init=1
+[GPT_PL]Success to find valid GPT.
+#T#part_init=10
+metadata.slot_info[0].priority = 14, 15
+metadata.slot_info[0].retry = 0, 7
+mblock_alloc_range: start: 0x000000007F600000, sz: 0x0000000000800000 lower_bound: 0x0000000000000000 limit: 0x0000000080000000 map:0 name:gz align: 0x0000000000200000
+[GZINIT] gz_mblock_create: allocate gz memory 0x000000007F600000, size 0x0000000000800000
+mblock_alloc_range: start: 0x000000007F400000, sz: 0x0000000000041000 lower_bound: 0x0000000000000000 limit: 0x000000007F600000 map:1 name:gz-log align: 0x0000000000200000
+[GZINIT] gz_mblock_create: allocate gz-log memory 0x000000007F400000, size 0x0000000000041000
+#T#gz_pre_init=5
+r_bound: 0x0000000000000000 limit: 0x00000000C0000000 map:0 name:dramc-rk0 align: 0x0000000000001000
+DRAM rank0 size:0x0000000080000000,
+DRAM rank1 size=0x0000000100000000
+[DOE_ENV]get_env DOE_CUSTOM_CONFIG_MAX_DRAM_SIZE
+CUSTOM_CONFIG_MAX_DRAM_SIZE: 0x0000000800000000
+mblock_alloc_range: start: 0x00000001BFFFF000, sz: 0x0000000000001000 lower_bound: 0x0000000000000000 limit: 0x00000001C0000000 map:0 name:dramc-rk1 align: 0x0000000000001000
+mblock_alloc_range: start: 0x000000007FFFF000, sz: 0x0000000000001000 lower_bound: 0x0000000000000000 limit: 0x0000000080000000 map:0 name:emi_mbist_buf align: 0x0000000000001000
+[EMI] mbist rsv_start=0x0#T#store_switch_to_dram=21
+#T#part_dump=0
+RPMB not program key
+#T#rpmb=1
+[MT6359] get volt 6, 52, 725000
+vcore = 725000 uV
+#T#before bldr_handshake=0
+#T#seclib_brom_meta_mode=0
+[BLDR] Tool connection is unlocked
+[platform_vusb_on] VUSB33 is on
+[USB] MDCIRQ 0x10000280 before: 0
+[USB] MDCIRQ 0x10000280 after: 0
+[PMIC]IsUsbCableIn 1
+mt6360_enable_usbchgen: en = 0
+mt6360_enable_usbchgen: en = 1
+mtk_ext_chgdet: usb_stats = 0x58
+mtk_ext_chgdet: chg type = 2
+[PLFM] USB cable in
+[TOOL] USB enum timeout (Yes), handshake timeout(Yes)
+[TOOL] Enumeration(Start)
+[TOOL] Enumeration(End): OK 239ms 
+[TOOL] 0xa0 sync time 541ms
+usbdl_vfy_da:disabled
+[BLDR] jump to 0x40200000
+[BLDR] <0x40200000>=0xEAFFFFFF
+[BLDR] <0x40200004>=0xFB001298

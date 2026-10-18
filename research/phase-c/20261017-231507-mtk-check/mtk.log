@@ -1,0 +1,2047 @@
++ mtk printgpt
+fuse library not installed
+DaHandler
+DaHandler - [LIB]: [33mTarget config is still unset after the initial connection attempt; retrying preloader initialization.[0m
+Preloader - Status: Waiting for PreLoader VCOM, please reconnect mobile/iot device to brom mode
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Port - Handshake failed after retries
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+Preloader
+Preloader - [LIB]: [31mStatus: Handshake failed, retrying...[0m
+
+Port - Hint:
+
+Power off the phone before connecting.
+For brom mode, press and hold vol up, vol dwn, or all hw buttons and connect usb.
+For preloader mode, don't press any hw button and connect usb.
+If it is already connected and on, hold power for 10 seconds to reset.
+
+
+..Port - Device detected :)
+Preloader - Detected regular mode !
+Preloader - 	CPU:			MT6877/MT6877V/MT8791N(Dimensity 900/1080/7050)
+Preloader - 	HW version:		0x0
+Preloader - 	WDT:			0x10007000
+Preloader - 	Uart:			0x11002000
+Preloader - 	Brom payload addr:	0x100a00
+Preloader - 	DA payload addr:	0x201000
+Preloader - 	CQ_DMA addr:		0x10212000
+Preloader - 	Var1:			0xa
+Preloader - Disabling Watchdog...
+Preloader - HW code:			0x959
+Preloader - Target config:		0x0
+Preloader - 	SBC enabled:		False
+Preloader - 	SLA enabled:		False
+Preloader - 	DAA enabled:		False
+Preloader - 	SWJTAG enabled:		False
+Preloader - 	EPP_PARAM at 0x600 after EMMC_BOOT/SDMMC_BOOT:	False
+Preloader - 	Root cert required:	False
+Preloader - 	Mem read auth:		False
+Preloader - 	Mem write auth:		False
+Preloader - 	Cmd 0xC8 blocked:	False
+Preloader - Get Target info
+Preloader - 	HW subcode:		0x8a00
+Preloader - 	HW Ver:			0xca00
+Preloader - 	SW Ver:			0x0
+Preloader - ME_ID:			<ME_ID>
+Preloader - SOC_ID:			<SOC_ID>
+DaHandler - Device is unprotected.
+DaHandler - Device is in Preloader-Mode.
+DAXFlash - Uploading xflash stage 1 from MTK_DA_V5.bin
+XFlashExt - Patching da1 ...
+Mtk - Patched "Patched loader msg" in preloader
+Mtk - Patched "hash_check" in preloader
+Mtk - Patched "Patched loader msg" in preloader
+Mtk - Patched "get_vfy_policy" in preloader
+XFlashExt - Patching da2 ...
+XFlashExt - Security check patched
+XFlashExt - DA version anti-rollback patched
+XFlashExt - SBC patched to be disabled
+XFlashExt - Register read/write not allowed patched
+DAXFlash - Successfully uploaded stage 1, jumping ..
+Preloader - Jumping to 0x200000
+Preloader - Jumping to 0x200000: ok.
+DAXFlash - Successfully received DA sync
+DAXFlash - Uploading stage 2...
+DAXFlash - Upload data was accepted. Jumping to stage 2...
+DAXFlash - Boot to succeeded.
+DAXFlash - Successfully uploaded stage 2
+DAXFlash - DA SLA is disabled
+DAXFlash - UFS Blocksize: 0x1000
+DAXFlash - UFS ID:       H9HQ15AECMBDAR
+DAXFlash - UFS MID:      0xad
+DAXFlash - UFS CID:      <STORAGE_CID>
+DAXFlash - UFS FWVer:    41303433
+DAXFlash - UFS Serial:   <STORAGE_SERIAL>
+DAXFlash - UFS LU0 Size: 0x1dcb000000
+DAXFlash - UFS LU1 Size: 0x400000
+DAXFlash - UFS LU2 Size: 0x400000
+DAXFlash - Starting DA extensions ...
+DAXFlash - Extensions were accepted. Jumping to extensions...
+DAXFlash - Boot to succeeded.
+DAXFlash - DA Extensions successfully added at 0x4fff0000
+Main - Handling da commands ...
+
+GPT Table:
+-------------
+misc:                Offset 0x0000000000008000, Length 0x0000000000080000, Flags 0x0000000000000000, UUID f57ad330-39c2-4488-b09b-00cb43c9ccd4, Type EFI_BASIC_DATA
+para:                Offset 0x0000000000088000, Length 0x0000000000080000, Flags 0x0000000000000000, UUID fe686d97-3544-4a41-21be-167e25b61b6f, Type EFI_BASIC_DATA
+expdb:               Offset 0x0000000000108000, Length 0x0000000002800000, Flags 0x0000000000000000, UUID 1cb143a8-b1a8-4b57-51b2-945c5119e8fe, Type EFI_BASIC_DATA
+frp:                 Offset 0x0000000002908000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID 3b9e343b-cdc8-4d7f-a69f-b6812e50ab62, Type EFI_BASIC_DATA
+nvcfg:               Offset 0x0000000002a08000, Length 0x0000000002000000, Flags 0x0000000000000000, UUID 5f6a2c79-6617-4b85-02ac-c2975a14d2d7, Type EFI_BASIC_DATA
+nvdata:              Offset 0x0000000004a08000, Length 0x0000000004000000, Flags 0x0000000000000000, UUID 4ae2050b-5db5-4ff7-d3aa-5730534be63d, Type EFI_BASIC_DATA
+vbmeta_a:            Offset 0x0000000008a08000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID 1f9b0939-e16b-4bc9-bca5-dc2ee969d801, Type EFI_BASIC_DATA
+vbmeta_system_a:     Offset 0x0000000009208000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID d722c721-0dee-4cb8-838a-2c63cd1393c7, Type EFI_BASIC_DATA
+vbmeta_vendor_a:     Offset 0x0000000009a08000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID e02179a8-ceb5-48a9-3188-4f1c9c5a8695, Type EFI_BASIC_DATA
+vbmeta_b:            Offset 0x000000000a208000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID 84b09a81-fad2-41ac-0e89-407c24975e74, Type EFI_BASIC_DATA
+vbmeta_system_b:     Offset 0x000000000aa08000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID e8f0a5ef-8d1b-42ea-2a9c-835cd77de363, Type EFI_BASIC_DATA
+vbmeta_vendor_b:     Offset 0x000000000b208000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID d5f0e175-a6e1-4db7-c094-f82ad032950b, Type EFI_BASIC_DATA
+vcom:                Offset 0x000000000ba08000, Length 0x0000000000008000, Flags 0x0000000000000000, UUID 1d9056e1-e139-4fca-0b8c-b75fd74d81c6, Type EFI_BASIC_DATA
+metadata:            Offset 0x000000000ba10000, Length 0x00000000025f0000, Flags 0x0000000000000000, UUID 7792210b-b6a8-45d5-91ad-3361ed14c608, Type EFI_BASIC_DATA
+protect1:            Offset 0x000000000e000000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID 138a6db9-1032-451d-e991-0fa38ff94fbb, Type EFI_BASIC_DATA
+protect2:            Offset 0x000000000e800000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID 756d934c-50e3-4c91-46af-02d824169ca7, Type EFI_BASIC_DATA
+seccfg:              Offset 0x000000000f000000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID a3f3c267-5521-42dd-24a7-3bdec20c7c6f, Type EFI_BASIC_DATA
+otp:                 Offset 0x000000000f800000, Length 0x0000000003000000, Flags 0x0000000000000000, UUID 8c68cd2a-ccc9-4c5d-578b-34ae9b2dd481, Type EFI_BASIC_DATA
+md1img_a:            Offset 0x0000000012800000, Length 0x000000000c800000, Flags 0x0000000000000000, UUID 6a5cebf8-54a7-4b89-1d8d-c5eb140b095b, Type EFI_BASIC_DATA
+spmfw_a:             Offset 0x000000001f000000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID a0d65bf8-e8de-4107-3494-1d318c843d37, Type EFI_BASIC_DATA
+pi_img_a:            Offset 0x000000001f100000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID 46f0c0bb-f227-4eb6-2fb8-66408e13e36d, Type EFI_BASIC_DATA
+dpm_a:               Offset 0x000000001f200000, Length 0x0000000000400000, Flags 0x0000000000000000, UUID fbc2c131-6392-4217-1eb5-548a6edb03d0, Type EFI_BASIC_DATA
+scp_a:               Offset 0x000000001f600000, Length 0x0000000000600000, Flags 0x0000000000000000, UUID e195a981-e285-4734-2580-ec323e9589d9, Type EFI_BASIC_DATA
+sspm_a:              Offset 0x000000001fc00000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID e29052f8-5d3a-4e97-b5ad-5f312ce6610a, Type EFI_BASIC_DATA
+mcupm_a:             Offset 0x000000001fd00000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID 9c3cabd7-a35d-4b45-578c-b80775426b35, Type EFI_BASIC_DATA
+cam_vpu1_a:          Offset 0x000000001fe00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID e7099731-95a6-45a6-e5a1-1b6aba032cf1, Type EFI_BASIC_DATA
+cam_vpu2_a:          Offset 0x0000000020d00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID 8273e1ab-846f-4468-99b9-ee2ea8e50a16, Type EFI_BASIC_DATA
+cam_vpu3_a:          Offset 0x0000000021c00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID d26472f1-9ebc-421d-14ba-311296457c90, Type EFI_BASIC_DATA
+gz_a:                Offset 0x0000000022b00000, Length 0x0000000002000000, Flags 0x0000000000000000, UUID b72ccbe9-2055-46f4-67a1-4a069c201738, Type EFI_BASIC_DATA
+lk_a:                Offset 0x0000000024b00000, Length 0x0000000000200000, Flags 0x0000000000000000, UUID 9c1520f3-c2c5-4b89-4282-fe4c61208a9e, Type EFI_BASIC_DATA
+boot_a:              Offset 0x0000000024d00000, Length 0x0000000002800000, Flags 0x0000000000000000, UUID 902d5f3f-434a-4de7-8889-321e88c9b8aa, Type EFI_BASIC_DATA
+vendor_boot_a:       Offset 0x0000000027500000, Length 0x0000000004000000, Flags 0x0000000000000000, UUID bece74c8-d8e2-4863-fe9b-5b0b66bb920f, Type EFI_BASIC_DATA
+init_boot_a:         Offset 0x000000002b500000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID ff1342cf-b7be-44d5-5ea2-a435addd2702, Type EFI_BASIC_DATA
+dtbo_a:              Offset 0x000000002bd00000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID a4da8f1b-fe07-433b-cb95-84a5f23e477b, Type EFI_BASIC_DATA
+tee_a:               Offset 0x000000002c500000, Length 0x0000000000500000, Flags 0x0000000000000000, UUID c2635e15-61aa-454e-409c-ebe1bdf19b9b, Type EFI_BASIC_DATA
+sec1:                Offset 0x000000002ca00000, Length 0x0000000000200000, Flags 0x0000000000000000, UUID 4d2d1290-36a3-4f5d-b4af-319f8ab6dcd8, Type EFI_BASIC_DATA
+proinfo:             Offset 0x000000002cc00000, Length 0x0000000000300000, Flags 0x0000000000000000, UUID fdce12f0-a7eb-40f7-5083-960972e6cb57, Type EFI_BASIC_DATA
+nvram:               Offset 0x000000002cf00000, Length 0x0000000004000000, Flags 0x0000000000000000, UUID 0fbbafa2-4aa9-4490-8389-5329328505fd, Type EFI_BASIC_DATA
+boot_para:           Offset 0x0000000030f00000, Length 0x0000000001a00000, Flags 0x0000000000000000, UUID a76e4b2f-31cb-40ba-6a82-c0cb0b73c856, Type EFI_BASIC_DATA
+logo:                Offset 0x0000000032900000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID f54ac030-7004-4d02-8194-bbf982036807, Type EFI_BASIC_DATA
+md1img_b:            Offset 0x0000000033800000, Length 0x000000000c800000, Flags 0x0000000000000000, UUID c4c310e2-4a7e-77d3-1848-61e2d8bb5e86, Type EFI_BASIC_DATA
+spmfw_b:             Offset 0x0000000040000000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID 3734710f-0f13-1ab9-4c73-12a08ec50837, Type EFI_BASIC_DATA
+pi_img_b:            Offset 0x0000000040100000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID 85a5b02f-3773-18b3-4910-718cde95107e, Type EFI_BASIC_DATA
+dpm_b:               Offset 0x0000000040200000, Length 0x0000000000400000, Flags 0x0000000000000000, UUID 6fce83a6-5273-4748-4511-c205ebb4b8ad, Type EFI_BASIC_DATA
+scp_b:               Offset 0x0000000040600000, Length 0x0000000000600000, Flags 0x0000000000000000, UUID 3645e6a3-a7e3-19b2-4149-172c10190eef, Type EFI_BASIC_DATA
+sspm_b:              Offset 0x0000000040c00000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID f60b92b4-0e2f-91b6-4afb-2d0b643bab4b, Type EFI_BASIC_DATA
+mcupm_b:             Offset 0x0000000040d00000, Length 0x0000000000100000, Flags 0x0000000000000000, UUID d05cedfe-20b7-68b3-f259-4fe25317f2fc, Type EFI_BASIC_DATA
+cam_vpu1_b:          Offset 0x0000000040e00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID 54060b67-fa74-5c82-1661-44821e54dced, Type EFI_BASIC_DATA
+cam_vpu2_b:          Offset 0x0000000041d00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID c0a128fb-59d1-0a9e-e8f0-ea3d36a9d658, Type EFI_BASIC_DATA
+cam_vpu3_b:          Offset 0x0000000042c00000, Length 0x0000000000f00000, Flags 0x0000000000000000, UUID f5f5a7f8-f8ec-3ba1-c9cb-4e2a7cbc7d07, Type EFI_BASIC_DATA
+gz_b:                Offset 0x0000000043b00000, Length 0x0000000002000000, Flags 0x0000000000000000, UUID 736d618a-5b79-530b-ac9d-895339690613, Type EFI_BASIC_DATA
+lk_b:                Offset 0x0000000045b00000, Length 0x0000000000200000, Flags 0x0000000000000000, UUID a2342ac6-4c40-b02c-4f51-e90d46f93454, Type EFI_BASIC_DATA
+boot_b:              Offset 0x0000000045d00000, Length 0x0000000002800000, Flags 0x0000000000000000, UUID 339d6f74-bcb8-f02b-4a69-ae0152bcadc0, Type EFI_BASIC_DATA
+vendor_boot_b:       Offset 0x0000000048500000, Length 0x0000000004000000, Flags 0x0000000000000000, UUID 2cd122a3-6142-31a9-8812-cb60fbead9be, Type EFI_BASIC_DATA
+init_boot_b:         Offset 0x000000004c500000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID c09b7bd1-5e46-450c-d597-adf4072a8d6b, Type EFI_BASIC_DATA
+waveform:            Offset 0x000000004cd00000, Length 0x0000000001000000, Flags 0x0000000000000000, UUID 448a65b8-a5d4-bdb0-ebdd-bf4ea3ceafc6, Type EFI_BASIC_DATA
+dtbo_b:              Offset 0x000000004dd00000, Length 0x0000000000800000, Flags 0x0000000000000000, UUID b1b1e374-8c7f-b48a-75d5-ce0ca20f1183, Type EFI_BASIC_DATA
+tee_b:               Offset 0x000000004e500000, Length 0x0000000000b00000, Flags 0x0000000000000000, UUID 24d37dd4-caf8-1a6e-45be-89e4b0705843, Type EFI_BASIC_DATA
+super:               Offset 0x000000004f000000, Length 0x0000000300000000, Flags 0x0000000000000000, UUID 37957b10-67ef-1440-3b89-6200484311b6, Type EFI_BASIC_DATA
+userdata:            Offset 0x000000034f000000, Length 0x0000001a7aff8000, Flags 0x0000000000000000, UUID 441c978b-5309-1faa-913c-32c5f087e9ae, Type EFI_BASIC_DATA
+flashinfo:           Offset 0x0000001dc9ff8000, Length 0x0000000001000000, Flags 0x0000000000000000, UUID 575fb526-8d23-61c4-fed5-e9e040eb0741, Type EFI_BASIC_DATA
+
+Total disk size:0x0000001dcb019000, sectors:0x0000000001dcb019
+
++ mtk r misc ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/misc.pre.bin
+fuse library not installed
+Main - Handling da commands ...
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "misc"
+
+Done |█---------| 12.5% Read: (0x10000/0x80000),0.00 MB/s
+Progress: |██--------| 25.0% Read: (0x20000/0x80000), 12.49 MB/s  
+Progress: |████------| 37.5% Read: (0x30000/0x80000), 29.76 MB/s  
+Progress: |█████-----| 50.0% Read: (0x40000/0x80000), 30.23 MB/s  
+Progress: |██████----| 62.5% Read: (0x50000/0x80000), 29.39 MB/s  
+Progress: |████████--| 75.0% Read: (0x60000/0x80000), 29.39 MB/s  
+Progress: |█████████-| 87.5% Read: (0x70000/0x80000), 28.67 MB/s  
+Progress: |██████████| 100.0% Read: (0x80000/0x80000), 26.67 MB/s  
+DaHandler - Dumped sector 8 with sector count 128 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/misc.pre.bin.
++ mtk r vbmeta_b,vbmeta_system_b,vbmeta_vendor_b,boot_b,seccfg,expdb ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_b.bin,~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_system_b.bin,~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_vendor_b.bin,~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/boot_b.bin,~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/seccfg.bin,~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/expdb.bin
+fuse library not installed
+Main - Handling da commands ...
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "vbmeta_b"
+
+Done |----------| 0.8% Read: (0x10000/0x800000),0.00 MB/s
+Progress: |----------| 1.6% Read: (0x20000/0x800000), 12.51 MB/s  
+Progress: |----------| 2.3% Read: (0x30000/0x800000), 29.14 MB/s  
+Progress: |----------| 3.1% Read: (0x40000/0x800000), 29.08 MB/s  
+Progress: |----------| 3.9% Read: (0x50000/0x800000), 28.83 MB/s  
+Progress: |----------| 4.7% Read: (0x60000/0x800000), 30.19 MB/s  
+Progress: |█---------| 5.5% Read: (0x70000/0x800000), 30.43 MB/s  
+Progress: |█---------| 6.2% Read: (0x80000/0x800000), 30.92 MB/s  
+Progress: |█---------| 7.0% Read: (0x90000/0x800000), 29.98 MB/s  
+Progress: |█---------| 7.8% Read: (0xA0000/0x800000), 29.2 MB/s  
+Progress: |█---------| 8.6% Read: (0xB0000/0x800000), 29.82 MB/s  
+Progress: |█---------| 9.4% Read: (0xC0000/0x800000), 29.81 MB/s  
+Progress: |█---------| 10.2% Read: (0xD0000/0x800000), 28.01 MB/s  
+Progress: |█---------| 10.9% Read: (0xE0000/0x800000), 29.82 MB/s  
+Progress: |█---------| 11.7% Read: (0xF0000/0x800000), 30.83 MB/s  
+Progress: |█---------| 12.5% Read: (0x100000/0x800000), 31.39 MB/s  
+Progress: |█---------| 13.3% Read: (0x110000/0x800000), 30.73 MB/s  
+Progress: |█---------| 14.1% Read: (0x120000/0x800000), 30.07 MB/s  
+Progress: |█---------| 14.8% Read: (0x130000/0x800000), 30.67 MB/s  
+Progress: |██--------| 15.6% Read: (0x140000/0x800000), 30.3 MB/s  
+Progress: |██--------| 16.4% Read: (0x150000/0x800000), 29.63 MB/s  
+Progress: |██--------| 17.2% Read: (0x160000/0x800000), 27.86 MB/s  
+Progress: |██--------| 18.0% Read: (0x170000/0x800000), 30.58 MB/s  
+Progress: |██--------| 18.8% Read: (0x180000/0x800000), 30.57 MB/s  
+Progress: |██--------| 19.5% Read: (0x190000/0x800000), 30.25 MB/s  
+Progress: |██--------| 20.3% Read: (0x1A0000/0x800000), 29.01 MB/s  
+Progress: |██--------| 21.1% Read: (0x1B0000/0x800000), 29.25 MB/s  
+Progress: |██--------| 21.9% Read: (0x1C0000/0x800000), 29.55 MB/s  
+Progress: |██--------| 22.7% Read: (0x1D0000/0x800000), 28.98 MB/s  
+Progress: |██--------| 23.4% Read: (0x1E0000/0x800000), 29.8 MB/s  
+Progress: |██--------| 24.2% Read: (0x1F0000/0x800000), 29.89 MB/s  
+Progress: |██--------| 25.0% Read: (0x200000/0x800000), 30.41 MB/s  
+Progress: |███-------| 25.8% Read: (0x210000/0x800000), 29.61 MB/s  
+Progress: |███-------| 26.6% Read: (0x220000/0x800000), 29.45 MB/s  
+Progress: |███-------| 27.3% Read: (0x230000/0x800000), 29.7 MB/s  
+Progress: |███-------| 28.1% Read: (0x240000/0x800000), 30.46 MB/s  
+Progress: |███-------| 28.9% Read: (0x250000/0x800000), 30.15 MB/s  
+Progress: |███-------| 29.7% Read: (0x260000/0x800000), 29.58 MB/s  
+Progress: |███-------| 30.5% Read: (0x270000/0x800000), 30.3 MB/s  
+Progress: |███-------| 31.2% Read: (0x280000/0x800000), 29.95 MB/s  
+Progress: |███-------| 32.0% Read: (0x290000/0x800000), 29.5 MB/s  
+Progress: |███-------| 32.8% Read: (0x2A0000/0x800000), 30.53 MB/s  
+Progress: |███-------| 33.6% Read: (0x2B0000/0x800000), 29.37 MB/s  
+Progress: |███-------| 34.4% Read: (0x2C0000/0x800000), 29.29 MB/s  
+Progress: |████------| 35.2% Read: (0x2D0000/0x800000), 29.0 MB/s  
+Progress: |████------| 35.9% Read: (0x2E0000/0x800000), 27.8 MB/s  
+Progress: |████------| 36.7% Read: (0x2F0000/0x800000), 27.96 MB/s  
+Progress: |████------| 37.5% Read: (0x300000/0x800000), 28.19 MB/s  
+Progress: |████------| 38.3% Read: (0x310000/0x800000), 29.16 MB/s  
+Progress: |████------| 39.1% Read: (0x320000/0x800000), 29.25 MB/s  
+Progress: |████------| 39.8% Read: (0x330000/0x800000), 28.36 MB/s  
+Progress: |████------| 40.6% Read: (0x340000/0x800000), 28.27 MB/s  
+Progress: |████------| 41.4% Read: (0x350000/0x800000), 28.68 MB/s  
+Progress: |████------| 42.2% Read: (0x360000/0x800000), 29.19 MB/s  
+Progress: |████------| 43.0% Read: (0x370000/0x800000), 28.16 MB/s  
+Progress: |████------| 43.8% Read: (0x380000/0x800000), 28.78 MB/s  
+Progress: |████------| 44.5% Read: (0x390000/0x800000), 28.32 MB/s  
+Progress: |█████-----| 45.3% Read: (0x3A0000/0x800000), 29.52 MB/s  
+Progress: |█████-----| 46.1% Read: (0x3B0000/0x800000), 28.9 MB/s  
+Progress: |█████-----| 46.9% Read: (0x3C0000/0x800000), 28.7 MB/s  
+Progress: |█████-----| 47.7% Read: (0x3D0000/0x800000), 28.85 MB/s  
+Progress: |█████-----| 48.4% Read: (0x3E0000/0x800000), 29.11 MB/s  
+Progress: |█████-----| 49.2% Read: (0x3F0000/0x800000), 29.14 MB/s  
+Progress: |█████-----| 50.0% Read: (0x400000/0x800000), 29.32 MB/s  
+Progress: |█████-----| 50.8% Read: (0x410000/0x800000), 28.48 MB/s  
+Progress: |█████-----| 51.6% Read: (0x420000/0x800000), 28.62 MB/s  
+Progress: |█████-----| 52.3% Read: (0x430000/0x800000), 28.13 MB/s  
+Progress: |█████-----| 53.1% Read: (0x440000/0x800000), 29.3 MB/s  
+Progress: |█████-----| 53.9% Read: (0x450000/0x800000), 27.9 MB/s  
+Progress: |█████-----| 54.7% Read: (0x460000/0x800000), 29.62 MB/s  
+Progress: |██████----| 55.5% Read: (0x470000/0x800000), 30.03 MB/s  
+Progress: |██████----| 56.2% Read: (0x480000/0x800000), 30.25 MB/s  
+Progress: |██████----| 57.0% Read: (0x490000/0x800000), 30.13 MB/s  
+Progress: |██████----| 57.8% Read: (0x4A0000/0x800000), 30.11 MB/s  
+Progress: |██████----| 58.6% Read: (0x4B0000/0x800000), 30.22 MB/s  
+Progress: |██████----| 59.4% Read: (0x4C0000/0x800000), 29.65 MB/s  
+Progress: |██████----| 60.2% Read: (0x4D0000/0x800000), 29.14 MB/s  
+Progress: |██████----| 60.9% Read: (0x4E0000/0x800000), 28.72 MB/s  
+Progress: |██████----| 61.7% Read: (0x4F0000/0x800000), 28.28 MB/s  
+Progress: |██████----| 62.5% Read: (0x500000/0x800000), 29.7 MB/s  
+Progress: |██████----| 63.3% Read: (0x510000/0x800000), 28.74 MB/s  
+Progress: |██████----| 64.1% Read: (0x520000/0x800000), 29.32 MB/s  
+Progress: |██████----| 64.8% Read: (0x530000/0x800000), 29.14 MB/s  
+Progress: |███████---| 65.6% Read: (0x540000/0x800000), 28.36 MB/s  
+Progress: |███████---| 66.4% Read: (0x550000/0x800000), 28.83 MB/s  
+Progress: |███████---| 67.2% Read: (0x560000/0x800000), 30.62 MB/s  
+Progress: |███████---| 68.0% Read: (0x570000/0x800000), 31.14 MB/s  
+Progress: |███████---| 68.8% Read: (0x580000/0x800000), 30.31 MB/s  
+Progress: |███████---| 69.5% Read: (0x590000/0x800000), 30.6 MB/s  
+Progress: |███████---| 70.3% Read: (0x5A0000/0x800000), 30.37 MB/s  
+Progress: |███████---| 71.1% Read: (0x5B0000/0x800000), 30.32 MB/s  
+Progress: |███████---| 71.9% Read: (0x5C0000/0x800000), 27.78 MB/s  
+Progress: |███████---| 72.7% Read: (0x5D0000/0x800000), 30.3 MB/s  
+Progress: |███████---| 73.4% Read: (0x5E0000/0x800000), 29.7 MB/s  
+Progress: |███████---| 74.2% Read: (0x5F0000/0x800000), 28.62 MB/s  
+Progress: |████████--| 75.0% Read: (0x600000/0x800000), 28.13 MB/s  
+Progress: |████████--| 75.8% Read: (0x610000/0x800000), 28.1 MB/s  
+Progress: |████████--| 76.6% Read: (0x620000/0x800000), 28.36 MB/s  
+Progress: |████████--| 77.3% Read: (0x630000/0x800000), 29.04 MB/s  
+Progress: |████████--| 78.1% Read: (0x640000/0x800000), 28.46 MB/s  
+Progress: |████████--| 78.9% Read: (0x650000/0x800000), 28.52 MB/s  
+Progress: |████████--| 79.7% Read: (0x660000/0x800000), 28.46 MB/s  
+Progress: |████████--| 80.5% Read: (0x670000/0x800000), 29.12 MB/s  
+Progress: |████████--| 81.2% Read: (0x680000/0x800000), 29.4 MB/s  
+Progress: |████████--| 82.0% Read: (0x690000/0x800000), 28.43 MB/s  
+Progress: |████████--| 82.8% Read: (0x6A0000/0x800000), 28.34 MB/s  
+Progress: |████████--| 83.6% Read: (0x6B0000/0x800000), 29.24 MB/s  
+Progress: |████████--| 84.4% Read: (0x6C0000/0x800000), 28.75 MB/s  
+Progress: |█████████-| 85.2% Read: (0x6D0000/0x800000), 28.29 MB/s  
+Progress: |█████████-| 85.9% Read: (0x6E0000/0x800000), 28.66 MB/s  
+Progress: |█████████-| 86.7% Read: (0x6F0000/0x800000), 29.09 MB/s  
+Progress: |█████████-| 87.5% Read: (0x700000/0x800000), 30.25 MB/s  
+Progress: |█████████-| 88.3% Read: (0x710000/0x800000), 30.03 MB/s  
+Progress: |█████████-| 89.1% Read: (0x720000/0x800000), 29.94 MB/s  
+Progress: |█████████-| 89.8% Read: (0x730000/0x800000), 30.61 MB/s  
+Progress: |█████████-| 90.6% Read: (0x740000/0x800000), 28.05 MB/s  
+Progress: |█████████-| 91.4% Read: (0x750000/0x800000), 29.93 MB/s  
+Progress: |█████████-| 92.2% Read: (0x760000/0x800000), 29.99 MB/s  
+Progress: |█████████-| 93.0% Read: (0x770000/0x800000), 28.45 MB/s  
+Progress: |█████████-| 93.8% Read: (0x780000/0x800000), 26.88 MB/s  
+Progress: |█████████-| 94.5% Read: (0x790000/0x800000), 30.64 MB/s  
+Progress: |██████████| 95.3% Read: (0x7A0000/0x800000), 31.16 MB/s  
+Progress: |██████████| 96.1% Read: (0x7B0000/0x800000), 31.31 MB/s  
+Progress: |██████████| 96.9% Read: (0x7C0000/0x800000), 30.87 MB/s  
+Progress: |██████████| 97.7% Read: (0x7D0000/0x800000), 30.09 MB/s  
+Progress: |██████████| 98.4% Read: (0x7E0000/0x800000), 30.52 MB/s  
+Progress: |██████████| 99.2% Read: (0x7F0000/0x800000), 30.6 MB/s  
+Progress: |██████████| 100.0% Read: (0x800000/0x800000), 31.17 MB/s  
+DaHandler - Dumped sector 41480 with sector count 2048 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_b.bin.
+DaHandler - Dumping partition "vbmeta_system_b"
+
+Done |----------| 0.8% Read: (0x10000/0x800000),0.00 MB/s
+Progress: |----------| 1.6% Read: (0x20000/0x800000), 13.13 MB/s  
+Progress: |----------| 2.3% Read: (0x30000/0x800000), 31.12 MB/s  
+Progress: |----------| 3.1% Read: (0x40000/0x800000), 30.83 MB/s  
+Progress: |----------| 3.9% Read: (0x50000/0x800000), 30.47 MB/s  
+Progress: |----------| 4.7% Read: (0x60000/0x800000), 29.2 MB/s  
+Progress: |█---------| 5.5% Read: (0x70000/0x800000), 28.84 MB/s  
+Progress: |█---------| 6.2% Read: (0x80000/0x800000), 28.52 MB/s  
+Progress: |█---------| 7.0% Read: (0x90000/0x800000), 29.12 MB/s  
+Progress: |█---------| 7.8% Read: (0xA0000/0x800000), 30.69 MB/s  
+Progress: |█---------| 8.6% Read: (0xB0000/0x800000), 29.78 MB/s  
+Progress: |█---------| 9.4% Read: (0xC0000/0x800000), 28.93 MB/s  
+Progress: |█---------| 10.2% Read: (0xD0000/0x800000), 29.73 MB/s  
+Progress: |█---------| 10.9% Read: (0xE0000/0x800000), 29.62 MB/s  
+Progress: |█---------| 11.7% Read: (0xF0000/0x800000), 28.38 MB/s  
+Progress: |█---------| 12.5% Read: (0x100000/0x800000), 28.13 MB/s  
+Progress: |█---------| 13.3% Read: (0x110000/0x800000), 30.26 MB/s  
+Progress: |█---------| 14.1% Read: (0x120000/0x800000), 30.19 MB/s  
+Progress: |█---------| 14.8% Read: (0x130000/0x800000), 29.51 MB/s  
+Progress: |██--------| 15.6% Read: (0x140000/0x800000), 29.11 MB/s  
+Progress: |██--------| 16.4% Read: (0x150000/0x800000), 30.92 MB/s  
+Progress: |██--------| 17.2% Read: (0x160000/0x800000), 30.59 MB/s  
+Progress: |██--------| 18.0% Read: (0x170000/0x800000), 29.12 MB/s  
+Progress: |██--------| 18.8% Read: (0x180000/0x800000), 27.04 MB/s  
+Progress: |██--------| 19.5% Read: (0x190000/0x800000), 28.7 MB/s  
+Progress: |██--------| 20.3% Read: (0x1A0000/0x800000), 29.19 MB/s  
+Progress: |██--------| 21.1% Read: (0x1B0000/0x800000), 29.24 MB/s  
+Progress: |██--------| 21.9% Read: (0x1C0000/0x800000), 29.35 MB/s  
+Progress: |██--------| 22.7% Read: (0x1D0000/0x800000), 29.53 MB/s  
+Progress: |██--------| 23.4% Read: (0x1E0000/0x800000), 28.19 MB/s  
+Progress: |██--------| 24.2% Read: (0x1F0000/0x800000), 28.36 MB/s  
+Progress: |██--------| 25.0% Read: (0x200000/0x800000), 29.15 MB/s  
+Progress: |███-------| 25.8% Read: (0x210000/0x800000), 30.4 MB/s  
+Progress: |███-------| 26.6% Read: (0x220000/0x800000), 30.92 MB/s  
+Progress: |███-------| 27.3% Read: (0x230000/0x800000), 30.37 MB/s  
+Progress: |███-------| 28.1% Read: (0x240000/0x800000), 30.95 MB/s  
+Progress: |███-------| 28.9% Read: (0x250000/0x800000), 32.29 MB/s  
+Progress: |███-------| 29.7% Read: (0x260000/0x800000), 32.1 MB/s  
+Progress: |███-------| 30.5% Read: (0x270000/0x800000), 32.32 MB/s  
+Progress: |███-------| 31.2% Read: (0x280000/0x800000), 31.79 MB/s  
+Progress: |███-------| 32.0% Read: (0x290000/0x800000), 31.8 MB/s  
+Progress: |███-------| 32.8% Read: (0x2A0000/0x800000), 32.18 MB/s  
+Progress: |███-------| 33.6% Read: (0x2B0000/0x800000), 31.57 MB/s  
+Progress: |███-------| 34.4% Read: (0x2C0000/0x800000), 31.05 MB/s  
+Progress: |████------| 35.2% Read: (0x2D0000/0x800000), 29.97 MB/s  
+Progress: |████------| 35.9% Read: (0x2E0000/0x800000), 30.9 MB/s  
+Progress: |████------| 36.7% Read: (0x2F0000/0x800000), 30.5 MB/s  
+Progress: |████------| 37.5% Read: (0x300000/0x800000), 30.49 MB/s  
+Progress: |████------| 38.3% Read: (0x310000/0x800000), 27.39 MB/s  
+Progress: |████------| 39.1% Read: (0x320000/0x800000), 30.18 MB/s  
+Progress: |████------| 39.8% Read: (0x330000/0x800000), 30.8 MB/s  
+Progress: |████------| 40.6% Read: (0x340000/0x800000), 29.48 MB/s  
+Progress: |████------| 41.4% Read: (0x350000/0x800000), 30.11 MB/s  
+Progress: |████------| 42.2% Read: (0x360000/0x800000), 30.61 MB/s  
+Progress: |████------| 43.0% Read: (0x370000/0x800000), 31.11 MB/s  
+Progress: |████------| 43.8% Read: (0x380000/0x800000), 30.71 MB/s  
+Progress: |████------| 44.5% Read: (0x390000/0x800000), 30.06 MB/s  
+Progress: |█████-----| 45.3% Read: (0x3A0000/0x800000), 30.68 MB/s  
+Progress: |█████-----| 46.1% Read: (0x3B0000/0x800000), 30.76 MB/s  
+Progress: |█████-----| 46.9% Read: (0x3C0000/0x800000), 28.13 MB/s  
+Progress: |█████-----| 47.7% Read: (0x3D0000/0x800000), 29.35 MB/s  
+Progress: |█████-----| 48.4% Read: (0x3E0000/0x800000), 30.15 MB/s  
+Progress: |█████-----| 49.2% Read: (0x3F0000/0x800000), 30.69 MB/s  
+Progress: |█████-----| 50.0% Read: (0x400000/0x800000), 29.9 MB/s  
+Progress: |█████-----| 50.8% Read: (0x410000/0x800000), 29.83 MB/s  
+Progress: |█████-----| 51.6% Read: (0x420000/0x800000), 23.91 MB/s  
+Progress: |█████-----| 52.3% Read: (0x430000/0x800000), 26.21 MB/s  
+Progress: |█████-----| 53.1% Read: (0x440000/0x800000), 27.45 MB/s  
+Progress: |█████-----| 53.9% Read: (0x450000/0x800000), 27.89 MB/s  
+Progress: |█████-----| 54.7% Read: (0x460000/0x800000), 26.02 MB/s  
+Progress: |██████----| 55.5% Read: (0x470000/0x800000), 23.94 MB/s  
+Progress: |██████----| 56.2% Read: (0x480000/0x800000), 27.93 MB/s  
+Progress: |██████----| 57.0% Read: (0x490000/0x800000), 26.0 MB/s  
+Progress: |██████----| 57.8% Read: (0x4A0000/0x800000), 29.74 MB/s  
+Progress: |██████----| 58.6% Read: (0x4B0000/0x800000), 28.96 MB/s  
+Progress: |██████----| 59.4% Read: (0x4C0000/0x800000), 30.02 MB/s  
+Progress: |██████----| 60.2% Read: (0x4D0000/0x800000), 30.15 MB/s  
+Progress: |██████----| 60.9% Read: (0x4E0000/0x800000), 30.18 MB/s  
+Progress: |██████----| 61.7% Read: (0x4F0000/0x800000), 30.47 MB/s  
+Progress: |██████----| 62.5% Read: (0x500000/0x800000), 30.05 MB/s  
+Progress: |██████----| 63.3% Read: (0x510000/0x800000), 30.61 MB/s  
+Progress: |██████----| 64.1% Read: (0x520000/0x800000), 30.55 MB/s  
+Progress: |██████----| 64.8% Read: (0x530000/0x800000), 30.88 MB/s  
+Progress: |███████---| 65.6% Read: (0x540000/0x800000), 30.64 MB/s  
+Progress: |███████---| 66.4% Read: (0x550000/0x800000), 30.86 MB/s  
+Progress: |███████---| 67.2% Read: (0x560000/0x800000), 30.59 MB/s  
+Progress: |███████---| 68.0% Read: (0x570000/0x800000), 30.7 MB/s  
+Progress: |███████---| 68.8% Read: (0x580000/0x800000), 30.87 MB/s  
+Progress: |███████---| 69.5% Read: (0x590000/0x800000), 30.41 MB/s  
+Progress: |███████---| 70.3% Read: (0x5A0000/0x800000), 30.25 MB/s  
+Progress: |███████---| 71.1% Read: (0x5B0000/0x800000), 29.15 MB/s  
+Progress: |███████---| 71.9% Read: (0x5C0000/0x800000), 29.82 MB/s  
+Progress: |███████---| 72.7% Read: (0x5D0000/0x800000), 30.03 MB/s  
+Progress: |███████---| 73.4% Read: (0x5E0000/0x800000), 29.07 MB/s  
+Progress: |███████---| 74.2% Read: (0x5F0000/0x800000), 28.87 MB/s  
+Progress: |████████--| 75.0% Read: (0x600000/0x800000), 26.69 MB/s  
+Progress: |████████--| 75.8% Read: (0x610000/0x800000), 26.97 MB/s  
+Progress: |████████--| 76.6% Read: (0x620000/0x800000), 29.02 MB/s  
+Progress: |████████--| 77.3% Read: (0x630000/0x800000), 30.35 MB/s  
+Progress: |████████--| 78.1% Read: (0x640000/0x800000), 29.41 MB/s  
+Progress: |████████--| 78.9% Read: (0x650000/0x800000), 28.85 MB/s  
+Progress: |████████--| 79.7% Read: (0x660000/0x800000), 28.04 MB/s  
+Progress: |████████--| 80.5% Read: (0x670000/0x800000), 28.69 MB/s  
+Progress: |████████--| 81.2% Read: (0x680000/0x800000), 29.04 MB/s  
+Progress: |████████--| 82.0% Read: (0x690000/0x800000), 28.62 MB/s  
+Progress: |████████--| 82.8% Read: (0x6A0000/0x800000), 28.56 MB/s  
+Progress: |████████--| 83.6% Read: (0x6B0000/0x800000), 29.8 MB/s  
+Progress: |████████--| 84.4% Read: (0x6C0000/0x800000), 29.53 MB/s  
+Progress: |█████████-| 85.2% Read: (0x6D0000/0x800000), 28.71 MB/s  
+Progress: |█████████-| 85.9% Read: (0x6E0000/0x800000), 28.73 MB/s  
+Progress: |█████████-| 86.7% Read: (0x6F0000/0x800000), 28.71 MB/s  
+Progress: |█████████-| 87.5% Read: (0x700000/0x800000), 28.32 MB/s  
+Progress: |█████████-| 88.3% Read: (0x710000/0x800000), 28.52 MB/s  
+Progress: |█████████-| 89.1% Read: (0x720000/0x800000), 28.37 MB/s  
+Progress: |█████████-| 89.8% Read: (0x730000/0x800000), 28.33 MB/s  
+Progress: |█████████-| 90.6% Read: (0x740000/0x800000), 29.24 MB/s  
+Progress: |█████████-| 91.4% Read: (0x750000/0x800000), 28.47 MB/s  
+Progress: |█████████-| 92.2% Read: (0x760000/0x800000), 28.43 MB/s  
+Progress: |█████████-| 93.0% Read: (0x770000/0x800000), 27.13 MB/s  
+Progress: |█████████-| 93.8% Read: (0x780000/0x800000), 28.95 MB/s  
+Progress: |█████████-| 94.5% Read: (0x790000/0x800000), 29.02 MB/s  
+Progress: |██████████| 95.3% Read: (0x7A0000/0x800000), 29.36 MB/s  
+Progress: |██████████| 96.1% Read: (0x7B0000/0x800000), 27.28 MB/s  
+Progress: |██████████| 96.9% Read: (0x7C0000/0x800000), 29.33 MB/s  
+Progress: |██████████| 97.7% Read: (0x7D0000/0x800000), 30.28 MB/s  
+Progress: |██████████| 98.4% Read: (0x7E0000/0x800000), 30.24 MB/s  
+Progress: |██████████| 99.2% Read: (0x7F0000/0x800000), 30.09 MB/s  
+Progress: |██████████| 100.0% Read: (0x800000/0x800000), 29.58 MB/s  
+DaHandler - Dumped sector 43528 with sector count 2048 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_system_b.bin.
+DaHandler - Dumping partition "vbmeta_vendor_b"
+
+Done |----------| 0.8% Read: (0x10000/0x800000),0.00 MB/s
+Progress: |----------| 1.6% Read: (0x20000/0x800000), 12.53 MB/s  
+Progress: |----------| 2.3% Read: (0x30000/0x800000), 28.03 MB/s  
+Progress: |----------| 3.1% Read: (0x40000/0x800000), 28.83 MB/s  
+Progress: |----------| 3.9% Read: (0x50000/0x800000), 30.02 MB/s  
+Progress: |----------| 4.7% Read: (0x60000/0x800000), 29.3 MB/s  
+Progress: |█---------| 5.5% Read: (0x70000/0x800000), 28.85 MB/s  
+Progress: |█---------| 6.2% Read: (0x80000/0x800000), 29.2 MB/s  
+Progress: |█---------| 7.0% Read: (0x90000/0x800000), 31.16 MB/s  
+Progress: |█---------| 7.8% Read: (0xA0000/0x800000), 29.44 MB/s  
+Progress: |█---------| 8.6% Read: (0xB0000/0x800000), 29.63 MB/s  
+Progress: |█---------| 9.4% Read: (0xC0000/0x800000), 30.47 MB/s  
+Progress: |█---------| 10.2% Read: (0xD0000/0x800000), 30.87 MB/s  
+Progress: |█---------| 10.9% Read: (0xE0000/0x800000), 30.8 MB/s  
+Progress: |█---------| 11.7% Read: (0xF0000/0x800000), 30.68 MB/s  
+Progress: |█---------| 12.5% Read: (0x100000/0x800000), 30.33 MB/s  
+Progress: |█---------| 13.3% Read: (0x110000/0x800000), 30.03 MB/s  
+Progress: |█---------| 14.1% Read: (0x120000/0x800000), 30.19 MB/s  
+Progress: |█---------| 14.8% Read: (0x130000/0x800000), 30.53 MB/s  
+Progress: |██--------| 15.6% Read: (0x140000/0x800000), 29.69 MB/s  
+Progress: |██--------| 16.4% Read: (0x150000/0x800000), 30.68 MB/s  
+Progress: |██--------| 17.2% Read: (0x160000/0x800000), 30.5 MB/s  
+Progress: |██--------| 18.0% Read: (0x170000/0x800000), 28.48 MB/s  
+Progress: |██--------| 18.8% Read: (0x180000/0x800000), 30.02 MB/s  
+Progress: |██--------| 19.5% Read: (0x190000/0x800000), 30.62 MB/s  
+Progress: |██--------| 20.3% Read: (0x1A0000/0x800000), 30.1 MB/s  
+Progress: |██--------| 21.1% Read: (0x1B0000/0x800000), 30.33 MB/s  
+Progress: |██--------| 21.9% Read: (0x1C0000/0x800000), 30.22 MB/s  
+Progress: |██--------| 22.7% Read: (0x1D0000/0x800000), 30.46 MB/s  
+Progress: |██--------| 23.4% Read: (0x1E0000/0x800000), 30.38 MB/s  
+Progress: |██--------| 24.2% Read: (0x1F0000/0x800000), 30.18 MB/s  
+Progress: |██--------| 25.0% Read: (0x200000/0x800000), 29.83 MB/s  
+Progress: |███-------| 25.8% Read: (0x210000/0x800000), 30.56 MB/s  
+Progress: |███-------| 26.6% Read: (0x220000/0x800000), 30.24 MB/s  
+Progress: |███-------| 27.3% Read: (0x230000/0x800000), 30.75 MB/s  
+Progress: |███-------| 28.1% Read: (0x240000/0x800000), 30.15 MB/s  
+Progress: |███-------| 28.9% Read: (0x250000/0x800000), 30.83 MB/s  
+Progress: |███-------| 29.7% Read: (0x260000/0x800000), 31.13 MB/s  
+Progress: |███-------| 30.5% Read: (0x270000/0x800000), 31.73 MB/s  
+Progress: |███-------| 31.2% Read: (0x280000/0x800000), 30.56 MB/s  
+Progress: |███-------| 32.0% Read: (0x290000/0x800000), 30.27 MB/s  
+Progress: |███-------| 32.8% Read: (0x2A0000/0x800000), 31.22 MB/s  
+Progress: |███-------| 33.6% Read: (0x2B0000/0x800000), 30.53 MB/s  
+Progress: |███-------| 34.4% Read: (0x2C0000/0x800000), 30.76 MB/s  
+Progress: |████------| 35.2% Read: (0x2D0000/0x800000), 29.59 MB/s  
+Progress: |████------| 35.9% Read: (0x2E0000/0x800000), 30.41 MB/s  
+Progress: |████------| 36.7% Read: (0x2F0000/0x800000), 28.51 MB/s  
+Progress: |████------| 37.5% Read: (0x300000/0x800000), 30.76 MB/s  
+Progress: |████------| 38.3% Read: (0x310000/0x800000), 29.59 MB/s  
+Progress: |████------| 39.1% Read: (0x320000/0x800000), 30.07 MB/s  
+Progress: |████------| 39.8% Read: (0x330000/0x800000), 31.16 MB/s  
+Progress: |████------| 40.6% Read: (0x340000/0x800000), 30.86 MB/s  
+Progress: |████------| 41.4% Read: (0x350000/0x800000), 30.09 MB/s  
+Progress: |████------| 42.2% Read: (0x360000/0x800000), 30.74 MB/s  
+Progress: |████------| 43.0% Read: (0x370000/0x800000), 30.85 MB/s  
+Progress: |████------| 43.8% Read: (0x380000/0x800000), 30.55 MB/s  
+Progress: |████------| 44.5% Read: (0x390000/0x800000), 30.65 MB/s  
+Progress: |█████-----| 45.3% Read: (0x3A0000/0x800000), 30.41 MB/s  
+Progress: |█████-----| 46.1% Read: (0x3B0000/0x800000), 30.08 MB/s  
+Progress: |█████-----| 46.9% Read: (0x3C0000/0x800000), 30.83 MB/s  
+Progress: |█████-----| 47.7% Read: (0x3D0000/0x800000), 30.09 MB/s  
+Progress: |█████-----| 48.4% Read: (0x3E0000/0x800000), 30.82 MB/s  
+Progress: |█████-----| 49.2% Read: (0x3F0000/0x800000), 31.5 MB/s  
+Progress: |█████-----| 50.0% Read: (0x400000/0x800000), 31.14 MB/s  
+Progress: |█████-----| 50.8% Read: (0x410000/0x800000), 29.62 MB/s  
+Progress: |█████-----| 51.6% Read: (0x420000/0x800000), 30.0 MB/s  
+Progress: |█████-----| 52.3% Read: (0x430000/0x800000), 29.41 MB/s  
+Progress: |█████-----| 53.1% Read: (0x440000/0x800000), 28.25 MB/s  
+Progress: |█████-----| 53.9% Read: (0x450000/0x800000), 29.23 MB/s  
+Progress: |█████-----| 54.7% Read: (0x460000/0x800000), 30.28 MB/s  
+Progress: |██████----| 55.5% Read: (0x470000/0x800000), 30.73 MB/s  
+Progress: |██████----| 56.2% Read: (0x480000/0x800000), 28.21 MB/s  
+Progress: |██████----| 57.0% Read: (0x490000/0x800000), 29.59 MB/s  
+Progress: |██████----| 57.8% Read: (0x4A0000/0x800000), 30.44 MB/s  
+Progress: |██████----| 58.6% Read: (0x4B0000/0x800000), 31.76 MB/s  
+Progress: |██████----| 59.4% Read: (0x4C0000/0x800000), 31.14 MB/s  
+Progress: |██████----| 60.2% Read: (0x4D0000/0x800000), 30.52 MB/s  
+Progress: |██████----| 60.9% Read: (0x4E0000/0x800000), 30.52 MB/s  
+Progress: |██████----| 61.7% Read: (0x4F0000/0x800000), 30.31 MB/s  
+Progress: |██████----| 62.5% Read: (0x500000/0x800000), 30.12 MB/s  
+Progress: |██████----| 63.3% Read: (0x510000/0x800000), 29.06 MB/s  
+Progress: |██████----| 64.1% Read: (0x520000/0x800000), 28.59 MB/s  
+Progress: |██████----| 64.8% Read: (0x530000/0x800000), 28.84 MB/s  
+Progress: |███████---| 65.6% Read: (0x540000/0x800000), 29.08 MB/s  
+Progress: |███████---| 66.4% Read: (0x550000/0x800000), 29.28 MB/s  
+Progress: |███████---| 67.2% Read: (0x560000/0x800000), 29.58 MB/s  
+Progress: |███████---| 68.0% Read: (0x570000/0x800000), 30.25 MB/s  
+Progress: |███████---| 68.8% Read: (0x580000/0x800000), 29.4 MB/s  
+Progress: |███████---| 69.5% Read: (0x590000/0x800000), 30.85 MB/s  
+Progress: |███████---| 70.3% Read: (0x5A0000/0x800000), 30.62 MB/s  
+Progress: |███████---| 71.1% Read: (0x5B0000/0x800000), 31.28 MB/s  
+Progress: |███████---| 71.9% Read: (0x5C0000/0x800000), 30.35 MB/s  
+Progress: |███████---| 72.7% Read: (0x5D0000/0x800000), 30.94 MB/s  
+Progress: |███████---| 73.4% Read: (0x5E0000/0x800000), 30.96 MB/s  
+Progress: |███████---| 74.2% Read: (0x5F0000/0x800000), 29.84 MB/s  
+Progress: |████████--| 75.0% Read: (0x600000/0x800000), 26.34 MB/s  
+Progress: |████████--| 75.8% Read: (0x610000/0x800000), 28.89 MB/s  
+Progress: |████████--| 76.6% Read: (0x620000/0x800000), 28.4 MB/s  
+Progress: |████████--| 77.3% Read: (0x630000/0x800000), 29.27 MB/s  
+Progress: |████████--| 78.1% Read: (0x640000/0x800000), 28.44 MB/s  
+Progress: |████████--| 78.9% Read: (0x650000/0x800000), 27.59 MB/s  
+Progress: |████████--| 79.7% Read: (0x660000/0x800000), 27.98 MB/s  
+Progress: |████████--| 80.5% Read: (0x670000/0x800000), 29.67 MB/s  
+Progress: |████████--| 81.2% Read: (0x680000/0x800000), 29.44 MB/s  
+Progress: |████████--| 82.0% Read: (0x690000/0x800000), 27.94 MB/s  
+Progress: |████████--| 82.8% Read: (0x6A0000/0x800000), 28.61 MB/s  
+Progress: |████████--| 83.6% Read: (0x6B0000/0x800000), 29.03 MB/s  
+Progress: |████████--| 84.4% Read: (0x6C0000/0x800000), 29.04 MB/s  
+Progress: |█████████-| 85.2% Read: (0x6D0000/0x800000), 29.15 MB/s  
+Progress: |█████████-| 85.9% Read: (0x6E0000/0x800000), 28.72 MB/s  
+Progress: |█████████-| 86.7% Read: (0x6F0000/0x800000), 28.75 MB/s  
+Progress: |█████████-| 87.5% Read: (0x700000/0x800000), 29.0 MB/s  
+Progress: |█████████-| 88.3% Read: (0x710000/0x800000), 28.92 MB/s  
+Progress: |█████████-| 89.1% Read: (0x720000/0x800000), 28.78 MB/s  
+Progress: |█████████-| 89.8% Read: (0x730000/0x800000), 28.13 MB/s  
+Progress: |█████████-| 90.6% Read: (0x740000/0x800000), 28.88 MB/s  
+Progress: |█████████-| 91.4% Read: (0x750000/0x800000), 29.9 MB/s  
+Progress: |█████████-| 92.2% Read: (0x760000/0x800000), 29.04 MB/s  
+Progress: |█████████-| 93.0% Read: (0x770000/0x800000), 28.74 MB/s  
+Progress: |█████████-| 93.8% Read: (0x780000/0x800000), 29.58 MB/s  
+Progress: |█████████-| 94.5% Read: (0x790000/0x800000), 28.37 MB/s  
+Progress: |██████████| 95.3% Read: (0x7A0000/0x800000), 29.11 MB/s  
+Progress: |██████████| 96.1% Read: (0x7B0000/0x800000), 26.86 MB/s  
+Progress: |██████████| 96.9% Read: (0x7C0000/0x800000), 28.43 MB/s  
+Progress: |██████████| 97.7% Read: (0x7D0000/0x800000), 28.62 MB/s  
+Progress: |██████████| 98.4% Read: (0x7E0000/0x800000), 28.08 MB/s  
+Progress: |██████████| 99.2% Read: (0x7F0000/0x800000), 28.48 MB/s  
+Progress: |██████████| 100.0% Read: (0x800000/0x800000), 28.56 MB/s  
+DaHandler - Dumped sector 45576 with sector count 2048 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/vbmeta_vendor_b.bin.
+DaHandler - Dumping partition "boot_b"
+
+Done |----------| 0.2% Read: (0x10000/0x2800000),0.00 MB/s
+Progress: |----------| 0.3% Read: (0x20000/0x2800000), 12.05 MB/s  
+Progress: |----------| 0.5% Read: (0x30000/0x2800000), 28.96 MB/s  
+Progress: |----------| 0.6% Read: (0x40000/0x2800000), 29.61 MB/s 01s left 
+Progress: |----------| 0.8% Read: (0x50000/0x2800000), 30.31 MB/s 01s left 
+Progress: |----------| 0.9% Read: (0x60000/0x2800000), 29.88 MB/s 01s left 
+Progress: |----------| 1.1% Read: (0x70000/0x2800000), 28.28 MB/s 01s left 
+Progress: |----------| 1.2% Read: (0x80000/0x2800000), 28.74 MB/s 01s left 
+Progress: |----------| 1.4% Read: (0x90000/0x2800000), 30.08 MB/s 01s left 
+Progress: |----------| 1.6% Read: (0xA0000/0x2800000), 29.95 MB/s 01s left 
+Progress: |----------| 1.7% Read: (0xB0000/0x2800000), 30.35 MB/s 01s left 
+Progress: |----------| 1.9% Read: (0xC0000/0x2800000), 30.09 MB/s 01s left 
+Progress: |----------| 2.0% Read: (0xD0000/0x2800000), 30.47 MB/s 01s left 
+Progress: |----------| 2.2% Read: (0xE0000/0x2800000), 30.19 MB/s 01s left 
+Progress: |----------| 2.3% Read: (0xF0000/0x2800000), 30.0 MB/s 01s left 
+Progress: |----------| 2.5% Read: (0x100000/0x2800000), 30.28 MB/s 01s left 
+Progress: |----------| 2.7% Read: (0x110000/0x2800000), 29.97 MB/s 01s left 
+Progress: |----------| 2.8% Read: (0x120000/0x2800000), 30.27 MB/s 01s left 
+Progress: |----------| 3.0% Read: (0x130000/0x2800000), 29.8 MB/s 01s left 
+Progress: |----------| 3.1% Read: (0x140000/0x2800000), 30.52 MB/s 01s left 
+Progress: |----------| 3.3% Read: (0x150000/0x2800000), 27.78 MB/s 01s left 
+Progress: |----------| 3.4% Read: (0x160000/0x2800000), 30.11 MB/s 01s left 
+Progress: |----------| 3.6% Read: (0x170000/0x2800000), 27.89 MB/s 01s left 
+Progress: |----------| 3.8% Read: (0x180000/0x2800000), 30.19 MB/s 01s left 
+Progress: |----------| 3.9% Read: (0x190000/0x2800000), 30.47 MB/s 01s left 
+Progress: |----------| 4.1% Read: (0x1A0000/0x2800000), 31.03 MB/s 01s left 
+Progress: |----------| 4.2% Read: (0x1B0000/0x2800000), 30.11 MB/s 01s left 
+Progress: |----------| 4.4% Read: (0x1C0000/0x2800000), 30.38 MB/s 01s left 
+Progress: |----------| 4.5% Read: (0x1D0000/0x2800000), 29.69 MB/s 01s left 
+Progress: |----------| 4.7% Read: (0x1E0000/0x2800000), 27.48 MB/s 01s left 
+Progress: |----------| 4.8% Read: (0x1F0000/0x2800000), 29.98 MB/s 01s left 
+Progress: |----------| 5.0% Read: (0x200000/0x2800000), 30.74 MB/s 01s left 
+Progress: |█---------| 5.2% Read: (0x210000/0x2800000), 30.12 MB/s 01s left 
+Progress: |█---------| 5.3% Read: (0x220000/0x2800000), 30.89 MB/s 01s left 
+Progress: |█---------| 5.5% Read: (0x230000/0x2800000), 30.62 MB/s 01s left 
+Progress: |█---------| 5.6% Read: (0x240000/0x2800000), 31.05 MB/s 01s left 
+Progress: |█---------| 5.8% Read: (0x250000/0x2800000), 30.85 MB/s 01s left 
+Progress: |█---------| 5.9% Read: (0x260000/0x2800000), 30.59 MB/s 01s left 
+Progress: |█---------| 6.1% Read: (0x270000/0x2800000), 30.43 MB/s 01s left 
+Progress: |█---------| 6.2% Read: (0x280000/0x2800000), 30.47 MB/s 01s left 
+Progress: |█---------| 6.4% Read: (0x290000/0x2800000), 29.7 MB/s 01s left 
+Progress: |█---------| 6.6% Read: (0x2A0000/0x2800000), 30.58 MB/s 01s left 
+Progress: |█---------| 6.7% Read: (0x2B0000/0x2800000), 29.61 MB/s 01s left 
+Progress: |█---------| 6.9% Read: (0x2C0000/0x2800000), 30.94 MB/s 01s left 
+Progress: |█---------| 7.0% Read: (0x2D0000/0x2800000), 30.43 MB/s 01s left 
+Progress: |█---------| 7.2% Read: (0x2E0000/0x2800000), 30.2 MB/s 01s left 
+Progress: |█---------| 7.3% Read: (0x2F0000/0x2800000), 27.79 MB/s 01s left 
+Progress: |█---------| 7.5% Read: (0x300000/0x2800000), 29.79 MB/s 01s left 
+Progress: |█---------| 7.7% Read: (0x310000/0x2800000), 30.55 MB/s 01s left 
+Progress: |█---------| 7.8% Read: (0x320000/0x2800000), 29.74 MB/s 01s left 
+Progress: |█---------| 8.0% Read: (0x330000/0x2800000), 30.25 MB/s 01s left 
+Progress: |█---------| 8.1% Read: (0x340000/0x2800000), 28.58 MB/s 01s left 
+Progress: |█---------| 8.3% Read: (0x350000/0x2800000), 29.34 MB/s 01s left 
+Progress: |█---------| 8.4% Read: (0x360000/0x2800000), 29.5 MB/s 01s left 
+Progress: |█---------| 8.6% Read: (0x370000/0x2800000), 30.21 MB/s 01s left 
+Progress: |█---------| 8.8% Read: (0x380000/0x2800000), 30.19 MB/s 01s left 
+Progress: |█---------| 8.9% Read: (0x390000/0x2800000), 29.52 MB/s 01s left 
+Progress: |█---------| 9.1% Read: (0x3A0000/0x2800000), 30.03 MB/s 01s left 
+Progress: |█---------| 9.2% Read: (0x3B0000/0x2800000), 29.46 MB/s 01s left 
+Progress: |█---------| 9.4% Read: (0x3C0000/0x2800000), 30.56 MB/s 01s left 
+Progress: |█---------| 9.5% Read: (0x3D0000/0x2800000), 30.84 MB/s 01s left 
+Progress: |█---------| 9.7% Read: (0x3E0000/0x2800000), 31.27 MB/s 01s left 
+Progress: |█---------| 9.8% Read: (0x3F0000/0x2800000), 30.16 MB/s 01s left 
+Progress: |█---------| 10.0% Read: (0x400000/0x2800000), 30.64 MB/s 01s left 
+Progress: |█---------| 10.2% Read: (0x410000/0x2800000), 29.74 MB/s 01s left 
+Progress: |█---------| 10.3% Read: (0x420000/0x2800000), 29.15 MB/s 01s left 
+Progress: |█---------| 10.5% Read: (0x430000/0x2800000), 27.57 MB/s 01s left 
+Progress: |█---------| 10.6% Read: (0x440000/0x2800000), 27.98 MB/s 01s left 
+Progress: |█---------| 10.8% Read: (0x450000/0x2800000), 28.45 MB/s 01s left 
+Progress: |█---------| 10.9% Read: (0x460000/0x2800000), 29.66 MB/s 01s left 
+Progress: |█---------| 11.1% Read: (0x470000/0x2800000), 28.77 MB/s 01s left 
+Progress: |█---------| 11.2% Read: (0x480000/0x2800000), 31.07 MB/s 01s left 
+Progress: |█---------| 11.4% Read: (0x490000/0x2800000), 30.37 MB/s 01s left 
+Progress: |█---------| 11.6% Read: (0x4A0000/0x2800000), 30.68 MB/s 01s left 
+Progress: |█---------| 11.7% Read: (0x4B0000/0x2800000), 30.1 MB/s 01s left 
+Progress: |█---------| 11.9% Read: (0x4C0000/0x2800000), 30.33 MB/s 01s left 
+Progress: |█---------| 12.0% Read: (0x4D0000/0x2800000), 30.24 MB/s 01s left 
+Progress: |█---------| 12.2% Read: (0x4E0000/0x2800000), 29.04 MB/s 01s left 
+Progress: |█---------| 12.3% Read: (0x4F0000/0x2800000), 27.91 MB/s 01s left 
+Progress: |█---------| 12.5% Read: (0x500000/0x2800000), 28.68 MB/s 01s left 
+Progress: |█---------| 12.7% Read: (0x510000/0x2800000), 28.82 MB/s 01s left 
+Progress: |█---------| 12.8% Read: (0x520000/0x2800000), 29.97 MB/s 01s left 
+Progress: |█---------| 13.0% Read: (0x530000/0x2800000), 29.82 MB/s 01s left 
+Progress: |█---------| 13.1% Read: (0x540000/0x2800000), 28.95 MB/s 01s left 
+Progress: |█---------| 13.3% Read: (0x550000/0x2800000), 30.41 MB/s 01s left 
+Progress: |█---------| 13.4% Read: (0x560000/0x2800000), 30.41 MB/s 01s left 
+Progress: |█---------| 13.6% Read: (0x570000/0x2800000), 29.13 MB/s 01s left 
+Progress: |█---------| 13.8% Read: (0x580000/0x2800000), 28.34 MB/s 01s left 
+Progress: |█---------| 13.9% Read: (0x590000/0x2800000), 28.14 MB/s 01s left 
+Progress: |█---------| 14.1% Read: (0x5A0000/0x2800000), 28.5 MB/s 01s left 
+Progress: |█---------| 14.2% Read: (0x5B0000/0x2800000), 28.19 MB/s 01s left 
+Progress: |█---------| 14.4% Read: (0x5C0000/0x2800000), 29.58 MB/s 01s left 
+Progress: |█---------| 14.5% Read: (0x5D0000/0x2800000), 29.35 MB/s 01s left 
+Progress: |█---------| 14.7% Read: (0x5E0000/0x2800000), 26.71 MB/s 01s left 
+Progress: |█---------| 14.8% Read: (0x5F0000/0x2800000), 29.44 MB/s 01s left 
+Progress: |██--------| 15.0% Read: (0x600000/0x2800000), 29.72 MB/s 01s left 
+Progress: |██--------| 15.2% Read: (0x610000/0x2800000), 30.35 MB/s 01s left 
+Progress: |██--------| 15.3% Read: (0x620000/0x2800000), 28.58 MB/s 01s left 
+Progress: |██--------| 15.5% Read: (0x630000/0x2800000), 28.37 MB/s 01s left 
+Progress: |██--------| 15.6% Read: (0x640000/0x2800000), 29.33 MB/s 01s left 
+Progress: |██--------| 15.8% Read: (0x650000/0x2800000), 29.2 MB/s 01s left 
+Progress: |██--------| 15.9% Read: (0x660000/0x2800000), 28.19 MB/s 01s left 
+Progress: |██--------| 16.1% Read: (0x670000/0x2800000), 28.17 MB/s 01s left 
+Progress: |██--------| 16.2% Read: (0x680000/0x2800000), 28.85 MB/s 01s left 
+Progress: |██--------| 16.4% Read: (0x690000/0x2800000), 29.36 MB/s 01s left 
+Progress: |██--------| 16.6% Read: (0x6A0000/0x2800000), 27.9 MB/s 01s left 
+Progress: |██--------| 16.7% Read: (0x6B0000/0x2800000), 28.44 MB/s 01s left 
+Progress: |██--------| 16.9% Read: (0x6C0000/0x2800000), 28.75 MB/s 01s left 
+Progress: |██--------| 17.0% Read: (0x6D0000/0x2800000), 28.87 MB/s 01s left 
+Progress: |██--------| 17.2% Read: (0x6E0000/0x2800000), 28.64 MB/s 01s left 
+Progress: |██--------| 17.3% Read: (0x6F0000/0x2800000), 28.55 MB/s 01s left 
+Progress: |██--------| 17.5% Read: (0x700000/0x2800000), 29.55 MB/s 01s left 
+Progress: |██--------| 17.7% Read: (0x710000/0x2800000), 28.46 MB/s 01s left 
+Progress: |██--------| 17.8% Read: (0x720000/0x2800000), 28.29 MB/s 01s left 
+Progress: |██--------| 18.0% Read: (0x730000/0x2800000), 28.09 MB/s 01s left 
+Progress: |██--------| 18.1% Read: (0x740000/0x2800000), 28.42 MB/s 01s left 
+Progress: |██--------| 18.3% Read: (0x750000/0x2800000), 28.14 MB/s 01s left 
+Progress: |██--------| 18.4% Read: (0x760000/0x2800000), 29.34 MB/s 01s left 
+Progress: |██--------| 18.6% Read: (0x770000/0x2800000), 28.76 MB/s 01s left 
+Progress: |██--------| 18.8% Read: (0x780000/0x2800000), 30.03 MB/s 01s left 
+Progress: |██--------| 18.9% Read: (0x790000/0x2800000), 28.52 MB/s 01s left 
+Progress: |██--------| 19.1% Read: (0x7A0000/0x2800000), 28.27 MB/s 01s left 
+Progress: |██--------| 19.2% Read: (0x7B0000/0x2800000), 30.19 MB/s 01s left 
+Progress: |██--------| 19.4% Read: (0x7C0000/0x2800000), 28.65 MB/s 01s left 
+Progress: |██--------| 19.5% Read: (0x7D0000/0x2800000), 28.04 MB/s 01s left 
+Progress: |██--------| 19.7% Read: (0x7E0000/0x2800000), 27.88 MB/s 01s left 
+Progress: |██--------| 19.8% Read: (0x7F0000/0x2800000), 29.4 MB/s 01s left 
+Progress: |██--------| 20.0% Read: (0x800000/0x2800000), 28.6 MB/s 01s left 
+Progress: |██--------| 20.2% Read: (0x810000/0x2800000), 27.89 MB/s 01s left 
+Progress: |██--------| 20.3% Read: (0x820000/0x2800000), 27.7 MB/s 01s left 
+Progress: |██--------| 20.5% Read: (0x830000/0x2800000), 29.2 MB/s 01s left 
+Progress: |██--------| 20.6% Read: (0x840000/0x2800000), 29.86 MB/s 01s left 
+Progress: |██--------| 20.8% Read: (0x850000/0x2800000), 28.92 MB/s 01s left 
+Progress: |██--------| 20.9% Read: (0x860000/0x2800000), 27.18 MB/s 01s left 
+Progress: |██--------| 21.1% Read: (0x870000/0x2800000), 29.08 MB/s 01s left 
+Progress: |██--------| 21.2% Read: (0x880000/0x2800000), 30.18 MB/s 01s left 
+Progress: |██--------| 21.4% Read: (0x890000/0x2800000), 29.94 MB/s 01s left 
+Progress: |██--------| 21.6% Read: (0x8A0000/0x2800000), 29.06 MB/s 01s left 
+Progress: |██--------| 21.7% Read: (0x8B0000/0x2800000), 29.85 MB/s 01s left 
+Progress: |██--------| 21.9% Read: (0x8C0000/0x2800000), 27.75 MB/s 01s left 
+Progress: |██--------| 22.0% Read: (0x8D0000/0x2800000), 29.48 MB/s 01s left 
+Progress: |██--------| 22.2% Read: (0x8E0000/0x2800000), 28.8 MB/s 01s left 
+Progress: |██--------| 22.3% Read: (0x8F0000/0x2800000), 29.72 MB/s 01s left 
+Progress: |██--------| 22.5% Read: (0x900000/0x2800000), 29.98 MB/s 01s left 
+Progress: |██--------| 22.7% Read: (0x910000/0x2800000), 31.03 MB/s 01s left 
+Progress: |██--------| 22.8% Read: (0x920000/0x2800000), 29.89 MB/s 01s left 
+Progress: |██--------| 23.0% Read: (0x930000/0x2800000), 30.4 MB/s 01s left 
+Progress: |██--------| 23.1% Read: (0x940000/0x2800000), 30.61 MB/s 01s left 
+Progress: |██--------| 23.3% Read: (0x950000/0x2800000), 30.08 MB/s 01s left 
+Progress: |██--------| 23.4% Read: (0x960000/0x2800000), 29.65 MB/s 01s left 
+Progress: |██--------| 23.6% Read: (0x970000/0x2800000), 29.92 MB/s 01s left 
+Progress: |██--------| 23.8% Read: (0x980000/0x2800000), 30.33 MB/s 01s left 
+Progress: |██--------| 23.9% Read: (0x990000/0x2800000), 30.86 MB/s 01s left 
+Progress: |██--------| 24.1% Read: (0x9A0000/0x2800000), 30.33 MB/s 01s left 
+Progress: |██--------| 24.2% Read: (0x9B0000/0x2800000), 30.61 MB/s 01s left 
+Progress: |██--------| 24.4% Read: (0x9C0000/0x2800000), 29.34 MB/s 01s left 
+Progress: |██--------| 24.5% Read: (0x9D0000/0x2800000), 28.81 MB/s 01s left 
+Progress: |██--------| 24.7% Read: (0x9E0000/0x2800000), 30.41 MB/s 01s left 
+Progress: |██--------| 24.8% Read: (0x9F0000/0x2800000), 30.34 MB/s 01s left 
+Progress: |██--------| 25.0% Read: (0xA00000/0x2800000), 30.41 MB/s 01s left 
+Progress: |███-------| 25.2% Read: (0xA10000/0x2800000), 30.98 MB/s 01s left 
+Progress: |███-------| 25.3% Read: (0xA20000/0x2800000), 30.71 MB/s 01s left 
+Progress: |███-------| 25.5% Read: (0xA30000/0x2800000), 30.79 MB/s 01s left 
+Progress: |███-------| 25.6% Read: (0xA40000/0x2800000), 30.43 MB/s 01s left 
+Progress: |███-------| 25.8% Read: (0xA50000/0x2800000), 30.65 MB/s 01s left 
+Progress: |███-------| 25.9% Read: (0xA60000/0x2800000), 29.15 MB/s  
+Progress: |███-------| 26.1% Read: (0xA70000/0x2800000), 29.59 MB/s  
+Progress: |███-------| 26.2% Read: (0xA80000/0x2800000), 29.48 MB/s  
+Progress: |███-------| 26.4% Read: (0xA90000/0x2800000), 27.88 MB/s  
+Progress: |███-------| 26.6% Read: (0xAA0000/0x2800000), 29.04 MB/s  
+Progress: |███-------| 26.7% Read: (0xAB0000/0x2800000), 29.2 MB/s  
+Progress: |███-------| 26.9% Read: (0xAC0000/0x2800000), 30.47 MB/s  
+Progress: |███-------| 27.0% Read: (0xAD0000/0x2800000), 31.08 MB/s  
+Progress: |███-------| 27.2% Read: (0xAE0000/0x2800000), 30.75 MB/s  
+Progress: |███-------| 27.3% Read: (0xAF0000/0x2800000), 30.41 MB/s  
+Progress: |███-------| 27.5% Read: (0xB00000/0x2800000), 31.16 MB/s  
+Progress: |███-------| 27.7% Read: (0xB10000/0x2800000), 30.97 MB/s  
+Progress: |███-------| 27.8% Read: (0xB20000/0x2800000), 30.5 MB/s  
+Progress: |███-------| 28.0% Read: (0xB30000/0x2800000), 29.9 MB/s  
+Progress: |███-------| 28.1% Read: (0xB40000/0x2800000), 30.61 MB/s  
+Progress: |███-------| 28.3% Read: (0xB50000/0x2800000), 30.12 MB/s  
+Progress: |███-------| 28.4% Read: (0xB60000/0x2800000), 30.16 MB/s  
+Progress: |███-------| 28.6% Read: (0xB70000/0x2800000), 30.35 MB/s  
+Progress: |███-------| 28.7% Read: (0xB80000/0x2800000), 30.95 MB/s  
+Progress: |███-------| 28.9% Read: (0xB90000/0x2800000), 30.11 MB/s  
+Progress: |███-------| 29.1% Read: (0xBA0000/0x2800000), 30.54 MB/s  
+Progress: |███-------| 29.2% Read: (0xBB0000/0x2800000), 30.28 MB/s  
+Progress: |███-------| 29.4% Read: (0xBC0000/0x2800000), 30.88 MB/s  
+Progress: |███-------| 29.5% Read: (0xBD0000/0x2800000), 30.87 MB/s  
+Progress: |███-------| 29.7% Read: (0xBE0000/0x2800000), 30.91 MB/s  
+Progress: |███-------| 29.8% Read: (0xBF0000/0x2800000), 29.98 MB/s  
+Progress: |███-------| 30.0% Read: (0xC00000/0x2800000), 29.39 MB/s  
+Progress: |███-------| 30.2% Read: (0xC10000/0x2800000), 29.88 MB/s  
+Progress: |███-------| 30.3% Read: (0xC20000/0x2800000), 28.18 MB/s  
+Progress: |███-------| 30.5% Read: (0xC30000/0x2800000), 29.41 MB/s  
+Progress: |███-------| 30.6% Read: (0xC40000/0x2800000), 27.24 MB/s  
+Progress: |███-------| 30.8% Read: (0xC50000/0x2800000), 29.64 MB/s  
+Progress: |███-------| 30.9% Read: (0xC60000/0x2800000), 30.47 MB/s  
+Progress: |███-------| 31.1% Read: (0xC70000/0x2800000), 28.9 MB/s  
+Progress: |███-------| 31.2% Read: (0xC80000/0x2800000), 29.91 MB/s  
+Progress: |███-------| 31.4% Read: (0xC90000/0x2800000), 30.27 MB/s  
+Progress: |███-------| 31.6% Read: (0xCA0000/0x2800000), 29.61 MB/s  
+Progress: |███-------| 31.7% Read: (0xCB0000/0x2800000), 30.11 MB/s  
+Progress: |███-------| 31.9% Read: (0xCC0000/0x2800000), 29.59 MB/s  
+Progress: |███-------| 32.0% Read: (0xCD0000/0x2800000), 30.56 MB/s  
+Progress: |███-------| 32.2% Read: (0xCE0000/0x2800000), 28.9 MB/s  
+Progress: |███-------| 32.3% Read: (0xCF0000/0x2800000), 28.41 MB/s  
+Progress: |███-------| 32.5% Read: (0xD00000/0x2800000), 29.62 MB/s  
+Progress: |███-------| 32.7% Read: (0xD10000/0x2800000), 27.47 MB/s  
+Progress: |███-------| 32.8% Read: (0xD20000/0x2800000), 27.73 MB/s  
+Progress: |███-------| 33.0% Read: (0xD30000/0x2800000), 26.3 MB/s  
+Progress: |███-------| 33.1% Read: (0xD40000/0x2800000), 27.82 MB/s  
+Progress: |███-------| 33.3% Read: (0xD50000/0x2800000), 29.96 MB/s  
+Progress: |███-------| 33.4% Read: (0xD60000/0x2800000), 30.19 MB/s  
+Progress: |███-------| 33.6% Read: (0xD70000/0x2800000), 30.37 MB/s  
+Progress: |███-------| 33.8% Read: (0xD80000/0x2800000), 29.48 MB/s  
+Progress: |███-------| 33.9% Read: (0xD90000/0x2800000), 27.78 MB/s  
+Progress: |███-------| 34.1% Read: (0xDA0000/0x2800000), 30.14 MB/s  
+Progress: |███-------| 34.2% Read: (0xDB0000/0x2800000), 30.18 MB/s  
+Progress: |███-------| 34.4% Read: (0xDC0000/0x2800000), 31.13 MB/s  
+Progress: |███-------| 34.5% Read: (0xDD0000/0x2800000), 31.1 MB/s  
+Progress: |███-------| 34.7% Read: (0xDE0000/0x2800000), 29.62 MB/s  
+Progress: |███-------| 34.8% Read: (0xDF0000/0x2800000), 30.17 MB/s  
+Progress: |████------| 35.0% Read: (0xE00000/0x2800000), 29.75 MB/s  
+Progress: |████------| 35.2% Read: (0xE10000/0x2800000), 30.37 MB/s  
+Progress: |████------| 35.3% Read: (0xE20000/0x2800000), 29.45 MB/s  
+Progress: |████------| 35.5% Read: (0xE30000/0x2800000), 28.67 MB/s  
+Progress: |████------| 35.6% Read: (0xE40000/0x2800000), 29.7 MB/s  
+Progress: |████------| 35.8% Read: (0xE50000/0x2800000), 30.09 MB/s  
+Progress: |████------| 35.9% Read: (0xE60000/0x2800000), 29.82 MB/s  
+Progress: |████------| 36.1% Read: (0xE70000/0x2800000), 30.25 MB/s  
+Progress: |████------| 36.2% Read: (0xE80000/0x2800000), 30.28 MB/s  
+Progress: |████------| 36.4% Read: (0xE90000/0x2800000), 30.94 MB/s  
+Progress: |████------| 36.6% Read: (0xEA0000/0x2800000), 30.44 MB/s  
+Progress: |████------| 36.7% Read: (0xEB0000/0x2800000), 30.55 MB/s  
+Progress: |████------| 36.9% Read: (0xEC0000/0x2800000), 30.56 MB/s  
+Progress: |████------| 37.0% Read: (0xED0000/0x2800000), 30.9 MB/s  
+Progress: |████------| 37.2% Read: (0xEE0000/0x2800000), 28.65 MB/s  
+Progress: |████------| 37.3% Read: (0xEF0000/0x2800000), 30.21 MB/s  
+Progress: |████------| 37.5% Read: (0xF00000/0x2800000), 30.06 MB/s  
+Progress: |████------| 37.7% Read: (0xF10000/0x2800000), 28.32 MB/s  
+Progress: |████------| 37.8% Read: (0xF20000/0x2800000), 29.53 MB/s  
+Progress: |████------| 38.0% Read: (0xF30000/0x2800000), 30.14 MB/s  
+Progress: |████------| 38.1% Read: (0xF40000/0x2800000), 30.02 MB/s  
+Progress: |████------| 38.3% Read: (0xF50000/0x2800000), 30.64 MB/s  
+Progress: |████------| 38.4% Read: (0xF60000/0x2800000), 30.46 MB/s  
+Progress: |████------| 38.6% Read: (0xF70000/0x2800000), 30.68 MB/s  
+Progress: |████------| 38.8% Read: (0xF80000/0x2800000), 30.22 MB/s  
+Progress: |████------| 38.9% Read: (0xF90000/0x2800000), 29.99 MB/s  
+Progress: |████------| 39.1% Read: (0xFA0000/0x2800000), 28.52 MB/s  
+Progress: |████------| 39.2% Read: (0xFB0000/0x2800000), 27.71 MB/s  
+Progress: |████------| 39.4% Read: (0xFC0000/0x2800000), 28.92 MB/s  
+Progress: |████------| 39.5% Read: (0xFD0000/0x2800000), 28.53 MB/s  
+Progress: |████------| 39.7% Read: (0xFE0000/0x2800000), 28.34 MB/s  
+Progress: |████------| 39.8% Read: (0xFF0000/0x2800000), 28.29 MB/s  
+Progress: |████------| 40.0% Read: (0x1000000/0x2800000), 29.06 MB/s  
+Progress: |████------| 40.2% Read: (0x1010000/0x2800000), 28.58 MB/s  
+Progress: |████------| 40.3% Read: (0x1020000/0x2800000), 27.06 MB/s  
+Progress: |████------| 40.5% Read: (0x1030000/0x2800000), 28.31 MB/s  
+Progress: |████------| 40.6% Read: (0x1040000/0x2800000), 29.2 MB/s  
+Progress: |████------| 40.8% Read: (0x1050000/0x2800000), 28.82 MB/s  
+Progress: |████------| 40.9% Read: (0x1060000/0x2800000), 29.61 MB/s  
+Progress: |████------| 41.1% Read: (0x1070000/0x2800000), 28.57 MB/s  
+Progress: |████------| 41.2% Read: (0x1080000/0x2800000), 26.71 MB/s  
+Progress: |████------| 41.4% Read: (0x1090000/0x2800000), 29.65 MB/s  
+Progress: |████------| 41.6% Read: (0x10A0000/0x2800000), 29.59 MB/s  
+Progress: |████------| 41.7% Read: (0x10B0000/0x2800000), 28.23 MB/s  
+Progress: |████------| 41.9% Read: (0x10C0000/0x2800000), 28.47 MB/s  
+Progress: |████------| 42.0% Read: (0x10D0000/0x2800000), 29.26 MB/s  
+Progress: |████------| 42.2% Read: (0x10E0000/0x2800000), 29.95 MB/s  
+Progress: |████------| 42.3% Read: (0x10F0000/0x2800000), 30.06 MB/s  
+Progress: |████------| 42.5% Read: (0x1100000/0x2800000), 30.53 MB/s  
+Progress: |████------| 42.7% Read: (0x1110000/0x2800000), 29.33 MB/s  
+Progress: |████------| 42.8% Read: (0x1120000/0x2800000), 28.91 MB/s  
+Progress: |████------| 43.0% Read: (0x1130000/0x2800000), 28.76 MB/s  
+Progress: |████------| 43.1% Read: (0x1140000/0x2800000), 28.46 MB/s  
+Progress: |████------| 43.3% Read: (0x1150000/0x2800000), 28.25 MB/s  
+Progress: |████------| 43.4% Read: (0x1160000/0x2800000), 28.45 MB/s  
+Progress: |████------| 43.6% Read: (0x1170000/0x2800000), 28.85 MB/s  
+Progress: |████------| 43.8% Read: (0x1180000/0x2800000), 28.32 MB/s  
+Progress: |████------| 43.9% Read: (0x1190000/0x2800000), 28.54 MB/s  
+Progress: |████------| 44.1% Read: (0x11A0000/0x2800000), 29.43 MB/s  
+Progress: |████------| 44.2% Read: (0x11B0000/0x2800000), 28.84 MB/s  
+Progress: |████------| 44.4% Read: (0x11C0000/0x2800000), 28.96 MB/s  
+Progress: |████------| 44.5% Read: (0x11D0000/0x2800000), 27.28 MB/s  
+Progress: |████------| 44.7% Read: (0x11E0000/0x2800000), 28.55 MB/s  
+Progress: |████------| 44.8% Read: (0x11F0000/0x2800000), 26.87 MB/s  
+Progress: |████------| 45.0% Read: (0x1200000/0x2800000), 27.55 MB/s  
+Progress: |█████-----| 45.2% Read: (0x1210000/0x2800000), 27.52 MB/s  
+Progress: |█████-----| 45.3% Read: (0x1220000/0x2800000), 29.99 MB/s  
+Progress: |█████-----| 45.5% Read: (0x1230000/0x2800000), 29.58 MB/s  
+Progress: |█████-----| 45.6% Read: (0x1240000/0x2800000), 29.65 MB/s  
+Progress: |█████-----| 45.8% Read: (0x1250000/0x2800000), 29.67 MB/s  
+Progress: |█████-----| 45.9% Read: (0x1260000/0x2800000), 28.27 MB/s  
+Progress: |█████-----| 46.1% Read: (0x1270000/0x2800000), 28.85 MB/s  
+Progress: |█████-----| 46.2% Read: (0x1280000/0x2800000), 29.76 MB/s  
+Progress: |█████-----| 46.4% Read: (0x1290000/0x2800000), 28.14 MB/s  
+Progress: |█████-----| 46.6% Read: (0x12A0000/0x2800000), 28.13 MB/s  
+Progress: |█████-----| 46.7% Read: (0x12B0000/0x2800000), 28.25 MB/s  
+Progress: |█████-----| 46.9% Read: (0x12C0000/0x2800000), 28.02 MB/s  
+Progress: |█████-----| 47.0% Read: (0x12D0000/0x2800000), 28.89 MB/s  
+Progress: |█████-----| 47.2% Read: (0x12E0000/0x2800000), 28.61 MB/s  
+Progress: |█████-----| 47.3% Read: (0x12F0000/0x2800000), 28.9 MB/s  
+Progress: |█████-----| 47.5% Read: (0x1300000/0x2800000), 28.92 MB/s  
+Progress: |█████-----| 47.7% Read: (0x1310000/0x2800000), 28.31 MB/s  
+Progress: |█████-----| 47.8% Read: (0x1320000/0x2800000), 28.07 MB/s  
+Progress: |█████-----| 48.0% Read: (0x1330000/0x2800000), 27.64 MB/s  
+Progress: |█████-----| 48.1% Read: (0x1340000/0x2800000), 28.57 MB/s  
+Progress: |█████-----| 48.3% Read: (0x1350000/0x2800000), 29.14 MB/s  
+Progress: |█████-----| 48.4% Read: (0x1360000/0x2800000), 27.8 MB/s  
+Progress: |█████-----| 48.6% Read: (0x1370000/0x2800000), 28.98 MB/s  
+Progress: |█████-----| 48.8% Read: (0x1380000/0x2800000), 28.58 MB/s  
+Progress: |█████-----| 48.9% Read: (0x1390000/0x2800000), 28.26 MB/s  
+Progress: |█████-----| 49.1% Read: (0x13A0000/0x2800000), 28.93 MB/s  
+Progress: |█████-----| 49.2% Read: (0x13B0000/0x2800000), 28.99 MB/s  
+Progress: |█████-----| 49.4% Read: (0x13C0000/0x2800000), 28.52 MB/s  
+Progress: |█████-----| 49.5% Read: (0x13D0000/0x2800000), 28.84 MB/s  
+Progress: |█████-----| 49.7% Read: (0x13E0000/0x2800000), 28.44 MB/s  
+Progress: |█████-----| 49.8% Read: (0x13F0000/0x2800000), 28.11 MB/s  
+Progress: |█████-----| 50.0% Read: (0x1400000/0x2800000), 28.8 MB/s  
+Progress: |█████-----| 50.2% Read: (0x1410000/0x2800000), 29.39 MB/s  
+Progress: |█████-----| 50.3% Read: (0x1420000/0x2800000), 28.92 MB/s  
+Progress: |█████-----| 50.5% Read: (0x1430000/0x2800000), 27.98 MB/s  
+Progress: |█████-----| 50.6% Read: (0x1440000/0x2800000), 28.57 MB/s  
+Progress: |█████-----| 50.8% Read: (0x1450000/0x2800000), 29.11 MB/s  
+Progress: |█████-----| 50.9% Read: (0x1460000/0x2800000), 29.27 MB/s  
+Progress: |█████-----| 51.1% Read: (0x1470000/0x2800000), 29.83 MB/s  
+Progress: |█████-----| 51.2% Read: (0x1480000/0x2800000), 30.01 MB/s  
+Progress: |█████-----| 51.4% Read: (0x1490000/0x2800000), 30.52 MB/s  
+Progress: |█████-----| 51.6% Read: (0x14A0000/0x2800000), 29.58 MB/s  
+Progress: |█████-----| 51.7% Read: (0x14B0000/0x2800000), 30.19 MB/s  
+Progress: |█████-----| 51.9% Read: (0x14C0000/0x2800000), 30.68 MB/s  
+Progress: |█████-----| 52.0% Read: (0x14D0000/0x2800000), 30.52 MB/s  
+Progress: |█████-----| 52.2% Read: (0x14E0000/0x2800000), 27.35 MB/s  
+Progress: |█████-----| 52.3% Read: (0x14F0000/0x2800000), 28.95 MB/s  
+Progress: |█████-----| 52.5% Read: (0x1500000/0x2800000), 28.71 MB/s  
+Progress: |█████-----| 52.7% Read: (0x1510000/0x2800000), 28.47 MB/s  
+Progress: |█████-----| 52.8% Read: (0x1520000/0x2800000), 28.54 MB/s  
+Progress: |█████-----| 53.0% Read: (0x1530000/0x2800000), 28.89 MB/s  
+Progress: |█████-----| 53.1% Read: (0x1540000/0x2800000), 28.95 MB/s  
+Progress: |█████-----| 53.3% Read: (0x1550000/0x2800000), 29.23 MB/s  
+Progress: |█████-----| 53.4% Read: (0x1560000/0x2800000), 29.69 MB/s  
+Progress: |█████-----| 53.6% Read: (0x1570000/0x2800000), 28.71 MB/s  
+Progress: |█████-----| 53.8% Read: (0x1580000/0x2800000), 28.57 MB/s  
+Progress: |█████-----| 53.9% Read: (0x1590000/0x2800000), 28.29 MB/s  
+Progress: |█████-----| 54.1% Read: (0x15A0000/0x2800000), 28.81 MB/s  
+Progress: |█████-----| 54.2% Read: (0x15B0000/0x2800000), 28.79 MB/s  
+Progress: |█████-----| 54.4% Read: (0x15C0000/0x2800000), 29.61 MB/s  
+Progress: |█████-----| 54.5% Read: (0x15D0000/0x2800000), 29.47 MB/s  
+Progress: |█████-----| 54.7% Read: (0x15E0000/0x2800000), 28.23 MB/s  
+Progress: |█████-----| 54.8% Read: (0x15F0000/0x2800000), 28.52 MB/s  
+Progress: |██████----| 55.0% Read: (0x1600000/0x2800000), 28.62 MB/s  
+Progress: |██████----| 55.2% Read: (0x1610000/0x2800000), 28.28 MB/s  
+Progress: |██████----| 55.3% Read: (0x1620000/0x2800000), 28.3 MB/s  
+Progress: |██████----| 55.5% Read: (0x1630000/0x2800000), 28.55 MB/s  
+Progress: |██████----| 55.6% Read: (0x1640000/0x2800000), 28.17 MB/s  
+Progress: |██████----| 55.8% Read: (0x1650000/0x2800000), 27.22 MB/s  
+Progress: |██████----| 55.9% Read: (0x1660000/0x2800000), 28.64 MB/s  
+Progress: |██████----| 56.1% Read: (0x1670000/0x2800000), 28.46 MB/s  
+Progress: |██████----| 56.2% Read: (0x1680000/0x2800000), 28.57 MB/s  
+Progress: |██████----| 56.4% Read: (0x1690000/0x2800000), 29.48 MB/s  
+Progress: |██████----| 56.6% Read: (0x16A0000/0x2800000), 27.56 MB/s  
+Progress: |██████----| 56.7% Read: (0x16B0000/0x2800000), 28.19 MB/s  
+Progress: |██████----| 56.9% Read: (0x16C0000/0x2800000), 28.56 MB/s  
+Progress: |██████----| 57.0% Read: (0x16D0000/0x2800000), 27.4 MB/s  
+Progress: |██████----| 57.2% Read: (0x16E0000/0x2800000), 26.67 MB/s  
+Progress: |██████----| 57.3% Read: (0x16F0000/0x2800000), 27.94 MB/s  
+Progress: |██████----| 57.5% Read: (0x1700000/0x2800000), 27.77 MB/s  
+Progress: |██████----| 57.7% Read: (0x1710000/0x2800000), 27.89 MB/s  
+Progress: |██████----| 57.8% Read: (0x1720000/0x2800000), 27.91 MB/s  
+Progress: |██████----| 58.0% Read: (0x1730000/0x2800000), 28.39 MB/s  
+Progress: |██████----| 58.1% Read: (0x1740000/0x2800000), 29.41 MB/s  
+Progress: |██████----| 58.3% Read: (0x1750000/0x2800000), 29.63 MB/s  
+Progress: |██████----| 58.4% Read: (0x1760000/0x2800000), 28.38 MB/s  
+Progress: |██████----| 58.6% Read: (0x1770000/0x2800000), 28.24 MB/s  
+Progress: |██████----| 58.8% Read: (0x1780000/0x2800000), 29.74 MB/s  
+Progress: |██████----| 58.9% Read: (0x1790000/0x2800000), 28.75 MB/s  
+Progress: |██████----| 59.1% Read: (0x17A0000/0x2800000), 28.22 MB/s  
+Progress: |██████----| 59.2% Read: (0x17B0000/0x2800000), 26.77 MB/s  
+Progress: |██████----| 59.4% Read: (0x17C0000/0x2800000), 27.62 MB/s  
+Progress: |██████----| 59.5% Read: (0x17D0000/0x2800000), 29.09 MB/s  
+Progress: |██████----| 59.7% Read: (0x17E0000/0x2800000), 28.44 MB/s  
+Progress: |██████----| 59.8% Read: (0x17F0000/0x2800000), 28.53 MB/s  
+Progress: |██████----| 60.0% Read: (0x1800000/0x2800000), 26.65 MB/s  
+Progress: |██████----| 60.2% Read: (0x1810000/0x2800000), 29.23 MB/s  
+Progress: |██████----| 60.3% Read: (0x1820000/0x2800000), 28.29 MB/s  
+Progress: |██████----| 60.5% Read: (0x1830000/0x2800000), 28.11 MB/s  
+Progress: |██████----| 60.6% Read: (0x1840000/0x2800000), 29.32 MB/s  
+Progress: |██████----| 60.8% Read: (0x1850000/0x2800000), 28.55 MB/s  
+Progress: |██████----| 60.9% Read: (0x1860000/0x2800000), 28.37 MB/s  
+Progress: |██████----| 61.1% Read: (0x1870000/0x2800000), 28.54 MB/s  
+Progress: |██████----| 61.3% Read: (0x1880000/0x2800000), 29.29 MB/s  
+Progress: |██████----| 61.4% Read: (0x1890000/0x2800000), 27.9 MB/s  
+Progress: |██████----| 61.6% Read: (0x18A0000/0x2800000), 29.04 MB/s  
+Progress: |██████----| 61.7% Read: (0x18B0000/0x2800000), 29.35 MB/s  
+Progress: |██████----| 61.9% Read: (0x18C0000/0x2800000), 28.97 MB/s  
+Progress: |██████----| 62.0% Read: (0x18D0000/0x2800000), 28.15 MB/s  
+Progress: |██████----| 62.2% Read: (0x18E0000/0x2800000), 28.86 MB/s  
+Progress: |██████----| 62.3% Read: (0x18F0000/0x2800000), 28.46 MB/s  
+Progress: |██████----| 62.5% Read: (0x1900000/0x2800000), 28.36 MB/s  
+Progress: |██████----| 62.7% Read: (0x1910000/0x2800000), 28.88 MB/s  
+Progress: |██████----| 62.8% Read: (0x1920000/0x2800000), 27.26 MB/s  
+Progress: |██████----| 63.0% Read: (0x1930000/0x2800000), 27.73 MB/s  
+Progress: |██████----| 63.1% Read: (0x1940000/0x2800000), 29.07 MB/s  
+Progress: |██████----| 63.3% Read: (0x1950000/0x2800000), 28.85 MB/s  
+Progress: |██████----| 63.4% Read: (0x1960000/0x2800000), 27.94 MB/s  
+Progress: |██████----| 63.6% Read: (0x1970000/0x2800000), 28.69 MB/s  
+Progress: |██████----| 63.7% Read: (0x1980000/0x2800000), 28.38 MB/s  
+Progress: |██████----| 63.9% Read: (0x1990000/0x2800000), 28.94 MB/s  
+Progress: |██████----| 64.1% Read: (0x19A0000/0x2800000), 29.45 MB/s  
+Progress: |██████----| 64.2% Read: (0x19B0000/0x2800000), 29.56 MB/s  
+Progress: |██████----| 64.4% Read: (0x19C0000/0x2800000), 28.56 MB/s  
+Progress: |██████----| 64.5% Read: (0x19D0000/0x2800000), 28.09 MB/s  
+Progress: |██████----| 64.7% Read: (0x19E0000/0x2800000), 29.05 MB/s  
+Progress: |██████----| 64.8% Read: (0x19F0000/0x2800000), 29.18 MB/s  
+Progress: |██████----| 65.0% Read: (0x1A00000/0x2800000), 28.11 MB/s  
+Progress: |███████---| 65.2% Read: (0x1A10000/0x2800000), 28.53 MB/s  
+Progress: |███████---| 65.3% Read: (0x1A20000/0x2800000), 28.63 MB/s  
+Progress: |███████---| 65.5% Read: (0x1A30000/0x2800000), 30.01 MB/s  
+Progress: |███████---| 65.6% Read: (0x1A40000/0x2800000), 30.55 MB/s  
+Progress: |███████---| 65.8% Read: (0x1A50000/0x2800000), 30.85 MB/s  
+Progress: |███████---| 65.9% Read: (0x1A60000/0x2800000), 29.62 MB/s  
+Progress: |███████---| 66.1% Read: (0x1A70000/0x2800000), 30.73 MB/s  
+Progress: |███████---| 66.2% Read: (0x1A80000/0x2800000), 30.22 MB/s  
+Progress: |███████---| 66.4% Read: (0x1A90000/0x2800000), 28.32 MB/s  
+Progress: |███████---| 66.6% Read: (0x1AA0000/0x2800000), 30.1 MB/s  
+Progress: |███████---| 66.7% Read: (0x1AB0000/0x2800000), 29.95 MB/s  
+Progress: |███████---| 66.9% Read: (0x1AC0000/0x2800000), 28.18 MB/s  
+Progress: |███████---| 67.0% Read: (0x1AD0000/0x2800000), 27.97 MB/s  
+Progress: |███████---| 67.2% Read: (0x1AE0000/0x2800000), 29.2 MB/s  
+Progress: |███████---| 67.3% Read: (0x1AF0000/0x2800000), 29.14 MB/s  
+Progress: |███████---| 67.5% Read: (0x1B00000/0x2800000), 29.09 MB/s  
+Progress: |███████---| 67.7% Read: (0x1B10000/0x2800000), 29.03 MB/s  
+Progress: |███████---| 67.8% Read: (0x1B20000/0x2800000), 28.14 MB/s  
+Progress: |███████---| 68.0% Read: (0x1B30000/0x2800000), 28.57 MB/s  
+Progress: |███████---| 68.1% Read: (0x1B40000/0x2800000), 28.48 MB/s  
+Progress: |███████---| 68.3% Read: (0x1B50000/0x2800000), 28.07 MB/s  
+Progress: |███████---| 68.4% Read: (0x1B60000/0x2800000), 28.25 MB/s  
+Progress: |███████---| 68.6% Read: (0x1B70000/0x2800000), 28.22 MB/s  
+Progress: |███████---| 68.8% Read: (0x1B80000/0x2800000), 28.25 MB/s  
+Progress: |███████---| 68.9% Read: (0x1B90000/0x2800000), 28.71 MB/s  
+Progress: |███████---| 69.1% Read: (0x1BA0000/0x2800000), 29.58 MB/s  
+Progress: |███████---| 69.2% Read: (0x1BB0000/0x2800000), 29.45 MB/s  
+Progress: |███████---| 69.4% Read: (0x1BC0000/0x2800000), 29.29 MB/s  
+Progress: |███████---| 69.5% Read: (0x1BD0000/0x2800000), 30.52 MB/s  
+Progress: |███████---| 69.7% Read: (0x1BE0000/0x2800000), 29.85 MB/s  
+Progress: |███████---| 69.8% Read: (0x1BF0000/0x2800000), 28.92 MB/s  
+Progress: |███████---| 70.0% Read: (0x1C00000/0x2800000), 29.2 MB/s  
+Progress: |███████---| 70.2% Read: (0x1C10000/0x2800000), 26.91 MB/s  
+Progress: |███████---| 70.3% Read: (0x1C20000/0x2800000), 26.56 MB/s  
+Progress: |███████---| 70.5% Read: (0x1C30000/0x2800000), 28.96 MB/s  
+Progress: |███████---| 70.6% Read: (0x1C40000/0x2800000), 29.06 MB/s  
+Progress: |███████---| 70.8% Read: (0x1C50000/0x2800000), 29.97 MB/s  
+Progress: |███████---| 70.9% Read: (0x1C60000/0x2800000), 27.91 MB/s  
+Progress: |███████---| 71.1% Read: (0x1C70000/0x2800000), 29.98 MB/s  
+Progress: |███████---| 71.2% Read: (0x1C80000/0x2800000), 31.12 MB/s  
+Progress: |███████---| 71.4% Read: (0x1C90000/0x2800000), 29.88 MB/s  
+Progress: |███████---| 71.6% Read: (0x1CA0000/0x2800000), 29.11 MB/s  
+Progress: |███████---| 71.7% Read: (0x1CB0000/0x2800000), 29.28 MB/s  
+Progress: |███████---| 71.9% Read: (0x1CC0000/0x2800000), 30.76 MB/s  
+Progress: |███████---| 72.0% Read: (0x1CD0000/0x2800000), 28.75 MB/s  
+Progress: |███████---| 72.2% Read: (0x1CE0000/0x2800000), 29.49 MB/s  
+Progress: |███████---| 72.3% Read: (0x1CF0000/0x2800000), 31.22 MB/s  
+Progress: |███████---| 72.5% Read: (0x1D00000/0x2800000), 30.79 MB/s  
+Progress: |███████---| 72.7% Read: (0x1D10000/0x2800000), 30.64 MB/s  
+Progress: |███████---| 72.8% Read: (0x1D20000/0x2800000), 30.89 MB/s  
+Progress: |███████---| 73.0% Read: (0x1D30000/0x2800000), 30.62 MB/s  
+Progress: |███████---| 73.1% Read: (0x1D40000/0x2800000), 29.48 MB/s  
+Progress: |███████---| 73.3% Read: (0x1D50000/0x2800000), 28.19 MB/s  
+Progress: |███████---| 73.4% Read: (0x1D60000/0x2800000), 28.83 MB/s  
+Progress: |███████---| 73.6% Read: (0x1D70000/0x2800000), 29.23 MB/s  
+Progress: |███████---| 73.8% Read: (0x1D80000/0x2800000), 25.81 MB/s  
+Progress: |███████---| 73.9% Read: (0x1D90000/0x2800000), 28.79 MB/s  
+Progress: |███████---| 74.1% Read: (0x1DA0000/0x2800000), 29.23 MB/s  
+Progress: |███████---| 74.2% Read: (0x1DB0000/0x2800000), 28.95 MB/s  
+Progress: |███████---| 74.4% Read: (0x1DC0000/0x2800000), 28.41 MB/s  
+Progress: |███████---| 74.5% Read: (0x1DD0000/0x2800000), 30.21 MB/s  
+Progress: |███████---| 74.7% Read: (0x1DE0000/0x2800000), 28.72 MB/s  
+Progress: |███████---| 74.8% Read: (0x1DF0000/0x2800000), 28.44 MB/s  
+Progress: |████████--| 75.0% Read: (0x1E00000/0x2800000), 29.35 MB/s  
+Progress: |████████--| 75.2% Read: (0x1E10000/0x2800000), 28.91 MB/s  
+Progress: |████████--| 75.3% Read: (0x1E20000/0x2800000), 28.97 MB/s  
+Progress: |████████--| 75.5% Read: (0x1E30000/0x2800000), 29.02 MB/s  
+Progress: |████████--| 75.6% Read: (0x1E40000/0x2800000), 29.93 MB/s  
+Progress: |████████--| 75.8% Read: (0x1E50000/0x2800000), 26.63 MB/s  
+Progress: |████████--| 75.9% Read: (0x1E60000/0x2800000), 23.97 MB/s  
+Progress: |████████--| 76.1% Read: (0x1E70000/0x2800000), 28.58 MB/s  
+Progress: |████████--| 76.2% Read: (0x1E80000/0x2800000), 26.53 MB/s  
+Progress: |████████--| 76.4% Read: (0x1E90000/0x2800000), 27.1 MB/s  
+Progress: |████████--| 76.6% Read: (0x1EA0000/0x2800000), 26.72 MB/s  
+Progress: |████████--| 76.7% Read: (0x1EB0000/0x2800000), 25.53 MB/s  
+Progress: |████████--| 76.9% Read: (0x1EC0000/0x2800000), 29.39 MB/s  
+Progress: |████████--| 77.0% Read: (0x1ED0000/0x2800000), 26.06 MB/s  
+Progress: |████████--| 77.2% Read: (0x1EE0000/0x2800000), 25.84 MB/s  
+Progress: |████████--| 77.3% Read: (0x1EF0000/0x2800000), 27.08 MB/s  
+Progress: |████████--| 77.5% Read: (0x1F00000/0x2800000), 25.72 MB/s  
+Progress: |████████--| 77.7% Read: (0x1F10000/0x2800000), 25.92 MB/s  
+Progress: |████████--| 77.8% Read: (0x1F20000/0x2800000), 22.92 MB/s  
+Progress: |████████--| 78.0% Read: (0x1F30000/0x2800000), 15.82 MB/s  
+Progress: |████████--| 78.1% Read: (0x1F40000/0x2800000), 25.86 MB/s  
+Progress: |████████--| 78.3% Read: (0x1F50000/0x2800000), 24.64 MB/s  
+Progress: |████████--| 78.4% Read: (0x1F60000/0x2800000), 27.08 MB/s  
+Progress: |████████--| 78.6% Read: (0x1F70000/0x2800000), 27.84 MB/s  
+Progress: |████████--| 78.8% Read: (0x1F80000/0x2800000), 28.22 MB/s  
+Progress: |████████--| 78.9% Read: (0x1F90000/0x2800000), 27.26 MB/s  
+Progress: |████████--| 79.1% Read: (0x1FA0000/0x2800000), 28.38 MB/s  
+Progress: |████████--| 79.2% Read: (0x1FB0000/0x2800000), 28.83 MB/s  
+Progress: |████████--| 79.4% Read: (0x1FC0000/0x2800000), 28.09 MB/s  
+Progress: |████████--| 79.5% Read: (0x1FD0000/0x2800000), 29.15 MB/s  
+Progress: |████████--| 79.7% Read: (0x1FE0000/0x2800000), 28.85 MB/s  
+Progress: |████████--| 79.8% Read: (0x1FF0000/0x2800000), 29.41 MB/s  
+Progress: |████████--| 80.0% Read: (0x2000000/0x2800000), 29.2 MB/s  
+Progress: |████████--| 80.2% Read: (0x2010000/0x2800000), 30.54 MB/s  
+Progress: |████████--| 80.3% Read: (0x2020000/0x2800000), 29.2 MB/s  
+Progress: |████████--| 80.5% Read: (0x2030000/0x2800000), 29.29 MB/s  
+Progress: |████████--| 80.6% Read: (0x2040000/0x2800000), 30.14 MB/s  
+Progress: |████████--| 80.8% Read: (0x2050000/0x2800000), 27.57 MB/s  
+Progress: |████████--| 80.9% Read: (0x2060000/0x2800000), 28.12 MB/s  
+Progress: |████████--| 81.1% Read: (0x2070000/0x2800000), 28.16 MB/s  
+Progress: |████████--| 81.2% Read: (0x2080000/0x2800000), 29.02 MB/s  
+Progress: |████████--| 81.4% Read: (0x2090000/0x2800000), 26.77 MB/s  
+Progress: |████████--| 81.6% Read: (0x20A0000/0x2800000), 28.5 MB/s  
+Progress: |████████--| 81.7% Read: (0x20B0000/0x2800000), 28.73 MB/s  
+Progress: |████████--| 81.9% Read: (0x20C0000/0x2800000), 28.41 MB/s  
+Progress: |████████--| 82.0% Read: (0x20D0000/0x2800000), 28.62 MB/s  
+Progress: |████████--| 82.2% Read: (0x20E0000/0x2800000), 28.82 MB/s  
+Progress: |████████--| 82.3% Read: (0x20F0000/0x2800000), 29.4 MB/s  
+Progress: |████████--| 82.5% Read: (0x2100000/0x2800000), 29.92 MB/s  
+Progress: |████████--| 82.7% Read: (0x2110000/0x2800000), 28.92 MB/s  
+Progress: |████████--| 82.8% Read: (0x2120000/0x2800000), 29.29 MB/s  
+Progress: |████████--| 83.0% Read: (0x2130000/0x2800000), 28.67 MB/s  
+Progress: |████████--| 83.1% Read: (0x2140000/0x2800000), 29.2 MB/s  
+Progress: |████████--| 83.3% Read: (0x2150000/0x2800000), 28.51 MB/s  
+Progress: |████████--| 83.4% Read: (0x2160000/0x2800000), 28.37 MB/s  
+Progress: |████████--| 83.6% Read: (0x2170000/0x2800000), 28.49 MB/s  
+Progress: |████████--| 83.8% Read: (0x2180000/0x2800000), 28.76 MB/s  
+Progress: |████████--| 83.9% Read: (0x2190000/0x2800000), 28.8 MB/s  
+Progress: |████████--| 84.1% Read: (0x21A0000/0x2800000), 28.95 MB/s  
+Progress: |████████--| 84.2% Read: (0x21B0000/0x2800000), 29.75 MB/s  
+Progress: |████████--| 84.4% Read: (0x21C0000/0x2800000), 28.9 MB/s  
+Progress: |████████--| 84.5% Read: (0x21D0000/0x2800000), 28.42 MB/s  
+Progress: |████████--| 84.7% Read: (0x21E0000/0x2800000), 29.0 MB/s  
+Progress: |████████--| 84.8% Read: (0x21F0000/0x2800000), 29.07 MB/s  
+Progress: |████████--| 85.0% Read: (0x2200000/0x2800000), 26.91 MB/s  
+Progress: |█████████-| 85.2% Read: (0x2210000/0x2800000), 23.85 MB/s  
+Progress: |█████████-| 85.3% Read: (0x2220000/0x2800000), 24.66 MB/s  
+Progress: |█████████-| 85.5% Read: (0x2230000/0x2800000), 21.69 MB/s  
+Progress: |█████████-| 85.6% Read: (0x2240000/0x2800000), 28.87 MB/s  
+Progress: |█████████-| 85.8% Read: (0x2250000/0x2800000), 28.83 MB/s  
+Progress: |█████████-| 85.9% Read: (0x2260000/0x2800000), 27.6 MB/s  
+Progress: |█████████-| 86.1% Read: (0x2270000/0x2800000), 26.08 MB/s  
+Progress: |█████████-| 86.2% Read: (0x2280000/0x2800000), 25.53 MB/s  
+Progress: |█████████-| 86.4% Read: (0x2290000/0x2800000), 25.24 MB/s  
+Progress: |█████████-| 86.6% Read: (0x22A0000/0x2800000), 26.04 MB/s  
+Progress: |█████████-| 86.7% Read: (0x22B0000/0x2800000), 29.32 MB/s  
+Progress: |█████████-| 86.9% Read: (0x22C0000/0x2800000), 28.67 MB/s  
+Progress: |█████████-| 87.0% Read: (0x22D0000/0x2800000), 29.1 MB/s  
+Progress: |█████████-| 87.2% Read: (0x22E0000/0x2800000), 28.5 MB/s  
+Progress: |█████████-| 87.3% Read: (0x22F0000/0x2800000), 28.44 MB/s  
+Progress: |█████████-| 87.5% Read: (0x2300000/0x2800000), 21.35 MB/s  
+Progress: |█████████-| 87.7% Read: (0x2310000/0x2800000), 21.43 MB/s  
+Progress: |█████████-| 87.8% Read: (0x2320000/0x2800000), 21.95 MB/s  
+Progress: |█████████-| 88.0% Read: (0x2330000/0x2800000), 17.34 MB/s  
+Progress: |█████████-| 88.1% Read: (0x2340000/0x2800000), 23.38 MB/s  
+Progress: |█████████-| 88.3% Read: (0x2350000/0x2800000), 25.01 MB/s  
+Progress: |█████████-| 88.4% Read: (0x2360000/0x2800000), 18.94 MB/s  
+Progress: |█████████-| 88.6% Read: (0x2370000/0x2800000), 24.87 MB/s  
+Progress: |█████████-| 88.8% Read: (0x2380000/0x2800000), 25.06 MB/s  
+Progress: |█████████-| 88.9% Read: (0x2390000/0x2800000), 19.54 MB/s  
+Progress: |█████████-| 89.1% Read: (0x23A0000/0x2800000), 25.4 MB/s  
+Progress: |█████████-| 89.2% Read: (0x23B0000/0x2800000), 23.65 MB/s  
+Progress: |█████████-| 89.4% Read: (0x23C0000/0x2800000), 22.65 MB/s  
+Progress: |█████████-| 89.5% Read: (0x23D0000/0x2800000), 24.43 MB/s  
+Progress: |█████████-| 89.7% Read: (0x23E0000/0x2800000), 22.04 MB/s  
+Progress: |█████████-| 89.8% Read: (0x23F0000/0x2800000), 17.94 MB/s  
+Progress: |█████████-| 90.0% Read: (0x2400000/0x2800000), 26.95 MB/s  
+Progress: |█████████-| 90.2% Read: (0x2410000/0x2800000), 29.21 MB/s  
+Progress: |█████████-| 90.3% Read: (0x2420000/0x2800000), 29.87 MB/s  
+Progress: |█████████-| 90.5% Read: (0x2430000/0x2800000), 30.27 MB/s  
+Progress: |█████████-| 90.6% Read: (0x2440000/0x2800000), 30.44 MB/s  
+Progress: |█████████-| 90.8% Read: (0x2450000/0x2800000), 30.8 MB/s  
+Progress: |█████████-| 90.9% Read: (0x2460000/0x2800000), 31.41 MB/s  
+Progress: |█████████-| 91.1% Read: (0x2470000/0x2800000), 31.22 MB/s  
+Progress: |█████████-| 91.2% Read: (0x2480000/0x2800000), 29.01 MB/s  
+Progress: |█████████-| 91.4% Read: (0x2490000/0x2800000), 31.79 MB/s  
+Progress: |█████████-| 91.6% Read: (0x24A0000/0x2800000), 32.15 MB/s  
+Progress: |█████████-| 91.7% Read: (0x24B0000/0x2800000), 30.61 MB/s  
+Progress: |█████████-| 91.9% Read: (0x24C0000/0x2800000), 29.0 MB/s  
+Progress: |█████████-| 92.0% Read: (0x24D0000/0x2800000), 30.09 MB/s  
+Progress: |█████████-| 92.2% Read: (0x24E0000/0x2800000), 29.65 MB/s  
+Progress: |█████████-| 92.3% Read: (0x24F0000/0x2800000), 29.51 MB/s  
+Progress: |█████████-| 92.5% Read: (0x2500000/0x2800000), 30.68 MB/s  
+Progress: |█████████-| 92.7% Read: (0x2510000/0x2800000), 29.77 MB/s  
+Progress: |█████████-| 92.8% Read: (0x2520000/0x2800000), 29.41 MB/s  
+Progress: |█████████-| 93.0% Read: (0x2530000/0x2800000), 30.69 MB/s  
+Progress: |█████████-| 93.1% Read: (0x2540000/0x2800000), 31.11 MB/s  
+Progress: |█████████-| 93.3% Read: (0x2550000/0x2800000), 31.13 MB/s  
+Progress: |█████████-| 93.4% Read: (0x2560000/0x2800000), 30.64 MB/s  
+Progress: |█████████-| 93.6% Read: (0x2570000/0x2800000), 30.02 MB/s  
+Progress: |█████████-| 93.8% Read: (0x2580000/0x2800000), 30.14 MB/s  
+Progress: |█████████-| 93.9% Read: (0x2590000/0x2800000), 28.58 MB/s  
+Progress: |█████████-| 94.1% Read: (0x25A0000/0x2800000), 29.15 MB/s  
+Progress: |█████████-| 94.2% Read: (0x25B0000/0x2800000), 30.4 MB/s  
+Progress: |█████████-| 94.4% Read: (0x25C0000/0x2800000), 30.09 MB/s  
+Progress: |█████████-| 94.5% Read: (0x25D0000/0x2800000), 29.1 MB/s  
+Progress: |█████████-| 94.7% Read: (0x25E0000/0x2800000), 29.62 MB/s  
+Progress: |█████████-| 94.8% Read: (0x25F0000/0x2800000), 29.69 MB/s  
+Progress: |██████████| 95.0% Read: (0x2600000/0x2800000), 27.41 MB/s  
+Progress: |██████████| 95.2% Read: (0x2610000/0x2800000), 29.33 MB/s  
+Progress: |██████████| 95.3% Read: (0x2620000/0x2800000), 28.36 MB/s  
+Progress: |██████████| 95.5% Read: (0x2630000/0x2800000), 29.21 MB/s  
+Progress: |██████████| 95.6% Read: (0x2640000/0x2800000), 29.76 MB/s  
+Progress: |██████████| 95.8% Read: (0x2650000/0x2800000), 30.15 MB/s  
+Progress: |██████████| 95.9% Read: (0x2660000/0x2800000), 30.12 MB/s  
+Progress: |██████████| 96.1% Read: (0x2670000/0x2800000), 29.74 MB/s  
+Progress: |██████████| 96.2% Read: (0x2680000/0x2800000), 30.69 MB/s  
+Progress: |██████████| 96.4% Read: (0x2690000/0x2800000), 30.61 MB/s  
+Progress: |██████████| 96.6% Read: (0x26A0000/0x2800000), 30.09 MB/s  
+Progress: |██████████| 96.7% Read: (0x26B0000/0x2800000), 29.46 MB/s  
+Progress: |██████████| 96.9% Read: (0x26C0000/0x2800000), 28.54 MB/s  
+Progress: |██████████| 97.0% Read: (0x26D0000/0x2800000), 28.79 MB/s  
+Progress: |██████████| 97.2% Read: (0x26E0000/0x2800000), 28.54 MB/s  
+Progress: |██████████| 97.3% Read: (0x26F0000/0x2800000), 27.26 MB/s  
+Progress: |██████████| 97.5% Read: (0x2700000/0x2800000), 28.84 MB/s  
+Progress: |██████████| 97.7% Read: (0x2710000/0x2800000), 29.02 MB/s  
+Progress: |██████████| 97.8% Read: (0x2720000/0x2800000), 28.19 MB/s  
+Progress: |██████████| 98.0% Read: (0x2730000/0x2800000), 26.95 MB/s  
+Progress: |██████████| 98.1% Read: (0x2740000/0x2800000), 27.9 MB/s  
+Progress: |██████████| 98.3% Read: (0x2750000/0x2800000), 28.6 MB/s  
+Progress: |██████████| 98.4% Read: (0x2760000/0x2800000), 29.41 MB/s  
+Progress: |██████████| 98.6% Read: (0x2770000/0x2800000), 28.79 MB/s  
+Progress: |██████████| 98.8% Read: (0x2780000/0x2800000), 28.63 MB/s  
+Progress: |██████████| 98.9% Read: (0x2790000/0x2800000), 26.92 MB/s  
+Progress: |██████████| 99.1% Read: (0x27A0000/0x2800000), 27.72 MB/s  
+Progress: |██████████| 99.2% Read: (0x27B0000/0x2800000), 28.78 MB/s  
+Progress: |██████████| 99.4% Read: (0x27C0000/0x2800000), 27.94 MB/s  
+Progress: |██████████| 99.5% Read: (0x27D0000/0x2800000), 29.3 MB/s  
+Progress: |██████████| 99.7% Read: (0x27E0000/0x2800000), 28.83 MB/s  
+Progress: |██████████| 99.8% Read: (0x27F0000/0x2800000), 28.23 MB/s  
+Progress: |██████████| 100.0% Read: (0x2800000/0x2800000), 27.93 MB/s  
+DaHandler - Dumped sector 285952 with sector count 10240 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/boot_b.bin.
+DaHandler - Dumping partition "seccfg"
+
+Done |----------| 0.8% Read: (0x10000/0x800000),0.00 MB/s
+Progress: |----------| 1.6% Read: (0x20000/0x800000), 12.18 MB/s  
+Progress: |----------| 2.3% Read: (0x30000/0x800000), 28.32 MB/s  
+Progress: |----------| 3.1% Read: (0x40000/0x800000), 29.7 MB/s  
+Progress: |----------| 3.9% Read: (0x50000/0x800000), 29.45 MB/s  
+Progress: |----------| 4.7% Read: (0x60000/0x800000), 28.63 MB/s  
+Progress: |█---------| 5.5% Read: (0x70000/0x800000), 29.72 MB/s  
+Progress: |█---------| 6.2% Read: (0x80000/0x800000), 29.17 MB/s  
+Progress: |█---------| 7.0% Read: (0x90000/0x800000), 29.09 MB/s  
+Progress: |█---------| 7.8% Read: (0xA0000/0x800000), 28.61 MB/s  
+Progress: |█---------| 8.6% Read: (0xB0000/0x800000), 29.41 MB/s  
+Progress: |█---------| 9.4% Read: (0xC0000/0x800000), 28.64 MB/s  
+Progress: |█---------| 10.2% Read: (0xD0000/0x800000), 28.75 MB/s  
+Progress: |█---------| 10.9% Read: (0xE0000/0x800000), 29.45 MB/s  
+Progress: |█---------| 11.7% Read: (0xF0000/0x800000), 30.09 MB/s  
+Progress: |█---------| 12.5% Read: (0x100000/0x800000), 30.42 MB/s  
+Progress: |█---------| 13.3% Read: (0x110000/0x800000), 30.18 MB/s  
+Progress: |█---------| 14.1% Read: (0x120000/0x800000), 30.58 MB/s  
+Progress: |█---------| 14.8% Read: (0x130000/0x800000), 30.37 MB/s  
+Progress: |██--------| 15.6% Read: (0x140000/0x800000), 30.41 MB/s  
+Progress: |██--------| 16.4% Read: (0x150000/0x800000), 30.07 MB/s  
+Progress: |██--------| 17.2% Read: (0x160000/0x800000), 30.65 MB/s  
+Progress: |██--------| 18.0% Read: (0x170000/0x800000), 28.08 MB/s  
+Progress: |██--------| 18.8% Read: (0x180000/0x800000), 30.15 MB/s  
+Progress: |██--------| 19.5% Read: (0x190000/0x800000), 29.89 MB/s  
+Progress: |██--------| 20.3% Read: (0x1A0000/0x800000), 29.9 MB/s  
+Progress: |██--------| 21.1% Read: (0x1B0000/0x800000), 30.25 MB/s  
+Progress: |██--------| 21.9% Read: (0x1C0000/0x800000), 28.76 MB/s  
+Progress: |██--------| 22.7% Read: (0x1D0000/0x800000), 29.68 MB/s  
+Progress: |██--------| 23.4% Read: (0x1E0000/0x800000), 29.86 MB/s  
+Progress: |██--------| 24.2% Read: (0x1F0000/0x800000), 29.52 MB/s  
+Progress: |██--------| 25.0% Read: (0x200000/0x800000), 28.44 MB/s  
+Progress: |███-------| 25.8% Read: (0x210000/0x800000), 28.63 MB/s  
+Progress: |███-------| 26.6% Read: (0x220000/0x800000), 28.81 MB/s  
+Progress: |███-------| 27.3% Read: (0x230000/0x800000), 28.11 MB/s  
+Progress: |███-------| 28.1% Read: (0x240000/0x800000), 28.16 MB/s  
+Progress: |███-------| 28.9% Read: (0x250000/0x800000), 28.43 MB/s  
+Progress: |███-------| 29.7% Read: (0x260000/0x800000), 28.79 MB/s  
+Progress: |███-------| 30.5% Read: (0x270000/0x800000), 26.46 MB/s  
+Progress: |███-------| 31.2% Read: (0x280000/0x800000), 26.65 MB/s  
+Progress: |███-------| 32.0% Read: (0x290000/0x800000), 28.21 MB/s  
+Progress: |███-------| 32.8% Read: (0x2A0000/0x800000), 29.14 MB/s  
+Progress: |███-------| 33.6% Read: (0x2B0000/0x800000), 30.25 MB/s  
+Progress: |███-------| 34.4% Read: (0x2C0000/0x800000), 30.68 MB/s  
+Progress: |████------| 35.2% Read: (0x2D0000/0x800000), 30.32 MB/s  
+Progress: |████------| 35.9% Read: (0x2E0000/0x800000), 28.55 MB/s  
+Progress: |████------| 36.7% Read: (0x2F0000/0x800000), 30.24 MB/s  
+Progress: |████------| 37.5% Read: (0x300000/0x800000), 30.23 MB/s  
+Progress: |████------| 38.3% Read: (0x310000/0x800000), 30.15 MB/s  
+Progress: |████------| 39.1% Read: (0x320000/0x800000), 30.24 MB/s  
+Progress: |████------| 39.8% Read: (0x330000/0x800000), 29.19 MB/s  
+Progress: |████------| 40.6% Read: (0x340000/0x800000), 27.99 MB/s  
+Progress: |████------| 41.4% Read: (0x350000/0x800000), 29.5 MB/s  
+Progress: |████------| 42.2% Read: (0x360000/0x800000), 30.47 MB/s  
+Progress: |████------| 43.0% Read: (0x370000/0x800000), 29.35 MB/s  
+Progress: |████------| 43.8% Read: (0x380000/0x800000), 28.56 MB/s  
+Progress: |████------| 44.5% Read: (0x390000/0x800000), 29.07 MB/s  
+Progress: |█████-----| 45.3% Read: (0x3A0000/0x800000), 29.82 MB/s  
+Progress: |█████-----| 46.1% Read: (0x3B0000/0x800000), 29.18 MB/s  
+Progress: |█████-----| 46.9% Read: (0x3C0000/0x800000), 28.11 MB/s  
+Progress: |█████-----| 47.7% Read: (0x3D0000/0x800000), 30.21 MB/s  
+Progress: |█████-----| 48.4% Read: (0x3E0000/0x800000), 29.58 MB/s  
+Progress: |█████-----| 49.2% Read: (0x3F0000/0x800000), 30.39 MB/s  
+Progress: |█████-----| 50.0% Read: (0x400000/0x800000), 29.86 MB/s  
+Progress: |█████-----| 50.8% Read: (0x410000/0x800000), 30.12 MB/s  
+Progress: |█████-----| 51.6% Read: (0x420000/0x800000), 29.74 MB/s  
+Progress: |█████-----| 52.3% Read: (0x430000/0x800000), 28.76 MB/s  
+Progress: |█████-----| 53.1% Read: (0x440000/0x800000), 28.51 MB/s  
+Progress: |█████-----| 53.9% Read: (0x450000/0x800000), 29.03 MB/s  
+Progress: |█████-----| 54.7% Read: (0x460000/0x800000), 26.65 MB/s  
+Progress: |██████----| 55.5% Read: (0x470000/0x800000), 28.64 MB/s  
+Progress: |██████----| 56.2% Read: (0x480000/0x800000), 28.99 MB/s  
+Progress: |██████----| 57.0% Read: (0x490000/0x800000), 28.37 MB/s  
+Progress: |██████----| 57.8% Read: (0x4A0000/0x800000), 27.85 MB/s  
+Progress: |██████----| 58.6% Read: (0x4B0000/0x800000), 28.85 MB/s  
+Progress: |██████----| 59.4% Read: (0x4C0000/0x800000), 28.85 MB/s  
+Progress: |██████----| 60.2% Read: (0x4D0000/0x800000), 29.14 MB/s  
+Progress: |██████----| 60.9% Read: (0x4E0000/0x800000), 28.9 MB/s  
+Progress: |██████----| 61.7% Read: (0x4F0000/0x800000), 28.21 MB/s  
+Progress: |██████----| 62.5% Read: (0x500000/0x800000), 28.87 MB/s  
+Progress: |██████----| 63.3% Read: (0x510000/0x800000), 29.54 MB/s  
+Progress: |██████----| 64.1% Read: (0x520000/0x800000), 29.08 MB/s  
+Progress: |██████----| 64.8% Read: (0x530000/0x800000), 28.69 MB/s  
+Progress: |███████---| 65.6% Read: (0x540000/0x800000), 29.33 MB/s  
+Progress: |███████---| 66.4% Read: (0x550000/0x800000), 29.75 MB/s  
+Progress: |███████---| 67.2% Read: (0x560000/0x800000), 29.23 MB/s  
+Progress: |███████---| 68.0% Read: (0x570000/0x800000), 27.99 MB/s  
+Progress: |███████---| 68.8% Read: (0x580000/0x800000), 28.03 MB/s  
+Progress: |███████---| 69.5% Read: (0x590000/0x800000), 28.21 MB/s  
+Progress: |███████---| 70.3% Read: (0x5A0000/0x800000), 28.24 MB/s  
+Progress: |███████---| 71.1% Read: (0x5B0000/0x800000), 29.78 MB/s  
+Progress: |███████---| 71.9% Read: (0x5C0000/0x800000), 30.62 MB/s  
+Progress: |███████---| 72.7% Read: (0x5D0000/0x800000), 26.67 MB/s  
+Progress: |███████---| 73.4% Read: (0x5E0000/0x800000), 28.8 MB/s  
+Progress: |███████---| 74.2% Read: (0x5F0000/0x800000), 28.98 MB/s  
+Progress: |████████--| 75.0% Read: (0x600000/0x800000), 28.2 MB/s  
+Progress: |████████--| 75.8% Read: (0x610000/0x800000), 27.78 MB/s  
+Progress: |████████--| 76.6% Read: (0x620000/0x800000), 28.51 MB/s  
+Progress: |████████--| 77.3% Read: (0x630000/0x800000), 28.4 MB/s  
+Progress: |████████--| 78.1% Read: (0x640000/0x800000), 28.83 MB/s  
+Progress: |████████--| 78.9% Read: (0x650000/0x800000), 29.23 MB/s  
+Progress: |████████--| 79.7% Read: (0x660000/0x800000), 29.01 MB/s  
+Progress: |████████--| 80.5% Read: (0x670000/0x800000), 28.99 MB/s  
+Progress: |████████--| 81.2% Read: (0x680000/0x800000), 29.64 MB/s  
+Progress: |████████--| 82.0% Read: (0x690000/0x800000), 29.26 MB/s  
+Progress: |████████--| 82.8% Read: (0x6A0000/0x800000), 28.59 MB/s  
+Progress: |████████--| 83.6% Read: (0x6B0000/0x800000), 28.41 MB/s  
+Progress: |████████--| 84.4% Read: (0x6C0000/0x800000), 29.72 MB/s  
+Progress: |█████████-| 85.2% Read: (0x6D0000/0x800000), 28.92 MB/s  
+Progress: |█████████-| 85.9% Read: (0x6E0000/0x800000), 28.58 MB/s  
+Progress: |█████████-| 86.7% Read: (0x6F0000/0x800000), 28.72 MB/s  
+Progress: |█████████-| 87.5% Read: (0x700000/0x800000), 29.85 MB/s  
+Progress: |█████████-| 88.3% Read: (0x710000/0x800000), 30.47 MB/s  
+Progress: |█████████-| 89.1% Read: (0x720000/0x800000), 29.17 MB/s  
+Progress: |█████████-| 89.8% Read: (0x730000/0x800000), 30.41 MB/s  
+Progress: |█████████-| 90.6% Read: (0x740000/0x800000), 28.35 MB/s  
+Progress: |█████████-| 91.4% Read: (0x750000/0x800000), 30.89 MB/s  
+Progress: |█████████-| 92.2% Read: (0x760000/0x800000), 30.43 MB/s  
+Progress: |█████████-| 93.0% Read: (0x770000/0x800000), 30.41 MB/s  
+Progress: |█████████-| 93.8% Read: (0x780000/0x800000), 28.85 MB/s  
+Progress: |█████████-| 94.5% Read: (0x790000/0x800000), 28.29 MB/s  
+Progress: |██████████| 95.3% Read: (0x7A0000/0x800000), 28.11 MB/s  
+Progress: |██████████| 96.1% Read: (0x7B0000/0x800000), 28.43 MB/s  
+Progress: |██████████| 96.9% Read: (0x7C0000/0x800000), 29.0 MB/s  
+Progress: |██████████| 97.7% Read: (0x7D0000/0x800000), 28.83 MB/s  
+Progress: |██████████| 98.4% Read: (0x7E0000/0x800000), 29.37 MB/s  
+Progress: |██████████| 99.2% Read: (0x7F0000/0x800000), 30.12 MB/s  
+Progress: |██████████| 100.0% Read: (0x800000/0x800000), 29.19 MB/s  
+DaHandler - Dumped sector 61440 with sector count 2048 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/seccfg.bin.
+DaHandler - Dumping partition "expdb"
+
+Done |----------| 0.2% Read: (0x10000/0x2800000),0.00 MB/s
+Progress: |----------| 0.3% Read: (0x20000/0x2800000), 12.29 MB/s  
+Progress: |----------| 0.5% Read: (0x30000/0x2800000), 28.66 MB/s  
+Progress: |----------| 0.6% Read: (0x40000/0x2800000), 30.26 MB/s 01s left 
+Progress: |----------| 0.8% Read: (0x50000/0x2800000), 30.43 MB/s 01s left 
+Progress: |----------| 0.9% Read: (0x60000/0x2800000), 30.57 MB/s 01s left 
+Progress: |----------| 1.1% Read: (0x70000/0x2800000), 30.98 MB/s 01s left 
+Progress: |----------| 1.2% Read: (0x80000/0x2800000), 31.14 MB/s 01s left 
+Progress: |----------| 1.4% Read: (0x90000/0x2800000), 31.14 MB/s 01s left 
+Progress: |----------| 1.6% Read: (0xA0000/0x2800000), 28.9 MB/s 01s left 
+Progress: |----------| 1.7% Read: (0xB0000/0x2800000), 30.85 MB/s 01s left 
+Progress: |----------| 1.9% Read: (0xC0000/0x2800000), 31.06 MB/s 01s left 
+Progress: |----------| 2.0% Read: (0xD0000/0x2800000), 31.16 MB/s 01s left 
+Progress: |----------| 2.2% Read: (0xE0000/0x2800000), 30.88 MB/s 01s left 
+Progress: |----------| 2.3% Read: (0xF0000/0x2800000), 29.81 MB/s 01s left 
+Progress: |----------| 2.5% Read: (0x100000/0x2800000), 30.38 MB/s 01s left 
+Progress: |----------| 2.7% Read: (0x110000/0x2800000), 28.83 MB/s 01s left 
+Progress: |----------| 2.8% Read: (0x120000/0x2800000), 29.15 MB/s 01s left 
+Progress: |----------| 3.0% Read: (0x130000/0x2800000), 30.72 MB/s 01s left 
+Progress: |----------| 3.1% Read: (0x140000/0x2800000), 30.41 MB/s 01s left 
+Progress: |----------| 3.3% Read: (0x150000/0x2800000), 27.83 MB/s 01s left 
+Progress: |----------| 3.4% Read: (0x160000/0x2800000), 27.72 MB/s 01s left 
+Progress: |----------| 3.6% Read: (0x170000/0x2800000), 30.18 MB/s 01s left 
+Progress: |----------| 3.8% Read: (0x180000/0x2800000), 30.64 MB/s 01s left 
+Progress: |----------| 3.9% Read: (0x190000/0x2800000), 28.15 MB/s 01s left 
+Progress: |----------| 4.1% Read: (0x1A0000/0x2800000), 29.48 MB/s 01s left 
+Progress: |----------| 4.2% Read: (0x1B0000/0x2800000), 30.64 MB/s 01s left 
+Progress: |----------| 4.4% Read: (0x1C0000/0x2800000), 30.71 MB/s 01s left 
+Progress: |----------| 4.5% Read: (0x1D0000/0x2800000), 30.62 MB/s 01s left 
+Progress: |----------| 4.7% Read: (0x1E0000/0x2800000), 29.89 MB/s 01s left 
+Progress: |----------| 4.8% Read: (0x1F0000/0x2800000), 30.17 MB/s 01s left 
+Progress: |----------| 5.0% Read: (0x200000/0x2800000), 30.52 MB/s 01s left 
+Progress: |█---------| 5.2% Read: (0x210000/0x2800000), 30.06 MB/s 01s left 
+Progress: |█---------| 5.3% Read: (0x220000/0x2800000), 26.74 MB/s 01s left 
+Progress: |█---------| 5.5% Read: (0x230000/0x2800000), 29.92 MB/s 01s left 
+Progress: |█---------| 5.6% Read: (0x240000/0x2800000), 30.56 MB/s 01s left 
+Progress: |█---------| 5.8% Read: (0x250000/0x2800000), 30.74 MB/s 01s left 
+Progress: |█---------| 5.9% Read: (0x260000/0x2800000), 28.53 MB/s 01s left 
+Progress: |█---------| 6.1% Read: (0x270000/0x2800000), 30.71 MB/s 01s left 
+Progress: |█---------| 6.2% Read: (0x280000/0x2800000), 30.5 MB/s 01s left 
+Progress: |█---------| 6.4% Read: (0x290000/0x2800000), 29.95 MB/s 01s left 
+Progress: |█---------| 6.6% Read: (0x2A0000/0x2800000), 30.39 MB/s 01s left 
+Progress: |█---------| 6.7% Read: (0x2B0000/0x2800000), 31.25 MB/s 01s left 
+Progress: |█---------| 6.9% Read: (0x2C0000/0x2800000), 30.03 MB/s 01s left 
+Progress: |█---------| 7.0% Read: (0x2D0000/0x2800000), 29.43 MB/s 01s left 
+Progress: |█---------| 7.2% Read: (0x2E0000/0x2800000), 30.41 MB/s 01s left 
+Progress: |█---------| 7.3% Read: (0x2F0000/0x2800000), 30.85 MB/s 01s left 
+Progress: |█---------| 7.5% Read: (0x300000/0x2800000), 30.93 MB/s 01s left 
+Progress: |█---------| 7.7% Read: (0x310000/0x2800000), 28.5 MB/s 01s left 
+Progress: |█---------| 7.8% Read: (0x320000/0x2800000), 29.14 MB/s 01s left 
+Progress: |█---------| 8.0% Read: (0x330000/0x2800000), 29.85 MB/s 01s left 
+Progress: |█---------| 8.1% Read: (0x340000/0x2800000), 30.5 MB/s 01s left 
+Progress: |█---------| 8.3% Read: (0x350000/0x2800000), 30.64 MB/s 01s left 
+Progress: |█---------| 8.4% Read: (0x360000/0x2800000), 30.06 MB/s 01s left 
+Progress: |█---------| 8.6% Read: (0x370000/0x2800000), 30.58 MB/s 01s left 
+Progress: |█---------| 8.8% Read: (0x380000/0x2800000), 30.38 MB/s 01s left 
+Progress: |█---------| 8.9% Read: (0x390000/0x2800000), 30.53 MB/s 01s left 
+Progress: |█---------| 9.1% Read: (0x3A0000/0x2800000), 30.24 MB/s 01s left 
+Progress: |█---------| 9.2% Read: (0x3B0000/0x2800000), 30.58 MB/s 01s left 
+Progress: |█---------| 9.4% Read: (0x3C0000/0x2800000), 30.65 MB/s 01s left 
+Progress: |█---------| 9.5% Read: (0x3D0000/0x2800000), 30.09 MB/s 01s left 
+Progress: |█---------| 9.7% Read: (0x3E0000/0x2800000), 28.65 MB/s 01s left 
+Progress: |█---------| 9.8% Read: (0x3F0000/0x2800000), 30.21 MB/s 01s left 
+Progress: |█---------| 10.0% Read: (0x400000/0x2800000), 29.96 MB/s 01s left 
+Progress: |█---------| 10.2% Read: (0x410000/0x2800000), 30.54 MB/s 01s left 
+Progress: |█---------| 10.3% Read: (0x420000/0x2800000), 30.1 MB/s 01s left 
+Progress: |█---------| 10.5% Read: (0x430000/0x2800000), 28.83 MB/s 01s left 
+Progress: |█---------| 10.6% Read: (0x440000/0x2800000), 29.2 MB/s 01s left 
+Progress: |█---------| 10.8% Read: (0x450000/0x2800000), 30.41 MB/s 01s left 
+Progress: |█---------| 10.9% Read: (0x460000/0x2800000), 29.8 MB/s 01s left 
+Progress: |█---------| 11.1% Read: (0x470000/0x2800000), 30.19 MB/s 01s left 
+Progress: |█---------| 11.2% Read: (0x480000/0x2800000), 30.75 MB/s 01s left 
+Progress: |█---------| 11.4% Read: (0x490000/0x2800000), 28.14 MB/s 01s left 
+Progress: |█---------| 11.6% Read: (0x4A0000/0x2800000), 29.9 MB/s 01s left 
+Progress: |█---------| 11.7% Read: (0x4B0000/0x2800000), 30.25 MB/s 01s left 
+Progress: |█---------| 11.9% Read: (0x4C0000/0x2800000), 30.05 MB/s 01s left 
+Progress: |█---------| 12.0% Read: (0x4D0000/0x2800000), 30.56 MB/s 01s left 
+Progress: |█---------| 12.2% Read: (0x4E0000/0x2800000), 29.29 MB/s 01s left 
+Progress: |█---------| 12.3% Read: (0x4F0000/0x2800000), 29.56 MB/s 01s left 
+Progress: |█---------| 12.5% Read: (0x500000/0x2800000), 28.21 MB/s 01s left 
+Progress: |█---------| 12.7% Read: (0x510000/0x2800000), 30.83 MB/s 01s left 
+Progress: |█---------| 12.8% Read: (0x520000/0x2800000), 30.13 MB/s 01s left 
+Progress: |█---------| 13.0% Read: (0x530000/0x2800000), 30.46 MB/s 01s left 
+Progress: |█---------| 13.1% Read: (0x540000/0x2800000), 31.25 MB/s 01s left 
+Progress: |█---------| 13.3% Read: (0x550000/0x2800000), 31.58 MB/s 01s left 
+Progress: |█---------| 13.4% Read: (0x560000/0x2800000), 30.83 MB/s 01s left 
+Progress: |█---------| 13.6% Read: (0x570000/0x2800000), 30.34 MB/s 01s left 
+Progress: |█---------| 13.8% Read: (0x580000/0x2800000), 30.23 MB/s 01s left 
+Progress: |█---------| 13.9% Read: (0x590000/0x2800000), 28.99 MB/s 01s left 
+Progress: |█---------| 14.1% Read: (0x5A0000/0x2800000), 28.11 MB/s 01s left 
+Progress: |█---------| 14.2% Read: (0x5B0000/0x2800000), 28.28 MB/s 01s left 
+Progress: |█---------| 14.4% Read: (0x5C0000/0x2800000), 28.53 MB/s 01s left 
+Progress: |█---------| 14.5% Read: (0x5D0000/0x2800000), 28.46 MB/s 01s left 
+Progress: |█---------| 14.7% Read: (0x5E0000/0x2800000), 27.78 MB/s 01s left 
+Progress: |█---------| 14.8% Read: (0x5F0000/0x2800000), 29.55 MB/s 01s left 
+Progress: |██--------| 15.0% Read: (0x600000/0x2800000), 29.26 MB/s 01s left 
+Progress: |██--------| 15.2% Read: (0x610000/0x2800000), 26.68 MB/s 01s left 
+Progress: |██--------| 15.3% Read: (0x620000/0x2800000), 29.72 MB/s 01s left 
+Progress: |██--------| 15.5% Read: (0x630000/0x2800000), 30.26 MB/s 01s left 
+Progress: |██--------| 15.6% Read: (0x640000/0x2800000), 30.02 MB/s 01s left 
+Progress: |██--------| 15.8% Read: (0x650000/0x2800000), 30.27 MB/s 01s left 
+Progress: |██--------| 15.9% Read: (0x660000/0x2800000), 30.33 MB/s 01s left 
+Progress: |██--------| 16.1% Read: (0x670000/0x2800000), 30.64 MB/s 01s left 
+Progress: |██--------| 16.2% Read: (0x680000/0x2800000), 29.83 MB/s 01s left 
+Progress: |██--------| 16.4% Read: (0x690000/0x2800000), 29.45 MB/s 01s left 
+Progress: |██--------| 16.6% Read: (0x6A0000/0x2800000), 29.62 MB/s 01s left 
+Progress: |██--------| 16.7% Read: (0x6B0000/0x2800000), 28.67 MB/s 01s left 
+Progress: |██--------| 16.9% Read: (0x6C0000/0x2800000), 28.96 MB/s 01s left 
+Progress: |██--------| 17.0% Read: (0x6D0000/0x2800000), 29.51 MB/s 01s left 
+Progress: |██--------| 17.2% Read: (0x6E0000/0x2800000), 29.16 MB/s 01s left 
+Progress: |██--------| 17.3% Read: (0x6F0000/0x2800000), 29.45 MB/s 01s left 
+Progress: |██--------| 17.5% Read: (0x700000/0x2800000), 29.32 MB/s 01s left 
+Progress: |██--------| 17.7% Read: (0x710000/0x2800000), 29.14 MB/s 01s left 
+Progress: |██--------| 17.8% Read: (0x720000/0x2800000), 29.04 MB/s 01s left 
+Progress: |██--------| 18.0% Read: (0x730000/0x2800000), 28.28 MB/s 01s left 
+Progress: |██--------| 18.1% Read: (0x740000/0x2800000), 28.64 MB/s 01s left 
+Progress: |██--------| 18.3% Read: (0x750000/0x2800000), 29.3 MB/s 01s left 
+Progress: |██--------| 18.4% Read: (0x760000/0x2800000), 28.78 MB/s 01s left 
+Progress: |██--------| 18.6% Read: (0x770000/0x2800000), 28.04 MB/s 01s left 
+Progress: |██--------| 18.8% Read: (0x780000/0x2800000), 28.87 MB/s 01s left 
+Progress: |██--------| 18.9% Read: (0x790000/0x2800000), 28.71 MB/s 01s left 
+Progress: |██--------| 19.1% Read: (0x7A0000/0x2800000), 28.41 MB/s 01s left 
+Progress: |██--------| 19.2% Read: (0x7B0000/0x2800000), 28.49 MB/s 01s left 
+Progress: |██--------| 19.4% Read: (0x7C0000/0x2800000), 28.75 MB/s 01s left 
+Progress: |██--------| 19.5% Read: (0x7D0000/0x2800000), 26.67 MB/s 01s left 
+Progress: |██--------| 19.7% Read: (0x7E0000/0x2800000), 28.78 MB/s 01s left 
+Progress: |██--------| 19.8% Read: (0x7F0000/0x2800000), 28.51 MB/s 01s left 
+Progress: |██--------| 20.0% Read: (0x800000/0x2800000), 29.54 MB/s 01s left 
+Progress: |██--------| 20.2% Read: (0x810000/0x2800000), 28.68 MB/s 01s left 
+Progress: |██--------| 20.3% Read: (0x820000/0x2800000), 27.11 MB/s 01s left 
+Progress: |██--------| 20.5% Read: (0x830000/0x2800000), 27.84 MB/s 01s left 
+Progress: |██--------| 20.6% Read: (0x840000/0x2800000), 29.37 MB/s 01s left 
+Progress: |██--------| 20.8% Read: (0x850000/0x2800000), 30.56 MB/s 01s left 
+Progress: |██--------| 20.9% Read: (0x860000/0x2800000), 30.12 MB/s 01s left 
+Progress: |██--------| 21.1% Read: (0x870000/0x2800000), 30.15 MB/s 01s left 
+Progress: |██--------| 21.2% Read: (0x880000/0x2800000), 30.02 MB/s 01s left 
+Progress: |██--------| 21.4% Read: (0x890000/0x2800000), 30.21 MB/s 01s left 
+Progress: |██--------| 21.6% Read: (0x8A0000/0x2800000), 30.59 MB/s 01s left 
+Progress: |██--------| 21.7% Read: (0x8B0000/0x2800000), 30.31 MB/s 01s left 
+Progress: |██--------| 21.9% Read: (0x8C0000/0x2800000), 30.21 MB/s 01s left 
+Progress: |██--------| 22.0% Read: (0x8D0000/0x2800000), 29.69 MB/s 01s left 
+Progress: |██--------| 22.2% Read: (0x8E0000/0x2800000), 30.12 MB/s 01s left 
+Progress: |██--------| 22.3% Read: (0x8F0000/0x2800000), 30.55 MB/s 01s left 
+Progress: |██--------| 22.5% Read: (0x900000/0x2800000), 29.79 MB/s 01s left 
+Progress: |██--------| 22.7% Read: (0x910000/0x2800000), 30.11 MB/s 01s left 
+Progress: |██--------| 22.8% Read: (0x920000/0x2800000), 30.03 MB/s 01s left 
+Progress: |██--------| 23.0% Read: (0x930000/0x2800000), 30.54 MB/s 01s left 
+Progress: |██--------| 23.1% Read: (0x940000/0x2800000), 30.53 MB/s 01s left 
+Progress: |██--------| 23.3% Read: (0x950000/0x2800000), 28.73 MB/s 01s left 
+Progress: |██--------| 23.4% Read: (0x960000/0x2800000), 30.08 MB/s 01s left 
+Progress: |██--------| 23.6% Read: (0x970000/0x2800000), 30.87 MB/s 01s left 
+Progress: |██--------| 23.8% Read: (0x980000/0x2800000), 30.59 MB/s 01s left 
+Progress: |██--------| 23.9% Read: (0x990000/0x2800000), 30.24 MB/s 01s left 
+Progress: |██--------| 24.1% Read: (0x9A0000/0x2800000), 30.79 MB/s 01s left 
+Progress: |██--------| 24.2% Read: (0x9B0000/0x2800000), 30.19 MB/s 01s left 
+Progress: |██--------| 24.4% Read: (0x9C0000/0x2800000), 31.06 MB/s 01s left 
+Progress: |██--------| 24.5% Read: (0x9D0000/0x2800000), 30.81 MB/s 01s left 
+Progress: |██--------| 24.7% Read: (0x9E0000/0x2800000), 30.69 MB/s 01s left 
+Progress: |██--------| 24.8% Read: (0x9F0000/0x2800000), 30.22 MB/s 01s left 
+Progress: |██--------| 25.0% Read: (0xA00000/0x2800000), 30.39 MB/s 01s left 
+Progress: |███-------| 25.2% Read: (0xA10000/0x2800000), 28.88 MB/s 01s left 
+Progress: |███-------| 25.3% Read: (0xA20000/0x2800000), 29.15 MB/s  
+Progress: |███-------| 25.5% Read: (0xA30000/0x2800000), 30.35 MB/s  
+Progress: |███-------| 25.6% Read: (0xA40000/0x2800000), 30.56 MB/s  
+Progress: |███-------| 25.8% Read: (0xA50000/0x2800000), 30.18 MB/s  
+Progress: |███-------| 25.9% Read: (0xA60000/0x2800000), 29.44 MB/s  
+Progress: |███-------| 26.1% Read: (0xA70000/0x2800000), 30.06 MB/s  
+Progress: |███-------| 26.2% Read: (0xA80000/0x2800000), 31.2 MB/s  
+Progress: |███-------| 26.4% Read: (0xA90000/0x2800000), 30.7 MB/s  
+Progress: |███-------| 26.6% Read: (0xAA0000/0x2800000), 30.84 MB/s  
+Progress: |███-------| 26.7% Read: (0xAB0000/0x2800000), 30.91 MB/s  
+Progress: |███-------| 26.9% Read: (0xAC0000/0x2800000), 31.29 MB/s  
+Progress: |███-------| 27.0% Read: (0xAD0000/0x2800000), 28.97 MB/s  
+Progress: |███-------| 27.2% Read: (0xAE0000/0x2800000), 31.44 MB/s  
+Progress: |███-------| 27.3% Read: (0xAF0000/0x2800000), 30.43 MB/s  
+Progress: |███-------| 27.5% Read: (0xB00000/0x2800000), 30.83 MB/s  
+Progress: |███-------| 27.7% Read: (0xB10000/0x2800000), 29.82 MB/s  
+Progress: |███-------| 27.8% Read: (0xB20000/0x2800000), 30.78 MB/s  
+Progress: |███-------| 28.0% Read: (0xB30000/0x2800000), 30.21 MB/s  
+Progress: |███-------| 28.1% Read: (0xB40000/0x2800000), 30.8 MB/s  
+Progress: |███-------| 28.3% Read: (0xB50000/0x2800000), 29.87 MB/s  
+Progress: |███-------| 28.4% Read: (0xB60000/0x2800000), 30.64 MB/s  
+Progress: |███-------| 28.6% Read: (0xB70000/0x2800000), 31.24 MB/s  
+Progress: |███-------| 28.7% Read: (0xB80000/0x2800000), 31.08 MB/s  
+Progress: |███-------| 28.9% Read: (0xB90000/0x2800000), 29.96 MB/s  
+Progress: |███-------| 29.1% Read: (0xBA0000/0x2800000), 30.76 MB/s  
+Progress: |███-------| 29.2% Read: (0xBB0000/0x2800000), 30.59 MB/s  
+Progress: |███-------| 29.4% Read: (0xBC0000/0x2800000), 30.3 MB/s  
+Progress: |███-------| 29.5% Read: (0xBD0000/0x2800000), 30.17 MB/s  
+Progress: |███-------| 29.7% Read: (0xBE0000/0x2800000), 30.3 MB/s  
+Progress: |███-------| 29.8% Read: (0xBF0000/0x2800000), 30.16 MB/s  
+Progress: |███-------| 30.0% Read: (0xC00000/0x2800000), 30.18 MB/s  
+Progress: |███-------| 30.2% Read: (0xC10000/0x2800000), 30.01 MB/s  
+Progress: |███-------| 30.3% Read: (0xC20000/0x2800000), 29.96 MB/s  
+Progress: |███-------| 30.5% Read: (0xC30000/0x2800000), 30.78 MB/s  
+Progress: |███-------| 30.6% Read: (0xC40000/0x2800000), 31.09 MB/s  
+Progress: |███-------| 30.8% Read: (0xC50000/0x2800000), 27.86 MB/s  
+Progress: |███-------| 30.9% Read: (0xC60000/0x2800000), 30.7 MB/s  
+Progress: |███-------| 31.1% Read: (0xC70000/0x2800000), 31.14 MB/s  
+Progress: |███-------| 31.2% Read: (0xC80000/0x2800000), 30.49 MB/s  
+Progress: |███-------| 31.4% Read: (0xC90000/0x2800000), 30.76 MB/s  
+Progress: |███-------| 31.6% Read: (0xCA0000/0x2800000), 31.35 MB/s  
+Progress: |███-------| 31.7% Read: (0xCB0000/0x2800000), 30.58 MB/s  
+Progress: |███-------| 31.9% Read: (0xCC0000/0x2800000), 30.35 MB/s  
+Progress: |███-------| 32.0% Read: (0xCD0000/0x2800000), 30.79 MB/s  
+Progress: |███-------| 32.2% Read: (0xCE0000/0x2800000), 30.55 MB/s  
+Progress: |███-------| 32.3% Read: (0xCF0000/0x2800000), 30.26 MB/s  
+Progress: |███-------| 32.5% Read: (0xD00000/0x2800000), 30.49 MB/s  
+Progress: |███-------| 32.7% Read: (0xD10000/0x2800000), 29.7 MB/s  
+Progress: |███-------| 32.8% Read: (0xD20000/0x2800000), 30.68 MB/s  
+Progress: |███-------| 33.0% Read: (0xD30000/0x2800000), 29.98 MB/s  
+Progress: |███-------| 33.1% Read: (0xD40000/0x2800000), 29.25 MB/s  
+Progress: |███-------| 33.3% Read: (0xD50000/0x2800000), 29.22 MB/s  
+Progress: |███-------| 33.4% Read: (0xD60000/0x2800000), 29.86 MB/s  
+Progress: |███-------| 33.6% Read: (0xD70000/0x2800000), 28.85 MB/s  
+Progress: |███-------| 33.8% Read: (0xD80000/0x2800000), 29.76 MB/s  
+Progress: |███-------| 33.9% Read: (0xD90000/0x2800000), 29.23 MB/s  
+Progress: |███-------| 34.1% Read: (0xDA0000/0x2800000), 29.12 MB/s  
+Progress: |███-------| 34.2% Read: (0xDB0000/0x2800000), 30.41 MB/s  
+Progress: |███-------| 34.4% Read: (0xDC0000/0x2800000), 31.09 MB/s  
+Progress: |███-------| 34.5% Read: (0xDD0000/0x2800000), 28.42 MB/s  
+Progress: |███-------| 34.7% Read: (0xDE0000/0x2800000), 30.09 MB/s  
+Progress: |███-------| 34.8% Read: (0xDF0000/0x2800000), 30.13 MB/s  
+Progress: |████------| 35.0% Read: (0xE00000/0x2800000), 30.19 MB/s  
+Progress: |████------| 35.2% Read: (0xE10000/0x2800000), 28.78 MB/s  
+Progress: |████------| 35.3% Read: (0xE20000/0x2800000), 29.21 MB/s  
+Progress: |████------| 35.5% Read: (0xE30000/0x2800000), 31.08 MB/s  
+Progress: |████------| 35.6% Read: (0xE40000/0x2800000), 30.99 MB/s  
+Progress: |████------| 35.8% Read: (0xE50000/0x2800000), 30.31 MB/s  
+Progress: |████------| 35.9% Read: (0xE60000/0x2800000), 30.64 MB/s  
+Progress: |████------| 36.1% Read: (0xE70000/0x2800000), 30.32 MB/s  
+Progress: |████------| 36.2% Read: (0xE80000/0x2800000), 30.06 MB/s  
+Progress: |████------| 36.4% Read: (0xE90000/0x2800000), 30.56 MB/s  
+Progress: |████------| 36.6% Read: (0xEA0000/0x2800000), 30.55 MB/s  
+Progress: |████------| 36.7% Read: (0xEB0000/0x2800000), 30.61 MB/s  
+Progress: |████------| 36.9% Read: (0xEC0000/0x2800000), 31.25 MB/s  
+Progress: |████------| 37.0% Read: (0xED0000/0x2800000), 30.76 MB/s  
+Progress: |████------| 37.2% Read: (0xEE0000/0x2800000), 29.18 MB/s  
+Progress: |████------| 37.3% Read: (0xEF0000/0x2800000), 28.82 MB/s  
+Progress: |████------| 37.5% Read: (0xF00000/0x2800000), 28.27 MB/s  
+Progress: |████------| 37.7% Read: (0xF10000/0x2800000), 27.91 MB/s  
+Progress: |████------| 37.8% Read: (0xF20000/0x2800000), 28.76 MB/s  
+Progress: |████------| 38.0% Read: (0xF30000/0x2800000), 28.6 MB/s  
+Progress: |████------| 38.1% Read: (0xF40000/0x2800000), 28.61 MB/s  
+Progress: |████------| 38.3% Read: (0xF50000/0x2800000), 26.1 MB/s  
+Progress: |████------| 38.4% Read: (0xF60000/0x2800000), 28.17 MB/s  
+Progress: |████------| 38.6% Read: (0xF70000/0x2800000), 28.46 MB/s  
+Progress: |████------| 38.8% Read: (0xF80000/0x2800000), 29.12 MB/s  
+Progress: |████------| 38.9% Read: (0xF90000/0x2800000), 30.14 MB/s  
+Progress: |████------| 39.1% Read: (0xFA0000/0x2800000), 30.59 MB/s  
+Progress: |████------| 39.2% Read: (0xFB0000/0x2800000), 30.06 MB/s  
+Progress: |████------| 39.4% Read: (0xFC0000/0x2800000), 30.19 MB/s  
+Progress: |████------| 39.5% Read: (0xFD0000/0x2800000), 29.61 MB/s  
+Progress: |████------| 39.7% Read: (0xFE0000/0x2800000), 29.12 MB/s  
+Progress: |████------| 39.8% Read: (0xFF0000/0x2800000), 29.45 MB/s  
+Progress: |████------| 40.0% Read: (0x1000000/0x2800000), 29.61 MB/s  
+Progress: |████------| 40.2% Read: (0x1010000/0x2800000), 29.34 MB/s  
+Progress: |████------| 40.3% Read: (0x1020000/0x2800000), 27.96 MB/s  
+Progress: |████------| 40.5% Read: (0x1030000/0x2800000), 28.92 MB/s  
+Progress: |████------| 40.6% Read: (0x1040000/0x2800000), 30.41 MB/s  
+Progress: |████------| 40.8% Read: (0x1050000/0x2800000), 29.62 MB/s  
+Progress: |████------| 40.9% Read: (0x1060000/0x2800000), 28.58 MB/s  
+Progress: |████------| 41.1% Read: (0x1070000/0x2800000), 28.44 MB/s  
+Progress: |████------| 41.2% Read: (0x1080000/0x2800000), 29.74 MB/s  
+Progress: |████------| 41.4% Read: (0x1090000/0x2800000), 28.05 MB/s  
+Progress: |████------| 41.6% Read: (0x10A0000/0x2800000), 28.83 MB/s  
+Progress: |████------| 41.7% Read: (0x10B0000/0x2800000), 28.59 MB/s  
+Progress: |████------| 41.9% Read: (0x10C0000/0x2800000), 29.72 MB/s  
+Progress: |████------| 42.0% Read: (0x10D0000/0x2800000), 27.48 MB/s  
+Progress: |████------| 42.2% Read: (0x10E0000/0x2800000), 29.07 MB/s  
+Progress: |████------| 42.3% Read: (0x10F0000/0x2800000), 28.95 MB/s  
+Progress: |████------| 42.5% Read: (0x1100000/0x2800000), 28.51 MB/s  
+Progress: |████------| 42.7% Read: (0x1110000/0x2800000), 28.32 MB/s  
+Progress: |████------| 42.8% Read: (0x1120000/0x2800000), 28.46 MB/s  
+Progress: |████------| 43.0% Read: (0x1130000/0x2800000), 28.23 MB/s  
+Progress: |████------| 43.1% Read: (0x1140000/0x2800000), 27.66 MB/s  
+Progress: |████------| 43.3% Read: (0x1150000/0x2800000), 28.75 MB/s  
+Progress: |████------| 43.4% Read: (0x1160000/0x2800000), 28.31 MB/s  
+Progress: |████------| 43.6% Read: (0x1170000/0x2800000), 28.27 MB/s  
+Progress: |████------| 43.8% Read: (0x1180000/0x2800000), 28.34 MB/s  
+Progress: |████------| 43.9% Read: (0x1190000/0x2800000), 28.29 MB/s  
+Progress: |████------| 44.1% Read: (0x11A0000/0x2800000), 28.59 MB/s  
+Progress: |████------| 44.2% Read: (0x11B0000/0x2800000), 29.81 MB/s  
+Progress: |████------| 44.4% Read: (0x11C0000/0x2800000), 29.24 MB/s  
+Progress: |████------| 44.5% Read: (0x11D0000/0x2800000), 28.67 MB/s  
+Progress: |████------| 44.7% Read: (0x11E0000/0x2800000), 28.89 MB/s  
+Progress: |████------| 44.8% Read: (0x11F0000/0x2800000), 29.2 MB/s  
+Progress: |████------| 45.0% Read: (0x1200000/0x2800000), 29.83 MB/s  
+Progress: |█████-----| 45.2% Read: (0x1210000/0x2800000), 30.34 MB/s  
+Progress: |█████-----| 45.3% Read: (0x1220000/0x2800000), 30.74 MB/s  
+Progress: |█████-----| 45.5% Read: (0x1230000/0x2800000), 29.98 MB/s  
+Progress: |█████-----| 45.6% Read: (0x1240000/0x2800000), 27.89 MB/s  
+Progress: |█████-----| 45.8% Read: (0x1250000/0x2800000), 30.39 MB/s  
+Progress: |█████-----| 45.9% Read: (0x1260000/0x2800000), 30.5 MB/s  
+Progress: |█████-----| 46.1% Read: (0x1270000/0x2800000), 29.74 MB/s  
+Progress: |█████-----| 46.2% Read: (0x1280000/0x2800000), 28.42 MB/s  
+Progress: |█████-----| 46.4% Read: (0x1290000/0x2800000), 28.33 MB/s  
+Progress: |█████-----| 46.6% Read: (0x12A0000/0x2800000), 27.95 MB/s  
+Progress: |█████-----| 46.7% Read: (0x12B0000/0x2800000), 28.18 MB/s  
+Progress: |█████-----| 46.9% Read: (0x12C0000/0x2800000), 28.25 MB/s  
+Progress: |█████-----| 47.0% Read: (0x12D0000/0x2800000), 28.33 MB/s  
+Progress: |█████-----| 47.2% Read: (0x12E0000/0x2800000), 29.08 MB/s  
+Progress: |█████-----| 47.3% Read: (0x12F0000/0x2800000), 30.52 MB/s  
+Progress: |█████-----| 47.5% Read: (0x1300000/0x2800000), 29.9 MB/s  
+Progress: |█████-----| 47.7% Read: (0x1310000/0x2800000), 30.19 MB/s  
+Progress: |█████-----| 47.8% Read: (0x1320000/0x2800000), 30.64 MB/s  
+Progress: |█████-----| 48.0% Read: (0x1330000/0x2800000), 29.37 MB/s  
+Progress: |█████-----| 48.1% Read: (0x1340000/0x2800000), 30.65 MB/s  
+Progress: |█████-----| 48.3% Read: (0x1350000/0x2800000), 30.24 MB/s  
+Progress: |█████-----| 48.4% Read: (0x1360000/0x2800000), 30.29 MB/s  
+Progress: |█████-----| 48.6% Read: (0x1370000/0x2800000), 29.32 MB/s  
+Progress: |█████-----| 48.8% Read: (0x1380000/0x2800000), 28.54 MB/s  
+Progress: |█████-----| 48.9% Read: (0x1390000/0x2800000), 28.23 MB/s  
+Progress: |█████-----| 49.1% Read: (0x13A0000/0x2800000), 28.32 MB/s  
+Progress: |█████-----| 49.2% Read: (0x13B0000/0x2800000), 28.04 MB/s  
+Progress: |█████-----| 49.4% Read: (0x13C0000/0x2800000), 28.69 MB/s  
+Progress: |█████-----| 49.5% Read: (0x13D0000/0x2800000), 28.0 MB/s  
+Progress: |█████-----| 49.7% Read: (0x13E0000/0x2800000), 29.84 MB/s  
+Progress: |█████-----| 49.8% Read: (0x13F0000/0x2800000), 29.83 MB/s  
+Progress: |█████-----| 50.0% Read: (0x1400000/0x2800000), 28.55 MB/s  
+Progress: |█████-----| 50.2% Read: (0x1410000/0x2800000), 28.76 MB/s  
+Progress: |█████-----| 50.3% Read: (0x1420000/0x2800000), 29.36 MB/s  
+Progress: |█████-----| 50.5% Read: (0x1430000/0x2800000), 28.17 MB/s  
+Progress: |█████-----| 50.6% Read: (0x1440000/0x2800000), 28.97 MB/s  
+Progress: |█████-----| 50.8% Read: (0x1450000/0x2800000), 28.64 MB/s  
+Progress: |█████-----| 50.9% Read: (0x1460000/0x2800000), 29.28 MB/s  
+Progress: |█████-----| 51.1% Read: (0x1470000/0x2800000), 29.12 MB/s  
+Progress: |█████-----| 51.2% Read: (0x1480000/0x2800000), 29.05 MB/s  
+Progress: |█████-----| 51.4% Read: (0x1490000/0x2800000), 28.59 MB/s  
+Progress: |█████-----| 51.6% Read: (0x14A0000/0x2800000), 27.89 MB/s  
+Progress: |█████-----| 51.7% Read: (0x14B0000/0x2800000), 28.6 MB/s  
+Progress: |█████-----| 51.9% Read: (0x14C0000/0x2800000), 28.91 MB/s  
+Progress: |█████-----| 52.0% Read: (0x14D0000/0x2800000), 28.88 MB/s  
+Progress: |█████-----| 52.2% Read: (0x14E0000/0x2800000), 27.78 MB/s  
+Progress: |█████-----| 52.3% Read: (0x14F0000/0x2800000), 29.4 MB/s  
+Progress: |█████-----| 52.5% Read: (0x1500000/0x2800000), 29.42 MB/s  
+Progress: |█████-----| 52.7% Read: (0x1510000/0x2800000), 29.15 MB/s  
+Progress: |█████-----| 52.8% Read: (0x1520000/0x2800000), 27.26 MB/s  
+Progress: |█████-----| 53.0% Read: (0x1530000/0x2800000), 28.92 MB/s  
+Progress: |█████-----| 53.1% Read: (0x1540000/0x2800000), 29.17 MB/s  
+Progress: |█████-----| 53.3% Read: (0x1550000/0x2800000), 29.75 MB/s  
+Progress: |█████-----| 53.4% Read: (0x1560000/0x2800000), 30.15 MB/s  
+Progress: |█████-----| 53.6% Read: (0x1570000/0x2800000), 28.55 MB/s  
+Progress: |█████-----| 53.8% Read: (0x1580000/0x2800000), 28.31 MB/s  
+Progress: |█████-----| 53.9% Read: (0x1590000/0x2800000), 30.01 MB/s  
+Progress: |█████-----| 54.1% Read: (0x15A0000/0x2800000), 29.41 MB/s  
+Progress: |█████-----| 54.2% Read: (0x15B0000/0x2800000), 30.06 MB/s  
+Progress: |█████-----| 54.4% Read: (0x15C0000/0x2800000), 29.42 MB/s  
+Progress: |█████-----| 54.5% Read: (0x15D0000/0x2800000), 28.99 MB/s  
+Progress: |█████-----| 54.7% Read: (0x15E0000/0x2800000), 30.24 MB/s  
+Progress: |█████-----| 54.8% Read: (0x15F0000/0x2800000), 28.31 MB/s  
+Progress: |██████----| 55.0% Read: (0x1600000/0x2800000), 28.84 MB/s  
+Progress: |██████----| 55.2% Read: (0x1610000/0x2800000), 29.03 MB/s  
+Progress: |██████----| 55.3% Read: (0x1620000/0x2800000), 28.64 MB/s  
+Progress: |██████----| 55.5% Read: (0x1630000/0x2800000), 28.23 MB/s  
+Progress: |██████----| 55.6% Read: (0x1640000/0x2800000), 28.92 MB/s  
+Progress: |██████----| 55.8% Read: (0x1650000/0x2800000), 28.89 MB/s  
+Progress: |██████----| 55.9% Read: (0x1660000/0x2800000), 28.59 MB/s  
+Progress: |██████----| 56.1% Read: (0x1670000/0x2800000), 29.42 MB/s  
+Progress: |██████----| 56.2% Read: (0x1680000/0x2800000), 29.5 MB/s  
+Progress: |██████----| 56.4% Read: (0x1690000/0x2800000), 29.35 MB/s  
+Progress: |██████----| 56.6% Read: (0x16A0000/0x2800000), 28.54 MB/s  
+Progress: |██████----| 56.7% Read: (0x16B0000/0x2800000), 30.7 MB/s  
+Progress: |██████----| 56.9% Read: (0x16C0000/0x2800000), 31.22 MB/s  
+Progress: |██████----| 57.0% Read: (0x16D0000/0x2800000), 29.57 MB/s  
+Progress: |██████----| 57.2% Read: (0x16E0000/0x2800000), 30.47 MB/s  
+Progress: |██████----| 57.3% Read: (0x16F0000/0x2800000), 30.85 MB/s  
+Progress: |██████----| 57.5% Read: (0x1700000/0x2800000), 30.88 MB/s  
+Progress: |██████----| 57.7% Read: (0x1710000/0x2800000), 30.05 MB/s  
+Progress: |██████----| 57.8% Read: (0x1720000/0x2800000), 30.09 MB/s  
+Progress: |██████----| 58.0% Read: (0x1730000/0x2800000), 30.74 MB/s  
+Progress: |██████----| 58.1% Read: (0x1740000/0x2800000), 29.8 MB/s  
+Progress: |██████----| 58.3% Read: (0x1750000/0x2800000), 29.23 MB/s  
+Progress: |██████----| 58.4% Read: (0x1760000/0x2800000), 29.11 MB/s  
+Progress: |██████----| 58.6% Read: (0x1770000/0x2800000), 28.54 MB/s  
+Progress: |██████----| 58.8% Read: (0x1780000/0x2800000), 28.13 MB/s  
+Progress: |██████----| 58.9% Read: (0x1790000/0x2800000), 28.81 MB/s  
+Progress: |██████----| 59.1% Read: (0x17A0000/0x2800000), 29.0 MB/s  
+Progress: |██████----| 59.2% Read: (0x17B0000/0x2800000), 29.11 MB/s  
+Progress: |██████----| 59.4% Read: (0x17C0000/0x2800000), 29.1 MB/s  
+Progress: |██████----| 59.5% Read: (0x17D0000/0x2800000), 30.16 MB/s  
+Progress: |██████----| 59.7% Read: (0x17E0000/0x2800000), 30.35 MB/s  
+Progress: |██████----| 59.8% Read: (0x17F0000/0x2800000), 29.29 MB/s  
+Progress: |██████----| 60.0% Read: (0x1800000/0x2800000), 28.84 MB/s  
+Progress: |██████----| 60.2% Read: (0x1810000/0x2800000), 29.61 MB/s  
+Progress: |██████----| 60.3% Read: (0x1820000/0x2800000), 29.33 MB/s  
+Progress: |██████----| 60.5% Read: (0x1830000/0x2800000), 29.56 MB/s  
+Progress: |██████----| 60.6% Read: (0x1840000/0x2800000), 29.21 MB/s  
+Progress: |██████----| 60.8% Read: (0x1850000/0x2800000), 31.16 MB/s  
+Progress: |██████----| 60.9% Read: (0x1860000/0x2800000), 27.79 MB/s  
+Progress: |██████----| 61.1% Read: (0x1870000/0x2800000), 29.82 MB/s  
+Progress: |██████----| 61.3% Read: (0x1880000/0x2800000), 29.36 MB/s  
+Progress: |██████----| 61.4% Read: (0x1890000/0x2800000), 28.96 MB/s  
+Progress: |██████----| 61.6% Read: (0x18A0000/0x2800000), 29.94 MB/s  
+Progress: |██████----| 61.7% Read: (0x18B0000/0x2800000), 29.97 MB/s  
+Progress: |██████----| 61.9% Read: (0x18C0000/0x2800000), 30.18 MB/s  
+Progress: |██████----| 62.0% Read: (0x18D0000/0x2800000), 29.93 MB/s  
+Progress: |██████----| 62.2% Read: (0x18E0000/0x2800000), 30.21 MB/s  
+Progress: |██████----| 62.3% Read: (0x18F0000/0x2800000), 30.47 MB/s  
+Progress: |██████----| 62.5% Read: (0x1900000/0x2800000), 31.03 MB/s  
+Progress: |██████----| 62.7% Read: (0x1910000/0x2800000), 30.43 MB/s  
+Progress: |██████----| 62.8% Read: (0x1920000/0x2800000), 29.58 MB/s  
+Progress: |██████----| 63.0% Read: (0x1930000/0x2800000), 30.08 MB/s  
+Progress: |██████----| 63.1% Read: (0x1940000/0x2800000), 30.1 MB/s  
+Progress: |██████----| 63.3% Read: (0x1950000/0x2800000), 30.12 MB/s  
+Progress: |██████----| 63.4% Read: (0x1960000/0x2800000), 29.82 MB/s  
+Progress: |██████----| 63.6% Read: (0x1970000/0x2800000), 30.66 MB/s  
+Progress: |██████----| 63.7% Read: (0x1980000/0x2800000), 30.37 MB/s  
+Progress: |██████----| 63.9% Read: (0x1990000/0x2800000), 30.76 MB/s  
+Progress: |██████----| 64.1% Read: (0x19A0000/0x2800000), 30.06 MB/s  
+Progress: |██████----| 64.2% Read: (0x19B0000/0x2800000), 29.7 MB/s  
+Progress: |██████----| 64.4% Read: (0x19C0000/0x2800000), 29.87 MB/s  
+Progress: |██████----| 64.5% Read: (0x19D0000/0x2800000), 29.96 MB/s  
+Progress: |██████----| 64.7% Read: (0x19E0000/0x2800000), 28.09 MB/s  
+Progress: |██████----| 64.8% Read: (0x19F0000/0x2800000), 30.04 MB/s  
+Progress: |██████----| 65.0% Read: (0x1A00000/0x2800000), 29.93 MB/s  
+Progress: |███████---| 65.2% Read: (0x1A10000/0x2800000), 30.18 MB/s  
+Progress: |███████---| 65.3% Read: (0x1A20000/0x2800000), 29.66 MB/s  
+Progress: |███████---| 65.5% Read: (0x1A30000/0x2800000), 30.21 MB/s  
+Progress: |███████---| 65.6% Read: (0x1A40000/0x2800000), 29.29 MB/s  
+Progress: |███████---| 65.8% Read: (0x1A50000/0x2800000), 29.67 MB/s  
+Progress: |███████---| 65.9% Read: (0x1A60000/0x2800000), 30.32 MB/s  
+Progress: |███████---| 66.1% Read: (0x1A70000/0x2800000), 29.93 MB/s  
+Progress: |███████---| 66.2% Read: (0x1A80000/0x2800000), 29.61 MB/s  
+Progress: |███████---| 66.4% Read: (0x1A90000/0x2800000), 29.41 MB/s  
+Progress: |███████---| 66.6% Read: (0x1AA0000/0x2800000), 30.46 MB/s  
+Progress: |███████---| 66.7% Read: (0x1AB0000/0x2800000), 29.47 MB/s  
+Progress: |███████---| 66.9% Read: (0x1AC0000/0x2800000), 29.14 MB/s  
+Progress: |███████---| 67.0% Read: (0x1AD0000/0x2800000), 29.95 MB/s  
+Progress: |███████---| 67.2% Read: (0x1AE0000/0x2800000), 31.01 MB/s  
+Progress: |███████---| 67.3% Read: (0x1AF0000/0x2800000), 30.31 MB/s  
+Progress: |███████---| 67.5% Read: (0x1B00000/0x2800000), 31.03 MB/s  
+Progress: |███████---| 67.7% Read: (0x1B10000/0x2800000), 30.41 MB/s  
+Progress: |███████---| 67.8% Read: (0x1B20000/0x2800000), 30.01 MB/s  
+Progress: |███████---| 68.0% Read: (0x1B30000/0x2800000), 30.43 MB/s  
+Progress: |███████---| 68.1% Read: (0x1B40000/0x2800000), 30.21 MB/s  
+Progress: |███████---| 68.3% Read: (0x1B50000/0x2800000), 29.93 MB/s  
+Progress: |███████---| 68.4% Read: (0x1B60000/0x2800000), 26.87 MB/s  
+Progress: |███████---| 68.6% Read: (0x1B70000/0x2800000), 28.38 MB/s  
+Progress: |███████---| 68.8% Read: (0x1B80000/0x2800000), 29.45 MB/s  
+Progress: |███████---| 68.9% Read: (0x1B90000/0x2800000), 28.75 MB/s  
+Progress: |███████---| 69.1% Read: (0x1BA0000/0x2800000), 28.44 MB/s  
+Progress: |███████---| 69.2% Read: (0x1BB0000/0x2800000), 28.65 MB/s  
+Progress: |███████---| 69.4% Read: (0x1BC0000/0x2800000), 28.32 MB/s  
+Progress: |███████---| 69.5% Read: (0x1BD0000/0x2800000), 28.19 MB/s  
+Progress: |███████---| 69.7% Read: (0x1BE0000/0x2800000), 28.63 MB/s  
+Progress: |███████---| 69.8% Read: (0x1BF0000/0x2800000), 28.38 MB/s  
+Progress: |███████---| 70.0% Read: (0x1C00000/0x2800000), 27.65 MB/s  
+Progress: |███████---| 70.2% Read: (0x1C10000/0x2800000), 29.37 MB/s  
+Progress: |███████---| 70.3% Read: (0x1C20000/0x2800000), 30.3 MB/s  
+Progress: |███████---| 70.5% Read: (0x1C30000/0x2800000), 28.59 MB/s  
+Progress: |███████---| 70.6% Read: (0x1C40000/0x2800000), 29.39 MB/s  
+Progress: |███████---| 70.8% Read: (0x1C50000/0x2800000), 27.95 MB/s  
+Progress: |███████---| 70.9% Read: (0x1C60000/0x2800000), 28.34 MB/s  
+Progress: |███████---| 71.1% Read: (0x1C70000/0x2800000), 29.35 MB/s  
+Progress: |███████---| 71.2% Read: (0x1C80000/0x2800000), 29.89 MB/s  
+Progress: |███████---| 71.4% Read: (0x1C90000/0x2800000), 28.71 MB/s  
+Progress: |███████---| 71.6% Read: (0x1CA0000/0x2800000), 28.36 MB/s  
+Progress: |███████---| 71.7% Read: (0x1CB0000/0x2800000), 29.15 MB/s  
+Progress: |███████---| 71.9% Read: (0x1CC0000/0x2800000), 29.0 MB/s  
+Progress: |███████---| 72.0% Read: (0x1CD0000/0x2800000), 26.64 MB/s  
+Progress: |███████---| 72.2% Read: (0x1CE0000/0x2800000), 28.62 MB/s  
+Progress: |███████---| 72.3% Read: (0x1CF0000/0x2800000), 29.18 MB/s  
+Progress: |███████---| 72.5% Read: (0x1D00000/0x2800000), 28.44 MB/s  
+Progress: |███████---| 72.7% Read: (0x1D10000/0x2800000), 27.9 MB/s  
+Progress: |███████---| 72.8% Read: (0x1D20000/0x2800000), 28.58 MB/s  
+Progress: |███████---| 73.0% Read: (0x1D30000/0x2800000), 28.57 MB/s  
+Progress: |███████---| 73.1% Read: (0x1D40000/0x2800000), 28.47 MB/s  
+Progress: |███████---| 73.3% Read: (0x1D50000/0x2800000), 28.23 MB/s  
+Progress: |███████---| 73.4% Read: (0x1D60000/0x2800000), 28.05 MB/s  
+Progress: |███████---| 73.6% Read: (0x1D70000/0x2800000), 27.54 MB/s  
+Progress: |███████---| 73.8% Read: (0x1D80000/0x2800000), 29.17 MB/s  
+Progress: |███████---| 73.9% Read: (0x1D90000/0x2800000), 29.73 MB/s  
+Progress: |███████---| 74.1% Read: (0x1DA0000/0x2800000), 29.64 MB/s  
+Progress: |███████---| 74.2% Read: (0x1DB0000/0x2800000), 28.07 MB/s  
+Progress: |███████---| 74.4% Read: (0x1DC0000/0x2800000), 28.37 MB/s  
+Progress: |███████---| 74.5% Read: (0x1DD0000/0x2800000), 30.25 MB/s  
+Progress: |███████---| 74.7% Read: (0x1DE0000/0x2800000), 28.95 MB/s  
+Progress: |███████---| 74.8% Read: (0x1DF0000/0x2800000), 28.95 MB/s  
+Progress: |████████--| 75.0% Read: (0x1E00000/0x2800000), 30.76 MB/s  
+Progress: |████████--| 75.2% Read: (0x1E10000/0x2800000), 30.4 MB/s  
+Progress: |████████--| 75.3% Read: (0x1E20000/0x2800000), 30.59 MB/s  
+Progress: |████████--| 75.5% Read: (0x1E30000/0x2800000), 28.46 MB/s  
+Progress: |████████--| 75.6% Read: (0x1E40000/0x2800000), 26.75 MB/s  
+Progress: |████████--| 75.8% Read: (0x1E50000/0x2800000), 29.54 MB/s  
+Progress: |████████--| 75.9% Read: (0x1E60000/0x2800000), 29.65 MB/s  
+Progress: |████████--| 76.1% Read: (0x1E70000/0x2800000), 30.38 MB/s  
+Progress: |████████--| 76.2% Read: (0x1E80000/0x2800000), 28.61 MB/s  
+Progress: |████████--| 76.4% Read: (0x1E90000/0x2800000), 29.61 MB/s  
+Progress: |████████--| 76.6% Read: (0x1EA0000/0x2800000), 29.76 MB/s  
+Progress: |████████--| 76.7% Read: (0x1EB0000/0x2800000), 30.35 MB/s  
+Progress: |████████--| 76.9% Read: (0x1EC0000/0x2800000), 30.46 MB/s  
+Progress: |████████--| 77.0% Read: (0x1ED0000/0x2800000), 30.71 MB/s  
+Progress: |████████--| 77.2% Read: (0x1EE0000/0x2800000), 30.46 MB/s  
+Progress: |████████--| 77.3% Read: (0x1EF0000/0x2800000), 29.58 MB/s  
+Progress: |████████--| 77.5% Read: (0x1F00000/0x2800000), 29.26 MB/s  
+Progress: |████████--| 77.7% Read: (0x1F10000/0x2800000), 29.59 MB/s  
+Progress: |████████--| 77.8% Read: (0x1F20000/0x2800000), 28.04 MB/s  
+Progress: |████████--| 78.0% Read: (0x1F30000/0x2800000), 27.28 MB/s  
+Progress: |████████--| 78.1% Read: (0x1F40000/0x2800000), 29.47 MB/s  
+Progress: |████████--| 78.3% Read: (0x1F50000/0x2800000), 29.26 MB/s  
+Progress: |████████--| 78.4% Read: (0x1F60000/0x2800000), 29.51 MB/s  
+Progress: |████████--| 78.6% Read: (0x1F70000/0x2800000), 30.27 MB/s  
+Progress: |████████--| 78.8% Read: (0x1F80000/0x2800000), 31.2 MB/s  
+Progress: |████████--| 78.9% Read: (0x1F90000/0x2800000), 31.0 MB/s  
+Progress: |████████--| 79.1% Read: (0x1FA0000/0x2800000), 30.05 MB/s  
+Progress: |████████--| 79.2% Read: (0x1FB0000/0x2800000), 31.0 MB/s  
+Progress: |████████--| 79.4% Read: (0x1FC0000/0x2800000), 27.63 MB/s  
+Progress: |████████--| 79.5% Read: (0x1FD0000/0x2800000), 29.48 MB/s  
+Progress: |████████--| 79.7% Read: (0x1FE0000/0x2800000), 29.21 MB/s  
+Progress: |████████--| 79.8% Read: (0x1FF0000/0x2800000), 30.37 MB/s  
+Progress: |████████--| 80.0% Read: (0x2000000/0x2800000), 29.66 MB/s  
+Progress: |████████--| 80.2% Read: (0x2010000/0x2800000), 29.2 MB/s  
+Progress: |████████--| 80.3% Read: (0x2020000/0x2800000), 27.58 MB/s  
+Progress: |████████--| 80.5% Read: (0x2030000/0x2800000), 27.97 MB/s  
+Progress: |████████--| 80.6% Read: (0x2040000/0x2800000), 28.87 MB/s  
+Progress: |████████--| 80.8% Read: (0x2050000/0x2800000), 28.4 MB/s  
+Progress: |████████--| 80.9% Read: (0x2060000/0x2800000), 26.61 MB/s  
+Progress: |████████--| 81.1% Read: (0x2070000/0x2800000), 28.42 MB/s  
+Progress: |████████--| 81.2% Read: (0x2080000/0x2800000), 27.83 MB/s  
+Progress: |████████--| 81.4% Read: (0x2090000/0x2800000), 30.15 MB/s  
+Progress: |████████--| 81.6% Read: (0x20A0000/0x2800000), 30.86 MB/s  
+Progress: |████████--| 81.7% Read: (0x20B0000/0x2800000), 31.2 MB/s  
+Progress: |████████--| 81.9% Read: (0x20C0000/0x2800000), 31.03 MB/s  
+Progress: |████████--| 82.0% Read: (0x20D0000/0x2800000), 29.96 MB/s  
+Progress: |████████--| 82.2% Read: (0x20E0000/0x2800000), 28.11 MB/s  
+Progress: |████████--| 82.3% Read: (0x20F0000/0x2800000), 29.47 MB/s  
+Progress: |████████--| 82.5% Read: (0x2100000/0x2800000), 30.27 MB/s  
+Progress: |████████--| 82.7% Read: (0x2110000/0x2800000), 29.54 MB/s  
+Progress: |████████--| 82.8% Read: (0x2120000/0x2800000), 29.99 MB/s  
+Progress: |████████--| 83.0% Read: (0x2130000/0x2800000), 29.27 MB/s  
+Progress: |████████--| 83.1% Read: (0x2140000/0x2800000), 29.18 MB/s  
+Progress: |████████--| 83.3% Read: (0x2150000/0x2800000), 29.04 MB/s  
+Progress: |████████--| 83.4% Read: (0x2160000/0x2800000), 27.42 MB/s  
+Progress: |████████--| 83.6% Read: (0x2170000/0x2800000), 26.77 MB/s  
+Progress: |████████--| 83.8% Read: (0x2180000/0x2800000), 26.52 MB/s  
+Progress: |████████--| 83.9% Read: (0x2190000/0x2800000), 28.27 MB/s  
+Progress: |████████--| 84.1% Read: (0x21A0000/0x2800000), 28.98 MB/s  
+Progress: |████████--| 84.2% Read: (0x21B0000/0x2800000), 29.03 MB/s  
+Progress: |████████--| 84.4% Read: (0x21C0000/0x2800000), 29.4 MB/s  
+Progress: |████████--| 84.5% Read: (0x21D0000/0x2800000), 28.05 MB/s  
+Progress: |████████--| 84.7% Read: (0x21E0000/0x2800000), 28.8 MB/s  
+Progress: |████████--| 84.8% Read: (0x21F0000/0x2800000), 28.69 MB/s  
+Progress: |████████--| 85.0% Read: (0x2200000/0x2800000), 28.21 MB/s  
+Progress: |█████████-| 85.2% Read: (0x2210000/0x2800000), 27.72 MB/s  
+Progress: |█████████-| 85.3% Read: (0x2220000/0x2800000), 28.41 MB/s  
+Progress: |█████████-| 85.5% Read: (0x2230000/0x2800000), 28.02 MB/s  
+Progress: |█████████-| 85.6% Read: (0x2240000/0x2800000), 28.93 MB/s  
+Progress: |█████████-| 85.8% Read: (0x2250000/0x2800000), 29.29 MB/s  
+Progress: |█████████-| 85.9% Read: (0x2260000/0x2800000), 28.63 MB/s  
+Progress: |█████████-| 86.1% Read: (0x2270000/0x2800000), 28.82 MB/s  
+Progress: |█████████-| 86.2% Read: (0x2280000/0x2800000), 29.95 MB/s  
+Progress: |█████████-| 86.4% Read: (0x2290000/0x2800000), 28.94 MB/s  
+Progress: |█████████-| 86.6% Read: (0x22A0000/0x2800000), 29.03 MB/s  
+Progress: |█████████-| 86.7% Read: (0x22B0000/0x2800000), 28.37 MB/s  
+Progress: |█████████-| 86.9% Read: (0x22C0000/0x2800000), 29.2 MB/s  
+Progress: |█████████-| 87.0% Read: (0x22D0000/0x2800000), 28.15 MB/s  
+Progress: |█████████-| 87.2% Read: (0x22E0000/0x2800000), 27.79 MB/s  
+Progress: |█████████-| 87.3% Read: (0x22F0000/0x2800000), 27.4 MB/s  
+Progress: |█████████-| 87.5% Read: (0x2300000/0x2800000), 27.86 MB/s  
+Progress: |█████████-| 87.7% Read: (0x2310000/0x2800000), 29.69 MB/s  
+Progress: |█████████-| 87.8% Read: (0x2320000/0x2800000), 29.99 MB/s  
+Progress: |█████████-| 88.0% Read: (0x2330000/0x2800000), 29.03 MB/s  
+Progress: |█████████-| 88.1% Read: (0x2340000/0x2800000), 26.64 MB/s  
+Progress: |█████████-| 88.3% Read: (0x2350000/0x2800000), 28.4 MB/s  
+Progress: |█████████-| 88.4% Read: (0x2360000/0x2800000), 29.11 MB/s  
+Progress: |█████████-| 88.6% Read: (0x2370000/0x2800000), 28.25 MB/s  
+Progress: |█████████-| 88.8% Read: (0x2380000/0x2800000), 29.47 MB/s  
+Progress: |█████████-| 88.9% Read: (0x2390000/0x2800000), 29.83 MB/s  
+Progress: |█████████-| 89.1% Read: (0x23A0000/0x2800000), 29.92 MB/s  
+Progress: |█████████-| 89.2% Read: (0x23B0000/0x2800000), 28.89 MB/s  
+Progress: |█████████-| 89.4% Read: (0x23C0000/0x2800000), 30.31 MB/s  
+Progress: |█████████-| 89.5% Read: (0x23D0000/0x2800000), 30.47 MB/s  
+Progress: |█████████-| 89.7% Read: (0x23E0000/0x2800000), 29.86 MB/s  
+Progress: |█████████-| 89.8% Read: (0x23F0000/0x2800000), 29.95 MB/s  
+Progress: |█████████-| 90.0% Read: (0x2400000/0x2800000), 28.96 MB/s  
+Progress: |█████████-| 90.2% Read: (0x2410000/0x2800000), 28.59 MB/s  
+Progress: |█████████-| 90.3% Read: (0x2420000/0x2800000), 28.65 MB/s  
+Progress: |█████████-| 90.5% Read: (0x2430000/0x2800000), 29.49 MB/s  
+Progress: |█████████-| 90.6% Read: (0x2440000/0x2800000), 29.64 MB/s  
+Progress: |█████████-| 90.8% Read: (0x2450000/0x2800000), 29.06 MB/s  
+Progress: |█████████-| 90.9% Read: (0x2460000/0x2800000), 28.36 MB/s  
+Progress: |█████████-| 91.1% Read: (0x2470000/0x2800000), 29.74 MB/s  
+Progress: |█████████-| 91.2% Read: (0x2480000/0x2800000), 29.92 MB/s  
+Progress: |█████████-| 91.4% Read: (0x2490000/0x2800000), 30.46 MB/s  
+Progress: |█████████-| 91.6% Read: (0x24A0000/0x2800000), 30.12 MB/s  
+Progress: |█████████-| 91.7% Read: (0x24B0000/0x2800000), 27.8 MB/s  
+Progress: |█████████-| 91.9% Read: (0x24C0000/0x2800000), 30.62 MB/s  
+Progress: |█████████-| 92.0% Read: (0x24D0000/0x2800000), 30.15 MB/s  
+Progress: |█████████-| 92.2% Read: (0x24E0000/0x2800000), 31.16 MB/s  
+Progress: |█████████-| 92.3% Read: (0x24F0000/0x2800000), 30.62 MB/s  
+Progress: |█████████-| 92.5% Read: (0x2500000/0x2800000), 29.33 MB/s  
+Progress: |█████████-| 92.7% Read: (0x2510000/0x2800000), 28.68 MB/s  
+Progress: |█████████-| 92.8% Read: (0x2520000/0x2800000), 27.9 MB/s  
+Progress: |█████████-| 93.0% Read: (0x2530000/0x2800000), 28.22 MB/s  
+Progress: |█████████-| 93.1% Read: (0x2540000/0x2800000), 29.04 MB/s  
+Progress: |█████████-| 93.3% Read: (0x2550000/0x2800000), 28.18 MB/s  
+Progress: |█████████-| 93.4% Read: (0x2560000/0x2800000), 28.48 MB/s  
+Progress: |█████████-| 93.6% Read: (0x2570000/0x2800000), 28.17 MB/s  
+Progress: |█████████-| 93.8% Read: (0x2580000/0x2800000), 28.42 MB/s  
+Progress: |█████████-| 93.9% Read: (0x2590000/0x2800000), 28.9 MB/s  
+Progress: |█████████-| 94.1% Read: (0x25A0000/0x2800000), 28.28 MB/s  
+Progress: |█████████-| 94.2% Read: (0x25B0000/0x2800000), 28.87 MB/s  
+Progress: |█████████-| 94.4% Read: (0x25C0000/0x2800000), 28.41 MB/s  
+Progress: |█████████-| 94.5% Read: (0x25D0000/0x2800000), 28.19 MB/s  
+Progress: |█████████-| 94.7% Read: (0x25E0000/0x2800000), 28.27 MB/s  
+Progress: |█████████-| 94.8% Read: (0x25F0000/0x2800000), 29.26 MB/s  
+Progress: |██████████| 95.0% Read: (0x2600000/0x2800000), 27.96 MB/s  
+Progress: |██████████| 95.2% Read: (0x2610000/0x2800000), 28.19 MB/s  
+Progress: |██████████| 95.3% Read: (0x2620000/0x2800000), 27.21 MB/s  
+Progress: |██████████| 95.5% Read: (0x2630000/0x2800000), 27.9 MB/s  
+Progress: |██████████| 95.6% Read: (0x2640000/0x2800000), 27.73 MB/s  
+Progress: |██████████| 95.8% Read: (0x2650000/0x2800000), 28.55 MB/s  
+Progress: |██████████| 95.9% Read: (0x2660000/0x2800000), 27.8 MB/s  
+Progress: |██████████| 96.1% Read: (0x2670000/0x2800000), 28.68 MB/s  
+Progress: |██████████| 96.2% Read: (0x2680000/0x2800000), 29.15 MB/s  
+Progress: |██████████| 96.4% Read: (0x2690000/0x2800000), 28.33 MB/s  
+Progress: |██████████| 96.6% Read: (0x26A0000/0x2800000), 26.71 MB/s  
+Progress: |██████████| 96.7% Read: (0x26B0000/0x2800000), 28.85 MB/s  
+Progress: |██████████| 96.9% Read: (0x26C0000/0x2800000), 29.07 MB/s  
+Progress: |██████████| 97.0% Read: (0x26D0000/0x2800000), 29.0 MB/s  
+Progress: |██████████| 97.2% Read: (0x26E0000/0x2800000), 29.48 MB/s  
+Progress: |██████████| 97.3% Read: (0x26F0000/0x2800000), 28.91 MB/s  
+Progress: |██████████| 97.5% Read: (0x2700000/0x2800000), 28.41 MB/s  
+Progress: |██████████| 97.7% Read: (0x2710000/0x2800000), 28.99 MB/s  
+Progress: |██████████| 97.8% Read: (0x2720000/0x2800000), 29.61 MB/s  
+Progress: |██████████| 98.0% Read: (0x2730000/0x2800000), 28.34 MB/s  
+Progress: |██████████| 98.1% Read: (0x2740000/0x2800000), 28.9 MB/s  
+Progress: |██████████| 98.3% Read: (0x2750000/0x2800000), 30.25 MB/s  
+Progress: |██████████| 98.4% Read: (0x2760000/0x2800000), 28.54 MB/s  
+Progress: |██████████| 98.6% Read: (0x2770000/0x2800000), 28.33 MB/s  
+Progress: |██████████| 98.8% Read: (0x2780000/0x2800000), 28.31 MB/s  
+Progress: |██████████| 98.9% Read: (0x2790000/0x2800000), 27.13 MB/s  
+Progress: |██████████| 99.1% Read: (0x27A0000/0x2800000), 28.47 MB/s  
+Progress: |██████████| 99.2% Read: (0x27B0000/0x2800000), 28.86 MB/s  
+Progress: |██████████| 99.4% Read: (0x27C0000/0x2800000), 28.06 MB/s  
+Progress: |██████████| 99.5% Read: (0x27D0000/0x2800000), 28.09 MB/s  
+Progress: |██████████| 99.7% Read: (0x27E0000/0x2800000), 29.84 MB/s  
+Progress: |██████████| 99.8% Read: (0x27F0000/0x2800000), 30.22 MB/s  
+Progress: |██████████| 100.0% Read: (0x2800000/0x2800000), 30.78 MB/s  
+DaHandler - Dumped sector 264 with sector count 10240 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/expdb.bin.
+DaHandler - All partitions were dumped
++ mtk ro 0x4f000000 0x100000 ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/super_head.bin
+fuse library not installed
+Main - Handling da commands ...
+
+Done |█---------| 6.2% Read: (0x10000/0x100000),0.00 MB/s
+Progress: |█---------| 12.5% Read: (0x20000/0x100000), 11.5 MB/s  
+Progress: |██--------| 18.8% Read: (0x30000/0x100000), 27.69 MB/s  
+Progress: |██--------| 25.0% Read: (0x40000/0x100000), 28.85 MB/s  
+Progress: |███-------| 31.2% Read: (0x50000/0x100000), 27.56 MB/s  
+Progress: |████------| 37.5% Read: (0x60000/0x100000), 27.88 MB/s  
+Progress: |████------| 43.8% Read: (0x70000/0x100000), 27.99 MB/s  
+Progress: |█████-----| 50.0% Read: (0x80000/0x100000), 28.06 MB/s  
+Progress: |██████----| 56.2% Read: (0x90000/0x100000), 29.44 MB/s  
+Progress: |██████----| 62.5% Read: (0xA0000/0x100000), 28.94 MB/s  
+Progress: |███████---| 68.8% Read: (0xB0000/0x100000), 28.14 MB/s  
+Progress: |████████--| 75.0% Read: (0xC0000/0x100000), 28.48 MB/s  
+Progress: |████████--| 81.2% Read: (0xD0000/0x100000), 28.41 MB/s  
+Progress: |█████████-| 87.5% Read: (0xE0000/0x100000), 27.88 MB/s  
+Progress: |█████████-| 93.8% Read: (0xF0000/0x100000), 28.76 MB/s  
+Progress: |██████████| 100.0% Read: (0x100000/0x100000), 28.0 MB/s  
+Dumped offset 0x4f000000 with length 0x100000 as ~/Desktop/Bigme/research/phase-c/20261017-231507-mtk-check/super_head.bin.

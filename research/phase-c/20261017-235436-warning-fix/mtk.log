@@ -1,0 +1,32 @@
++ mtk r misc ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.pre.bin
+fuse library not installed
+Main - Handling da commands ...
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "misc"
+
+Done |█---------| 12.5% Read: (0x10000/0x80000),0.00 MB/s
+Progress: |██--------| 25.0% Read: (0x20000/0x80000), 12.74 MB/s  
+Progress: |████------| 37.5% Read: (0x30000/0x80000), 28.54 MB/s  
+Progress: |█████-----| 50.0% Read: (0x40000/0x80000), 30.19 MB/s  
+Progress: |██████----| 62.5% Read: (0x50000/0x80000), 30.68 MB/s  
+Progress: |████████--| 75.0% Read: (0x60000/0x80000), 31.02 MB/s  
+Progress: |█████████-| 87.5% Read: (0x70000/0x80000), 31.25 MB/s  
+Progress: |██████████| 100.0% Read: (0x80000/0x80000), 30.95 MB/s  
+DaHandler - Dumped sector 8 with sector count 128 as ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.pre.bin.
++ mtk multi w misc ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.ota-flag.bin;r misc ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.post.bin
+fuse library not installed
+
+Done |██████████| 100.0% Write: (0x80000/0x80000),0.00 MB/s
+Wrote ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.ota-flag.bin to sector 8 with sector count 128.
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "misc"
+
+Done |█---------| 12.5% Read: (0x10000/0x80000),0.00 MB/s
+Progress: |██--------| 25.0% Read: (0x20000/0x80000), 13.46 MB/s  
+Progress: |████------| 37.5% Read: (0x30000/0x80000), 32.35 MB/s  
+Progress: |█████-----| 50.0% Read: (0x40000/0x80000), 32.76 MB/s  
+Progress: |██████----| 62.5% Read: (0x50000/0x80000), 32.16 MB/s  
+Progress: |████████--| 75.0% Read: (0x60000/0x80000), 32.49 MB/s  
+Progress: |█████████-| 87.5% Read: (0x70000/0x80000), 32.5 MB/s  
+Progress: |██████████| 100.0% Read: (0x80000/0x80000), 33.18 MB/s  
+DaHandler - Dumped sector 8 with sector count 128 as ~/Desktop/Bigme/research/phase-c/20261017-235436-warning-fix/misc.post.bin.

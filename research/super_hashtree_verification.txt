@@ -1,0 +1,27 @@
+hashtree descriptors found:
+   product 589578240 0e6bfcb5 -> [('vbmeta_a', '8e6466be1c8e'), ('vbmeta_b', '747fa9594f17')]
+   system_ext 752652288 0e6bfcb5 -> [('vbmeta_a', 'e5da61fd4b90')]
+   system_ext 752648192 0e6bfcb5 -> [('vbmeta_b', '44ac712ad86d')]
+   system 4977647616 0e6bfcb5 -> [('vbmeta_system_a', '1f44b47f1719')]
+   system 6008668160 0e6bfcb5 -> [('vbmeta_system_b', '580a62e29dd3')]
+   vendor 648527872 6df4c5ab -> [('vbmeta_vendor_a', 'b16bb3a468d9'), ('vbmeta_vendor_b', 'fc4ebf59b3e0')]
+
+product: computed root (image_size=589578240) = 747fa9594f17be2831039b9e5c7913a4f3c2703a7ce8c32052011b3512c1617b  [0s]
+   vbmeta_a           expects 8e6466be1c8eda35...  -> mismatch
+   vbmeta_b           expects 747fa9594f17be28...  -> MATCH
+
+system_ext: computed root (image_size=752652288) = 2a2767b713f9d3e9246d8b97bd478e336306e6dfa1075ebb5e072c5e1a507306  [0s]
+   vbmeta_a           expects e5da61fd4b902894...  -> mismatch
+
+system_ext: computed root (image_size=752648192) = 44ac712ad86dceb5a695d3f0f741d03235d5f4a6cd2a4bb0af89f01625fd147d  [0s]
+   vbmeta_b           expects 44ac712ad86dceb5...  -> MATCH
+
+system: computed root (image_size=4977647616) = 51dae7f9e9d709ca00140d18c74c4fe707846b4cb10d8df58e2a6bcd78a5d9bd  [3s]
+   vbmeta_system_a    expects 1f44b47f1719c6cf...  -> mismatch
+
+system: computed root (image_size=6008668160) = 580a62e29dd34f0b1cbfe0d26265cfffae11a1f2010695482cf7bd5f69384fbf  [4s]
+   vbmeta_system_b    expects 580a62e29dd34f0b...  -> MATCH
+
+vendor: computed root (image_size=648527872) = fc4ebf59b3e04f0a931459f537f3d2d34a0edf162e73ac93aa8dc9188e6bbe1b  [0s]
+   vbmeta_vendor_a    expects b16bb3a468d93336...  -> mismatch
+   vbmeta_vendor_b    expects fc4ebf59b3e04f0a...  -> MATCH

@@ -1,0 +1,4 @@
+  PASS slot_suffix = _b
+  PASS boot_completed = 1
+  PASS veritymode = eio
+  PASS vbmeta.digest = e9211d4a1da0847afc55b59d83b18a6aa084efd1d2900eea9bf7ed8e0ab29671

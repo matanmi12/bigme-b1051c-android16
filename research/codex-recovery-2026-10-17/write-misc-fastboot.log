@@ -1,0 +1,16 @@
+fuse library not installed
+
+Done |██████████| 100.0% Write: (0x80000/0x80000),0.00 MB/s
+Wrote ~/Desktop/Bigme/research/codex-recovery-2026-10-17/misc-fastboot-once.bin to sector 8 with sector count 128.
+DaHandler - Requesting available partitions ....
+DaHandler - Dumping partition "misc"
+
+Done |█---------| 12.5% Read: (0x10000/0x80000),0.00 MB/s
+Progress: |██--------| 25.0% Read: (0x20000/0x80000), 13.8 MB/s  
+Progress: |████------| 37.5% Read: (0x30000/0x80000), 33.55 MB/s  
+Progress: |█████-----| 50.0% Read: (0x40000/0x80000), 32.79 MB/s  
+Progress: |██████----| 62.5% Read: (0x50000/0x80000), 33.21 MB/s  
+Progress: |████████--| 75.0% Read: (0x60000/0x80000), 33.28 MB/s  
+Progress: |█████████-| 87.5% Read: (0x70000/0x80000), 33.42 MB/s  
+Progress: |██████████| 100.0% Read: (0x80000/0x80000), 33.74 MB/s  
+DaHandler - Dumped sector 8 with sector count 128 as ~/Desktop/Bigme/research/codex-recovery-2026-10-17/misc-fastboot-readback.bin.

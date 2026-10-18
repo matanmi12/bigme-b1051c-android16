@@ -1,0 +1,5 @@
+  PASS slot_suffix = _b
+  PASS boot_completed = 1
+  PASS veritymode = disabled
+  PASS vbmeta.digest = 5a084f7abaac13cc6de1d08d05e00f9ededbd76b0f981bfcd82495cc63eedad7
+  PASS partition.system.verified = 

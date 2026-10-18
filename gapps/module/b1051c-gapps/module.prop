@@ -1,0 +1,6 @@
+id=b1051c-gapps
+name=Minimal Google apps (MindTheGapps subset)
+version=16.0.0-arm64-20260915_222150
+versionCode=1
+author=matanmi12
+description=Google Play services (GmsCore 25.15.32), Google Services Framework, Google Play Store (45.7.17) + their privapp/sysconfig XMLs and the MTG GmsOverlay (makes GMS/Play Store visible to apps). Subset of MindTheGapps-16.0.0-arm64-20260915_222150 (github.com/MindTheGapps/16.0.0-arm64). No setup wizard, no Google app, no launcher. Disable: touch /data/adb/modules/b1051c-gapps/disable

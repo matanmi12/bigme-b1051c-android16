@@ -1,0 +1,329 @@
+
+######## vendor_b ########
+  EC103                                    x3
+  display_policy                           x1
+  handwrittenservice                       x2
+  hwcomposer.mt6877                        x2
+  xrz_display_policy_service               x1
+  setLayerRefreshMode                      x1
+  eink_debug/                              x3
+  /sys/kernel/debug/eink                   x3
+  DRM_IOCTL_EINK                           x4
+  ro.product.vendor.                       x5
+  ro.product.odm.                          x5
+  <manifest version                        x25
+  target-level                             x2
+  vendor.xrz.                              x30
+  gsid                                     x13
+  wacom                                    x1
+  cyttsp                                   x1
+  emr                                      x69
+  ro.hardware.                             x13
+  waveform                                 x2
+  EPD                                      x109
+  saturation                               x70
+  dither                                   x24
+  eink_                                    x10
+  ro.boot.                                 x57
+  avb_                                     x11
+  verity                                   x379
+  --- context for '<manifest version' ---
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.biometrics.fingerprint</name> ⏎         <transport>hwbinder</transport> ⏎         <vers
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.boot</name> ⏎         <transport>hwbinder</transport> ⏎         <fqname>@1.2::IBootCont
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.cas</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.2</version> ⏎  
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.health</name> ⏎         <transport>hwbinder</transport> ⏎         <fqname>@2.1::IHealth
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.keymaster</name> ⏎         <transport>hwbinder</transport> ⏎         <version>4.1</vers
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.neuralnetworks</name> ⏎         <transport>hwbinder</transport> ⏎         <fqname>@1.3:
+     | ............................................................<manifest version="1.0" type="device"> ⏎      <hal format="hidl"> ⏎          <name>android.hardware.usb</name> ⏎          <transport>hwbinder</transport> ⏎          <version>1.3</versio
+     | ............................................................<manifest version="1.0" type="device"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.wifi.hostapd</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.3</v
+  --- context for 'target-level' ---
+     |      manifest.xml ⏎ --> ⏎ <manifest version="4.0" type="device" target-level="5"> ⏎     <hal format="hidl"> ⏎         <name>android.hardware.audio</name> ⏎         <transport>hwbinder</transport> ⏎         <version>7.0</version> ⏎         <interf
+     |         <version>31.0</version> ⏎     </sepolicy> ⏎     <kernel target-level="5"/> ⏎ </manifest> ⏎ .............................................................................................................................................
+  --- context for 'ro.product.vendor.' ---
+     |  this partition image. ⏎ #################################### ⏎ ro.product.vendor.brand=alps ⏎ ro.product.vendor.device=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.manufacturer=alps ⏎ ro.product.vendor.model=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.name=v
+     | ############################## ⏎ ro.product.vendor.brand=alps ⏎ ro.product.vendor.device=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.manufacturer=alps ⏎ ro.product.vendor.model=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.name=vnd_k6877v1_64_k419 ⏎ ro.vendor.
+     | dor.brand=alps ⏎ ro.product.vendor.device=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.manufacturer=alps ⏎ ro.product.vendor.model=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.name=vnd_k6877v1_64_k419 ⏎ ro.vendor.product.cpu.abilist=arm64-v8a,armeabi-v7a,arm
+     | ice=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.manufacturer=alps ⏎ ro.product.vendor.model=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.name=vnd_k6877v1_64_k419 ⏎ ro.vendor.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.vendor.product.cpu.abilist32
+     | nufacturer=alps ⏎ ro.product.vendor.model=vnd_k6877v1_64_k419 ⏎ ro.product.vendor.name=vnd_k6877v1_64_k419 ⏎ ro.vendor.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.vendor.product.cpu.abilist32=armeabi-v7a,armeabi ⏎ ro.vendor.product.cpu.a
+  --- context for 'ro.product.odm.' ---
+     |  this partition image. ⏎ #################################### ⏎ ro.product.odm.brand=alps ⏎ ro.product.odm.device=vnd_k6877v1_64_k419 ⏎ ro.product.odm.manufacturer=alps ⏎ ro.product.odm.model=vnd_k6877v1_64_k419 ⏎ ro.product.odm.name=vnd_k6877v1_6
+     | ################################# ⏎ ro.product.odm.brand=alps ⏎ ro.product.odm.device=vnd_k6877v1_64_k419 ⏎ ro.product.odm.manufacturer=alps ⏎ ro.product.odm.model=vnd_k6877v1_64_k419 ⏎ ro.product.odm.name=vnd_k6877v1_64_k419 ⏎ ro.odm.product.cpu.
+     | ct.odm.brand=alps ⏎ ro.product.odm.device=vnd_k6877v1_64_k419 ⏎ ro.product.odm.manufacturer=alps ⏎ ro.product.odm.model=vnd_k6877v1_64_k419 ⏎ ro.product.odm.name=vnd_k6877v1_64_k419 ⏎ ro.odm.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.o
+     | device=vnd_k6877v1_64_k419 ⏎ ro.product.odm.manufacturer=alps ⏎ ro.product.odm.model=vnd_k6877v1_64_k419 ⏎ ro.product.odm.name=vnd_k6877v1_64_k419 ⏎ ro.odm.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.odm.product.cpu.abilist32=armeabi-
+     | .manufacturer=alps ⏎ ro.product.odm.model=vnd_k6877v1_64_k419 ⏎ ro.product.odm.name=vnd_k6877v1_64_k419 ⏎ ro.odm.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.odm.product.cpu.abilist32=armeabi-v7a,armeabi ⏎ ro.odm.product.cpu.abilist64=
+  --- context for 'EC103' ---
+     | 6453A855._libh264dec_asm_sa_EE7AB5ADED7027EFC1CE5AB4AAB817EAEC103CA74B93F0E8F6EDCF66C9D9EC57.qpDiv6.qpMod6.Reorderblock._libh264dec_asm_sa_7C8DF255EAB8A97ED4C8F18732DA5F4B8F92593F7A399F82AE19F8E5E4DE7CC5._libh264dec_asm_sa_26
+     | 6453A855._libh264dec_asm_sd_EE7AB5ADED7027EFC1CE5AB4AAB817EAEC103CA74B93F0E8F6EDCF66C9D9EC57.qpDiv6.qpMod6.h264bsdQpC.Reorderblock.zigzag_scan8x8_single._libh264dec_asm_sd_7C8DF255EAB8A97ED4C8F18732DA5F4B8F92593F7A399F82AE19F
+     | 6453A855._libh264dec_asm_se_EE7AB5ADED7027EFC1CE5AB4AAB817EAEC103CA74B93F0E8F6EDCF66C9D9EC57.zigzag_scan8x8_field.qpDiv6.qpMod6.h264bsdQpC.Reorderblock.zigzag_scan8x8_single._libh264dec_asm_se_7C8DF255EAB8A97ED4C8F18732DA5F4B
+  --- context for '/sys/kernel/debug/eink' ---
+     | ............................................................/sys/kernel/debug/eink_debug/clean_a2.testing. ⏎ .......pass. ⏎ ..........fail. ⏎ ............................AM...aeabi..C...C2.09..cortex-a55....A.... ⏎ .........................".$.&.*.D.
+     | .vendor.xrz.disable_auto_global_refresh.threshold=%d,cur=%d./sys/kernel/debug/eink_debug/anti_flicker.[%s] CapsInfo [0x%x] hw_ver.[%s] CapsInfo [%d] dispSelfRefreshSupported.[%s] %s: unknown hw version: 0x%x.(%lu) drmModeAtomicCommit: .+%zu,p
+     | ............................................................/sys/kernel/debug/eink_debug/clean_a2.testing. ⏎ .......pass. ⏎ ..........fail. ⏎ ..............................fini_array..text..got..note.android.ident..got.plt..rela.plt..bss..dynstr..e
+  --- context for 'eink_debug/' ---
+     | ........................................../sys/kernel/debug/eink_debug/clean_a2.testing. ⏎ .......pass. ⏎ ..........fail. ⏎ ............................AM...aeabi..C...C2.09..cortex-a55....A.... ⏎ .........................".$.&.*.D...fini_
+     | e_auto_global_refresh.threshold=%d,cur=%d./sys/kernel/debug/eink_debug/anti_flicker.[%s] CapsInfo [0x%x] hw_ver.[%s] CapsInfo [%d] dispSelfRefreshSupported.[%s] %s: unknown hw version: 0x%x.(%lu) drmModeAtomicCommit: .+%zu,pid:%d,f
+     | ........................................../sys/kernel/debug/eink_debug/clean_a2.testing. ⏎ .......pass. ⏎ ..........fail. ⏎ ..............................fini_array..text..got..note.android.ident..got.plt..rela.plt..bss..dynstr..eh_frame
+  --- context for 'display_policy' ---
+     | ce....4...........vendor_mtk_printk_prop....#...........xrz_display_policy_service....H...........proc_qtaguid_ctrl................hal_fastboot_service....,...........hidl_manager_hwservice..... ⏎ ..........data_vendor_AAObitTrue_file..
+  --- context for 'hwcomposer.mt6877' ---
+     | ibxml2.so.libimage_process.so.libdrm.so.libged.so.libc++.so.hwcomposer.mt6877.so.....APS2. ⏎ .#...............................................................................+................................................................
+     | ).......gps.default.so..*.......gralloc.default.so..+.......hwcomposer.mt6877.so,.......libSoftGatekeeper.so-.......lights.mt6877.so.... ...local_time.default.so.../.......memtrack.default.so.0...,.!.microarray.fingerprint.default.so...1
+  --- context for 'handwrittenservice' ---
+     | _prop....M...........vendor_mtk_wappush_prop................handwrittenservice....~...........hal_talkie_server....B...........scheduling_policy_service................update_engine_exec..... ⏎ ..........mtk_hal_memtrack_exec..... ⏎ .........
+     | table_service................system_lib_file.... ...........handwrittenservice_exec................mm_events_exec................stpbt_device....c...........media_userdir_file................hal_mtk_bgs_client....-...........hal_service_t
+  --- context for 'waveform' ---
+     | DEV] ioctl(DRM_IOCTL_MTK_LAYERING_RULE):787.[%s] set reload waveform flag.[%s] (%lu) DRM_IOCTL_MTK_MML_GEM_SUBMIT id:%x err:%d, %s.[%s] (%lu) DRM_IOCTL_MTK_CRTC_GETSFFENCE id:%x err:%d, %s.----------DRMDEV Color Matrix----------
+     | oy session with wrong state: %d->%d id:%x.vendor.xrz.update_waveform.[DEV] ioctl(DRM_IOCTL_MTK_GET_SESSION_INFO):1265.[DEV] ioctl(DRM_IOCTL_MTK_CRTC_GETFENCE):1820.DRM_IOCTL_GEM_CLOSE.DRM_IOCTL_MTK_GET_MSYNC_PARAMS.[%s] failed t
+
+######## system_b ########
+  eink_key                                 x1
+  EC103                                    x1
+  display_policy                           x19
+  disp_policy                              x2
+  handwrittenservice                       x20
+  xrz.framework                            x20
+  libxrz                                   x121
+  xrz_display_policy_service               x9
+  remoteSetLayerRefreshMode                x17
+  setLayerRefreshMode                      x11
+  eink_debug/                              x17
+  /sys/kernel/debug/eink                   x17
+  DRM_IOCTL_EINK                           x3
+  ro.product.vendor.                       x7
+  ro.product.odm.                          x5
+  ro.product.system.                       x13
+  <manifest version                        x13
+  target-level                             x11
+  <kernel version                          x119
+  ro.vendor.api_level                      x6
+  vendor.xrz.                              x162
+  DynamicSystemInstallationService         x3
+  gsid                                     x300
+  lm3630                                   x5
+  wacom                                    x17
+  parade                                   x48
+  emr                                      x649
+  ro.hardware.                             x63
+  waveform                                 x67
+  EPD                                      x386
+  colorfilter                              x4
+  color_filter                             x166
+  saturation                               x211
+  dither                                   x450
+  eink_                                    x201
+  ro.boot.                                 x258
+  avb_                                     x545
+  verity                                   x2476
+  B1051                                    x38
+  --- context for '<manifest version' ---
+     | .....................<?xml version="1.0" encoding="UTF-8"?> ⏎ <manifest version="1.0" type="framework"> ⏎     <!-- empty --> ⏎ </manifest> ⏎ ........................................................................................................
+     | .....................<?xml version="1.0" encoding="UTF-8"?> ⏎ <manifest version="1.0" type="device" /> ⏎ ........................................................................................................................................
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal max-level="5"> ⏎         <name>android.frameworks.stats</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.0</ver
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal> ⏎         <name>android.hidl.allocator</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.0</version> ⏎         <i
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal format="aidl"> ⏎         <name>android.system.keystore2</name> ⏎         <version>3</version> ⏎         <interface> ⏎             <nam
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal format="aidl"> ⏎         <name>android.system.net.netd</name> ⏎         <version>1</version> ⏎         <fqname>INetd/default</fqname
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal max-level="6"> ⏎         <name>android.system.suspend</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.0</versi
+     | ............................................................<manifest version="1.0" type="framework"> ⏎     <hal> ⏎         <name>android.hidl.manager</name> ⏎         <transport>hwbinder</transport> ⏎         <version>1.2</version> ⏎         <int
+  --- context for 'target-level' ---
+     | drc-heavy-compression..aac-drc-output-loudness..aac-encoded-target-level..aac-max-output-channel_count..aac-profile..aac-sbr-mode..aac-target-ref-level. ⏎ aacProfile..aag..ab..abandonAudioFocus..abandonAudioFocusForCall..abandonAudioF
+     | avaVMInitArgs.untranslated sf error code: %d.%s.aac-encoded-target-level.crypto-skip-byte-block.hdr-static-info.mpegh-reference-channel-layout.invalid event data size=%d.Error: AImage %p is deleted before returning buffer to AImageR
+     | t......./apex/com.android.media.swcodec/etc.....aac-encoded-target-level........debug.stagefright.ccodec........brand/product/device:...coded.bitrate...intra-period....coded.channel-count.....raw.pcm-encoding........low-latency.....
+     | HECK(storingMetadataInDecodedBuffers()) failed..aac-encoded-target-level.Ignoring unsupported ts-schema [%s].android._num-output-buffers.hdr-static-info.dataspace changed to %#x (R:%d(%s), P:%d(%s), M:%d(%s), T:%d(%s)) (R:%d(%s), S:
+     | at getPackageMinorVersion(). .Sepolicy version .Conflicting target-level: ., with conditionals.Kernel FCM Version is .getDeviceCompatibilityMatrix.Cannot get framework matrix for each FCM version for unknown error..matrices with FCM
+     | evice matrix file from device or from update package........target-level....sepolicy-version......../odm/etc/vintf/manifest/........ro.boot.product.vendor.sku....../vendor/etc/vintf/....../system/compatibility_matrix.xml........ro.b
+     | r key.%s.Unrecognized key; default to timestamp.aac-encoded-target-level.Ignoring unsupported ts-schema [%s].rangeOffset.asC2Buffer.debug.stagefright.ccodec.brand/product/device:.vendor-software.PipelineWatcher.[%s] pipelineFull 3 i
+     | 8"?> ⏎ .lastUpdateMillis. provideSharedApexLibs=".passthrough.target-level.Duplicated manifest.xmlfile entry .sepolicy-version.system.system/libvintf/HalManifest.cpp. ⏎     provided: .Wrong type; checking ..xml.]. Supported versions are
+  --- context for '<kernel version' ---
+     | ance>default</instance> ⏎         </interface> ⏎     </hal> ⏎     <kernel version="4.14.105" level="4"> ⏎         <config> ⏎             <key>CONFIG_ADVISE_SYSCALLS</key> ⏎             <value type="tristate">y</value> ⏎         </config> ⏎         <co
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_ARM</key> ⏎                 <value type="tristate">y</value> ⏎         
+     | pe="tristate">n</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_ARM</key> ⏎                 <value type="tristate">y</value> ⏎         
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_ARM64</key> ⏎                 <value type="tristate">y</value> ⏎       
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_X86</key> ⏎                 <value type="tristate">y</value> ⏎         
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_ACPI</key> ⏎                 <value type="tristate">n</value> ⏎        
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_OF</key> ⏎                 <value type="tristate">n</value> ⏎          
+     | pe="tristate">y</value> ⏎         </config> ⏎     </kernel> ⏎     <kernel version="4.14.105" level="4"> ⏎         <conditions> ⏎             <config> ⏎                 <key>CONFIG_MEMCG</key> ⏎                 <value type="tristate">n</value> ⏎       
+  --- context for 'ro.product.vendor.' ---
+     |  ApexConfig.........description() is deprecated; use Displayro.product.vendor.device...................$...........D.H.........L.P...(.....T...........,.....0...........X......... .....\.4...8...`.........d.<.......h...................l..
+     | pi_level          u:object_r:build_vendor_prop:s0 exact int ⏎ ro.product.vendor.brand             u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.device            u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendo
+     | nd             u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.device            u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.manufacturer      u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendo
+     | ice            u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.manufacturer      u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.model             u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendo
+     | ufacturer      u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.model             u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.name              u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendo
+     | el             u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor.name              u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendor_dlkm.brand        u:object_r:build_vendor_prop:s0 exact string ⏎ ro.product.vendo
+     | uct.name..ro.product.system.brand..ro.product.system.model..ro.product.vendor.%s..ro.product.vndk.version..ro.ril.wake_lock_timeout..ro.setupwizard.esim_cid_ignore..ro.sf.lcd_density..ro.soc.manufacturer..ro.soc.model..ro.system.build.fin
+  --- context for 'ro.product.odm.' ---
+     | performance_class   u:object_r:build_odm_prop:s0 exact int ⏎  ⏎ ro.product.odm.brand        u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.device       u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.manufacturer u:objec
+     | .odm.brand        u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.device       u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.manufacturer u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.model        u:objec
+     | .odm.device       u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.manufacturer u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.model        u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.name         u:objec
+     | .odm.manufacturer u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.model        u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.name         u:object_r:build_odm_prop:s0 exact string ⏎  ⏎ # All vendor_dlkm build props are 
+     | .odm.model        u:object_r:build_odm_prop:s0 exact string ⏎ ro.product.odm.name         u:object_r:build_odm_prop:s0 exact string ⏎  ⏎ # All vendor_dlkm build props are set by /vendor_dlkm/etc/build.prop ⏎ ro.vendor_dlkm.build.date          
+  --- context for 'ro.product.system.' ---
+     |  this partition image. ⏎ #################################### ⏎ ro.product.system.brand=alps ⏎ ro.product.system.device=sys_mssi_64_cn_armv82 ⏎ ro.product.system.manufacturer=alps ⏎ ro.product.system.model=sys_mssi_64_cn_armv82 ⏎ ro.product.system.na
+     | ############################## ⏎ ro.product.system.brand=alps ⏎ ro.product.system.device=sys_mssi_64_cn_armv82 ⏎ ro.product.system.manufacturer=alps ⏎ ro.product.system.model=sys_mssi_64_cn_armv82 ⏎ ro.product.system.name=sys_mssi_64_cn_armv82 ⏎ ro.s
+     | m.brand=alps ⏎ ro.product.system.device=sys_mssi_64_cn_armv82 ⏎ ro.product.system.manufacturer=alps ⏎ ro.product.system.model=sys_mssi_64_cn_armv82 ⏎ ro.product.system.name=sys_mssi_64_cn_armv82 ⏎ ro.system.product.cpu.abilist=arm64-v8a,armeabi-v7a
+     | e=sys_mssi_64_cn_armv82 ⏎ ro.product.system.manufacturer=alps ⏎ ro.product.system.model=sys_mssi_64_cn_armv82 ⏎ ro.product.system.name=sys_mssi_64_cn_armv82 ⏎ ro.system.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.system.product.cpu.abili
+     | facturer=alps ⏎ ro.product.system.model=sys_mssi_64_cn_armv82 ⏎ ro.product.system.name=sys_mssi_64_cn_armv82 ⏎ ro.system.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi ⏎ ro.system.product.cpu.abilist32=armeabi-v7a,armeabi ⏎ ro.system.product.cpu
+     | ax    u:object_r:build_prop:s0 exact enum 4096 16384 65536 ⏎  ⏎ ro.product.system.brand        u:object_r:build_prop:s0 exact string ⏎ ro.product.system.device       u:object_r:build_prop:s0 exact string ⏎ ro.product.system.manufacturer u:object_
+     | t.system.brand        u:object_r:build_prop:s0 exact string ⏎ ro.product.system.device       u:object_r:build_prop:s0 exact string ⏎ ro.product.system.manufacturer u:object_r:build_prop:s0 exact string ⏎ ro.product.system.model        u:object_
+     | t.system.device       u:object_r:build_prop:s0 exact string ⏎ ro.product.system.manufacturer u:object_r:build_prop:s0 exact string ⏎ ro.product.system.model        u:object_r:build_prop:s0 exact string ⏎ ro.product.system.name         u:object_
+  --- context for 'ro.vendor.api_level' ---
+     | _dlkm./default.prop. and .Setting product property .': err=.ro.vendor.api_level.ro.boot.revision.PropertyServiceThread start pid:.WPPFfd.ro.build.shutdown.watchdog.timeout.ms after receiving .sideload-auto-reboot.cold.androidboot.init_fata
+     | d.api_level       u:object_r:build_vendor_prop:s0 exact int ⏎ ro.vendor.api_level      u:object_r:build_vendor_prop:s0 exact int ⏎  ⏎ # Boot image build props set by /{second_stage_resources/,}boot/etc/build.prop ⏎ ro.bootimage.build.date         
+     | flinger.has_wide_color_display..ro.system_user_home_needed..ro.vendor.api_level..ro.vendor.mtk_wfd_support..ro.vold.primary_physical..ro.zram.first_wb_delay_mins..ro.zram.mark_idle_delay_mins..ro.zram.periodic_wb_delay_hours..role..role:..
+     | Address("%s").eglGetSystemTimeNVImpl.GPU Frames Outstanding.ro.vendor.api_level.GLES.loaded %s.unflatten: bad magic number: %u.EGL_BAD_ATTRIBUTE.EGL_BAD_CURRENT_SURFACE.EGL_KHR_gl_colorspace.glAlphaFuncxOES.glBindFragDataLocationEXT.glBind
+  --- context for 'eink_key' ---
+     | ....apexU.......app.........bin....... ⏎ .build.prop..........eink_key........etc.k.......fonts...M.......framework...........lib.........lib64...k.......media...o..... ⏎ .preinstall..........priv-app........product.........ro.prop.
+  --- context for 'EC103' ---
+     | ..........................................470_VSF009_HM7F01_EC103KH2C1_SC1452-KCD_TC.awf 2023.05.11.13:51:52V]SZLKQ.................................................................!&+0......................)..P.....#...(.....
+  --- context for '/sys/kernel/debug/eink' ---
+     | est/calibrate.+/sys/kernel/debug/0-0025/mfg_test/calibrate.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:.....
+     | t/calibrate.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../......:.....0..0. ⏎ . ⏎ ..0 pol
+     | _debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../......:.....0..0. ⏎ . ⏎ ..0 polynomial..0.0..0.00..00..000..0000..
+     | cpp::IHandwrittenService::unRegisterClient::cppServer..Q2='^/sys/kernel/debug/eink_debug/clean_a2..........................................................f.....v.......m.........#...D.S.F....;.........?..0....?..L....A.......C......\C......|
+     | hown system system /sys/power/normal_standby ⏎     chmod 0666 /sys/kernel/debug/eink_debug/clean_a2 ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on po
+     | d 0666 /sys/kernel/debug/eink_debug/clean_a2 ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on post-fs-data ⏎ .mkdir /data/system/devices 0777 system sy
+     | 66 /sys/kernel/debug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on post-fs-data ⏎ .mkdir /data/system/devices 0777 system system ⏎ .mkdir /data/system/devices/keylayout 0777 system sy
+     | -0010/t1000_vcom_vol.$/sys/class/misc/mx25u_dev/mx25u/info.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform.&/system_ext/framework/mediatek-cta.jar.,/system_ext/framework
+  --- context for 'eink_debug/' ---
+     | s/kernel/debug/0-0025/mfg_test/calibrate.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../......
+     | kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../......:.....0..0. ⏎ . ⏎ ..0 polynomial
+     | eform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../......:.....0..0. ⏎ . ⏎ ..0 polynomial..0.0..0.00..00..000..0000..0000-. ⏎ 
+     | ervice::unRegisterClient::cppServer..Q2='^/sys/kernel/debug/eink_debug/clean_a2..........................................................f.....v.......m.........#...D.S.F....;.........?..0....?..L....A.......C......\C......|C......
+     |  /sys/power/normal_standby ⏎     chmod 0666 /sys/kernel/debug/eink_debug/clean_a2 ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on post-fs-d
+     | /debug/eink_debug/clean_a2 ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on post-fs-data ⏎ .mkdir /data/system/devices 0777 system system ⏎ .m
+     | ug/eink_debug/anti_flicker ⏎     chmod 0666 /sys/kernel/debug/eink_debug/anti_alias ⏎  ⏎ #on late-fs ⏎  ⏎ #on post-fs ⏎  ⏎ on post-fs-data ⏎ .mkdir /data/system/devices 0777 system system ⏎ .mkdir /data/system/devices/keylayout 0777 system system ⏎ . ⏎ 
+     | ol.$/sys/class/misc/mx25u_dev/mx25u/info.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform.&/system_ext/framework/mediatek-cta.jar.,/system_ext/framework/mediat
+  --- context for 'display_policy' ---
+     | TopMenuPop..xrz_close_camera..xrz_current_note_version..xrz_display_policy_service..xrz_educate_sp..xrz_inknote_launcher..xrz_menu_tool_land_layout..xrz_menu_tool_layout..xrz_notice_clicktime..xrz_notice_data..xrz_notice_firstdata..xr
+     | endor.xrz.sytlus_type=0 ⏎ ro.sf.lcd_density=300 ⏎ ro.vendor.xrz.display_policy_version=6 ⏎ ro.vendor.xrz.pen_type=1 ⏎ ro.vendor.xrz.support_split_screen=1 ⏎ ro.vendor.xrz.support_voice_conversion=1 ⏎ ro.vendor.xrz.support_login=1 ⏎ ro.vendor.xrz.su
+     | y-image-objects.....$...dirty-image-objects.fsv_meta........display_policy..........displayconfig...........duraspeed...........event-log-tags..........fonts.xml...........fs_config_dirs..........fs_config_files.........fstab.postinst
+     | xmlStyle..xmode..xorigin..xpos..xrz_app_freeze_service..xrz_display_policy_service..xrz_split_screen_service..xrz_system_proxy_service..xs..xxhdpi..xxxhdpi..xy..xy must not be null..xyPrimaries..xyWhitePoint..xyY..xyYToXyz..xyz..y.%y 
+     | isteners must be added beforethe animation..-Error: get xrz_display_policy_service failed!.aError: widget's RemoteViewsFactory returns more view types than  indicated by getViewTypeCount() . ⏎ ErrorPopup..EtsiTs103097Module.java..Eval s
+     | h_SHAKE256..xoff..xoffset..xor..xorPad..xpos..xppe..xr..xrz_display_policy_service..xs..xsLen..xsOff..xspec..xstep..xvel..xx..xx06..xx07..xx08..xx09..xx10..xx11..xx12..xx13..xx14..xx15..xx16..xx17..xx18..xx19..xx20..xx21..xx22..xx23..
+     | IXrzSystemProxy..xrzSystemUtil..xrz_app_freeze_service..xrz_display_policy_service..xrz_split_screen_service..xrz_system_proxy_service..xvel..xx..y..yDiff..yOffset..yPos..ySpeed..yTargetVelocity..yVel..yVelocity.Qyou must have a patte
+     | psk..xauthrsa..xcbc(aes)..xdpi..xrz_app_freeze_service..xrz_display_policy_service..xrz_split_screen_service..xrz_system_proxy_service..xrzebook..y..yDpi..y_offset..y_scale..y_xmix..ydpi..yes..yesterdayStats. ⏎ yyyy-MM-dd..yyyy-MM-dd HH
+  --- context for 'handwrittenservice' ---
+     | .....&.......selinux.............................u:object_r:handwrittenservice_exec:s0.............\I..\I..\I....................toybox.................................................................................. .................\I.
+     | ....gsi_tool........gsid........gunzip..........gzip........handwrittenservice..........head........heapprofd...........hid.........hostname........hw..........hwclock.........hwservicemanager........i2cdetect...........i2cdump.........i2
+     | ay ⏎ .get display color type failed!err=%d,type=%d.wait_vsync.handwrittenservice.sched_get_priority_max() failed..Blender create failed!.onCommit.vendor.xrz.input_predict_disabled.   Layout=(%d,%d,%d,%d),blend=%s,recommit=%s,predict=%s,over
+     | keeperd.rc..........gpuservice.rc...........gsid.rc..... ...handwrittenservice.rc...........heapprofd.rc........hw..........hwservicemanager.rc....... ⏎ .idmap2d.rc..........incidentd.rc........init.eink.rc........installd.rc.........keysto
+     | ....................................................service handwrittenservice /system/bin/handwrittenservice -p /dev/input/event0 ⏎     class late_start ⏎ ......................................................................................
+     | .....................service handwrittenservice /system/bin/handwrittenservice -p /dev/input/event0 ⏎     class late_start ⏎ .....................................................................................................................
+     | ttribute permission_checker_service_34_0) ⏎ (typeattributeset handwrittenservice_34_0 (handwrittenservice)) ⏎ (expandtypeattribute (handwrittenservice_34_0) true) ⏎ (typeattribute handwrittenservice_34_0) ⏎ (typeattributeset scheduling_policy_ser
+     | er_service_34_0) ⏎ (typeattributeset handwrittenservice_34_0 (handwrittenservice)) ⏎ (expandtypeattribute (handwrittenservice_34_0) true) ⏎ (typeattribute handwrittenservice_34_0) ⏎ (typeattributeset scheduling_policy_service_34_0 (scheduling_pol
+  --- context for 'xrz.framework' ---
+     | 2..x3..x509..xDiff..xTargetVelocity..xVel..xVelocity..xpos.(xrz.framework.manager.IAppFreezeListener.'xrz.framework.manager.IAppFreezeManager.+xrz.framework.manager.IDisplayPolicyManager.&xrz.framework.manager.IGestureListener.0xrz.f
+     | .xVelocity..xpos.(xrz.framework.manager.IAppFreezeListener.'xrz.framework.manager.IAppFreezeManager.+xrz.framework.manager.IDisplayPolicyManager.&xrz.framework.manager.IGestureListener.0xrz.framework.manager.IGlobalHandwritingListene
+     | AppFreezeListener.'xrz.framework.manager.IAppFreezeManager.+xrz.framework.manager.IDisplayPolicyManager.&xrz.framework.manager.IGestureListener.0xrz.framework.manager.IGlobalHandwritingListener.!xrz.framework.manager.ISSCallBack.)xrz
+     | FreezeManager.+xrz.framework.manager.IDisplayPolicyManager.&xrz.framework.manager.IGestureListener.0xrz.framework.manager.IGlobalHandwritingListener.!xrz.framework.manager.ISSCallBack.)xrz.framework.manager.ISplitScreenManager.%xrz.f
+     | splayPolicyManager.&xrz.framework.manager.IGestureListener.0xrz.framework.manager.IGlobalHandwritingListener.!xrz.framework.manager.ISSCallBack.)xrz.framework.manager.ISplitScreenManager.%xrz.framework.manager.IXrzSystemProxy..xrzSys
+     | Listener.0xrz.framework.manager.IGlobalHandwritingListener.!xrz.framework.manager.ISSCallBack.)xrz.framework.manager.ISplitScreenManager.%xrz.framework.manager.IXrzSystemProxy..xrzSystemUtil..xrz_app_freeze_service..xrz_display_polic
+     | obalHandwritingListener.!xrz.framework.manager.ISSCallBack.)xrz.framework.manager.ISplitScreenManager.%xrz.framework.manager.IXrzSystemProxy..xrzSystemUtil..xrz_app_freeze_service..xrz_display_policy_service..xrz_split_screen_service
+     | ger.ISSCallBack.)xrz.framework.manager.ISplitScreenManager.%xrz.framework.manager.IXrzSystemProxy..xrzSystemUtil..xrz_app_freeze_service..xrz_display_policy_service..xrz_split_screen_service..xrz_system_proxy_service..xvel..xx..y..yD
+  --- context for 'libxrz' ---
+     | ................PK........!.!....a.x...x....l.lib/arm64-v8a/libxrzEncrypt.so.............................................................................................................ELF............................@.......Pr
+     | o._edata.__bss_start.__bss_start__.__bss_end__.__end__._end.libxrzEncrypt.so.LIBC.................................................................................................................................................
+     | PK..........!.!....a.x...x................X...lib/arm64-v8a/libxrzEncrypt.soPK..........!.!..M.........................8..DebugProbesKt.binPK..........!.!....!........3..............;..META-INF/androidx.activity_activity-compo
+     | ................PK........!.!..Y$h.Y...Y......lib/arm64-v8a/libxrzEncrypt.soUT....................................................................................................................................................
+     | ..............PK........!.!.th.j 1.. 1.. .f.lib/armeabi-v7a/libxrzEncrypt.soUT....................................................................................................................................................
+     | .................. ⏎ ...............__cxa_atexit.LIBC.libc.so.libxrzEncrypt.so.__cxa_finalize.Java_com_xrz_asr_MainActivity_stringFromJNI.Java_com_xrz_asr_util_XrzCipher_getDecrtyptData.Java_com_xrz_asr_util_XrzCipher_getEncrtyp
+     | PK..........!.!..Y$h.Y...Y.................O..lib/arm64-v8a/libxrzEncrypt.soUT.......PK..........!.!.....0...0...".................lib/armeabi-v7a/libBugly_Native.soUT.......PK..........!.!..B...>...>................0x..lib/ar
+     | ..........!.!.th.j 1.. 1.. .............\. .lib/armeabi-v7a/libxrzEncrypt.soUT.......PK..........!.!.........f................. ...assets/bookmall_cate.txtPK..........!.!..e....v...................*...assets/data.mdbPK........
+  --- context for 'lm3630' ---
+     | ....on init ⏎     chmod 0666 /dev/fpsdev0 ⏎ # define device for lm3630a ⏎     chmod 0666 /dev/lm3630a...................................................................................................................................
+     | dev/fpsdev0 ⏎ # define device for lm3630a ⏎     chmod 0666 /dev/lm3630a...............................................................................................................................................................
+     | BT_WS8100 ⏎     chmod 0666 /dev/bt_ws8100 ⏎     chmod 0666 /dev/lm3630a ⏎ . ⏎ #on late-init ⏎  ⏎ #on charger ⏎  ⏎ #on early-fs ⏎  ⏎ on fs ⏎     chmod 0666 /sys/power/normal_standby ⏎     chown system system /sys/power/normal_standby ⏎     chmod 0666 /s
+     | e 0 to /sys/bus/platform/devices/quectel/quectel_mode ⏎ ./dev/lm3630a.android_hwebook_Xrzebook_SetScreenState: %d ⏎ .Xrzebook-JNI.(I)Ljava/lang/String;.nativeFillData.nativeEnableRT9428WakeIrq.yds SetWvMode lastWvMode = %d./sys/cl
+  --- context for 'waveform' ---
+     | ST_NEXTGROUP.KEY_RIGHT_DOWN.BTN_TRIGGER_HAPPY36., periodic={waveform=%u, period=%u, magnitude=%d, offset=%d, phase=%u.FALLOC_FL_COLLAPSE_RANGE.FAN_MARK_ONLYDIR.F_NOTIFY.F_EXLCK.F_SEAL_SHRINK.FIEMAP_EXTENT_SHARED.verbose.kvm.LOCK
+     | Attempting to read HTK features from unsupported type (e.g. waveform or discrete features...HTK header: Num Samples: ...; Sample period: ...; Sample size: .; Sample kind: .Could not read data from HTK feature file ..Could not re
+     | frequency....Waveform data sample frequency (must match the waveform file, if specified there)...frame-length....Frame length in milliseconds....frame-shift.Frame shift in milliseconds.preemphasis-coefficient.Coefficient for use
+     | signal preemphasis...remove-dc-offset....Subtract mean from waveform on each frame...dither..Dithering constant (0.0 means no dither)....window-type.Type of window ("hamming"|"hanning"|"povey"|"rectangular")..round-to-power-of-t
+     | Attempting to read HTK features from unsupported type (e.g. waveform or discrete features..HTK header: Num Samples: .; Sample period: .; Sample size: .; Sample kind: .Could not read data from HTK feature file .Vec AddVec 87.thir
+     | 25/mfg_test/calibrate.-/sys/kernel/debug/eink_debug/machine_waveform.!/sys/kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../...
+     | /kernel/debug/eink_debug/vcom.%/sys/kernel/debug/eink_debug/waveform../............:../......:...../......:...../............:...../............:...../......:.....0..0. ⏎ . ⏎ ..0 polynomial..0.0..0.00..00..000..0000..0000-. ⏎ 0000-00-
+     | f_vignette.ff_vf_vmafmotion.ff_vf_vstack.ff_vf_w3fdif.ff_vf_waveform.ff_vf_weave.ff_vf_xbr.ff_vf_xcorrelate.ff_vf_xfade.ff_vf_xmedian.ff_vf_xstack.ff_vf_yadif.ff_vf_yaepblur.ff_vf_zoompan.ff_vsink_buffer.ff_vsink_nullsink.ff_vsr
+  --- context for 'B1051' ---
+     | inability to play the recording file!...FAQs...FCC ID:2A8EM-B1051...Factory reset...Fail...Failed to get sequence number.66Failed to read file list, please refresh and try again...Failed to recognize text...Faroese...Farsi/..
+     | b/B1 MAX................pdf.33https://bj.bcebos.com/bos-pub/B1051 User Manual.pdf.,4https://bj.bcebos.com/bos-pub/B1051 .............pdf.44https://bj.bcebos.com/bos-pub/B1051C User Manual.pdf.-5https://bj.bcebos.com/bos-pub/B
+     | s-pub/B1051 User Manual.pdf.,4https://bj.bcebos.com/bos-pub/B1051 .............pdf.44https://bj.bcebos.com/bos-pub/B1051C User Manual.pdf.-5https://bj.bcebos.com/bos-pub/B1051C .............pdf.2<https://bj.bcebos.com/bos-pub
+     | -pub/B1051 .............pdf.44https://bj.bcebos.com/bos-pub/B1051C User Manual.pdf.-5https://bj.bcebos.com/bos-pub/B1051C .............pdf.2<https://bj.bcebos.com/bos-pub/B1MAX COLOR................pdf.00https://bj.bcebos.com
+     | -pub/B1051C User Manual.pdf.-5https://bj.bcebos.com/bos-pub/B1051C .............pdf.2<https://bj.bcebos.com/bos-pub/B1MAX COLOR................pdf.00https://bj.bcebos.com/bos-pub/B7 User Manual.pdf.)1https://bj.bcebos.com/bos
+     | .............................../AINote............../Model: B1051............../Version...Color ⏎  .......................................... ⏎  Bigme Cloud Literacy Technology Co., Ltd. ⏎  ............/Made in China...............
+     | ..B0_FLAG_RSV1..B0_FLAG_RSV2..B0_FLAG_RSV3..B0_MASK_OPCODE..B1051..B1Sn.java..B1_FLAG_MASK..B1_MASK_LENGTH..B:..BA.(BACKGROUND_THREAD_KEEP_ALIVE_DURATION_MS..BADGE_ICON_LARGE..BADGE_ICON_NONE..BADGE_ICON_SMALL..BALOAD..BARCOD
+     | pper..AvdcInflateDelegate..AwbState..AwtCodec.java..B..B10..B1051..B64.java. ⏎ B64T_ARRAY..B64T_STRING..B:..BACHER..BACK..BACKGROUND_RES_IDS..BACKOFF_DURATION_MS..BACKOFF_RATIO..BADGE_ICON_LARGE..BADGE_ICON_NONE..BADGE_ICON_SMA
+
+######## product_b ########
+  ro.vendor.api_level                      x1
+  gsid                                     x35
+  parade                                   x18
+  emr                                      x143
+  ro.hardware.                             x6
+  EPD                                      x20
+  colorfilter                              x12
+  color_filter                             x15
+  saturation                               x60
+  dither                                   x8
+  ro.boot.                                 x25
+  verity                                   x79
+  B1051                                    x1
+  --- context for 'ro.vendor.api_level' ---
+     | hardware.revision..ro.product.first_api_level..ro.revision..ro.vendor.api_level..roaming_state..round..routine-hygiene..rp..rq..rr..rs..rt..ru..run..runOnUiThread..runOnWidgetCoroutine.launch(..running..rv..rw..rx..ry..rz..s..sA..sB..sC..s
+  --- context for 'B1051' ---
+     | B7C574D0BDECF8A22E6524775F98CDEBDCB.*020A601907B8C953CA1481EB10512F78744A3205FD.>020ffa963cdca8816ccc33b8642bedf905c3d358573d3f27fbbd3b3cb9aaaf.^021085E2755381DCCCE3C1557AFA10C2F0C0C2825646C5B34A394CBCFA8BC16B22E7E789E927BE21
+
+######## system_ext_b ########
+  eink_key                                 x1
+  display_policy                           x8
+  handwrittenservice                       x94
+  xrz_display_policy_service               x8
+  /sys/kernel/debug/eink                   x1
+  ro.product.vendor.                       x3
+  <manifest version                        x2
+  gsid                                     x37
+  lm3630                                   x1
+  wacom                                    x1
+  parade                                   x12
+  emr                                      x219
+  ro.hardware.                             x22
+  EPD                                      x83
+  color_filter                             x22
+  saturation                               x43
+  dither                                   x21
+  /system/eink                             x1
+  eink_                                    x2
+  ro.boot.                                 x31
+  avb_                                     x1
+  verity                                   x865
+  --- context for '<manifest version' ---
+     | ............................................................<manifest version="1.0" type="framework">. ⏎ .<hal format="aidl">. ⏎         <name>vendor.mediatek.hardware.mbrainj</name>. ⏎ ..<version>1</version>. ⏎         <fqname>IMBrainJava/defau
+     | ystem/libhidl/vintfdata/system_ext_manifest.default.xml ⏎ --> ⏎ <manifest version="7.0" type="framework"> ⏎     <vendor-ndk> ⏎         <version>34</version> ⏎     </vendor-ndk> ⏎     <vendor-ndk> ⏎         <version>30</version> ⏎     </vendor-ndk> ⏎     <
+  --- context for 'ro.product.vendor.' ---
+     | m/twoway.rs.........description() is deprecated; use Displayro.product.vendor.device.........."&*-03...................................... ⏎ ....................................................................................... ...!..."...
+     | indMountdst.........description() is deprecated; use Displayro.product.vendor.device...................$...........D.H.........L.P...(.....T...........,.....0...........X......... .....\.4...8...`.........d.<.......h...................l..
+     | m/twoway.rs.........description() is deprecated; use Displayro.product.vendor.deviceexternal/rust/crates/os_str_bytes/src/pattern.rsprebuilts/rust/linux-x86/1.68.0/src/stdlibs/library/panic_abort/src/android.rs....attempt to add with over
+  --- context for 'eink_key' ---
+     | :aal_exec:s0 ⏎ /system/bin/osi u:object_r:osi_exec:s0 ⏎ /system/eink_key                            u:object_r:xrz_system_file:s0 ⏎ /system/bin/dpci u:object_r:dpci_exec:s0 ⏎ /system/etc/g_c001                          u:object_r:xrz_sy
+  --- context for '/sys/kernel/debug/eink' ---
+     | ystem_de/mdfilter(/.*)? u:object_r:mddb_filter_data_file:s0 ⏎ /sys/kernel/debug/eink_debug(/.*)?          u:object_r:xrz_debugfs:s0 ⏎ /system/bin/start_uart2serport.sh           u:object_r:uart2serport_exec:s0 ⏎ /sys/devices/platform/11e00000.i2c0/
+  --- context for 'display_policy' ---
+     | _service mtk_vowbridge_service xrz_split_screen_service xrz_display_policy_service xrz_app_freeze_service xrz_system_proxy_service freeme_pfw_service common_api_service installer_system_update_service )) ⏎ (typeattributeset app_api_serv
+     | gt_service handwritten_service xrz_split_screen_service xrz_display_policy_service xrz_app_freeze_service xrz_system_proxy_service teei_ifaa_service common_api_service installer_system_update_service )) ⏎ (typeattributeset ephemeral_app
+     | ng_service handwritten_service xrz_split_screen_service xrz_display_policy_service xrz_app_freeze_service xrz_system_proxy_service )) ⏎ (typeattributeset service_manager_type (aidl_lazy_test_service apc_service apex_service artd_service
+     | sf_service handwritten_service xrz_split_screen_service xrz_display_policy_service xrz_app_freeze_service xrz_system_proxy_service teei_ifaa_service freeme_pfw_service dpci_service common_api_service installer_system_update_service ))
+     | ice) ⏎ (roletype object_r xrz_split_screen_service) ⏎ (type xrz_display_policy_service) ⏎ (roletype object_r xrz_display_policy_service) ⏎ (type xrz_app_freeze_service) ⏎ (roletype object_r xrz_app_freeze_service) ⏎ (type xrz_system_proxy_service
+     | e) ⏎ (type xrz_display_policy_service) ⏎ (roletype object_r xrz_display_policy_service) ⏎ (type xrz_app_freeze_service) ⏎ (roletype object_r xrz_app_freeze_service) ⏎ (type xrz_system_proxy_service) ⏎ (roletype object_r xrz_system_proxy_service) ⏎ 
+     |                       u:object_r:handwritten_service:s0 ⏎ xrz_display_policy_service                  u:object_r:xrz_display_policy_service:s0 ⏎ xrz_split_screen_service                    u:object_r:xrz_split_screen_service:s0 ⏎ xrz_app_fr
+     |  ⏎ xrz_display_policy_service                  u:object_r:xrz_display_policy_service:s0 ⏎ xrz_split_screen_service                    u:object_r:xrz_split_screen_service:s0 ⏎ xrz_app_freeze_service                      u:object_r:xrz_app_fr
+  --- context for 'handwrittenservice' ---
+     | go_updater u:object_r:boot_logo_updater_exec:s0 ⏎ /system/bin/handwrittenservice              u:object_r:handwrittenservice_exec:s0 ⏎ /dev/socket/usap_pool_tertiary u:object_r:zygote_socket:s0 ⏎ /system/bin/modemdbfilter_client u:object_r:modem
+     | c:s0 ⏎ /system/bin/handwrittenservice              u:object_r:handwrittenservice_exec:s0 ⏎ /dev/socket/usap_pool_tertiary u:object_r:zygote_socket:s0 ⏎ /system/bin/modemdbfilter_client u:object_r:modemdbfilter_client_exec:s0 ⏎ /sys/class/pen_swit
+     | eperd gmscore_app gpuservice hal_graphics_allocator_default handwrittenservice healthd heapprofd hwservicemanager idmap incident incident_helper incidentd init inputflinger installd isolated_app isolated_compute_app kernel keystore kpoc_c
+     | rservice_exec thermald_exec usp_service_exec vtservice_exec handwrittenservice_exec uart2serport_exec xrzStart_exec aee_core_forwarder_exec connsyslogger_exec emdlogger_exec loghidlsysservice_exec mdlogger_exec mobile_log_d_exec modemdbfi
+     | rservice_exec thermald_exec usp_service_exec vtservice_exec handwrittenservice_exec aee_core_forwarder_exec connsyslogger_exec emdlogger_exec loghidlsysservice_exec mdlogger_exec mobile_log_d_exec modemdbfilter_client_exec netdiag_exec dp
+     | client_endpoint_socket pdx_bufferhub_client_endpoint_socket handwrittenservice heapprofd hwservicemanager incidentd init installd kernel keystore llkd lmkd logd mdnsd mediadrmserver mediaextractor mediaserver netd network_stack nfc perfor
+     |  dhcp dnsmasq drmserver dumpstate ephemeral_app gmscore_app handwrittenservice mdnsd mediadrmserver mediaprovider mediaserver mtp netd network_stack nfc platform_app ppp priv_app racoon radio rkpdapp runas_app shell system_app system_serv
+     | er cameraserver credstore drmserver evsmanagerd gatekeeperd handwrittenservice idmap inputflinger keystore logd mediadrmserver mediaextractor mediametrics mediaserver mediatranscoding nfc radio secure_element surfaceflinger system_app sys
+  --- context for 'lm3630' ---
+     | ject_r:tll_device:s0 ⏎ /dev/hbt u:object_r:hbt_device:s0 ⏎ /dev/lm3630a..                        u:object_r:xrz_device:s0 ⏎ /dev/ubi_ctrl           u:object_r:mtd_device:s0 ⏎ /dev/bt_ws8100                              u:object_r:xrz_
+  --- context for '/system/eink' ---
+     | object_r:aal_exec:s0 ⏎ /system/bin/osi u:object_r:osi_exec:s0 ⏎ /system/eink_key                            u:object_r:xrz_system_file:s0 ⏎ /system/bin/dpci u:object_r:dpci_exec:s0 ⏎ /system/etc/g_c001                          u:object_r:xr

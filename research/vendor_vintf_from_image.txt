@@ -1,0 +1,54 @@
+==== vendor manifest ==== <manifest version="4.0" type="device" target-level="5">
+    <hal format="hidl">
+ len 17882
+  hidl  android.hardware.audio                                  v=['7.0'] fq=['@7.0::IDevicesFactory/default'] hwbinder
+  hidl  android.hardware.audio.effect                           v=['7.0'] fq=['@7.0::IEffectsFactory/default'] hwbinder
+  hidl  android.hardware.bluetooth                              v=['1.1'] fq=['@1.1::IBluetoothHci/default'] hwbinder
+  hidl  android.hardware.bluetooth.audio                        v=['2.1'] fq=['@2.1::IBluetoothAudioProvidersFactory/default'] hwbinder
+  hidl  android.hardware.boot                                   v=['1.0'] fq=['@1.0::IBootControl/default'] hwbinder
+  hidl  android.hardware.camera.provider                        v=['2.6'] fq=['@2.6::ICameraProvider/internal/0'] hwbinder
+  hidl  android.hardware.gatekeeper                             v=['1.0'] fq=['@1.0::IGatekeeper/default'] hwbinder
+  hidl  android.hardware.graphics.allocator                     v=['4.0'] fq=['@4.0::IAllocator/default'] hwbinder
+  hidl  android.hardware.graphics.composer                      v=['2.1'] fq=['@2.1::IComposer/default'] hwbinder
+  hidl  android.hardware.graphics.mapper                        v=['4.0'] fq=['@4.0::IMapper/default'] passthrough
+  hidl  android.hardware.media.omx                              v=['1.0'] fq=['@1.0::IOmx/default', '@1.0::IOmxStore/default'] hwbinder
+  hidl  android.hardware.memtrack                               v=['1.0'] fq=['@1.0::IMemtrack/default'] hwbinder
+  hidl  android.hardware.radio                                  v=['1.2'] fq=['@1.2::IRadio/em1', '@1.2::IRadio/em2', '@1.2::IRadio/imsAospSlot1'] hwbinder
+  hidl  android.hardware.radio.config                           v=['1.3'] fq=['@1.3::IRadioConfig/default'] hwbinder
+  hidl  android.hardware.renderscript                           v=['1.0'] fq=['@1.0::IDevice/default'] passthrough
+  hidl  android.hardware.secure_element                         v=['1.2'] fq=['@1.2::ISecureElement/SIM1', '@1.2::ISecureElement/SIM2'] hwbinder
+  hidl  android.hardware.sensors                                v=['2.0'] fq=['@2.0::ISensors/default'] hwbinder
+  hidl  android.hardware.soundtrigger                           v=['2.3'] fq=['@2.3::ISoundTriggerHw/default'] hwbinder
+  hidl  android.hardware.tetheroffload.config                   v=['1.0'] fq=['@1.0::IOffloadConfig/default'] hwbinder
+  hidl  android.hardware.tetheroffload.control                  v=['1.1'] fq=['@1.1::IOffloadControl/default'] hwbinder
+  hidl  android.hardware.thermal                                v=['1.0', '2.0'] fq=['@1.0::IThermal/default', '@2.0::IThermal/default'] hwbinder
+  hidl  vendor.mediatek.hardware.aee                            v=['1.1'] fq=['@1.1::IAee/AEE', '@1.1::IAee/default'] hwbinder
+  hidl  vendor.mediatek.hardware.apmonitor                      v=['2.0'] fq=['@2.0::IApmService/apm_hidl_service'] hwbinder
+  hidl  vendor.mediatek.hardware.apuware.apusys                 v=['2.1'] fq=['@2.1::INeuronApusys/default'] hwbinder
+  hidl  vendor.mediatek.hardware.apuware.utils                  v=['2.0'] fq=['@2.0::IApuwareUtils/default'] hwbinder
+  hidl  vendor.mediatek.hardware.apuware.xrp                    v=['2.0'] fq=['@2.0::INeuronXrp/default'] hwbinder
+  hidl  vendor.mediatek.hardware.atci                           v=['1.0'] fq=['@1.0::IAtcid/default'] hwbinder
+  hidl  vendor.mediatek.hardware.bluetooth.audio                v=['2.2'] fq=['@2.2::IBluetoothAudioProvidersFactory/default'] hwbinder
+  hidl  vendor.mediatek.hardware.camera.atms                    v=['1.0'] fq=['@1.0::IATMs/default'] hwbinder
+  hidl  vendor.mediatek.hardware.camera.isphal                  v=['1.0'] fq=['@1.0::IISPModule/internal/0'] hwbinder
+  hidl  vendor.mediatek.hardware.composer_ext                   v=['1.0'] fq=['@1.0::IComposerExt/default'] hwbinder
+  hidl  vendor.mediatek.hardware.dmc                            v=['1.2'] fq=['@1.2::IDmcService/dmc_hidl_service'] hwbinder
+  hidl  vendor.mediatek.hardware.engineermode                   v=['1.3'] fq=['@1.3::IEmd/EmHidlServer'] hwbinder
+  hidl  vendor.mediatek.hardware.log                            v=['1.0'] fq=['@1.0::ILog/ATMWiFiHidlServer', '@1.0::ILog/ConnsysFWHidlServer', '@1.0::ILog/LoggerHidlServer'] hwbinder
+  hidl  vendor.mediatek.hardware.mdmonitor                      v=['1.0'] fq=['@1.0::IMDMonitorService/default'] hwbinder
+  hidl  vendor.mediatek.hardware.mmagent                        v=['1.1'] fq=['@1.1::IMMAgent/default'] hwbinder
+  hidl  vendor.mediatek.hardware.mms                            v=['1.6'] fq=['@1.6::IMms/default'] hwbinder
+  hidl  vendor.mediatek.hardware.mtkpower                       v=['1.2'] fq=['@1.2::IMtkPerf/default', '@1.2::IMtkPower/default'] hwbinder
+  hidl  vendor.mediatek.hardware.mtkradioex                     v=['3.0'] fq=['@3.0::IMtkRadioEx/imsSlot1', '@3.0::IMtkRadioEx/imsSlot2', '@3.0::IMtkRadioEx/mtkAssist1'] hwbinder
+  hidl  vendor.mediatek.hardware.netdagent                      v=['1.0'] fq=['@1.0::INetdagent/default'] hwbinder
+  hidl  vendor.mediatek.hardware.nvram                          v=['1.1'] fq=['@1.1::INvram/default'] hwbinder
+  hidl  vendor.mediatek.hardware.nwk_opt                        v=['1.0'] fq=['@1.0::INwkOpt/default'] hwbinder
+   <sepolicy> <version>31.0</version> </sepolicy>
+   <kernel target-level="5"/>
+
+VNDK apex names in system_b: [b'com.android.vndk.v34']
+system_ext vendor-ndk versions declared: [b'30', b'31', b'33', b'34']
+
+==== vendor compatibility matrix ==== <compatibility-matrix version="4.0" type="device"> len 1113
+   <vendor-ndk> <version>31</version> </vendor-ndk>
+   <system-sdk> <version>31</version> </system-sdk>

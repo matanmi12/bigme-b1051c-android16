@@ -1,0 +1,17 @@
+ro.boot.slot_suffix                        _b
+sys.boot_completed                         1
+ro.boot.veritymode                         eio
+ro.boot.veritymode.managed                 yes
+ro.boot.verifiedbootstate                  orange
+ro.boot.vbmeta.digest                      e9211d4a1da0847afc55b59d83b18a6aa084efd1d2900eea9bf7ed8e0ab29671
+ro.boot.vbmeta.device_state                unlocked
+ro.build.fingerprint                       alps/vnd_k6877v1_64_k419/vnd_k6877v1_64_k419:14/UP1A.231005.007/mp1V328:user/dev-keys
+ro.build.type                              user
+ro.debuggable                              0
+ro.gsid.image_running                      
+ro.boot.dynamic_partitions                 true
+partition.system.verified                  0
+partition.vendor.verified                  0
+partition.product.verified                 0
+partition.system_ext.verified              0
+persist.sys.phh.enable_sf_gl_backpressure  

@@ -1,0 +1,17 @@
+ro.boot.slot_suffix                        _b
+sys.boot_completed                         1
+ro.boot.veritymode                         disabled
+ro.boot.veritymode.managed                 yes
+ro.boot.verifiedbootstate                  orange
+ro.boot.vbmeta.digest                      5a084f7abaac13cc6de1d08d05e00f9ededbd76b0f981bfcd82495cc63eedad7
+ro.boot.vbmeta.device_state                unlocked
+ro.build.fingerprint                       google/treble_arm64_bvS/tdgsi_arm64_ab:16/BP2A.250605.031.A3/250617:userdebug/test-keys
+ro.build.type                              userdebug
+ro.debuggable                              1
+ro.gsid.image_running                      
+ro.boot.dynamic_partitions                 true
+partition.system.verified                  
+partition.vendor.verified                  
+partition.product.verified                 
+partition.system_ext.verified              
+persist.sys.phh.enable_sf_gl_backpressure  

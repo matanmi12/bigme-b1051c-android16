@@ -1,0 +1,5 @@
+  PASS slot_suffix = _b
+  FAIL boot_completed = '' (expected '1')
+  PASS veritymode = disabled
+  PASS build.type = userdebug
+  PASS fingerprint is TrebleDroid

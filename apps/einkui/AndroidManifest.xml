@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.b1051c.einkui">
+    <uses-sdk android:minSdkVersion="31" android:targetSdkVersion="35" />
+    <!-- signature permission of SystemUI; granted because this APK is signed with the (public AOSP test) platform key -->
+    <uses-permission android:name="com.android.systemui.permission.PLUGIN" />
+
+    <application android:label="E-Ink SystemUI" android:hasCode="true" android:allowBackup="false">
+        <!-- SystemUI (debuggable builds) loads overlay plugins found through this action -->
+        <service android:name=".EinkOverlayPlugin" android:exported="true">
+            <intent-filter><action android:name="com.android.systemui.action.PLUGIN_OVERLAY" /></intent-filter>
+        </service>
+    </application>
+</manifest>

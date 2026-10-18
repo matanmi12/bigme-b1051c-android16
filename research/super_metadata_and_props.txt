@@ -1,0 +1,722 @@
+geometry magic=0x616c4467 metadata_max_size=65536 slots=3 logical_block_size=4096
+
+== slot 0: magic=0x414c5030 v10.2 header_size=256 tables_size=744 flags=1
+groups: [('default', 0), ('main_a', 12882804736), ('main_b', 12882804736)]
+blockdev: super size=12884901888 (12.00 GiB) first_logical_sector=2048 align=1048576 flags=0
+  product_a        attrs=0x1 size=   599117824 (   571.4 MiB) fs=ext4     group=main_a extents=[(599117824, 1048576)]
+  product_b        attrs=0x1 size=           0 (     0.0 MiB) fs=-        group=main_b extents=[]
+  system_a         attrs=0x1 size=  5057536000 (  4823.2 MiB) fs=ext4     group=main_a extents=[(5057536000, 600834048)]
+  system_b         attrs=0x1 size=    81371136 (    77.6 MiB) fs=unknown/empty group=main_b extents=[(81371136, 5659164672)]
+  system_ext_a     attrs=0x1 size=   764809216 (   729.4 MiB) fs=ext4     group=main_a extents=[(764809216, 5740953600)]
+  system_ext_b     attrs=0x1 size=           0 (     0.0 MiB) fs=-        group=main_b extents=[]
+  vendor_a         attrs=0x1 size=   659005440 (   628.5 MiB) fs=ext4     group=main_a extents=[(659005440, 6506414080)]
+  vendor_b         attrs=0x1 size=           0 (     0.0 MiB) fs=-        group=main_b extents=[]
+
+== slot 1: magic=0x414c5030 v10.2 header_size=256 tables_size=912 flags=1
+groups: [('default', 0), ('main_b', 12882804736), ('cow', 0)]
+blockdev: super size=12884901888 (12.00 GiB) first_logical_sector=2048 align=524288 flags=0
+  product_b        attrs=0x5 size=   599117824 (   571.4 MiB) fs=ext4     group=main_b extents=[(599117824, 1048576)]
+  system_b         attrs=0x5 size=  6105083904 (  5822.3 MiB) fs=ext4     group=main_b extents=[(5057806336, 600834048), (524288, 600309760), (82313216, 5658640384), (524288, 6505889792), (963915776, 7165444096)]
+  system_ext_b     attrs=0x5 size=   764805120 (   729.4 MiB) fs=ext4     group=main_b extents=[(764805120, 5740953600)]
+  vendor_b         attrs=0x5 size=   659005440 (   628.5 MiB) fs=ext4     group=main_b extents=[(659005440, 6506414080)]
+  product_b-cow    attrs=0x0 size=    16551936 (    15.8 MiB) fs=unknown/empty group=cow extents=[(16551936, 8129609728)]
+  system_b-cow     attrs=0x0 size=  1485217792 (  1416.4 MiB) fs=unknown/empty group=cow extents=[(1485217792, 8146386944)]
+  system_ext_b-cow attrs=0x0 size=    26193920 (    25.0 MiB) fs=unknown/empty group=cow extents=[(26193920, 9631694848)]
+  vendor_b-cow     attrs=0x0 size=    18751488 (    17.9 MiB) fs=unknown/empty group=cow extents=[(18751488, 9657909248)]
+
+#### vendor_a: 79 props, 703 eink-ish names ####
+  P persist.vendor.debug.hwc.log=I
+  P persist.vendor.mediatek.fg.disable=1
+  P persist.vendor.mediatek.fg.force25c=0
+  P persist.vendor.mediatek.fg.force25c=1
+  P persist.vendor.mediatek.fg.log.enable=1
+  P ro.board.first_api_level=30
+  P ro.board.platform=mt6877
+  P ro.boot.dynamic_partitions=true
+  P ro.build.type=eng
+  P ro.build.type=userdebug
+  P ro.build.version.release=12
+  P ro.build.version.release=13
+  P ro.gfx.driver.0=com.mediatek.mt6877.gamedriver
+  P ro.hardware.egl=meow
+  P ro.hardware.hwcomposer=mtk_common
+  P ro.hardware.vulkan=mali
+  P ro.logd.kernel=false
+  P ro.odm.build.date.utc=1767618167
+  P ro.odm.build.date=Mon Jan  5 21:02:47 CST 2026
+  P ro.odm.build.fingerprint=alps/vnd_k6877v1_64_k419/vnd_k6877v1_64_k419:12/SP1A.210812.016/mp1V15125:user/dev-keys
+  P ro.odm.build.tags=dev-keys
+  P ro.odm.build.type=user
+  P ro.odm.build.version.incremental=mp1V15125
+  P ro.odm.build.version.release=12
+  P ro.odm.build.version.release_or_codename=12
+  P ro.odm.build.version.sdk=31
+  P ro.odm.product.cpu.abilist32=armeabi-v7a,armeabi
+  P ro.odm.product.cpu.abilist64=arm64-v8a
+  P ro.odm.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi
+  P ro.odm_dlkm.build.date.utc=1767618167
+  P ro.odm_dlkm.build.date=Mon Jan  5 21:02:47 CST 2026
+  P ro.odm_dlkm.build.fingerprint=alps/vnd_k6877v1_64_k419/vnd_k6877v1_64_k419:12/SP1A.210812.016/mp1V15125:user/dev-keys
+  P ro.odm_dlkm.build.tags=dev-keys
+  P ro.odm_dlkm.build.type=user
+  P ro.odm_dlkm.build.version.incremental=mp1V15125
+  P ro.odm_dlkm.build.version.release=12
+  P ro.odm_dlkm.build.version.release_or_codename=12
+  P ro.odm_dlkm.build.version.sdk=31
+  P ro.product.board=k6877v1_64_k419
+  P ro.product.cpu.abilist32=*
+  P ro.product.cpu.abilist64=*
+  P ro.product.first_api_level=31
+  P ro.product.first_api_level=34
+  P ro.surface_flinger.force_hwc_copy_for_virtual_displays=true
+  P ro.surface_flinger.max_frame_buffer_acquired_buffers=3
+  P ro.surface_flinger.primary_display_orientation=ORIENTATION_270
+  P ro.surface_flinger.protected_contents=true
+  P ro.vendor.build.date.utc=1767618167
+  P ro.vendor.build.date=Mon Jan  5 21:02:47 CST 2026
+  P ro.vendor.build.fingerprint=alps/vnd_k6877v1_64_k419/vnd_k6877v1_64_k419:12/SP1A.210812.016/mp1V15125:user/dev-keys
+  P ro.vendor.build.tags=dev-keys
+  P ro.vendor.build.type=user
+  P ro.vendor.build.version.incremental=mp1V15125
+  P ro.vendor.build.version.release=12
+  P ro.vendor.build.version.release_or_codename=12
+  P ro.vendor.build.version.sdk=31
+  P ro.vendor.mediatek.platform=MT6877
+  P ro.vendor.mediatek.rsc_name=default
+  P ro.vendor.mediatek.version.branch=alps-mp-s0.mp1
+  P ro.vendor.mediatek.version.release=alps-mp-s0.mp1-V15.125
+  P ro.vendor.mtk.bt_sap_enable=true
+  P ro.vendor.mtk.sensor.support=yes
+  P ro.vendor.mtk_backlight_hwc_support=0
+  P ro.vendor.product.cpu.abilist32=armeabi-v7a,armeabi
+  P ro.vendor.product.cpu.abilist64=arm64-v8a
+  P ro.vendor.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi
+  P ro.vendor_dlkm.build.date.utc=1767618167
+  P ro.vendor_dlkm.build.date=Mon Jan  5 21:02:47 CST 2026
+  P ro.vendor_dlkm.build.fingerprint=alps/vnd_k6877v1_64_k419/vnd_k6877v1_64_k419:12/SP1A.210812.016/mp1V15125:user/dev-keys
+  P ro.vendor_dlkm.build.tags=dev-keys
+  P ro.vendor_dlkm.build.type=user
+  P ro.vendor_dlkm.build.version.incremental=mp1V15125
+  P ro.vendor_dlkm.build.version.release=12
+  P ro.vendor_dlkm.build.version.release_or_codename=12
+  P ro.vendor_dlkm.build.version.sdk=31
+  P ro.virtual_ab.compression.enabled=true
+  P ro.virtual_ab.enabled=true
+  P ro.virtual_ab.userspace.snapshots.enabled=true
+  P ro.vndk.version=31
+  N EPDCP_MAJOR_VERSION  x13
+  N EPDCP_MINOR_VERSION  x13
+  N EPDCP_RELEASE_VERSION  x13
+  N parsePdu  x12
+  N coding.intra-refresh  x10
+  N _ZN7android8hardware5radio4V1_019BnHwRadioIndication16_hidl_simRefreshEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPS9_NSt3__18func  x9
+  N _ZN7android8hardware5radio4V1_019BpHwRadioIndication16_hidl_simRefreshEPNS0_10IInterfaceEPNS0_7details16HidlInstrumentorENS2_19RadioIndicationTypeERKNS2_16SimRefreshResultE  x9
+  N simRefreshInd  x7
+  N refresh  x6
+  N ebc  x5
+  N oemcrypto_refresh_keys_time_us  x5
+  N __builtin_ia32_reducepd256_mask  x4
+  N __builtin_ia32_rndscalepd_mask  x4
+  N __builtin_ia32_rndscalepd_256_mask  x4
+  N __builtin_ia32_rangepd256_mask  x4
+  N __builtin_ia32_rangepd512_mask  x4
+  N __builtin_ia32_rndscalepd_128_mask  x4
+  N __builtin_ia32_reducepd512_mask  x4
+  N __builtin_ia32_maskstorepd  x4
+  N __builtin_ia32_rangepd128_mask  x4
+  N __builtin_ia32_reducepd128_mask  x4
+  N __builtin_ia32_maskstorepd256  x4
+  N _ZN20C2IntraRefreshStruct9FieldListEv  x4
+  N RefReshapeWorkload_Execute  x4
+  N N5armnn18RefReshapeWorkloadE  x4
+  N _ZN6google8protobuf2io16CodedInputStream7RefreshEv  x4
+  N _ZN6google8protobuf2io17CodedOutputStream7RefreshEv  x4
+  N _ZN6google8protobuf13RepeatedFieldIdE9CopyArrayEPdPKdi  x4
+  N _ZN6google8protobuf13RepeatedFieldIdE9MoveArrayEPdS3_i  x4
+  N _ZN5wvcdm13CryptoSession11RefreshKeysERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allo  x4
+  N ODK_RefreshV15Values  x4
+  N Refreshing  x4
+  N RefreshKeys  x4
+  N _ZN7CPQDCFW13refreshOutputEP9ADLOutputP11DCsharedata  x4
+  N decodeStkRefreshFileChange  x4
+  N _ZNK7NSCamHW12HwInfoHelper19getSensorRawFmtTypeERj  x4
+  N Refresh  x3
+  N _ZN7android8hardware3cas4V1_07BnHwCas25_hidl_refreshEntitlementsEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPS9_  x3
+  N _ZN7android8hardware3cas4V1_07BpHwCas25_hidl_refreshEntitlementsEPNS0_10IInterfaceEPNS0_7details16HidlInstrument  x3
+  N eink_update  x3
+  N eink_debug  x3
+  N UNSOL_SIM_REFRESH  x3
+  N _ZNK7android8hardware6Parcel10readDoubleEPd  x3
+  N isAllowNotifyCustomizationSimRefreshTypeConfigured  x3
+  N SimRefreshResponse-  x3
+  N handleSimRefresh  x3
+  N notifyEPDGScreenState  x3
+  N keepDim  x2
+  N volte_sip_stack_ipsec_refresh  x2
+  N wo_epdg_client  x2
+  N _ZN7android8hardware5radio4V1_019BpHwRadioIndication10simRefreshENS2_19RadioIndicationTypeERKNS2_16SimRefreshResultE  x2
+  N _ZN7android8hardware5radio4V1_119BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x2
+  N __builtin_ia32_cmpnlepd  x2
+  N __builtin_ia32_cmplepd  x2
+  N UTF-EBCDIC  x2
+  N _ZN20DynamicRESAlgoMotion13sStepDurationE  x2
+  N sMRESStepDuration  x2
+  N _ZN7android22AudioALSAStreamManager21phoneCallRefreshModemEPKc  x2
+  N phoneCallRefreshModem  x2
+  N RefreshModem  x2
+  N _ZN6CAALFW25enterPartialUpdateInkModeERK8AALInputP9AALOutput  x2
+  N PartialUpdateInkValue  x2
+  N PartialUpdateInkEn  x2
+  N CBLStepDnSpeed  x2
+  N enterPartialUpdateInkMode  x2
+  N --refresh  x2
+  N activePDPContext  x2
+  N epdgIpAddress  x2
+  N unrecoverablePduCount  x2
+  N _ZN17C2FieldDescriptor14namedValuesForIN8C2Config20intra_refresh_mode_tEEENSt3__16vectorINS3_4pairINS3_12basic_stringIcNS3_1  x2
+  N _ZN20C2IntraRefreshStruct11_FIELD_LISTE  x2
+  N INTRA_REFRESH_ARBITRARY  x2
+  N INTRA_REFRESH_DISABLED  x2
+  N _libhevce_24F53C7822B5BCA29302C8BCEBC9063F  x2
+  N _libhevce_73DE48E9F30ADBF815CD05EBC6AF9D200F8D9A3BD46096201C49A2CC98066CCD  x2
+  N _libhevce_883D07A7A59ED1A18B96B1D7D4E6965A4C0007420C848BB59C3743EBC45F0078  x2
+  N _libhevce_B7984565A2C34EBC361B1FBB4D9296F8  x2
+  N uistr_info_atv_refreshCH  x2
+  N bRefreshStatus  x2
+  N bRefreshMethod  x2
+  N dRefreshTotalCount  x2
+  N bRefreshFreq  x2
+  N bRefreshUnit  x2
+  N fRefreshEnable  x2
+  N RX_HS_ADAPT_REFRESH_Capability  x2
+  N dRefreshProgress  x2
+  N PA_PeerRxHsAdaptRefresh  x2
+  N _ZN6google8protobuf8compiler6Parser13ConsumeNumberEPdPKc  x2
+  N _ZN6google8protobuf2io9Tokenizer7RefreshEv  x2
+  N _ZN4absl14lts_2020_09_2310SimpleAtodENSt3__117basic_string_viewIcNS1_11char_traitsIcEEEEPd  x2
+  N _ZNSt3__127__insertion_sort_incompleteIRNS_6__lessIddEEPdEEbT0_S5_T_  x2
+  N _ZNSt3__16__sortIRNS_6__lessIddEEPdEEvT0_S5_T_  x2
+  N epdcp_stats.dl_tput_bps  x2
+  N epdcp_stats.ul_tput_bps  x2
+  N para.epdg_ip_addr_len  x2
+  N rawMessagePDU  x2
+  N para.epdg_ip_addr  x2
+  N rawMessagePDULength  x2
+  N _ZN7android11clearkeycas17ClearKeyCasPlugin19refreshEntitlementsEiRKNSt3__16vectorIhNS2_9allocatorIhEEEE  x2
+  N aisRefreshFWKBlacklist  x2
+  N _ZN18DpAsyncBlitStream214refreshCropROIEj  x2
+  N _ZN18DpAsyncBlitStream215refreshCropROIsEv  x2
+  N refreshCropROI  x2
+  N _ZN13CPQHDRVIVIDFW20getCuvaBaseParameterEPK29__HDRVIVID_Dynamic_MetaData__dddP9CuvaCurvePdS5_  x2
+  N refreshOutput  x2
+  N _ZN3xrz13EffectHandler13convertToGrayEPvS1_N7android4RectEii  x2
+  N _ZN3xrz13EffectHandler14imageSmoothingEPvS1_S1_S1_N7android4RectEii  x2
+  N DecodePDResult  x2
+  N ma_tac_refresh_caliline  x2
+  N ma_tac_refresh_calibrate_data  x2
+  N _ZN12Cam_path_sel8Path_selEN5NSCam8NSIoPipe11NSCamIOPipe11EPipeRawFmtEii12E_CamPattern  x2
+  N _ZN17RfxSimRefreshData13copyDataByObjEPK11RfxBaseData  x2
+  N _ZN17RfxSimRefreshData14copyDataByDataEPvi  x2
+  N _ZN17RfxSimRefreshDataC1EPvi  x2
+  N _ZN17RfxSimRefreshDataC2EPvi  x2
+  N _ZN17RfxSimRefreshDataD0Ev  x2
+  N _ZN17RfxSimRefreshDataD1Ev  x2
+  N _ZN17RfxSimRefreshDataD2Ev  x2
+  N _ZTV17RfxSimRefreshData  x2
+  N s_init_valRfxSimRefreshDataRFX_MSG_URC_SIM_REFRESH  x2
+
+#### system_a: 89 props, 6083 eink-ish names ####
+  P persist.sys.hctmodel=Bigme
+  P persist.vendor.xrz.google_id=3801423178089371876
+  P ro.apex.updatable=true
+  P ro.build.ProductCode=Color
+  P ro.build.date.utc=1773836631
+  P ro.build.date=Wed Mar 18 20:23:51 CST 2026
+  P ro.build.id=UP1A.231005.007
+  P ro.build.locale.area=http://ereader.xrztech.com:8090
+  P ro.build.product=sys_mssi_64_cn_armv82
+  P ro.build.tags=dev-keys
+  P ro.build.type=user
+  P ro.build.version.all_codenames=REL
+  P ro.build.version.codename=REL
+  P ro.build.version.incremental=mp1V328
+  P ro.build.version.known_codenames=Base,Base11,Cupcake,Donut,Eclair,Eclair01,EclairMr1,Froyo,Gingerbread,GingerbreadMr1,Honeycomb,HoneycombMr1,HoneycombMr2,IceCreamSandwich,IceCreamSandwichMr1,Je
+  P ro.build.version.min_supported_target_sdk=28
+  P ro.build.version.preview_sdk=0
+  P ro.build.version.preview_sdk_fingerprint=REL
+  P ro.build.version.release=14
+  P ro.build.version.release_or_codename=14
+  P ro.build.version.release_or_preview_display=14
+  P ro.build.version.sdk=34
+  P ro.build.version.security_patch=2023-12-05
+  P ro.build.versionCode=B1051C
+  P ro.build.versionName=B1051C_R_4.9.0
+  P ro.build.versionProduct=B1051
+  P ro.hct_navbarmode_gestural=1
+  P ro.kernel.qemu.gles=0
+  P ro.kernel.qemu=1
+  P ro.kernel.version=4.14
+  P ro.kernel.version=4.19
+  P ro.kernel.version=4.9
+  P ro.kernel.version=5.4
+  P ro.kernel.zio=38,108,105,16
+  P ro.mediatek.version.branch=alps-mp-u0.mssi1
+  P ro.mediatek.version.release=alps-mp-u0.mp1-V3.28
+  P ro.mediatek.wlan.p2p=1
+  P ro.mediatek.wlan.wsc=1
+  P ro.product.cpu.abi=arm64-v8a
+  P ro.product.cpu.abilist32=*
+  P ro.product.cpu.abilist64=*
+  P ro.product.cpu.abilist64=* && property:bootreceiver.enable=1
+  P ro.product.cpu.abilist64=* && property:bootreceiver.enable=1 && property:dmesgd.start=1
+  P ro.product.cpu.abilist=arm64-v8a
+  P ro.sf.lcd_density=300
+  P ro.system.build.date.utc=1773908973
+  P ro.system.build.date=Thu Mar 19 16:29:33 CST 2026
+  P ro.system.build.fingerprint=alps/sys_mssi_64_cn_armv82/sys_mssi_64_cn_armv82:14/UP1A.231005.007/mp1V328:user/dev-keys
+  P ro.system.build.tags=dev-keys
+  P ro.system.build.type=user
+  P ro.system.build.version.incremental=mp1V328
+  P ro.system.build.version.release=14
+  P ro.system.build.version.release_or_codename=14
+  P ro.system.build.version.sdk=34
+  P ro.system.product.cpu.abilist32=armeabi-v7a,armeabi
+  P ro.system.product.cpu.abilist64=arm64-v8a
+  P ro.system.product.cpu.abilist=arm64-v8a,armeabi-v7a,armeabi
+  P ro.treble.enabled=true
+  P ro.vendor.build.fingerprint='%s', length=%zu
+  P ro.vendor.build.version.release_or_codename='%s', length=%zu
+  P ro.vendor.xrz.default_anti_alias=0
+  P ro.vendor.xrz.default_anti_flicker=1
+  P ro.vendor.xrz.default_auto_clean=1
+  P ro.vendor.xrz.default_bleach_bg_color=10
+  P ro.vendor.xrz.default_brightness_level=0
+  P ro.vendor.xrz.default_color_enhance=70
+  P ro.vendor.xrz.default_contrast_level=0
+  P ro.vendor.xrz.default_refresh_frequency=0
+  P ro.vendor.xrz.default_refresh_mode=178
+  P ro.vendor.xrz.default_text_enhance=0
+  P ro.vendor.xrz.default_text_plus=0
+  P ro.vendor.xrz.display_policy_version=6
+  P ro.vendor.xrz.normal_standby_enable=1
+  P ro.vendor.xrz.pen_type=1
+  P ro.vendor.xrz.phy_rotation=270
+  P ro.vendor.xrz.support_aigpt=1
+  P ro.vendor.xrz.support_appstore=1
+  P ro.vendor.xrz.support_custom_device=0
+  P ro.vendor.xrz.support_export=1
+  P ro.vendor.xrz.support_follow_system_rotate=1
+  P ro.vendor.xrz.support_login=1
+  P ro.vendor.xrz.support_share=1
+  P ro.vendor.xrz.support_split_screen=1
+  P ro.vendor.xrz.support_sunina_hw=1
+  P ro.vendor.xrz.support_thickness=0
+  P ro.vendor.xrz.support_tts=1
+  P ro.vendor.xrz.support_voice_conversion=1
+  P ro.vendor.xrz.support_wiki=1
+  P ro.vendor.xrz.sytlus_type=0
+  N sherpa-ncnn-xrz  x16812
+  N xrz  x11470
+  N handwrite  x1747
+  N handwrittenPlus  x1540
+  N handwritten  x398
+  N refresh  x358
+  N BigmeLib  x339
+  N einktest  x283
+  N handwriting  x232
+  N bigmeai  x163
+  N HandWriteAdapter  x81
+  N XrzHttpUtils  x68
+  N HandWriteActivity  x67
+  N swiperefreshlayout  x62
+  N _ZN17util_registration15ClassRegistererIN20research_handwriting28AbstractInkPreprocessingStepEJRKNS1_24InkPreprocessingS  x57
+  N _ZZZN20research_handwriting19PreprocessWordLevelERKNS_3InkERKNS_30WordLevelPreproces  x54
+  N Java_com_xrz_asr_MainActivity_stringFromJNI  x48
+  N Java_com_xrz_asr_util_XrzCipher_getDecrtyptData  x48
+  N Java_com_xrz_asr_util_XrzCipher_getEncrtyptData  x48
+  N Java_com_xrz_bmeso_Bmeso_getBody  x46
+  N Java_com_xrz_bmeso_Bmeso_getData  x46
+  N Java_com_xrz_bmeso_Bmeso_setBody  x46
+  N Java_com_xrz_bmeso_Bmeso_setData  x46
+  N Java_com_xrz_bmeso_Bmeso_setDataNokey  x46
+  N handwritetool  x46
+  N BigmeRT  x45
+  N HandwritingManager  x43
+  N _ZN4absl18container_internal12raw_hash_setINS0_17FlatHashMapPolicyINSt6__ndk112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEENS3_4pairINS3_10unique_ptrIN6tflite15FlatBufferModelENS3_14default_deleteISD_EEEEN20research_handwriting8MmapDataEEEEENS0_10StringHashENS0_8StringEqENS7_INSA_IKS  x40
+  N _ZN4absl18container_internal12raw_hash_setINS0_17FlatHashMapPolicyINSt6__ndk112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEN20research_handwriting14StdFstRegistry5EntryEEENS0_10StringHashENS0_8StringEqEN  x40
+  N _ZZZN20research_handwriting12_GLOBAL__N_123ScorePotentialLineBreakERKN6proto216Repea  x39
+  N libxrzEncrypt.so  x38
+  N _ZN6proto28internal12MapEntryImplIN20research_handwriting45TimingInformation_NamedTimersMsEntry_DoNotUseENS_11Mess  x36
+  N _ZNSt6__ndk1L10__init_patIcEEvRNS_10money_base7patternERNS_12basic_stringIT_NS_11char_traitsIS5_EENS_9allocatorIS5_EEEEbcccS5_  x30
+  N _ZNSt6__ndk1L10__init_patIwEEvRNS_10money_base7patternERNS_12basic_stringIT_NS_11char_traitsIS5_EENS_9allocatorIS5_EEEEbcccS5_  x30
+  N _ZZZN20research_handwriting16SegmenterRuntime19MapExternalSegmentsERKNSt6__ndk16vect  x30
+  N SwipeRefreshLayout  x29
+  N BigmeCloudActivity  x29
+  N BigmeCloudFragment  x29
+  N HandWriteRelativeUtils  x28
+  N MiniHandWriteActivity  x25
+  N _ZZZN20research_handwriting10FstDecoder22DecodeWithSegmentationERKNS_3InkEiRKNSt6__n  x24
+  N _ZZZN20research_handwriting24ResampleRamerWithMappingERKNS_3InkERKNSt6__ndk16vectorI  x24
+  N _ZN20research_handwriting55InkPreprocessingStepSpec_NormalizeMultilineSizeSettings  x24
+  N _ZN20research_handwriting56InkPreprocessingStepSpec_InkBasedSlopeCorrectionSetting  x24
+  N _ZN20research_handwriting60InkPreprocessingStepSpec_DetectAndRearrangeMultiLineSet  x24
+  N _ZN20research_handwriting69InkPreprocessingStepSpec_NormalizeSizeWritingGuideFirst  x24
+  N androidx.swiperefreshlayout_swiperefreshlayout.versionPK  x22
+  N GlobalHandwritingMenu  x22
+  N _ZNSt6__ndk16__sortIRNS_6__lessIddEEPdEEvT0_S5_T_  x21
+  N _ZZZN20research_handwriting31ParseNamedCharClassesFromStringEN4absl11string_viewES1_  x21
+  N _ZZZN20research_handwriting38ResampleLinearInterpolationWithMappingERKNS_3InkERKNSt6  x21
+  N HandwrittenView  x19
+  N XRZToolMenuPopNew  x19
+  N HandWriteRelative  x19
+  N _ZNK7android8hardware6Parcel10readDoubleEPd  x18
+  N _ZNK6proto28internal12MapEntryImplIN20research_handwriting45TimingInformation_NamedTimersMsEntry_DoNotUseENS_11Mess  x18
+  N _ZNK20research_handwriting55InkPreprocessingStepSpec_NormalizeMultilineSizeSettings  x18
+  N _ZNK20research_handwriting56InkPreprocessingStepSpec_InkBasedSlopeCorrectionSetting  x18
+  N _ZNK20research_handwriting60InkPreprocessingStepSpec_DetectAndRearrangeMultiLineSet  x18
+  N _ZNK20research_handwriting69InkPreprocessingStepSpec_NormalizeSizeWritingGuideFirst  x18
+  N HandWriteHistory  x18
+  N XRZTopMenuPop  x18
+  N XrzNote  x17
+  N -Lxrz  x17
+  N _ZNK7android6Parcel10readDoubleEPd  x16
+  N _ZN3knf24OnlineGenericBaseFeatureINS_13FbankComputerEE14AcceptWaveformEfPKfi  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcCreate  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcFree  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcInit  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcSetConfig  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcProcess  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcAddFarend  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcAddMic  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcVirtualMic  x16
+  N Java_com_xrz_recoder_AutomaticGainControlUtils_agcGain  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsCreate  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsInit  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsSetPolicy  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsProcess  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsFree  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsxCreate  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsxInit  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsxSetPolicy  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsxProcess  x16
+  N Java_com_xrz_recoder_NoiseSuppressorUtils_nsxFree  x16
+  N Java_com_xrz_recoder_AndroidLame_initializeDefault  x16
+  N Java_com_xrz_recoder_AndroidLame_initialize  x16
+  N Java_com_xrz_recoder_AndroidLame_lameEncode  x16
+  N Java_com_xrz_recoder_AndroidLame_encodeBufferInterleaved  x16
+  N Java_com_xrz_recoder_AndroidLame_lameFlush  x16
+  N Java_com_xrz_recoder_AndroidLame_lameClose  x16
+  N _ZN11sherpa_ncnn6Stream14AcceptWaveformEiPKfi  x16
+  N Java_com_xrz_recoder_VadControlUtils_nativeStart  x16
+  N Java_com_xrz_recoder_VadControlUtils_nativeStop  x16
+  N Java_com_xrz_recoder_VadControlUtils_nativeIsSpeech  x16
+  N WAVEFORM  x16
+  N WebChromeClient  x16
+  N eink_debug  x16
+  N XrzEinkManager  x16
+  N XRZBookCache  x16
+  N FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF6955817183995497CEA956AE515D2261898FA051015728E5A8AAAC42DAD33170D04507A33A85521ABDF1CBA64ECFB850458DBEF0A8AEA71575D060C7DB3970F85A6E1E4C7ABF5AE8CDB0933D71E8C94E04A25619DCEE3D2261AD2EE6BF12FFA06D98A0864D87602733EC86A64521F2B18177B200CBBE117577A615D6C770988C0BAD946E208E24FA074E5AB3143DB5BFCE0FD108E4B82D120A92108011A723C12A787E6D788719A10BDBA5B2699C327186AF4E23C1A946834B6150BDA2583E9CA2AD44CE8DBBBC2DB04DE8EF92E8EFC141FBECAA6287C59474E6BC05D99B2964FA090C3A2233BA186515BE7ED1F612970CEE2D7AFB81BDD762170481CD0069127D5B05AA993B4EA988D8FDDC186FFB7DC90A6C08F4DF435C93402849236C3FAB4D27C7026C1D4DCB2602646DEC9751E763DBA37BDF8FF9406AD9E530EE5DB382F413001AEB06A53ED9027D831179727B0865A8918DA3EDBEBCF9B14ED44CE6CBACED4BB1BDB7F1447E6CC254B332051512BD7AF426FB8F  x16
+  N _ZNSt6__ndk127__insertion_sort_incompleteIRNS_6__lessIddEEPdEEbT0_S5_T_  x15
+  N XrzFillPenRecord  x15
+  N SearchHandWriteFragment  x15
+  N bdbos.bigme.vip  x15
+  N libxrzEncrypt.soPK  x14
+  N libxrzEncrypt.so5  x14
+  N HandwrittenClient  x14
+  N notepadinterfaces  x14
+  N XrzRecord  x13
+  N XRZMenuComponent  x13
+  N HomeRefreshControl  x13
+  N SwipeRefreshHelper  x13
+  N peBC  x12
+  N _ZN20research_handwriting3  x12
+  N _ZZNK20research_handwriting3  x12
+  N _ZGVZNK20research_handwriting3  x12
+  N _ZZZN20research_handwriting28SegmentationFeatureGenerator28GenerateSegmentationFeatu  x12
+  N _ZN17util_registration9StaticMapIN20research_handwriting19ModelRunnerByintMapEiNSt6__ndk112basic_stringIcNS3_11ch  x12
+  N _ZN17util_registration9StaticMapIN20research_handwriting25ResponseProcessorByintMapEiNSt6__ndk112basic_stringIcNS  x12
+
+#### product_a: 16 props, 636 eink-ish names ####
+  P ro.product.build.date.utc=1769133939
+  P ro.product.build.date=Fri Jan 23 10:05:39 CST 2026
+  P ro.product.build.fingerprint=alps/sys_mssi_64_cn_armv82/sys_mssi_64_cn_armv82:14/UP1A.231005.007/mp1V328:user/dev-keys
+  P ro.product.build.tags=dev-keys
+  P ro.product.build.type=user
+  P ro.product.build.version.incremental=mp1V328
+  P ro.product.build.version.release=14
+  P ro.product.build.version.release_or_codename=14
+  P ro.product.build.version.sdk=34
+  P ro.product.cpu.pagesize.max=4096
+  P ro.product.product.brand=alps
+  P ro.product.product.device=sys_mssi_64_cn_armv82
+  P ro.product.product.manufacturer=alps
+  P ro.product.product.model=sys_mssi_64_cn_armv82
+  P ro.product.product.name=sys_mssi_64_cn_armv82
+  P ro.product.vndk.version=34
+  N WebContentsImpl  x68
+  N WebContents  x66
+  N webcrypto  x36
+  N webcodecs  x32
+  N swiperefreshlayout  x32
+  N WebChromeClient  x27
+  N SwipeRefreshLayout  x25
+  N webcontents  x20
+  N androidx.swiperefreshlayout_swiperefreshlayout.version5  x10
+  N wbNvyz6ENwPiTrjV2KRkEjH78ZMcUQXg0L3BYHJ3lc69Vs5Ddf9uUGGMYldX3WfMBEmh  x9
+  N 00swipeRefreshLayoutProgressSpinnerBackgroundColor  x8
+  N ic_menu_refresh_holo_dark.png5  x8
+  N refresh  x8
+  N 2android.safetycenter.action.REFRESH_SAFETY_SOURCES  x7
+  N 4android.safetycenter.extra.REFRESH_SAFETY_SOURCE_IDS  x7
+  N WebContentsFrameTracker  x6
+  N HandwritingGesture  x6
+  N xrz  x6
+  N ParticipantRefresh  x5
+  N ForceSettingsCacheRefreshResult  x5
+  N RefreshSeCardsResponse  x5
+  N Refresh  x4
+  N WebRTC.Call.PacerBitrateInKbps  x4
+  N WebRTC.Call.EstimatedSendBitrateInKbps  x4
+  N MetricsWebContentsObserver  x4
+  N WebCore  x4
+  N webcal  x4
+  N WebContentsDelegate  x4
+  N AwWebContentsDelegate  x4
+  N handwriting.mojom.HandwritingRecognitionService  x4
+  N WebContentsAccessibilityImpl  x4
+  N WebContentsObserverProxy  x4
+  N OverscrollRefreshHandler  x4
+  N WebContentsDelegateAndroid  x4
+  N ic_menu_refresh_holo_dark.png  x4
+  N safety_exp_account_menu_refresh  x4
+  N PreviewableHandwritingGesture  x4
+  N CubesAppIconRefreshHygieneJob  x4
+  N IOnContentRefreshListener  x4
+  N WebRTC.Audio.TargetBitrateInKbps  x3
+  N WebCache.EncodedSizeDuplicatedInDataUrls  x3
+  N WebCache.ScriptResources  x3
+  N WebCache.FontResources  x3
+  N WebCache.CSSStylesheetResources  x3
+  N WebCache.XSLStylesheetResources  x3
+  N WebCache.OtherResources  x3
+  N WebCache.ImageResources  x3
+  N refresh_token  x3
+  N WebCache.V8CodeCache  x3
+  N WebCache  x3
+  N ebcdic  x3
+  N EBCDIC  x3
+  N WebRTC.Video.RMSEOfEncodingBitrateInKbps.  x3
+  N WebRTC.Video.Screenshare.RMSEOfEncodingBitrateInKbps.  x3
+  N 6measurement.upload.refresh_blacklisted_config_interval  x3
+  N GetMdlRefreshTimestampsRequest  x3
+  N RefreshSePostpaidsTransactionsFromChipRequest  x3
+  N RefreshSePrepaidTransactionsFromChipRequest  x3
+  N StoreMdlRefreshTimestampRequest  x3
+  N androidx.swiperefreshlayout_swiperefreshlayout.version3  x2
+  N androidx.swiperefreshlayout_swiperefreshlayout.versionPK  x2
+  N UpdateInnerWebContentsVisibility  x2
+  N GenerateWebCryptoSecretKey  x2
+  N WebContentsOfBrowserContext  x2
+  N WebContentsObserver.RenderViewReady  x2
+  N refreshPolicy  x2
+  N RefreshPolicy  x2
+  N WebCore.IndexedDB.RequestDispatchOutcome.ObjectStorePut  x2
+  N WebCore.IndexedDB.RequestDuration2.ObjectStorePut  x2
+  N WebCore.Scripts.InlineStreamerTimedOut  x2
+  N Signin.AccountTracker.RefreshAccountInfo.IsAlreadyTrackingAccount  x2
+  N HandwritingPoint  x2
+  N HandwritingModelConstraint  x2
+  N WebContentsObserver.DidFirstVisuallyNonEmptyPaint  x2
+  N WebCore.IndexedDB.BackingStore.OpenFirstTryResult  x2
+  N WebContentsObserver.TitleWasSet  x2
+  N WebCore.Scripts.V8CodeCacheMetadata.Set  x2
+  N WebCore.IndexedDB.RequestDispatchOutcome.ObjectStoreGet  x2
+  N WebCore.IndexedDB.RequestDuration2.ObjectStoreGet  x2
+  N WebCore.Scripts.V8CodeCacheMetadata.Get  x2
+  N WebCore.Scripts.V8CompileHintsStatus  x2
+  N WebCore.IndexedDB.BackingStore.OpenStatus  x2
+  N Blink.WebCodecs.  x2
+  N WebCore.IndexedDB.BackingStore.DeleteDatabaseStatus  x2
+  N onWebContentsLostFocus  x2
+  N HandwritingHints  x2
+  N createInterfaceRegistryForWebContents  x2
+  N unlockOrientationForWebContents  x2
+  N AttachInnerWebContents  x2
+  N onWebContents  x2
+  N kWebContents  x2
+  N StartObservingWebContents  x2
+  N Android.FocusChanged.FocusOwningWebContents  x2
+  N shouldCreateWebContents  x2
+  N WebCodecsHBDFormats  x2
+  N Blink.WebCodecs.ImageDecoder.Success  x2
+  N WebCore.IndexedDB.LevelDBOpenErrors  x2
+  N WebCore.IndexedDB.LevelDBWriteErrors  x2
+  N WebCore.IndexedDB.LevelDBReadErrors  x2
+  N WebContentsObserverList  x2
+  N keepDimensions  x2
+  N getSupportedRefreshRates  x2
+  N refreshPolicies  x2
+  N RefreshPolicies  x2
+  N WebCore.Editing.Commands  x2
+  N MediaSourceExtensionsForWebCodecs  x2
+  N OnRefreshError  x2
+  N WebCore.IndexedDB.IndexedDBPreCloseTaskList.MetadataError  x2
+  N queryHandwritingRecognizer  x2
+  N createHandwritingRecognizer  x2
+  N MaybeStartRefreshFrameRequester  x2
+  N SendWebContentsTitleHelper  x2
+  N SetPendingWebContentsForPopup  x2
+  N WebCodecsVideoEncoderFrameDrop  x2
+  N InternalWebCrypto  x2
+  N stepDown  x2
+  N WebCore.IndexedDB.TransactionAbortReason  x2
+  N WebCore.Scripts.Other.NotStreamingReason  x2
+  N WebCore.Scripts.ParsingBlocking.NotStreamingReason  x2
+  N WebCore.Scripts.Deferred.NotStreamingReason  x2
+
+#### system_ext_a: 25 props, 291 eink-ish names ####
+  P persist.vendor.mtk.aeev.dal=%d
+  P persist.vendor.mtk.aeev.explevel=%d
+  P persist.vendor.mtk.aeev.filter=%d
+  P persist.vendor.mtk.aeev.mode=%d
+  P persist.vendor.mtk.pl_lnk=1
+  P ro.build.type=eng
+  P ro.build.type=eng && property:persist.vendor.aee.tracing_on=0
+  P ro.build.type=eng && property:persist.vendor.aee.tracing_on=1
+  P ro.build.type=eng && property:ro.vendor.aee.convert64=0
+  P ro.build.type=eng && property:ro.vendor.aee.convert64=1
+  P ro.build.type=user
+  P ro.build.type=userdebug
+  P ro.build.type=userdebug && property:persist.vendor.aee.tracing_on=0
+  P ro.build.type=userdebug && property:persist.vendor.aee.tracing_on=1
+  P ro.build.type=userdebug && property:ro.vendor.aee.convert64=0
+  P ro.build.type=userdebug && property:ro.vendor.aee.convert64=1
+  P ro.system_ext.build.date.utc=1769133939
+  P ro.system_ext.build.date=Fri Jan 23 10:05:39 CST 2026
+  P ro.system_ext.build.fingerprint=alps/sys_mssi_64_cn_armv82/sys_mssi_64_cn_armv82:14/UP1A.231005.007/mp1V328:user/dev-keys
+  P ro.system_ext.build.tags=dev-keys
+  P ro.system_ext.build.type=user
+  P ro.system_ext.build.version.incremental=mp1V328
+  P ro.system_ext.build.version.release=14
+  P ro.system_ext.build.version.release_or_codename=14
+  P ro.system_ext.build.version.sdk=34
+  N swiperefreshlayout  x47
+  N SwipeRefreshLayout  x33
+  N _ZNK7android8hardware6Parcel10readDoubleEPd  x22
+  N epdgconfig  x20
+  N setAutoRefresh  x18
+  N _ZN7android8hardware5radio4V1_019BnHwRadioIndication16_hidl_simRefreshEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPS9_NSt3__18func  x16
+  N _ZN7android8hardware5radio4V1_019BpHwRadioIndication16_hidl_simRefreshEPNS0_10IInterfaceEPNS0_7details16HidlInstrumentorENS2_19RadioIndicationTypeERKNS2_16SimRefreshResultE  x16
+  N vowFModel_name_table_p2  x16
+  N _ZN7android19BufferQueueProducer14setAutoRefreshEb  x12
+  N _ZNK7android11FrameEvents23hasLastRefreshStartInfoEv  x12
+  N _ZNK7android11FrameEvents24hasFirstRefreshStartInfoEv  x12
+  N androidx.swiperefreshlayout_swiperefreshlayout.version5  x12
+  N RefreshAnnotatedCallLogWorker  x12
+  N _ZNSt3__127__insertion_sort_incompleteIRNS_6__lessIddEEPdEEbT0_S5_T_  x10
+  N _ZNSt3__16__sortIRNS_6__lessIddEEPdEEvT0_S5_T_  x10
+  N RefreshModules  x10
+  N refreshrate  x9
+  N _ZNK8tinyxml210XMLElement15QueryDoubleTextEPd  x8
+  N _ZNK8tinyxml212XMLAttribute16QueryDoubleValueEPd  x8
+  N getWfMipiData  x8
+  N .mKeepDims  x8
+  N vowFModel_name_table  x8
+  N vowFModel_name_table_p23  x8
+  N 00swipeRefreshLayoutProgressSpinnerBackgroundColor  x7
+  N _ZN7android8hardware3cas4V1_07BnHwCas25_hidl_refreshEntitlementsEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPS9_  x6
+  N _ZN7android8hardware3cas4V1_07BpHwCas25_hidl_refreshEntitlementsEPNS0_10IInterfaceEPNS0_7details16HidlInstrument  x6
+  N _ZN7android8hardware8graphics11bufferqueue4V1_025BnHwGraphicBufferProducer20_hidl_setAutoRefreshEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPSA_NSt3__18func  x6
+  N _ZN7android8hardware8graphics11bufferqueue4V1_025BpHwGraphicBufferProducer14setAutoRefreshEb  x6
+  N _ZN7android8hardware8graphics11bufferqueue4V1_025BpHwGraphicBufferProducer20_hidl_setAutoRefreshEPNS0_10IInterfaceEPNS0_7details16HidlInstrumentorEb  x6
+  N _ZNK7android6Parcel10readDoubleEPd  x6
+  N _ZNK7android6Parcel8readCharEPDs  x6
+  N _ZNK7android2os17PersistableBundle9getDoubleERKNS_8String16EPd  x6
+  N _ZN7android8gralloc412decodeDoubleERKNS_8hardware8graphics6mapper4V4_07IMapper12MetadataTypeERKNS1_8hidl_vecIhEEPd  x6
+  N _ZN7android7Surface14setAutoRefreshEb  x6
+  N _ZN7android7Surface22dispatchSetAutoRefreshESt9__va_list  x6
+  N _ZN7android7Surface38dispatchGetDisplayRefreshCycleDurationESt9__va_list  x6
+  N _ZN7android8hardware8graphics11bufferqueue4V1_05utils24H2BGraphicBufferProducer14setAutoRefreshEb  x6
+  N _ZN7android8hardware8graphics11bufferqueue4V2_05utils24H2BGraphicBufferProducer14setAutoRefreshEb  x6
+  N getDisplayRefreshCycleDuration  x6
+  N ParamVideoIntraRefresh  x6
+  N ConfigAndroidIntraRefresh  x6
+  N ConfigVideoIntraVOPRefresh  x6
+  N ebcdic  x6
+  N EBCDIC  x6
+  N EBCDIC-US  x6
+  N SimRefreshResult  x6
+  N RefreshAnnotatedCallLogReceiver  x5
+  N PeakRefreshRatePreferenceController  x5
+  N RefreshUsersScheduler  x5
+  N _ZN7android8hardware8graphics8composer4V2_120BnHwComposerCallback15_hidl_onRefreshEPNS_4hidl4base4V1_08BnHwBaseERKNS0_6ParcelEPSA_NSt3__18func  x4
+  N _ZN7android8hardware5radio4V1_519BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x4
+  N _ZN7android21SurfaceComposerClient11Transaction14setAutoRefreshERKNS_2spINS_14SurfaceControlEEEb  x4
+  N autoRefresh  x4
+  N epdgConfig  x4
+  N epdgConfigGeneralFragment  x4
+  N RefreshRatePolicy  x4
+  N setWfMipiData  x4
+  N _ZNSt6__ndk1L10__init_patIcEEvRNS_10money_base7patternERNS_12basic_stringIT_NS_11char_traitsIS5_EENS_9allocatorIS5_EEEEbcccS5_  x4
+  N _ZNSt6__ndk1L10__init_patIwEEvRNS_10money_base7patternERNS_12basic_stringIT_NS_11char_traitsIS5_EENS_9allocatorIS5_EEEEbcccS5_  x4
+  N xrz_flush.xml  x4
+  N _ZN5Eigen8internal13gemm_pack_rhsIdiNS0_22const_blas_data_mapperIdiLi0EEELi4ELi0ELb0ELb0EEclEPdRKS3_iiii  x3
+  N _ZN5Eigen8internal13gemm_pack_rhsIdiNS0_22const_blas_data_mapperIdiLi0EEELi4ELi0ELb0ELb1EEclEPdRKS3_iiii  x3
+  N _ZN7android7Surface30getDisplayRefreshCycleDurationEPx  x3
+  N _ZN5Eigen8internal13gemm_pack_rhsIdlNS0_22const_blas_data_mapperIdlLi0EEELi4ELi0ELb0ELb0EEclEPdRKS3_llll  x3
+  N _ZN5Eigen8internal13gemm_pack_rhsIdlNS0_22const_blas_data_mapperIdlLi0EEELi4ELi0ELb0ELb1EEclEPdRKS3_llll  x3
+  N _ZN7android7Surface30getDisplayRefreshCycleDurationEPl  x3
+  N epdgConfigEmergencyFragment  x3
+  N epdgConfigResetFragment  x3
+  N xrz  x3
+  N odrefresh  x2
+  N _ZN7android8hardware3cas4V1_07BpHwCas19refreshEntitlementsEiRKNS0_8hidl_vecIhEE  x2
+  N _ZN7android8hardware3cas4V1_17BpHwCas19refreshEntitlementsEiRKNS0_8hidl_vecIhEE  x2
+  N _ZN7android8hardware3cas4V1_27BpHwCas19refreshEntitlementsEiRKNS0_8hidl_vecIhEE  x2
+  N _ZN7android8hardware8graphics8composer4V2_120BpHwComposerCallback15_hidl_onRefreshEPNS0_10IInterfaceEPNS0_7details16HidlInstrumentorEy  x2
+  N _ZN7android8hardware5radio4V1_019BpHwRadioIndication10simRefreshENS2_19RadioIndicationTypeERKNS2_16SimRefreshResultE  x2
+  N _ZN7android8hardware5radio4V1_119BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x2
+  N _ZN7android8hardware5radio4V1_219BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x2
+  N _ZN7android8hardware5radio4V1_319BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x2
+  N _ZN7android8hardware5radio4V1_419BpHwRadioIndication10simRefreshENS1_4V1_019RadioIndicationTypeERKNS4_16SimRefreshResultE  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdiNS0_16blas_data_mapperIdiLi0ELi0EEELi2ELi1ELi0ELb0ELb1EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdiNS0_22const_blas_data_mapperIdiLi0EEELi2ELi1ELi0ELb0ELb0EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdiNS0_22const_blas_data_mapperIdiLi0EEELi2ELi1ELi0ELb1ELb0EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdiNS0_22const_blas_data_mapperIdiLi1EEELi2ELi1ELi1ELb0ELb0EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdiNS0_22const_blas_data_mapperIdiLi1EEELi2ELi1ELi1ELb1ELb0EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdiNS0_16blas_data_mapperIdiLi0ELi0EEELi4ELi0ELb0ELb1EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdiNS0_22const_blas_data_mapperIdiLi1EEELi4ELi1ELb0ELb0EEclEPdRKS3_iiii  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdiNS0_22const_blas_data_mapperIdiLi1EEELi4ELi1ELb0ELb1EEclEPdRKS3_iiii  x2
+  N _ZN7android8hardware8graphics8composer4V2_120BpHwComposerCallback15_hidl_onRefreshEPNS0_10IInterfaceEPNS0_7details16HidlInstrumentorEm  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdlNS0_16blas_data_mapperIdlLi0ELi0EEELi6ELi2ELi0ELb0ELb1EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdlNS0_22const_blas_data_mapperIdlLi0EEELi6ELi2ELi0ELb0ELb0EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdlNS0_22const_blas_data_mapperIdlLi0EEELi6ELi2ELi0ELb1ELb0EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdlNS0_22const_blas_data_mapperIdlLi1EEELi6ELi2ELi1ELb0ELb0EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_lhsIdlNS0_22const_blas_data_mapperIdlLi1EEELi6ELi2ELi1ELb1ELb0EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdlNS0_16blas_data_mapperIdlLi0ELi0EEELi4ELi0ELb0ELb1EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdlNS0_22const_blas_data_mapperIdlLi1EEELi4ELi1ELb0ELb0EEclEPdRKS3_llll  x2
+  N _ZN5Eigen8internal13gemm_pack_rhsIdlNS0_22const_blas_data_mapperIdlLi1EEELi4ELi1ELb0ELb1EEclEPdRKS3_llll  x2
+  N _ZN4aidl7android8hardware5radio4data11BpRadioData20allocatePduSessionIdEi  x2
+  N _ZN4aidl7android8hardware5radio4data11BpRadioData19releasePduSessionIdEii  x2
+  N _ZN4aidl7android8hardware5radio4data17IRadioDataDefault20allocatePduSessionIdEi  x2
+  N _ZN4aidl7android8hardware5radio4data17IRadioDataDefault19releasePduSessionIdEii  x2
+  N _ZN4aidl7android8hardware5radio4data19BpRadioDataResponse28allocatePduSessionIdResponseERKNS2_17RadioResponseInfoEi  x2
+  N _ZN4aidl7android8hardware5radio4data19BpRadioDataResponse27releasePduSessionIdResponseERKNS2_17RadioResponseInfoE  x2
+  N _ZN4aidl7android8hardware5radio4data25IRadioDataResponseDefault28allocatePduSessionIdResponseERKNS2_17RadioResponseInfoEi  x2
+  N _ZN4aidl7android8hardware5radio4data25IRadioDataResponseDefault27releasePduSessionIdResponseERKNS2_17RadioResponseInfoE  x2
+  N _ZN4aidl7android8hardware5radio3sim16SimRefreshResult14readFromParcelEPK7AParcel  x2
+  N _ZN4aidl7android8hardware5radio3sim20BpRadioSimIndication10simRefreshENS2_19RadioIndicationTypeERKNS3_16SimRefreshResultE  x2
+  N _ZNK4aidl7android8hardware5radio3sim16SimRefreshResult13writeToParcelEP7AParcel  x2
+  N _ZN4aidl7android8hardware5radio3sim26IRadioSimIndicationDefault10simRefreshENS2_19RadioIndicationTypeERKNS3_16SimRefreshResultE  x2
+  N _ZN4aidl7android8hardware5radio3sim16SimRefreshResult10descriptorE  x2
+  N android.hardware.radio.sim.SimRefreshResult  x2
+  N SimRefreshType  x2
+  N epdgConfigCertificateFragment  x2
+  N epdgConfigOtherFragment  x2
+  N epdgConfigTimerFragment  x2
+  N epdg_certificate.xml  x2
+  N epdg_config.xml  x2
+  N epdg_emergency.xml  x2
+  N epdg_general.xml  x2
+  N epdg_general_dialog.xml  x2
+  N epdg_other.xml  x2

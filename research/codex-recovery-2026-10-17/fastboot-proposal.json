@@ -1,0 +1,30 @@
+{
+  "operation": "Write misc-fastboot-once.bin to misc, read back and compare; only after equality reboot to bootloader fastboot",
+  "changed_offsets": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "before_sha256": "4dc68cb24cc30bd5c991acabeca7feebbd1e507585a8c3e2f5d1e2c459c08ee7",
+  "after_sha256": "ae27a966ccf652591f4e6ea2c58f841e9d94a8d7ceeae42f56a16115702bd5a7",
+  "size": 524288,
+  "slot_control_unchanged": true,
+  "rollback": "Write captured misc.bin back to misc if needed",
+  "no_wipe_command": true
+}
