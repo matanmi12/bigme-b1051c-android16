@@ -103,3 +103,14 @@ The first boot is slow while GmsCore (175 MB) is dexopted, and the module uses a
 - GSF/Android ID (for google.com/android/uncertified, decimal): <GSF_ID>.
   On current GMS it lives in `/data/data/com.google.android.gms/databases/gservices.db` (table `main`, name `android_id`),
   not in the GSF database.
+
+## Factory Reset Protection (FRP) is disabled on purpose
+There is no Google setup wizard on this ROM, so FRP armed by a Google account could never be cleared after a factory
+reset. `post-fs-data.sh` deletes `ro.frp.pst`, so system_server does not start PersistentDataBlockService: neither
+Play services nor the lock screen can write FRP data. The `frp` partition itself is not touched. Side effect: the
+"OEM unlocking" toggle in Developer options is unavailable (the bootloader stays unlocked). Verify with
+`service check persistent_data_block` -> "not found".
+
+## Sign-in failing with "No WebView installed"
+On this GSI WebViewUpdateService may come up with no provider although `com.android.webview` is installed; Google
+sign-in (MinuteMaid) then crashes. Fix once (persists): `cmd webviewupdate set-webview-implementation com.android.webview`.
