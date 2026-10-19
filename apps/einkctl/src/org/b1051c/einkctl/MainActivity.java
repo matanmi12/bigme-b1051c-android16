@@ -18,7 +18,7 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-/** Single-screen control panel, built for e-ink: black on white, no animations, large targets. */
+/** Single-screen control panel, built for e-ink: InKognito look (Ink), no animations, large targets. */
 public class MainActivity extends Activity {
     private SharedPreferences p;
     private LinearLayout root;
@@ -31,11 +31,18 @@ public class MainActivity extends Activity {
         startForegroundService(new Intent(this, KeeperService.class));
 
         ScrollView sv = new ScrollView(this);
-        sv.setBackgroundColor(Color.WHITE);
+        sv.setBackgroundColor(Ink.CREAM);
         root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         int pad = dp(20);
         root.setPadding(pad, pad, pad, pad);
+        // Android 15+ draws targetSdk 35 apps edge to edge: keep the content clear of the status bar and the taskbar
+        sv.setOnApplyWindowInsetsListener((v, ins) -> {
+            android.graphics.Insets bars = ins.getInsets(android.view.WindowInsets.Type.systemBars()
+                    | android.view.WindowInsets.Type.displayCutout());
+            root.setPadding(pad + bars.left, pad + bars.top, pad + bars.right, pad + bars.bottom);
+            return android.view.WindowInsets.CONSUMED;
+        });
         sv.addView(root);
         setContentView(sv);
 
@@ -43,12 +50,12 @@ public class MainActivity extends Activity {
 
         // Front light
         section("Front light");
-        CheckBox lightOn = check("Front light on", p.getBoolean("light_on", false), v -> {
+        check("Front light on", p.getBoolean("light_on", false), v -> {
             p.edit().putBoolean("light_on", v).apply();
             Eink.applyFrontlight(this);
         });
         slider("Cold (white)", "cold", 0, Eink.FL_MAX, 40, v -> { if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this); });
-        slider("Warm (amber)", "warm", 0, Eink.FL_MAX, 40, v -> { if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this); });
+        slider("Warm (amber)", "warm", 0, Eink.FL_MAX, 40, Ink.GOLD, v -> { if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this); });
         check("Follow Android's brightness slider", p.getBoolean("link_brightness", false), v -> {
             p.edit().putBoolean("link_brightness", v).apply();
             Eink.applyFrontlight(this);
@@ -62,12 +69,7 @@ public class MainActivity extends Activity {
         RadioGroup rg = new RadioGroup(this);
         int cur = Eink.modeIndex(p.getInt("mode", 0));
         for (int i = 0; i < Eink.MODES.length; i++) {
-            RadioButton rb = new RadioButton(this);
-            rb.setText(Eink.MODE_NAMES[i]);
-            rb.setTextSize(18);
-            rb.setTextColor(Color.BLACK);
-            rb.setId(1000 + i);
-            rb.setPadding(dp(8), dp(10), dp(8), dp(10));
+            RadioButton rb = radio(Eink.MODE_NAMES[i], 1000 + i);
             rg.addView(rb);
             if (i == cur) rb.setChecked(true);
         }
@@ -76,7 +78,7 @@ public class MainActivity extends Activity {
             Eink.applyRefreshMode(this);
         });
         root.addView(rg);
-        button("Clear screen (full refresh)", v -> Eink.clearScreen(this));
+        button("Clear screen (full refresh)", true, v -> Eink.clearScreen(this));
         check("Refresh button next to the navigation buttons", p.getBoolean("nav_refresh", true), v -> {
             p.edit().putBoolean("nav_refresh", v).apply();
             AppProfileService.navChanged();
@@ -90,7 +92,7 @@ public class MainActivity extends Activity {
         SeekBar dpiBar = new SeekBar(this);
         dpiBar.setMin(Eink.DPI_MIN / 10);
         dpiBar.setMax(Eink.DPI_MAX / 10);                       // steps of 10 dpi
-        dpiBar.setPadding(dp(16), dp(14), dp(16), dp(14));
+        Ink.styleSeekBar(dpiBar, Ink.STEEL);
         dpiBar.setEnabled(false);
         dpiBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar s, int v, boolean user) {
@@ -120,23 +122,24 @@ public class MainActivity extends Activity {
         int[] shadeVals = {0, 1, 2, -1};
         int curShade = Eink.secureInt(this, "b1051c_shade_theme", 0);
         for (int i = 0; i < shadeNames.length; i++) {
-            RadioButton rb = new RadioButton(this);
-            rb.setText(shadeNames[i]);
-            rb.setTextSize(18);
-            rb.setTextColor(Color.BLACK);
-            rb.setId(3000 + i);
-            rb.setPadding(dp(8), dp(10), dp(8), dp(10));
+            RadioButton rb = radio(shadeNames[i], 3000 + i);
             sg.addView(rb);
             if (shadeVals[i] == curShade) rb.setChecked(true);
         }
         sg.setOnCheckedChangeListener((g, id) -> Eink.putSecure(this, "b1051c_shade_theme", shadeVals[id - 3000]));
         root.addView(sg);
-        TextView strokeLabel = text("Outline width: " + Eink.secureInt(this, "b1051c_shade_stroke", 15) / 10f + " dp", 17, false);
+        // the plugin's default outline: 2.5 dp with the InKognito colours, 1.5 dp plain
+        boolean[] inkShade = {Eink.secureInt(this, "b1051c_shade_palette", 1) != 0};
+        int strokeNow = Eink.secureInt(this, "b1051c_shade_stroke", -1);
+        if (strokeNow <= 0) strokeNow = inkShade[0] ? 25 : 15;
+        check("InKognito colors (off = black and white)", inkShade[0],
+                v -> Eink.putSecure(this, "b1051c_shade_palette", v ? 1 : 0));
+        TextView strokeLabel = text("Outline width: " + strokeNow / 10f + " dp", 17, false);
         SeekBar stroke = new SeekBar(this);
         stroke.setMin(5);
         stroke.setMax(40);
-        stroke.setProgress(Eink.secureInt(this, "b1051c_shade_stroke", 15));
-        stroke.setPadding(dp(16), dp(14), dp(16), dp(14));
+        stroke.setProgress(strokeNow);
+        Ink.styleSeekBar(stroke, Ink.STEEL);
         stroke.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar s, int v, boolean user) { strokeLabel.setText("Outline width: " + v / 10f + " dp"); }
             @Override public void onStartTrackingTouch(SeekBar s) {}
@@ -150,15 +153,7 @@ public class MainActivity extends Activity {
         // Colour
         section("Color");
         RadioGroup pg = new RadioGroup(this);
-        for (int i = 0; i < Eink.PROFILE_NAMES.length; i++) {
-            RadioButton rb = new RadioButton(this);
-            rb.setText(Eink.PROFILE_NAMES[i]);
-            rb.setTextSize(18);
-            rb.setTextColor(Color.BLACK);
-            rb.setId(2000 + i);
-            rb.setPadding(dp(8), dp(10), dp(8), dp(10));
-            pg.addView(rb);
-        }
+        for (int i = 0; i < Eink.PROFILE_NAMES.length; i++) pg.addView(radio(Eink.PROFILE_NAMES[i], 2000 + i));
         pg.check(2000 + Eink.clamp(p.getInt("profile", 0), 0, Eink.PROFILE_NAMES.length - 1));
         root.addView(pg);
         SeekBar[] img = new SeekBar[3];                             // vivid, contrast, colour brightness
@@ -338,15 +333,33 @@ public class MainActivity extends Activity {
         }
     }
 
+    /** One app = an outlined card: name, then its profile summary in the caption colour. */
     private void appRow(String label, String key) {
         Button b = new Button(this);
         b.setAllCaps(false);
-        b.setTextSize(16);
-        b.setTextColor(Color.BLACK);
+        b.setTextSize(17);
+        b.setTextColor(Ink.INK);
+        b.setTypeface(Ink.font(this, 400));
         b.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-        b.setText(label + "  —  " + Profiles.summary(Profiles.get(this, key)));
+        b.setBackground(Ink.pill(this, Ink.CREAM, 14));
+        b.setStateListAnimator(null);
+        b.setPadding(dp(16), dp(10), dp(16), dp(10));
+        b.setText(rowText(label, Profiles.summary(Profiles.get(this, key))));
         b.setOnClickListener(v -> editProfile(label, key, b));
-        root.addView(b, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(56)));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, dp(5), 0, dp(5));
+        root.addView(b, lp);
+    }
+
+    private CharSequence rowText(String label, String summary) {
+        android.text.SpannableStringBuilder s = new android.text.SpannableStringBuilder(label);
+        s.setSpan(new android.text.style.TypefaceSpan(Ink.font(this, 600)), 0, s.length(), 0);
+        int at = s.length();
+        s.append("\n").append(summary);
+        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.MUTED), at, s.length(), 0);
+        s.setSpan(new android.text.style.RelativeSizeSpan(0.85f), at, s.length(), 0);
+        return s;
     }
 
     private static final String[] TRI = {"Inherit", "On", "Off"};
@@ -402,7 +415,7 @@ public class MainActivity extends Activity {
 
     private void saveProfile(String label, String key, org.json.JSONObject x, Button row) {
         Profiles.put(this, key, x);
-        row.setText(label + "  —  " + Profiles.summary(x));
+        row.setText(rowText(label, Profiles.summary(x)));
         Profiles.apply(this, AppProfileService.currentPackage(), true);
     }
 
@@ -417,7 +430,8 @@ public class MainActivity extends Activity {
         TextView t = new TextView(this);
         t.setText(label);
         t.setTextSize(15);
-        t.setTextColor(Color.BLACK);
+        t.setTextColor(Ink.INK);
+        t.setTypeface(Ink.font(this, 500));
         t.setPadding(0, dp(10), 0, 0);
         box.addView(t);
         android.widget.Spinner s = new android.widget.Spinner(this, android.widget.Spinner.MODE_DIALOG);
@@ -432,21 +446,38 @@ public class MainActivity extends Activity {
     // ---- tiny UI helpers --------------------------------------------------------------------------
     private int dp(int v) { return Math.round(v * getResources().getDisplayMetrics().density); }
 
+    /** Board 05 identity: the title in the wordmark face, "InKognito" in the logo's steel + bordeaux. */
     private void header(String t) {
-        TextView tv = text(t, 26, true);
-        tv.setPadding(0, 0, 0, dp(12));
+        TextView brand = new TextView(this);
+        android.text.SpannableStringBuilder s = new android.text.SpannableStringBuilder("InKognito");
+        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.STEEL), 0, 2, 0);
+        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.BORDEAUX), 2, 9, 0);
+        s.append("  ·  Less bloat. More ink.");
+        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.MUTED), 9, s.length(), 0);
+        s.setSpan(new android.text.style.RelativeSizeSpan(0.7f), 9, s.length(), 0);
+        brand.setText(s);
+        brand.setTextSize(20);
+        brand.setTypeface(Ink.display(this));
+        root.addView(brand);
+        TextView tv = text(t, 36, false);
+        tv.setTypeface(Ink.display(this));
+        tv.setPadding(0, dp(2), 0, dp(10));
     }
 
+    /** Riveted steel band, then the section title (board 05). */
     private void section(String t) {
-        View line = new View(this);
-        line.setBackgroundColor(Color.BLACK);
-        root.addView(line, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(2)));
-        TextView tv = text(t, 21, true);
-        tv.setPadding(0, dp(14), 0, dp(6));
+        View band = new View(this);
+        band.setBackground(new Ink.RivetBand(this));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(10));
+        lp.topMargin = dp(18);
+        root.addView(band, lp);
+        TextView tv = text(t, 22, true);
+        tv.setPadding(0, dp(12), 0, dp(6));
     }
 
     private TextView note(String t) {
         TextView tv = text(t, 15, false);
+        tv.setTextColor(Ink.MUTED);
         tv.setPadding(0, dp(4), 0, dp(12));
         return tv;
     }
@@ -455,24 +486,46 @@ public class MainActivity extends Activity {
         TextView tv = new TextView(this);
         tv.setText(t);
         tv.setTextSize(sp);
-        tv.setTextColor(Color.BLACK);
-        if (bold) tv.setTypeface(Typeface.DEFAULT_BOLD);
+        tv.setTextColor(Ink.INK);
+        tv.setTypeface(Ink.font(this, bold ? 600 : 400));
         root.addView(tv);
         return tv;
+    }
+
+    private RadioButton radio(String t, int id) {
+        RadioButton rb = new RadioButton(this);
+        rb.setText(t);
+        rb.setTextSize(18);
+        rb.setTextColor(Ink.INK);
+        rb.setTypeface(Ink.font(this, 400));
+        rb.setButtonTintList(Ink.tint(Ink.TEAL));
+        rb.setId(id);
+        rb.setPadding(dp(8), dp(10), dp(8), dp(10));
+        return rb;
     }
 
     private interface IntCb { void on(int v); }
     private interface BoolCb { void on(boolean v); }
 
-    private CheckBox check(String t, boolean val, BoolCb cb) {
-        CheckBox c = new CheckBox(this);
+    /** On/off setting: text left, badge toggle right (teal track + light-gold knob when on). */
+    private android.widget.Switch check(String t, boolean val, BoolCb cb) {
+        android.widget.Switch c = new android.widget.Switch(this);
         c.setText(t);
         c.setTextSize(18);
-        c.setTextColor(Color.BLACK);
+        c.setTextColor(Ink.INK);
+        c.setTypeface(Ink.font(this, 400));
+        c.setTrackDrawable(Ink.switchTrack(this));
+        c.setThumbDrawable(Ink.switchThumb(this));
+        c.setTrackTintList(null);
+        c.setThumbTintList(null);
+        c.setSwitchMinWidth(dp(58));
+        c.setSwitchPadding(dp(16));
+        c.setShowText(false);
         c.setChecked(val);
-        c.setPadding(dp(8), dp(10), dp(8), dp(10));
+        c.setPadding(dp(4), dp(12), dp(4), dp(12));
         c.setOnCheckedChangeListener((b, v) -> cb.on(v));
-        root.addView(c);
+        root.addView(c, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         return c;
     }
 
@@ -484,12 +537,17 @@ public class MainActivity extends Activity {
     }
 
     private SeekBar slider(String label, String key, int min, int max, int def, IntCb cb) {
+        return slider(label, key, min, max, def, Ink.STEEL, cb);
+    }
+
+    /** Labelled badge slider; {@code fill} = steel, or gold for the warm light (as in the shade). */
+    private SeekBar slider(String label, String key, int min, int max, int def, int fill, IntCb cb) {
         TextView tv = text(label + ": " + p.getInt(key, def), 17, false);
         SeekBar sb = new SeekBar(this);
         sb.setMin(min);
         sb.setMax(max);
         sb.setProgress(p.getInt(key, def));
-        sb.setPadding(dp(16), dp(14), dp(16), dp(14));
+        Ink.styleSeekBar(sb, fill);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar s, int v, boolean user) { tv.setText(label + ": " + v); }
             @Override public void onStartTrackingTouch(SeekBar s) {}
@@ -502,16 +560,22 @@ public class MainActivity extends Activity {
         return sb;
     }
 
-    private void button(String t, View.OnClickListener l) {
+    private void button(String t, View.OnClickListener l) { button(t, false, l); }
+
+    /** Pill button with an ink outline; primary = bordeaux with cream text (board 05 "Apply"). */
+    private void button(String t, boolean primary, View.OnClickListener l) {
         Button b = new Button(this);
         b.setText(t);
         b.setTextSize(18);
         b.setAllCaps(false);
-        b.setTextColor(Color.BLACK);
+        b.setTypeface(Ink.font(this, 600));
+        b.setTextColor(primary ? Ink.CREAM : Ink.INK);
+        b.setBackground(Ink.pill(this, primary ? Ink.BORDEAUX : Ink.CREAM, 999));
+        b.setStateListAnimator(null);
         b.setGravity(Gravity.CENTER);
         b.setOnClickListener(l);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(64));
-        lp.setMargins(0, dp(6), 0, dp(10));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(60));
+        lp.setMargins(0, dp(8), 0, dp(10));
         root.addView(b, lp);
     }
 }

@@ -1,0 +1,3 @@
+f6d59171a3e7d5cb5309f59bb2ea17752b93ec3c9c5fc501aad302c91728a0e4  research/phase-c/20261019-161555-boot-write12/boot_b_w12.img
+research/phase-c/20261019-161555-boot-write12/boot_b_w12.img: 50 MHz @ 0x1959d7c — CAPPED
+CHECK OK: boot: header v2, kernel (14719687 B) identical to stock; DTB (186186 B) = stock + SD cap 50 MHz; ramdisk 11553759 -> 11829841 B; image 41943040 B

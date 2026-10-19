@@ -1,0 +1,7 @@
+pre-checks 2026-10-19 15:37:37
+_b
+disabled
+/dev/block/sdc53
+41943040
+57d07a2b5a3d99a1a3c3c37e544a85116e6837952f917de1524a83da5509b1e7  /data/local/tmp/w9/boot_b_live.img
+/data/adb/magisk/magiskboot

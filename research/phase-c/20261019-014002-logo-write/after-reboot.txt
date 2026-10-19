@@ -1,0 +1,2 @@
+264aba89149df7eb09b4d9e6e1ada8f492d2b1d6468145eff442040c93ea9734  /dev/block/by-name/logo
+slot=_b verity=disabled bootanim=running

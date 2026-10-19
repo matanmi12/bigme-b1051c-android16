@@ -1,0 +1,7 @@
+== pre-checks
+Mon Oct 19 01:40:03 IDT 2026
+_b
+lrwxrwxrwx 1 root root 16 2026-10-19 01:20 /dev/block/by-name/logo -> /dev/block/sdc40
+ro=0 size=15728640
+264aba89149df7eb09b4d9e6e1ada8f492d2b1d6468145eff442040c93ea9734  /data/local/tmp/logo-candidate-cream.bin
+84983b34e07be58664cc9b5c1183bfdbce1b30ed681ed9ffbe63bc09a49ad896  /dev/block/by-name/logo

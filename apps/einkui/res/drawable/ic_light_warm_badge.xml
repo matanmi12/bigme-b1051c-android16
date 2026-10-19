@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Warm front light in the badge style (design board 05): gold flame with an ink outline. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFCD8E2C" android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineJoin="round"
+        android:pathData="M12,2.5c2.5,3.5 5.5,6 5.5,10.5a5.5,5.5 0 0,1 -11,0c0,-2.4 1.2,-3.6 2,-4.6c0.3,1.6 1,2.6 2,3c0,-3.7 1.5,-6.3 1.5,-8.9z" />
+</vector>

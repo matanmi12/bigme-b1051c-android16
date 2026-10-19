@@ -1,0 +1,11 @@
+write11 2026-10-19 15:59:10
+/dev/block/sdc40
+15728640
+live=24ac4106885c5d69300790fcb45dbea9d98a26089091ca0a2e9b2d3a59d3c8f6
+cand=574cd488d488c981dd8d85cc730f8b3e64adc42edb8e0633fbccce2978f1829e
+15+0 records in
+15+0 records out
+15728640 bytes (15 M) copied, 0.036 s, 417 M/s
+dd-exit=0
+574cd488d488c981dd8d85cc730f8b3e64adc42edb8e0633fbccce2978f1829e  /dev/block/by-name/logo
+end 15:59:10

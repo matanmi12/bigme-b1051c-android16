@@ -1,0 +1,12 @@
+write9 2026-10-19 15:42:12
+_b
+/dev/block/sdc53
+57d07a2b5a3d99a1a3c3c37e544a85116e6837952f917de1524a83da5509b1e7  /dev/block/by-name/boot_b
+fc08b0538c1725eeb6f226954b2ae52b97c6bb916629817be5fc5681e07fd2ff  /data/local/tmp/boot_b_w9n.img
+dd start 15:42:18
+40+0 records in
+40+0 records out
+41943040 bytes (40 M) copied, 0.090 s, 444 M/s
+dd-exit=0
+fc08b0538c1725eeb6f226954b2ae52b97c6bb916629817be5fc5681e07fd2ff  /dev/block/by-name/boot_b
+dd end 15:42:18

@@ -1,9 +1,34 @@
-# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-18, 23:30)
+# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-19, 04:00)
 
 Plan: `~/.claude/plans/pasted-content-id-25ff-bigme-mellow-sutton.md` (approved; **Revision 2** at its top).
 Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-verity-warning-2026-10-17.md`,
 `research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
 Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
+
+## Night 2026-10-19 02:15–04:00 — design board 05 applied (owner asleep, overnight work approved)
+- **Live:** E-Ink SystemUI plugin **0.3.4** build 23 (InKognito palette in the shade, riveted light sliders,
+  `b1051c_shade_palette` 1/0), E-Ink Control **0.12.2** build 38 (InKognito look, Rubik + Lilita One in assets,
+  setLight never drives the LEDs while the screen is off), Magisk module **b1051c-fonts 0.1.0** (Rubik as
+  Roboto-Regular.ttf, needs a reboot; done 03:10). WRITE 7 logo unchanged. No partition writes tonight.
+- Canvas: board 06 "Built on the tablet" (screenshots, SSID redacted) next to board 05.
+- Front light: switched off at 02:22 so the panel stayed dark in the bedroom; restored to cold 222 / warm 180 at the
+  end with the screen off (comes back on the next wake) — see settings-changes.log.
+- Regression found and fixed: plugin 0.3.3 painted the expanded QS cream (unbounded RenderEffect), 02:33–03:34.
+- Night mode restored to auto (it was forced no/yes for screenshots). Lawnchair text colour was already Dark.
+
+## Morning 2026-10-19 00:40–01:30 (plan ~/.claude/plans/iconframes-java-jaunty-rabin.md, approved)
+- **Live after a clean reboot (01:19):** `b1051c-eink-compat` **0.1.12** (shim `bb2248ce…`: + stock-style page
+  count, `page_min_pct` 40, bounding box of changed 8×8 cells), `b1051c-icons` **0.1.6** (owner-approved custom
+  drawings as fallback: KOReader, E-Ink Control, Gallery, Gemini, Home, Docs, Magisk; generator no longer overlays
+  service/receiver icons), E-Ink Control **0.11.2** (shutdown/reboot screen, KoBridgeReceiver, own notification
+  icon), KOReader patches `koreader/patches/{1-bigme-eink,2-bigme-light-dialog}.lua`, KOReader profile n 0.
+- Settings: `stay_on_while_plugged_in` 0 (lock screen sleeps on the charger), locale en-US-u-mu-celsius + 24 h.
+- Boot logo: `work/bootlogo/` (cream/white 1860×2480, step-2 frames), `tools/scripts/logo_tool.py` (round trip
+  byte-identical; candidates `logo-candidate-{cream,white}.bin`, 9.2 MB of 15 MiB, NOT written). Partition has a
+  cert1/cert2 trailer; LK logs `img_auth_required = 0`.
+- Design: palette card `work/design/palette-test-1860x2480.png` on the tablet; board 05 "InKognito Badge" on the
+  design canvas. Public repo pushed `bb5d7fd` (book list and the staging script itself stay private).
+- Global refresh is HD 256 + Magazine since between 00:17 and 01:12 (not set by a logged step; owner to confirm).
 
 ## Overnight 2026-10-19 00:00–00:30 (owner-approved; supersedes the versions listed in the next section)
 - **Module `b1051c-eink-compat` 0.1.11** (zip `d714838d…`, shim `7597ce3b…`), verified after a reboot (00:20):

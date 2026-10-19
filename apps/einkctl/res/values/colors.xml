@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- InKognito palette, sampled from the boot logo (design board 05); ink is pure black on the panel. -->
+    <color name="ink">#FF000000</color>
+    <color name="paper">#FFF7F4E7</color>
+    <color name="bordeaux">#FF932845</color>
+    <color name="teal">#FF194D50</color>
+    <color name="gold">#FFCD8E2C</color>
+    <color name="light_gold">#FFF7BF5D</color>
+    <color name="steel">#FF5D7E91</color>
+    <color name="silver">#FFA7B0B6</color>
+    <color name="muted">#FF4A4342</color>
+</resources>

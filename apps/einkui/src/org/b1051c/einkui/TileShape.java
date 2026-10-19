@@ -27,6 +27,12 @@ final class TileShape extends Drawable {
         setLine(lineWidth, lineColor);
     }
 
+    void setRadius(float radius) {
+        if (this.radius == radius) return;
+        this.radius = radius;
+        invalidateSelf();
+    }
+
     void setLine(float width, int color) {
         if (line.getStrokeWidth() == width && line.getColor() == color) return;
         line.setStrokeWidth(width);

@@ -38,7 +38,7 @@ final class LightSliders {
     private View orig;
     private LinearLayout box;
     private SeekBar cold, warm;
-    private int styledMode = -1;
+    private int styledGen = -1;
     private int gap;                 // QS tile row spacing, also kept between the sliders and the tiles
     private boolean tracking;
     private boolean writeFailed;
@@ -71,7 +71,7 @@ final class LightSliders {
             if (box.getParent() != null) ((ViewGroup) box.getParent()).removeView(box);
             parent.addView(box, parent.indexOfChild(brightness) + 1, boxParams(brightness));
         }
-        if (styledMode != s.mode) style(s);
+        if (styledGen != s.gen) style(s);
     }
 
     private ViewGroup.LayoutParams boxParams(View brightness) {
@@ -109,7 +109,7 @@ final class LightSliders {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, h);
         lp.topMargin = gap;
         box.addView(warm, lp);
-        styledMode = -1;
+        styledGen = -1;
         syncFromSettings();
     }
 
@@ -154,12 +154,45 @@ final class LightSliders {
         warm.setProgress(stepOf(Settings.Secure.getInt(cr, KEY_WARM, 0)));
     }
 
-    /** Progress drawable = a fresh brightness drawable from SystemUI, recoloured for e-ink modes, icon swapped. */
+    /** InKognito palette: badge-style SliderTrack. Otherwise: a fresh brightness drawable from SystemUI, recoloured
+     *  for the plain e-ink modes, icon swapped. */
     private void style(ShadeStyler s) {
-        styledMode = s.mode;
+        styledGen = s.gen;
         Context c = orig.getContext();
+        if (s.inkPalette) {
+            badge(cold, s, true);
+            badge(warm, s, false);
+            return;
+        }
+        cold.setPadding(0, 0, 0, 0);
+        warm.setPadding(0, 0, 0, 0);
         cold.setProgressDrawable(drawable(c, s, plugin.getDrawable(R.drawable.ic_light_cold)));
         warm.setProgressDrawable(drawable(c, s, plugin.getDrawable(R.drawable.ic_light_warm)));
+    }
+
+    /** Board 05: silver riveted track, steel (cold) or gold (warm) fill, cream thumb; dark shade = black track,
+     *  white ink, silver / light gold fill. */
+    private void badge(SeekBar b, ShadeStyler s, boolean isCold) {
+        SliderTrack.Colors k = new SliderTrack.Colors();
+        boolean dark = s.mode == 2;
+        k.track = dark ? 0xFF000000 : Palette.SILVER;
+        k.line = s.fg;
+        k.fill = isCold ? (dark ? Palette.SILVER : Palette.STEEL) : (dark ? Palette.LIGHT_GOLD : Palette.GOLD);
+        k.thumb = dark ? 0xFF000000 : Palette.CREAM;
+        k.rivets = true;
+        Drawable icon = plugin.getDrawable(isCold ? R.drawable.ic_light_cold_badge : R.drawable.ic_light_warm_badge).mutate();
+        if (dark) icon.setTint(s.fg);                   // the ink outlines would vanish on black: white silhouette
+        int h = b.getLayoutParams() != null && b.getLayoutParams().height > 0 ? b.getLayoutParams().height : dp(b.getContext(), 48);
+        float d = h * 0.8f;
+        int ext = Math.round(d / 2f + s.stroke), zone = Math.round(h * 0.9f);
+        b.setPadding(zone + ext, 0, ext, 0);
+        // ProgressBar sets the level of the layer with the matching id, or of the whole drawable when there is none:
+        // without its own secondaryProgress layer, the secondary progress (0) would overwrite the track's level.
+        LayerDrawable ld = new LayerDrawable(new Drawable[] {
+                new SliderTrack(k, s.stroke, ext, zone, icon), new android.graphics.drawable.ColorDrawable(0)});
+        ld.setId(0, android.R.id.progress);
+        ld.setId(1, android.R.id.secondaryProgress);
+        b.setProgressDrawable(ld);
     }
 
     private Drawable drawable(Context c, ShadeStyler s, Drawable icon) {

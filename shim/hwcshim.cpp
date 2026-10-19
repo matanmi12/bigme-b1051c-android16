@@ -228,6 +228,7 @@ static int g_turns;                 // page turns since the last GC16 (HWC threa
 // is no help (it is not re-sent for static layers, so stale full damage lingers), so we measure the picture:
 // one sample per 8x8 cell of the client target, compared with the frame at the previous candidate.
 static int g_page_min_pct = 40;     // vendor.debug.hwc.shim.page_min_pct (0 = count every touch-driven commit)
+static int g_boot_damage;           // vendor.debug.hwc.shim.boot_damage: 1 while booting (module post-fs-data)
 static uint8_t g_thumb[(2480 / 8) * (1860 / 8)];
 static bool g_thumb_valid;
 
@@ -260,6 +261,7 @@ struct LayerState {
     hwc_frect_t crop;
     int32_t refresh_mode;   // last value we pushed via descriptor 71
     uint32_t buffer_changes;
+    buffer_handle_t damaged_for;   // boot_damage: buffer we last forced full damage for
 };
 #define MAX_LAYERS 96
 static LayerState g_layers[MAX_LAYERS];
@@ -328,6 +330,7 @@ static void refresh_knobs() {
     g_check_commit = prop_int("vendor.xrz.check_commit", 0);
     g_auto_gc16 = prop_int("vendor.debug.hwc.shim.auto_gc16", 1);
     g_page_min_pct = prop_int("vendor.debug.hwc.shim.page_min_pct", 40);
+    g_boot_damage = prop_int("vendor.debug.hwc.shim.boot_damage", 0);
     g_global_mode = prop_int("vendor.xrz.global_refresh_mode", 0);
     g_force_regal = prop_int("vendor.debug.hwc.shim.force_regal", 1);
     if (g_cp_want.sat < 0) g_cp_want.sat = 0; if (g_cp_want.sat > 100) g_cp_want.sat = 100;
@@ -937,6 +940,20 @@ static int (*real_mtk_commit)(const drm_eink_update*);
 static int hook_mtk_commit(const drm_eink_update* orig) {
     static Limiter L = {0, 40, 120};
     refresh_knobs();
+    // When SurfaceFlinger dies (init kills it at every shutdown), the composer destroys all layers and performs "a
+    // final presentDisplay" with none: the vendor HWC renders that as an empty, black frame, and on power-off the
+    // panel keeps it, replacing the shutdown picture (owner 2026-10-19: "black screen at shutdown"). A commit while
+    // the display has no layer at all never carries content: skip it. vendor.debug.hwc.shim.keep_empty_commit=1 = off.
+    {
+        int layers = 0;
+        pthread_mutex_lock(&g_lock);
+        for (int i = 0; i < MAX_LAYERS; i++) if (g_layers[i].used) layers++;
+        pthread_mutex_unlock(&g_lock);
+        if (layers == 0 && prop_int("vendor.debug.hwc.shim.keep_empty_commit", 0) == 0) {
+            LOGI("e-ink commit with no layers (SurfaceFlinger gone?) skipped: the panel keeps its picture");
+            return 0;
+        }
+    }
     drm_eink_update mod = *orig; const drm_eink_update* u = orig;
     bool rewritten = false;
     if (g_commit_stride > 0 && mod.stride != (uint32_t)g_commit_stride) { mod.stride = g_commit_stride; rewritten = true; }
@@ -1354,6 +1371,37 @@ static void log_layer_table(hwc2_display_t display, const char* when) {
     pthread_mutex_unlock(&g_lock);
 }
 
+// Boot only (vendor.debug.hwc.shim.boot_damage=1, set by the module's post-fs-data and cleared at boot_completed):
+// for its first ~2 s SurfaceFlinger sends no surface damage for a new layer, so the vendor HWC saw "No dirty region"
+// and skipped the first boot-animation frames (2026-10-19: frames 1-2 of 4 never reached the panel). Every layer that
+// got a new buffer since the last validate gets the whole source as damage. Off after boot: normal partial updates.
+static void force_boot_damage(hwc2_device_t* dev, hwc2_display_t display) {
+    PFN_setLayerSurfaceDamage real = (PFN_setLayerSurfaceDamage)g_real_fn[FN_SET_LAYER_SURFACE_DAMAGE];
+    if (!real) return;
+    hwc2_layer_t ids[MAX_LAYERS];
+    hwc_rect_t rects[MAX_LAYERS];
+    int n = 0;
+    pthread_mutex_lock(&g_lock);
+    for (int i = 0; i < MAX_LAYERS; i++) {
+        LayerState* l = &g_layers[i];
+        if (!l->used || l->display != display || !l->buffer || l->buffer == l->damaged_for) continue;
+        l->damaged_for = l->buffer;
+        hwc_rect_t whole = {0, 0, 16384, 16384};
+        if (l->crop.right > l->crop.left && l->crop.bottom > l->crop.top)
+            whole = {(int32_t)l->crop.left, (int32_t)l->crop.top, (int32_t)ceilf(l->crop.right), (int32_t)ceilf(l->crop.bottom)};
+        else if (l->buf.valid && l->buf.w > 0 && l->buf.h > 0)
+            whole = {0, 0, l->buf.w, l->buf.h};
+        ids[n] = l->id; rects[n] = whole; n++;
+    }
+    pthread_mutex_unlock(&g_lock);
+    static Limiter L = {0, 6, 600};
+    for (int i = 0; i < n; i++) {
+        hwc_region_t full = {1, &rects[i]};
+        real(dev, display, ids[i], full);
+        if (lim(L)) LOGI("boot damage L%" PRIu64 ": new buffer -> [%d,%d,%d,%d]", ids[i], rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+    }
+}
+
 static int32_t hook_validateDisplay(hwc2_device_t* dev, hwc2_display_t display, uint32_t* outNumTypes, uint32_t* outNumRequests) {
     static Limiter L = {0, 12, 240};
     refresh_knobs();
@@ -1367,6 +1415,7 @@ static int32_t hook_validateDisplay(hwc2_device_t* dev, hwc2_display_t display, 
         LOGI("refresh_mode knob now %d", g_refresh_mode);
     }
     bool say = lim(L);
+    if (g_boot_damage) force_boot_damage(dev, display);
     if (say) log_layer_table(display, "validateDisplay IN");
     int32_t err = ((PFN_validateDisplay)g_real_fn[FN_VALIDATE_DISPLAY])(dev, display, outNumTypes, outNumRequests);
     __atomic_fetch_add(&g_ct.validate, 1, __ATOMIC_RELAXED);

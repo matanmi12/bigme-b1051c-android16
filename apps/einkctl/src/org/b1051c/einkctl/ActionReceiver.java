@@ -16,6 +16,8 @@ public class ActionReceiver extends BroadcastReceiver {
     static final String EXPORT = "org.b1051c.einkctl.EXPORT", IMPORT = "org.b1051c.einkctl.IMPORT";
     /** Show the shutdown screen for 8 s without shutting down (extra "mode" overrides the setting once). */
     static final String PREVIEW_SHUTDOWN = "org.b1051c.einkctl.PREVIEW_SHUTDOWN";
+    /** --es file <name in the app's external files dir> [--es which home|lock|both]: set that image as wallpaper. */
+    static final String SET_WALLPAPER = "org.b1051c.einkctl.SET_WALLPAPER";
 
     @Override
     public void onReceive(Context c, Intent i) {
@@ -33,6 +35,12 @@ public class ActionReceiver extends BroadcastReceiver {
             }).start();
         } else if (PREVIEW_SHUTDOWN.equals(i.getAction())) {
             ShutdownScreen.preview(c, i.getStringExtra("mode"));
+        } else if (SET_WALLPAPER.equals(i.getAction())) {
+            String file = i.getStringExtra("file"), which = i.getStringExtra("which");
+            PendingResult r = goAsync();
+            new Thread(() -> {
+                try { Eink.setWallpaper(c, file, which); } finally { r.finish(); }
+            }).start();
         } else if (WHITE_WALLPAPER.equals(i.getAction())) {
             PendingResult r = goAsync();
             new Thread(() -> {
