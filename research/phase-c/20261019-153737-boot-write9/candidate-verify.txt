@@ -1,0 +1,7 @@
+== candidate (unpack -n, kernel kept)
+fc08b0538c1725eeb6f226954b2ae52b97c6bb916629817be5fc5681e07fd2ff  research/phase-c/20261019-153737-boot-write9/boot_b_w9.img
+research/phase-c/20261019-153737-boot-write9/boot_b_w9.img: 50 MHz @ 0x1a1257c — CAPPED
+CHECK OK: boot: header v2, kernel (14719687 B) identical to stock; DTB (186186 B) = stock + SD cap 50 MHz; ramdisk 11553759 -> 12585810 B; image 41943040 B
+c5dfabec6e4fc08738b8882e9644162de496bcdbb6a333f99be0719aa425c636  a
+5e256041b696a455d331a350b57052b9e0852185253964402ee0aa7b27b3d684  b
+d532096c6f094d9160b05ab60d11731ca5ced11a04027154f32769643050782a  c

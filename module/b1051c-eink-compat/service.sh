@@ -13,6 +13,7 @@ TAG=b1051c-compat
 resetprop persist.sys.phh.enable_sf_gl_backpressure false
 resetprop persist.sys.phh.enable_sf_hwc_backpressure false
 until [ "$(getprop sys.boot_completed)" = 1 ]; do sleep 2; done
+resetprop vendor.debug.hwc.shim.boot_damage 0   # boot-only full damage (post-fs-data) ends here at the latest
 # 4) einkd: raises vendor.xrz.check_commit for 800 ms after each touch/pen/key, like stock PowerManager, so the HWC's
 #    "full refresh every N big updates" (clean_frequency) counts page turns. Source: work/einkd/einkd.c
 if [ -x "$MODDIR/bin/einkd" ] && [ ! -f "$MODDIR/no_einkd" ]; then

@@ -1,0 +1,6 @@
+id=b1051c-launcher3
+name=Launcher3 taskbar: transparent on the home screen
+version=0.1.0
+versionCode=1
+author=matanmi12
+description=Launcher3QuickStep (GSI build bf92e8d5…) + org.b1051c.l3.HomeBg: the 3-button nav row has no background while the default home app (Lawnchair) is on top, and keeps it in apps. Signed with the AOSP testkey like the original. Switch: settings put secure b1051c_taskbar_home_bg 0 (stock look). Disable this module + reboot to get the untouched Launcher3 back. Source: work/launcher3patch.

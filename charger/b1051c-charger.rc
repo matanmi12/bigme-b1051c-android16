@@ -1,0 +1,15 @@
+# Bigme B1051C (InKognito): off-mode charging screen. Injected by Magisk overlay.d (works in charger mode, where
+# Magisk modules are not mounted). Charger mode only.
+# The AOSP charger's own drawing reaches this e-ink panel only through the kernel's RGB conversion, which needs the
+# stock /system/eink_key waveform file (absent on the GSI): every frame came out black with a thin line (diagnosed
+# 2026-10-19, WRITE 10). So the charger draws nothing: LK's charging picture (logo image 2: the black-pen badge with a
+# battery below it) stays on the panel. Charging, the power key and the low-battery shutdown are unchanged.
+on init && property:ro.bootmode=charger
+    setprop ro.charger.no_ui true
+    setprop ro.charger.disable_init_blank true
+
+# Diagnostics for the next normal boot (small text files in /metadata/b1051c/).
+on charger
+    mkdir /metadata/b1051c 0770 root system
+    copy /proc/self/mounts /metadata/b1051c/charger-mounts.txt
+    exec_background u:r:magisk:s0 root root -- /system/bin/sh ${MAGISKTMP}/b1051c_charger_diag.sh

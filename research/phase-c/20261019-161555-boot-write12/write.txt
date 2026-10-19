@@ -1,0 +1,11 @@
+write12 2026-10-19 16:16:09
+_b
+/dev/block/sdc53
+live=595595c698b5fc9954974e98e29793e87c6114c847065ab9ee46f119fedf8681
+cand=f6d59171a3e7d5cb5309f59bb2ea17752b93ec3c9c5fc501aad302c91728a0e4
+40+0 records in
+40+0 records out
+41943040 bytes (40 M) copied, 0.087 s, 460 M/s
+dd-exit=0
+f6d59171a3e7d5cb5309f59bb2ea17752b93ec3c9c5fc501aad302c91728a0e4  /dev/block/by-name/boot_b
+end 16:16:10

@@ -1,0 +1,11 @@
+pre-checks 2026-10-19 14:51:32
+24ac4106885c5d69300790fcb45dbea9d98a26089091ca0a2e9b2d3a59d3c8f6  work/bootlogo/bw/logo-candidate-bw.bin
+work/bootlogo/bw/logo-candidate-bw.bin: 1 file pushed, 0 skipped. 694.5 MB/s (15728640 bytes in 0.022s)
+_b
+disabled
+/dev/block/sdc40
+15728640
+brw-rw---- 1 root system 259,  24 2026-10-19 14:30 /dev/block/sdc40
+264aba89149df7eb09b4d9e6e1ada8f492d2b1d6468145eff442040c93ea9734  /dev/block/by-name/logo
+24ac4106885c5d69300790fcb45dbea9d98a26089091ca0a2e9b2d3a59d3c8f6  /data/local/tmp/logo-candidate-bw.bin
+15728640

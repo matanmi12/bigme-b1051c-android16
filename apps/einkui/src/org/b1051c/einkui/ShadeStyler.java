@@ -33,7 +33,8 @@ import java.util.WeakHashMap;
  *  - shade header (clock, date, status icons) in the text colour; Compose footer gets a grey/invert colour filter.
  *  - brightness slider -> LightSliders (always, also with the theme "off").
  * Theme: Settings.Secure b1051c_shade_theme = 0 follow Dark theme (default), 1 light, 2 dark, -1 off (vanilla).
- * Outline width: b1051c_shade_stroke in tenths of dp (default 15 = 1.5 dp).
+ * Colours: b1051c_shade_palette = 1 InKognito (default, see Palette), 0 plain black and white.
+ * Outline width: b1051c_shade_stroke in tenths of dp (default 25 = 2.5 dp with InKognito, 15 plain).
  */
 final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
     /** Read by other plugin builds through reflection (see EinkOverlayPlugin.setup). */
@@ -56,8 +57,11 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
     int mode = -1;
     int fg, bg, mid;
     float stroke;
-    private int pref, strokePref;
-    private int gen;
+    /** InKognito colours in effect (palette setting on and a style mode). */
+    boolean inkPalette;
+    private int pref, strokePref, palettePref;
+    /** Bumped on every style change; LightSliders restyles when it moves. */
+    int gen;
     private int errors;
 
     private final int idQsFrame, idBrightness, idFooterActions, idTileBase, idScrimBehind, idScrimNotif,
@@ -102,6 +106,7 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
     void start() {
         cr.registerContentObserver(Settings.Secure.getUriFor(KEY_THEME), false, obs);
         cr.registerContentObserver(Settings.Secure.getUriFor(KEY_STROKE), false, obs);
+        cr.registerContentObserver(Settings.Secure.getUriFor(Palette.KEY), false, obs);
         root.getViewTreeObserver().addOnPreDrawListener(this);
         root.invalidate();
     }
@@ -123,22 +128,43 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
 
     private void readPrefs() {
         pref = Settings.Secure.getInt(cr, KEY_THEME, 0);
-        strokePref = Settings.Secure.getInt(cr, KEY_STROKE, 15);
+        strokePref = Settings.Secure.getInt(cr, KEY_STROKE, -1);
+        palettePref = Settings.Secure.getInt(cr, Palette.KEY, 1);
     }
 
     private void resolveMode() {
         boolean night = (res.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         int m = pref == -1 ? 0 : pref == 1 ? 1 : pref == 2 ? 2 : (night ? 2 : 1);
-        float s = strokePref / 10f * res.getDisplayMetrics().density;
-        if (m == mode && s == stroke) return;
+        boolean ink = palettePref != 0 && m != 0;
+        float s = (strokePref > 0 ? strokePref : ink ? 25 : 15) / 10f * res.getDisplayMetrics().density;
+        if (m == mode && s == stroke && ink == inkPalette) return;
         mode = m;
         stroke = s;
-        fg = m == 2 ? 0xFFFFFFFF : 0xFF000000;
-        bg = m == 2 ? 0xFF000000 : 0xFFFFFFFF;
+        inkPalette = ink;
+        fg = m == 2 ? 0xFFFFFFFF : Palette.INK;
+        bg = m == 2 ? 0xFF000000 : ink ? Palette.CREAM : 0xFFFFFFFF;
         mid = m == 2 ? 0xFF8C8C8C : 0xFF7A7A7A;
         scrimFilter = new PorterDuffColorFilter(bg, PorterDuff.Mode.SRC_IN);
         gen++;
-        Log.i(EinkOverlayPlugin.TAG, "style mode=" + m + " stroke=" + s + "px");
+        Log.i(EinkOverlayPlugin.TAG, "style mode=" + m + " palette=" + (ink ? "inkognito" : "plain") + " stroke=" + s + "px");
+    }
+
+    /** Fill of an active tile (board 05): E-Ink Control's "Refresh mode" bordeaux, "Color" gold, everything else
+     *  teal; dark shade light gold; plain palette the text colour (inverted tile). */
+    private int accentFill(View t) {
+        if (!inkPalette) return fg;
+        if (mode == 2) return Palette.LIGHT_GOLD;
+        Object l = Refl.get(t, "label");
+        CharSequence s = l instanceof TextView ? ((TextView) l).getText() : null;
+        if (s != null && "Refresh mode".contentEquals(s)) return Palette.BORDEAUX;
+        if (s != null && "Color".contentEquals(s)) return Palette.GOLD;
+        return Palette.TEAL;
+    }
+
+    /** Text/icon colour on an active tile: ink on the golds, cream on the dark fills. */
+    private int onFill(int fill) {
+        if (!inkPalette) return bg;
+        return fill == Palette.GOLD || fill == Palette.LIGHT_GOLD ? Palette.INK : Palette.CREAM;
     }
 
     @Override
@@ -243,19 +269,23 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
             for (int i = 0; i < orig.length; i++) orig[i] = Refl.getInt(t, TILE_FIELDS[i], 0);
             Object[] bgs = new Object[BG_FIELDS.length];
             for (int i = 0; i < bgs.length; i++) bgs[i] = Refl.get(t, BG_FIELDS[i]);
-            st = new Object[] {-1, orig, bgs, null};
+            st = new Object[] {-1, orig, bgs, null, 0};
             tiles.put(t, st);
         }
         int state = Refl.getInt(t, "lastState", 1);
+        int fill = accentFill(t), on = onFill(fill);
         TileShape shape = st[3] instanceof android.graphics.drawable.RippleDrawable
                 && t.getBackground() == st[3] ? (TileShape) Refl.get(t, "backgroundBaseDrawable") : null;
-        if ((int) st[0] != gen || shape == null) {
+        if ((int) st[0] != gen || shape == null || (int) st[4] != fill) {
             st[0] = gen;
-            int[] c = {fg, bg, bg, bg, fg, mid, bg, fg, mid, 0, 0};
+            st[4] = fill;
+            int[] c = {fill, bg, bg, on, fg, mid, on, fg, mid, 0, 0};
             for (int i = 0; i < c.length; i++) Refl.set(t, TILE_FIELDS[i], c[i]);
+            int rid = res.getIdentifier("qs_corner_radius", "dimen", "com.android.systemui");
+            float radius = rid != 0 ? res.getDimension(rid) : 28 * res.getDisplayMetrics().density;
+            if (inkPalette) radius = Math.min(radius, 16 * res.getDisplayMetrics().density);   // board 05: badge tiles, not pills
+            if (shape != null) shape.setRadius(radius);
             if (shape == null) {
-                int rid = res.getIdentifier("qs_corner_radius", "dimen", "com.android.systemui");
-                float radius = rid != 0 ? res.getDimension(rid) : 28 * res.getDisplayMetrics().density;
                 shape = new TileShape(radius, stroke, fg, bg);
                 android.graphics.drawable.ColorDrawable overlay = new android.graphics.drawable.ColorDrawable(0);
                 LayerDrawable ld = new LayerDrawable(new Drawable[] {shape, overlay});
@@ -273,15 +303,15 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
                 st[3] = ripple;
             }
             Refl.call(t, "setAllColors", new Class<?>[] {int.class, int.class, int.class, int.class, int.class},
-                    state == 2 ? fg : bg, state == 2 ? bg : state == 0 ? mid : fg,
-                    state == 2 ? bg : state == 0 ? mid : fg, state == 2 ? bg : state == 0 ? mid : fg, 0);
+                    state == 2 ? fill : bg, state == 2 ? on : state == 0 ? mid : fg,
+                    state == 2 ? on : state == 0 ? mid : fg, state == 2 ? on : state == 0 ? mid : fg, 0);
         }
         shape.setLine(stroke, state == 0 ? mid : fg);
         // icons are tinted from theme attributes on every state change: enforce ours
         Object icon = Refl.get(t, "icon");
         if (icon != null) {
             Object iv = Refl.get(icon, "mIcon");
-            int want = state == 2 ? bg : state == 0 ? mid : fg;
+            int want = state == 2 ? on : state == 0 ? mid : fg;
             if (iv instanceof ImageView) tint((ImageView) iv, want);
         }
     }
@@ -381,17 +411,24 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         }
     }
 
-    /** "Manage" / "Clear all": outlined pill, our own drawable (never mutate SystemUI's cached ones). */
+    private final WeakHashMap<View, Drawable> footerPills = new WeakHashMap<>();
+
+    /** "Manage" / "Clear all": outlined pill, our own drawable (never mutate SystemUI's cached ones). SystemUI
+     *  re-applies its own background and text colour when the theme changes (seen: a gray "Manage" in the dark shade),
+     *  so this re-checks every frame and restyles whenever the button no longer carries our pill. */
     private void styleFooterButton(android.widget.Button b) {
         Integer g = notifChildGen.get(b);
-        if (g != null && g == gen) return;
+        Drawable mine = footerPills.get(b);
+        if (g != null && g == gen && mine != null && b.getBackground() == mine && b.getCurrentTextColor() == fg) return;
         notifChildGen.put(b, gen);
         GradientDrawable pill = new GradientDrawable();
         pill.setCornerRadius(1000f);
         pill.setColor(bg);
         pill.setStroke(Math.round(stroke), fg);
+        b.setBackgroundTintList(null);
         b.setBackground(pill);
         b.setTextColor(fg);
+        footerPills.put(b, pill);
     }
 
     // ---- scrims -----------------------------------------------------------------------------------
@@ -453,6 +490,18 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
                 r, g, b, 0, off,
                 r, g, b, 0, off,
                 0, 0, 0, 1, 0});
-        v.setRenderEffect(RenderEffect.createColorFilterEffect(new ColorMatrixColorFilter(m)));
+        RenderEffect grey = RenderEffect.createColorFilterEffect(new ColorMatrixColorFilter(m));
+        if (mode == 1 && bg != 0xFFFFFFFF) {
+            // Cream paper: the effect chain works in float and does not clamp between passes, so the contrast
+            // overshoot (> white) survives a scaling pass. DARKEN with the page colour = per-channel min(paper, pixel):
+            // whites land on cream, darker tones stay. DARKEN also turns transparent pixels into paper, and such an
+            // effect has unbounded output: it painted cream over the whole QS panel (0.3.3). DST_IN with the untouched
+            // content keeps only what the footer itself drew, with its own coverage.
+            RenderEffect clamp = RenderEffect.createColorFilterEffect(
+                    new android.graphics.BlendModeColorFilter(bg, android.graphics.BlendMode.DARKEN), grey);
+            grey = RenderEffect.createBlendModeEffect(clamp, RenderEffect.createOffsetEffect(0, 0),
+                    android.graphics.BlendMode.DST_IN);
+        }
+        v.setRenderEffect(grey);
     }
 }

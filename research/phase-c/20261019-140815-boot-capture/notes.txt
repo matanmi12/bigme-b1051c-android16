@@ -1,0 +1,28 @@
+reboot requested 14:08:15
+adb back 14:08:51
+boot_completed seen 14:09:40
+60.21 408.29
+stopped
+120.26 789.46
+second reboot 14:11:01
+59.91 405.26
+99.95 645.60
+stopped
+14:13:50 persist.logd.size set to 16777216 for the boot capture (was empty); restore: setprop persist.logd.size ''
+14:14:01 third reboot (16 MB buffers)
+60.23 411.96
+stopped
+100.29 647.42
+14:18:11 fourth reboot: module 0.1.13 (ccci_mdinit stopped), logcat -G 16M as soon as adb is up
+11.64 66.69
+58.53 406.10
+stopped
+stopped
+98.59 637.28
+14:22:58 fifth reboot: module 0.1.14
+11.62 66.09
+19.95 104.14
+14:27:02 sixth reboot: + b1051c-bootanim 0.1.0
+20.01 107.68
+14:29:56 seventh reboot: module 0.1.15 (shim 059bdf41 boot_damage)
+20.03 107.44

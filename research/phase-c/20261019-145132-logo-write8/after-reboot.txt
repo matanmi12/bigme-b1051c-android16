@@ -1,0 +1,20 @@
+reboot 14:51:50
+after boot 14:52:50
+34.99 148.12
+_b
+disabled
+24ac4106885c5d69300790fcb45dbea9d98a26089091ca0a2e9b2d3a59d3c8f6  /dev/block/by-name/logo
+0
+dmesg: klogctl: Permission denied
+    10.151  1488  1511 D BootAnimation: BootAnimationShownTiming start time: 10151ms
+    10.152  1488  1511 D BootAnimation: Playing files = /product/media/bootanimation.zip/part0, Requested repeat = 1, playUntilComplete = tr
+    14.858  1973  1981 D BootAnimation: BootAnimationShownTiming start time: 14858ms
+    14.858  1973  1981 D BootAnimation: Playing files = /product/media/bootanimation.zip/part0, Requested repeat = 1, playUntilComplete = tr
+    14.938  1323  1423 I hwcshim : boot damage L2: new buffer -> [0,0,2480,1860]
+    15.921  1323  1423 I hwcshim : boot damage L2: new buffer -> [0,0,2480,1860]
+    16.921  1323  1423 I hwcshim : boot damage L2: new buffer -> [0,0,2480,1860]
+    18.005  1323  1423 I hwcshim : boot damage L2: new buffer -> [0,0,2480,1860]
+    18.858  1973  1981 D BootAnimation: BootAnimationShownTiming End time: 18858ms
+    18.877  1323  1423 I hwcshim : boot damage L3: new buffer -> [0,0,2480,1860]
+    18.877  1323  1423 I hwcshim : boot damage L4: new buffer -> [0,0,53,1860]
+    19.068     1     1 I (2)[1:init]: processing action (sys.boot_completed=1) from (/system/etc/init/hw/init.rc:1227)

@@ -131,7 +131,9 @@ final class Eink {
             e.putInt("cold", clamp(cold, 0, FL_MAX)).putInt("warm", clamp(warm, 0, FL_MAX));
         }
         e.apply();
-        Root.async(frontlightCmd(cold, warm));
+        // asleep: only remember it (the keeper lights the panel at SCREEN_ON) — a change from settings / KOReader /
+        // adb must never switch the light on in a dark room while the screen is off (seen 2026-10-19)
+        if (c.getSystemService(android.os.PowerManager.class).isInteractive()) Root.async(frontlightCmd(cold, warm));
         if (publish) publishLight(c, new int[] {cold, warm});
     }
 
@@ -280,6 +282,25 @@ final class Eink {
             android.util.Log.w("einkctl", "white wallpaper failed: " + e);
         } finally {
             b.recycle();
+        }
+    }
+
+    /** Wallpaper from an image in the app's external files dir (adb: push it there, then ActionReceiver
+     *  SET_WALLPAPER). which = home, lock or both (default). Used for panel-tuned versions of the owner's images. */
+    static void setWallpaper(Context c, String name, String which) {
+        java.io.File dir = c.getExternalFilesDir(null);
+        java.io.File f = new java.io.File(dir, name == null ? "wallpaper.png" : name);
+        int flags = "home".equals(which) ? android.app.WallpaperManager.FLAG_SYSTEM
+                : "lock".equals(which) ? android.app.WallpaperManager.FLAG_LOCK
+                : android.app.WallpaperManager.FLAG_SYSTEM | android.app.WallpaperManager.FLAG_LOCK;
+        try {
+            if (!f.getCanonicalPath().startsWith(dir.getCanonicalPath() + "/")) throw new java.io.IOException("outside " + dir);
+            try (java.io.InputStream in = new java.io.FileInputStream(f)) {
+                android.app.WallpaperManager.getInstance(c).setStream(in, null, true, flags);
+            }
+            android.util.Log.i("einkctl", "wallpaper set from " + f + " (flags " + flags + ")");
+        } catch (java.io.IOException | SecurityException e) {
+            android.util.Log.w("einkctl", "wallpaper failed: " + e);
         }
     }
 

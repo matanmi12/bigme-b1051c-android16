@@ -46,7 +46,8 @@ final class Tiles {
             int pad = Math.round(24 * s.getResources().getDisplayMetrics().density);
             tv.setPadding(pad, pad, pad, pad / 3);
             tv.setTextSize(20);
-            tv.setTextColor(0xFF000000);
+            tv.setTextColor(Ink.INK);
+            tv.setTypeface(Ink.font(s, 400));
             tv.setText(t);
             b.setCustomTitle(tv);
         }

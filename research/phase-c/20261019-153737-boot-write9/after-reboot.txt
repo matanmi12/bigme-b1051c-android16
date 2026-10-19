@@ -1,0 +1,27 @@
+reboot 15:42:31
+after boot 15:43:28
+27.95 107.71
+_b
+disabled
+normal
+fc08b0538c1725eeb6f226954b2ae52b97c6bb916629817be5fc5681e07fd2ff  /dev/block/by-name/boot_b
+b1051c-bootanim
+b1051c-eink-compat
+b1051c-fonts
+b1051c-gapps
+b1051c-icons
+b1051c-launcher3
+30.7:MAGISK:R
+
+0
+b1051c_animation.txt
+b1051c_battery_scale.png
+10-19 15:43:15.480  1799  2017 I ApkLiteParseUtils: Skipping target and overlay pair android and /system/product/overlay/treble-overlay-realme-x2pro.apk: overlay ignored due to required system property: ro.build.overlay.deviceid with value: +RMX1931*
+10-19 15:43:15.480  1799  1799 W PackageManager: Failed to parse /system/product/overlay/treble-overlay-realme-x2pro.apk: Skipping target and overlay pair android and /system/product/overlay/treble-overlay-realme-x2pro.apk: overlay ignored due to required system property: ro.build.overlay.deviceid with value: +RMX1931*
+10-19 15:43:15.480  1799  2014 I ApkLiteParseUtils: Skipping target and overlay pair android and /system/product/overlay/treble-overlay-realme-q2.apk: overlay ignored due to required system property: ro.build.overlay.deviceid with value: +RMX2117
+10-19 15:43:15.480  1799  1799 W PackageManager: Failed to parse /system/product/overlay/treble-overlay-realme-q2.apk: Skipping target and overlay pair android and /system/product/overlay/treble-overlay-realme-q2.apk: overlay ignored due to required system property: ro.build.overlay.deviceid with value: +RMX2117
+10-19 15:43:15.481  1799  2016 I ApkLiteParseUtils: Skipping target and overlay pair com.android.systemui and /system/product/overlay/treble-overlay-realme-q2-systemui.apk: overlay ignored due to required system property: ro.build.overlay.deviceid with value: +RMX2117
+u:object_r:system_file:s0 /debug_ramdisk/b1051c_animation.txt
+u:object_r:system_file:s0 /debug_ramdisk/b1051c_battery_scale.png
+/dev/block/vold/public:179,1 116G 931M  116G   1% /mnt/media_rw/EEDD-A114
+/dev/fuse                    116G 931M  116G   1% /mnt/installer/0/EEDD-A114

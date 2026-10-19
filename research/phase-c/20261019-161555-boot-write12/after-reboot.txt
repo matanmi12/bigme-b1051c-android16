@@ -1,0 +1,12 @@
+after boot 16:17:11
+24.92 107.80
+_b
+disabled
+normal
+
+f6d59171a3e7d5cb5309f59bb2ea17752b93ec3c9c5fc501aad302c91728a0e4  /dev/block/by-name/boot_b
+574cd488d488c981dd8d85cc730f8b3e64adc42edb8e0633fbccce2978f1829e  /dev/block/by-name/logo
+30.7:MAGISK:R
+b1051c-bootanim b1051c-eink-compat b1051c-fonts b1051c-gapps b1051c-icons b1051c-launcher3 
+b1051c_charger_diag.sh
+2

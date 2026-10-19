@@ -1,0 +1,6 @@
+id=b1051c-fonts
+name=InKognito system font (Rubik)
+version=0.1.0
+versionCode=1
+author=matanmi12
+description=InKognito design (board 05): Rubik (SIL OFL 1.1, google/fonts, variable wght 300-900, Latin + Hebrew) as the system sans-serif in place of Roboto. Only /system/fonts/Roboto-Regular.ttf is replaced (no font XML change); italics show upright. Disable or remove this module and reboot to get Roboto back.
