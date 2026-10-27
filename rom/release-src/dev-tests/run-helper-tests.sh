@@ -1,0 +1,46 @@
+#!/bin/bash
+# Function-level checks of the pure parsing helpers in flash-inkognito.sh.
+# The script is sourced (main() does not run); no adb/fastboot is invoked. Mocks stay first in PATH anyway.
+HERE=$(cd "$(dirname "$0")" && pwd); WORK="${TEST_WORK:-${TMPDIR:-/tmp}/inkognito-flash-tests}"; mkdir -p "$WORK"
+export PATH="$HERE/mockbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export MOCK_LOG="$WORK/mock-calls-helpers.log"; : > "$MOCK_LOG"
+. "$HERE/../flash-inkognito.sh"
+set +u
+p=0; f=0
+eq() { if [ "$2" = "$3" ]; then p=$((p+1)); else f=$((f+1)); echo "FAIL $1: got '$2' want '$3'"; fi; }
+NL=$'\n'
+eq lk-super      "$(parse_getvar partition-size:super "partition-size:super: 300000000${NL}Finished. Total time: 0.001s")" "300000000"
+eq fbd-super     "$(parse_getvar partition-size:super "partition-size:super: 0x300000000${NL}Finished. Total time: 0.001s")" "0x300000000"
+eq norm-lk       "$(norm_hex 300000000)" "300000000"
+eq norm-fbd      "$(norm_hex 0x300000000)" "300000000"
+eq norm-upper    "$(norm_hex 0X2800000)" "2800000"
+eq norm-pad      "$(norm_hex 0x02800000)" "2800000"
+eq norm-zero     "$(norm_hex 0x0)" "0"
+eq slot-b        "$(parse_getvar current-slot "current-slot: b${NL}Finished. Total time: 0.000s")" "b"
+eq slot-us       "$(norm_slot _a)" "a"
+eq slot-up       "$(norm_slot B)" "b"
+eq slot-bad      "$(norm_slot c)" ""
+eq info-prefix   "$(parse_getvar unlocked "(bootloader) unlocked: yes${NL}unlocked: ${NL}Finished. Total time: 0.001s")" "yes"
+eq nospace       "$(parse_getvar snapshot-update-status "snapshot-update-status:none")" "none"
+eq crlf          "$(parse_getvar product "product: k6877v1_64_k419"$'\r'"${NL}Finished.")" "k6877v1_64_k419"
+parse_getvar partition-size:waveform "getvar:partition-size:waveform FAILED (remote: 'unknown variable')${NL}Finished. Total time: 0.001s" >/dev/null; eq missing-rc "$?" "1"
+eq boot-b        "$(parse_getvar partition-size:boot_b "partition-size:boot_b: 2800000")" "2800000"
+eq no-substring  "$(parse_getvar partition-size:boot_b "partition-size:boot_b_x: 1")" ""
+eq adb-one       "$(parse_adb_devices "List of devices attached${NL}SERIAL1	device${NL}")" "1 1 0"
+eq adb-daemon    "$(parse_adb_devices "* daemon not running; starting now at tcp:5037${NL}* daemon started successfully${NL}List of devices attached${NL}SERIAL1	device")" "1 1 0"
+eq adb-unauth    "$(parse_adb_devices "List of devices attached${NL}SERIAL1	unauthorized")" "1 0 1"
+eq adb-two       "$(parse_adb_devices "List of devices attached${NL}S1	device${NL}S2	offline")" "2 1 0"
+eq adb-none      "$(parse_adb_devices "List of devices attached${NL}")" "0 0 0"
+eq fb-one        "$(parse_fastboot_devices "SERIAL1	fastboot")" "1"
+eq fb-none       "$(parse_fastboot_devices "")" "0"
+eq battery       "$(parse_battery "Current Battery Service state:${NL}  AC powered: false${NL}  level: 85${NL}  scale: 100")" "85"
+eq battery-cr    "$(parse_battery "  level: 7"$'\r')" "7"
+eq wm            "$(parse_wm "Physical size: 1860x2480${NL}Override size: 1240x1653")" "1860x2480"
+TD=$(mktemp -d "$WORK/sums.XXXX"); cd "$TD"
+printf 'AAAA  boot.img\r\nBBBB *system.img\ncccc  ./vbmeta.img\n' > SHA256SUMS
+eq sums-crlf     "$(expected_sha boot.img)" "aaaa"
+eq sums-binary   "$(expected_sha system.img)" "bbbb"
+eq sums-dotslash "$(expected_sha vbmeta.img)" "cccc"
+eq sums-missing  "$(expected_sha logo.img)" ""
+cd /; rm -rf "$TD"
+echo "helpers: passed=$p failed=$f; adb/fastboot calls logged: $(wc -l < "$MOCK_LOG" | tr -d ' ')"

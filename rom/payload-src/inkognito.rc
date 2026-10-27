@@ -1,0 +1,13 @@
+# InKognito (Bigme B1051C Pro): first-boot provisioning of the e-ink layer. Installed as /system/etc/init/inkognito.rc.
+# The scripts run in Magisk's SELinux domain, so they need the release's Magisk-patched boot.img; without it the
+# exec fails and Android boots plain. Both scripts exit at once when their marker exists, so later boots cost nothing.
+#
+# Boot 1 (fresh /data): zygote-start runs after every post-fs-data action (Magisk's included) and before "boot",
+# which starts SurfaceFlinger and TrebleDroid's phh-su daemon. Stage 1 installs the Magisk modules there and
+# reboots, so the panel never shows an unshimmed frame and AOSP Provision never runs.
+on zygote-start
+    exec u:r:magisk:s0 root root -- /system/bin/sh /system/etc/inkognito/provision-stage1.sh
+
+# Boot 2: install and configure the apps while Google setup is on screen.
+on property:sys.boot_completed=1
+    exec_background u:r:magisk:s0 root root -- /system/bin/sh /system/etc/inkognito/provision-stage2.sh

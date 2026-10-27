@@ -1,0 +1,12 @@
+write13 2026-10-19 16:54:35
+_b
+/dev/block/sdc57
+live=3068aa5c357f1cf781a8227200b86cf5e9d0eca7d73735bf312f4c284374f0b5
+cand=7090611f680bd54ba72d4b4c63eb51024b1f52336c3d7e6e17b13e6e03c71b2d
+boot_b=f6d59171a3e7d5cb
+8+0 records in
+8+0 records out
+8388608 bytes (8.0 M) copied, 0.016 s, 500 M/s
+dd-exit=0
+7090611f680bd54ba72d4b4c63eb51024b1f52336c3d7e6e17b13e6e03c71b2d  /dev/block/by-name/dtbo_b
+end 16:54:36

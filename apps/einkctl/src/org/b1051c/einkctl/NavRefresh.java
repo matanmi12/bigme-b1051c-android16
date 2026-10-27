@@ -47,6 +47,16 @@ final class NavRefresh {
         h.postDelayed(relayout, 300);
     }
 
+    /** After a Dark theme switch: the nav glyphs change colour (animated) with no window event, so the stored tint
+     *  is stale (black glyph on black, or white on cream). Sample again as they settle; the wallpaper swap lands a few
+     *  seconds later (ThemeSync calls this again then). A sample where nothing stands out keeps the old tint. */
+    void retint() {
+        h.removeCallbacks(resample);
+        for (long ms : new long[] {1500, 3500, 6000, 9000}) h.postDelayed(resample, ms);
+    }
+
+    private final Runnable resample = () -> { lastShot = 0; relayout(); };
+
     void destroy() {
         h.removeCallbacksAndMessages(null);
         hide();
@@ -143,11 +153,26 @@ final class NavRefresh {
         return bestD >= 90 ? (best | 0xFF000000) : 0;
     }
 
+    /** The owner's spray-paint refresh (private asset, owner 2026-10-19), shown at its pixel size like the spray
+     *  back / home / recents of the Launcher3 overlay; null (vector fallback) when the asset is not in the build. */
+    private android.graphics.drawable.Drawable sprayGlyph() {
+        try (java.io.InputStream in = svc.getAssets().open("nav/refresh.png")) {
+            Bitmap b = android.graphics.BitmapFactory.decodeStream(in);
+            if (b == null) return null;
+            b.setDensity(svc.getResources().getDisplayMetrics().densityDpi);
+            return new android.graphics.drawable.BitmapDrawable(svc.getResources(), b);
+        } catch (java.io.IOException e) {
+            return null;
+        }
+    }
+
     private void show() {
         if (target.isEmpty() || tint == 0) return;
         if (view == null) {
             view = new ImageView(svc);
-            view.setImageResource(R.drawable.ic_nav_refresh);
+            android.graphics.drawable.Drawable spray = sprayGlyph();
+            if (spray != null) view.setImageDrawable(spray);
+            else view.setImageResource(R.drawable.ic_nav_refresh);
             view.setScaleType(ImageView.ScaleType.CENTER);
             view.setContentDescription("Refresh screen");
             view.setOnClickListener(v -> Eink.clearScreen(svc));

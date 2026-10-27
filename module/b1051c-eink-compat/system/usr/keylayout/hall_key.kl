@@ -1,0 +1,5 @@
+# Bigme B1051C Pro magnetic cover: hall sensor input device "hall_key" (/dev/input/event1) sends key 646 when the
+# cover closes and 647 when it opens. Stock maps them to Bigme's own HALL_SENSOR_NEAR / HALL_SENSOR_LEAVE keycodes,
+# which a GSI does not know (the events were ignored). Standard Android keys instead: close = sleep, open = wake.
+key 646   SLEEP
+key 647   WAKEUP

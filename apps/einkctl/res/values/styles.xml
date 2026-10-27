@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- InKognito (design board 05): cream paper, black ink, teal for "on", bordeaux for the main action. Fonts are
-         applied in code (Ink.font), so a build without the font assets still works. -->
-    <style name="InkTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <!-- Light / dark: only the Base* parents differ (values-night/styles.xml: the Material dark themes); every color
+         below is a role from colors.xml that values-night overrides, so the app follows Android's Dark theme. -->
+    <style name="BaseInkTheme" parent="@android:style/Theme.Material.Light.NoActionBar" />
+    <style name="BaseInkDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert" />
+
+    <!-- InKognito (design board 05): cream paper, black ink, teal for "on", bordeaux for the main action; dark (Night
+         Badge): black page, white ink, gold for "on". Fonts are applied in code (Ink.font), so a build without the
+         font assets still works. -->
+    <style name="InkTheme" parent="BaseInkTheme">
         <item name="android:windowBackground">@color/paper</item>
         <item name="android:colorBackground">@color/paper</item>
         <item name="android:statusBarColor">@color/paper</item>
         <item name="android:navigationBarColor">@color/paper</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-        <item name="android:colorPrimary">@color/bordeaux</item>
-        <item name="android:colorAccent">@color/teal</item>
-        <item name="android:colorControlActivated">@color/teal</item>
+        <item name="android:windowLightStatusBar">@bool/light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/light_bars</item>
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorAccent">@color/control_on</item>
+        <item name="android:colorControlActivated">@color/control_on</item>
         <item name="android:colorControlNormal">@color/ink</item>
         <item name="android:textColorPrimary">@color/ink</item>
         <item name="android:textColorSecondary">@color/muted</item>
@@ -19,13 +25,13 @@
         <item name="android:dialogTheme">@style/InkDialog</item>
     </style>
 
-    <!-- Dialogs: cream card with an ink outline, nothing dimmed behind (a dim scrim turns into a gray smear on e-ink),
-         bordeaux dialog buttons, teal radio buttons. -->
-    <style name="InkDialog" parent="@android:style/Theme.Material.Light.Dialog.Alert">
+    <!-- Dialogs: cream (dark: black) card with an ink outline, nothing dimmed behind (a dim scrim turns into a gray
+         smear on e-ink), bordeaux dialog buttons, teal radio buttons (dark: light-gold buttons and radio buttons). -->
+    <style name="InkDialog" parent="BaseInkDialog">
         <item name="android:windowBackground">@drawable/dialog_card</item>
         <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:colorAccent">@color/bordeaux</item>
-        <item name="android:colorControlActivated">@color/teal</item>
+        <item name="android:colorAccent">@color/dialog_button</item>
+        <item name="android:colorControlActivated">@color/control_on</item>
         <item name="android:colorControlNormal">@color/ink</item>
         <item name="android:textColorPrimary">@color/ink</item>
         <item name="android:textColorSecondary">@color/ink</item>
@@ -39,6 +45,6 @@
         <item name="android:textSize">17sp</item>
     </style>
 
-    <!-- Pick lists opened from the QS tiles. -->
+    <!-- Pick lists opened from the QS tiles (and the Switch system dialog); dark through BaseInkDialog. -->
     <style name="TileDialog" parent="InkDialog" />
 </resources>

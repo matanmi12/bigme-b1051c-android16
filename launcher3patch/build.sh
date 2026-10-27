@@ -1,7 +1,8 @@
 #!/bin/bash
 # Launcher3QuickStep with a transparent taskbar on a third-party home screen (org.b1051c.l3.HomeBg).
 # Input: the GSI's own Launcher3QuickStep.apk (sha bf92e8d5…, from work/gsi/system-td-arm64-vanilla.img).
-# Steps: apktool d -r (code only) -> one smali hook in TaskbarDragLayerController.updateBackgroundAlpha() ->
+# Steps: apktool d -r (code only) -> smali hooks in TaskbarDragLayerController.updateBackgroundAlpha() and
+# FallbackTaskbarUIController.createAnimToRecentsState() ->
 # apktool b -> + classes2.dex (HomeBg, built with javac + d8 against compile-only stubs) -> dex stored, zipalign,
 # signed with the public AOSP testkey (= Launcher3's own certificate a40da80a…, so it updates in place).
 # Output: build/Launcher3QuickStep.apk, then a Magisk module zip (module/). Never touches a device.
@@ -31,23 +32,45 @@ javac -Xlint:-options -source 17 -target 17 -encoding UTF-8 -classpath "$AJ" -d 
 javac -Xlint:-options -source 17 -target 17 -encoding UTF-8 -classpath "$AJ:build/stubs" -d build/classes $(find src -name '*.java')
 "$BT/d8" --lib "$AJ" --classpath build/stubs --min-api 31 --release --output build/dex $(find build/classes -name '*.class')
 
-# 2. smali hook
+# 2. smali hooks
+#  a) TaskbarDragLayerController.updateBackgroundAlpha(): alpha -> HomeBg.alpha(this, alpha)   (transparent on home)
+#  b) FallbackTaskbarUIController.createAnimToRecentsState(state, duration): the isIn3pHomeOrRecents() answer ->
+#     HomeBg.stashLauncherState(state, answer)   (no launcher stash for HOME / BG_LAUNCHER, fix 2026-10-20)
 rm -rf build/dec
 java -jar "$APKTOOL" d -q -r -o build/dec "$SRC_APK"
-F=build/dec/smali/com/android/launcher3/taskbar/TaskbarDragLayerController.smali
-python3 - "$F" <<'PY'
-import sys
-p = sys.argv[1]
-s = open(p).read()
-anchor = ("    mul-float/2addr v2, v0\n\n"
-          "    iput v2, p0, Lcom/android/launcher3/taskbar/TaskbarDragLayerController;->mLastSetBackgroundAlpha:F\n")
-assert s.count(anchor) == 1, "hook anchor not found exactly once"
-hook = ("    mul-float/2addr v2, v0\n\n"
-        "    invoke-static {p0, v2}, Lorg/b1051c/l3/HomeBg;->alpha(Ljava/lang/Object;F)F\n\n"
-        "    move-result v2\n\n"
-        "    iput v2, p0, Lcom/android/launcher3/taskbar/TaskbarDragLayerController;->mLastSetBackgroundAlpha:F\n")
-open(p, "w").write(s.replace(anchor, hook))
-print("hook inserted")
+python3 - build/dec/smali/com/android/launcher3/taskbar <<'PY'
+import sys, os
+d = sys.argv[1]
+hooks = [
+    ("TaskbarDragLayerController.smali",
+     "    mul-float/2addr v2, v0\n\n"
+     "    iput v2, p0, Lcom/android/launcher3/taskbar/TaskbarDragLayerController;->mLastSetBackgroundAlpha:F\n",
+     "    mul-float/2addr v2, v0\n\n"
+     "    invoke-static {p0, v2}, Lorg/b1051c/l3/HomeBg;->alpha(Ljava/lang/Object;F)F\n\n"
+     "    move-result v2\n\n"
+     "    iput v2, p0, Lcom/android/launcher3/taskbar/TaskbarDragLayerController;->mLastSetBackgroundAlpha:F\n"),
+    ("FallbackTaskbarUIController.smali",
+     ".method private createAnimToRecentsState(Lcom/android/quickstep/fallback/RecentsState;J)Landroid/animation/Animator;\n"
+     "    .locals 3\n\n"
+     "    .line 115\n"
+     "    invoke-direct {p0}, Lcom/android/launcher3/taskbar/FallbackTaskbarUIController;->isIn3pHomeOrRecents()Z\n\n"
+     "    move-result p1\n\n"
+     "    const/4 v0, 0x1\n",
+     ".method private createAnimToRecentsState(Lcom/android/quickstep/fallback/RecentsState;J)Landroid/animation/Animator;\n"
+     "    .locals 3\n\n"
+     "    .line 115\n"
+     "    invoke-direct {p0}, Lcom/android/launcher3/taskbar/FallbackTaskbarUIController;->isIn3pHomeOrRecents()Z\n\n"
+     "    move-result v0\n\n"
+     "    invoke-static {p1, v0}, Lorg/b1051c/l3/HomeBg;->stashLauncherState(Ljava/lang/Object;Z)Z\n\n"
+     "    move-result p1\n\n"
+     "    const/4 v0, 0x1\n"),
+]
+for name, anchor, hook in hooks:
+    p = os.path.join(d, name)
+    s = open(p).read()
+    assert s.count(anchor) == 1, "hook anchor not found exactly once in " + name
+    open(p, "w").write(s.replace(anchor, hook))
+    print("hook inserted:", name)
 PY
 
 # 3. rebuild, add the helper dex (stored, like the original classes.dex), align, sign

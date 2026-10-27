@@ -21,17 +21,21 @@ import android.widget.TextView;
 /** Single-screen control panel, built for e-ink: InKognito look (Ink), no animations, large targets. */
 public class MainActivity extends Activity {
     private SharedPreferences p;
+    private Ink.Pal pal;
     private LinearLayout root;
     private TextView sysStatus;
 
+    // No uiMode in the manifest configChanges: Android's Dark theme recreates the screen with the night palette.
     @Override
     protected void onCreate(Bundle b) {
         super.onCreate(b);
         p = Eink.prefs(this);
+        pal = Ink.pal(this);
         startForegroundService(new Intent(this, KeeperService.class));
+        AppProfileService.recover(this, "settings screen");
 
         ScrollView sv = new ScrollView(this);
-        sv.setBackgroundColor(Ink.CREAM);
+        sv.setBackgroundColor(pal.paper);
         root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         int pad = dp(20);
@@ -48,14 +52,56 @@ public class MainActivity extends Activity {
 
         header("E-Ink Control");
 
+        // The accessibility service carries half the features (review 2026-10-21): show its state, offer the switch
+        if (!AppProfileService.running()) {
+            boolean enabled = AppProfileService.enabledInSettings(this);
+            note(enabled
+                    ? "The E-Ink Control accessibility service is enabled but not connected right now. It reconnects by itself within a few seconds, or after a reboot."
+                    : "The E-Ink Control accessibility service is off. Per-app profiles, Fast while typing, the refresh button and the shutdown picture need it.");
+            if (!enabled) button("Turn the accessibility service on", v -> {
+                AppProfileService.enable(this);
+                new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> { if (!isDestroyed()) recreate(); }, 1500);
+            });
+        }
+
         // Front light
         section("Front light");
         check("Front light on", p.getBoolean("light_on", false), v -> {
             p.edit().putBoolean("light_on", v).apply();
             Eink.applyFrontlight(this);
         });
-        slider("Cold (white)", "cold", 0, Eink.FL_MAX, 40, v -> { if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this); });
-        slider("Warm (amber)", "warm", 0, Eink.FL_MAX, 40, Ink.GOLD, v -> { if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this); });
+        RadioGroup lp = new RadioGroup(this);
+        for (int i = 0; i < Eink.LIGHT_NAMES.length; i++) {
+            int[] v = Eink.LIGHT_PRESETS[i];
+            lp.addView(radio(Eink.LIGHT_NAMES[i] + (v[0] >= 0 ? "  (cold " + v[0] + " / warm " + v[1] + ")" : ""), 5000 + i));
+        }
+        lp.check(5000 + Eink.lightPreset(this));
+        root.addView(lp);
+        SeekBar[] fl = new SeekBar[2];                              // cold, warm
+        lp.setOnCheckedChangeListener((g, id) -> {
+            if (id - 5000 == Eink.lightPreset(this)) return;       // set from a slider below
+            Eink.selectLight(this, id - 5000);
+            fl[0].setProgress(p.getInt("cold", 40)); fl[1].setProgress(p.getInt("warm", 40));
+        });
+        IntCb lightCustom = v -> {                                  // moving a slider = Custom
+            if (Eink.lightPreset(this) != Eink.LIGHT_CUSTOM) {
+                p.edit().putInt("light_preset", Eink.LIGHT_CUSTOM).apply();
+                lp.check(5000 + Eink.LIGHT_CUSTOM);
+            }
+            if (p.getBoolean("light_on", false)) Eink.applyFrontlight(this);
+        };
+        fl[0] = slider("Cold (white)", "cold", 0, Eink.FL_MAX, 40, lightCustom);
+        fl[1] = slider("Warm (amber)", "warm", 0, Eink.FL_MAX, 40, pal.sliderWarm, lightCustom);
+        note("Morning: bright, a little amber, for the day. Night: dim and warm, for reading in a lit room in the "
+                + "evening. Bed: amber only and very dim, for a dark room. Color: bright and half amber, for comics and "
+                + "photos (the truest colors on this panel). Moving a slider switches to Custom.");
+        note("Night Light (Android's quick-settings tile, or Settings > Display > Night Light, with its schedule): the "
+                + "Night light and Dark theme together. Its Intensity goes from Night to Bed. Turning it off brings back "
+                + "your light and theme.");
+        button("Night Light settings", v -> {
+            try { startActivity(new android.content.Intent(android.provider.Settings.ACTION_NIGHT_DISPLAY_SETTINGS)); }
+            catch (android.content.ActivityNotFoundException e) { /* Night Light hidden (framework overlay < 1.3) */ }
+        });
         check("Follow Android's brightness slider", p.getBoolean("link_brightness", false), v -> {
             p.edit().putBoolean("link_brightness", v).apply();
             Eink.applyFrontlight(this);
@@ -88,21 +134,24 @@ public class MainActivity extends Activity {
 
         // Display density
         section("Display density (DPI)");
-        TextView dpiLabel = text("DPI: …", 17, false);
-        SeekBar dpiBar = new SeekBar(this);
+        dpiLabel = text("DPI: …", 17, false);
+        dpiBar = new SeekBar(this);
         dpiBar.setMin(Eink.DPI_MIN / 10);
         dpiBar.setMax(Eink.DPI_MAX / 10);                       // steps of 10 dpi
-        Ink.styleSeekBar(dpiBar, Ink.STEEL);
+        Ink.styleSeekBar(dpiBar, pal, pal.sliderCold);
         dpiBar.setEnabled(false);
         dpiBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            private boolean touching;
+            private final Runnable apply = () -> applyDpi(dpiBar.getProgress() * 10);
             @Override public void onProgressChanged(SeekBar s, int v, boolean user) {
                 if (user) dpiLabel.setText("DPI: " + v * 10 + "  (release to apply)");
+                if (user && !touching) { s.removeCallbacks(apply); s.postDelayed(apply, 600); }   // keyboard / TalkBack
             }
-            @Override public void onStartTrackingTouch(SeekBar s) {}
-            @Override public void onStopTrackingTouch(SeekBar s) { applyDpi(s.getProgress() * 10, dpiBar, dpiLabel); }
+            @Override public void onStartTrackingTouch(SeekBar s) { touching = true; s.removeCallbacks(apply); }
+            @Override public void onStopTrackingTouch(SeekBar s) { touching = false; apply.run(); }
         });
         root.addView(dpiBar);
-        button("Reset to " + Eink.DPI_DEFAULT + " dpi", v -> applyDpi(Eink.DPI_DEFAULT, dpiBar, dpiLabel));
+        button("Reset to " + Eink.DPI_DEFAULT + " dpi", v -> applyDpi(Eink.DPI_DEFAULT));
         note("Lower = smaller text and more on screen; higher = larger. Applies at once to all apps. Every change "
                 + "asks to be kept and goes back to the previous value after 15 s otherwise.");
         new Thread(() -> {
@@ -114,12 +163,16 @@ public class MainActivity extends Activity {
                 dpiBar.setEnabled(true);
             });
         }).start();
+        live = this;
+        if (dpiWant >= 0) { dpiLabel.setText(dpiText(dpiWant)); showDpiDialog(); }   // recreated mid-countdown
 
-        // Notification shade (E-Ink SystemUI plugin)
+        // Notification shade (E-Ink SystemUI plugin). The forced "E-ink light" / "E-ink dark" choices (1 / 2) are off
+        // the screen since the owner chose one master switch (2026-10-20: Android's Dark theme); the key still takes
+        // them over adb (settings put secure b1051c_shade_theme 1|2) as a rollback.
         section("Notification shade");
         RadioGroup sg = new RadioGroup(this);
-        String[] shadeNames = {"E-ink, follows Dark theme", "E-ink light", "E-ink dark", "Android default"};
-        int[] shadeVals = {0, 1, 2, -1};
+        String[] shadeNames = {"E-ink, follows Dark theme", "Android default"};
+        int[] shadeVals = {0, -1};
         int curShade = Eink.secureInt(this, "b1051c_shade_theme", 0);
         for (int i = 0; i < shadeNames.length; i++) {
             RadioButton rb = radio(shadeNames[i], 3000 + i);
@@ -128,6 +181,8 @@ public class MainActivity extends Activity {
         }
         sg.setOnCheckedChangeListener((g, id) -> Eink.putSecure(this, "b1051c_shade_theme", shadeVals[id - 3000]));
         root.addView(sg);
+        if (curShade == 1 || curShade == 2) note("The shade is forced " + (curShade == 1 ? "light" : "dark")
+                + " (set over adb). Choose an option above to follow the Dark theme again.");
         // the plugin's default outline: 2.5 dp with the InKognito colours, 1.5 dp plain
         boolean[] inkShade = {Eink.secureInt(this, "b1051c_shade_palette", 1) != 0};
         int strokeNow = Eink.secureInt(this, "b1051c_shade_stroke", -1);
@@ -139,16 +194,44 @@ public class MainActivity extends Activity {
         stroke.setMin(5);
         stroke.setMax(40);
         stroke.setProgress(strokeNow);
-        Ink.styleSeekBar(stroke, Ink.STEEL);
+        Ink.styleSeekBar(stroke, pal, pal.sliderCold);
         stroke.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar s, int v, boolean user) { strokeLabel.setText("Outline width: " + v / 10f + " dp"); }
-            @Override public void onStartTrackingTouch(SeekBar s) {}
-            @Override public void onStopTrackingTouch(SeekBar s) { Eink.putSecure(MainActivity.this, "b1051c_shade_stroke", s.getProgress()); }
+            private boolean touching;
+            private final Runnable apply = () -> Eink.putSecure(MainActivity.this, "b1051c_shade_stroke", stroke.getProgress());
+            @Override public void onProgressChanged(SeekBar s, int v, boolean user) {
+                strokeLabel.setText("Outline width: " + v / 10f + " dp");
+                if (user && !touching) { s.removeCallbacks(apply); s.postDelayed(apply, 400); }   // keyboard / TalkBack
+            }
+            @Override public void onStartTrackingTouch(SeekBar s) { touching = true; s.removeCallbacks(apply); }
+            @Override public void onStopTrackingTouch(SeekBar s) { touching = false; apply.run(); }
         });
         root.addView(stroke);
         note("Quick settings and notifications drawn for e-ink: solid colors, outlines, no gray shade. The two "
                 + "front-light sliders replace the brightness slider in every style.");
-        button("White wallpaper (home + lock screen)", v -> new Thread(() -> Eink.whiteWallpaper(this)).start());
+
+        // Lock screen, sleep picture and shutdown picture: the Lock & Sleep app (0.15.11; the sections lived here in
+        // 0.15.7–0.15.10). The plugin still reads Settings.Secure b1051c_lock_style / b1051c_lock_scrim, and the
+        // shutdown picture is still drawn here (ShutdownScreen reads b1051c_shutdown_screen).
+        section("Lock screen and sleep picture");
+        Intent sleepApp = getPackageManager().getLaunchIntentForPackage(SleepRelay.PKG);
+        note(sleepApp != null
+                ? "The lock screen's look, the picture the panel keeps while the tablet sleeps and the shutdown picture are set in the Lock & Sleep app."
+                : "The lock screen's look, the picture the panel keeps while the tablet sleeps and the shutdown picture are set in the Lock & Sleep app, which is not installed.");
+        if (sleepApp != null) button("Open Lock & Sleep", v -> startActivity(sleepApp));
+
+        // Dark theme (ThemeSync); replaces the "White wallpaper" button (the adb WHITE_WALLPAPER action stays)
+        section("Dark theme");
+        note("Follows Android's Dark theme (quick-settings tile). Switching also changes the wallpaper (home + lock "
+                + "screen), the keyboard and the shutdown screen, then does one full refresh.");
+        check("Wallpaper follows theme", p.getBoolean(ThemeSync.K_WALLPAPER, true), v -> {
+            p.edit().putBoolean(ThemeSync.K_WALLPAPER, v).apply();
+            if (v) ThemeSync.followOn(this, true);
+        });
+        check("Keyboard follows theme", p.getBoolean(ThemeSync.K_KEYBOARD, true), v -> {
+            p.edit().putBoolean(ThemeSync.K_KEYBOARD, v).apply();
+            if (v) ThemeSync.followOn(this, false);
+        });
+        button("Re-apply the theme now", v -> ThemeSync.request(this, "button", true));
 
         // Colour
         section("Color");
@@ -179,7 +262,14 @@ public class MainActivity extends Activity {
         note("Bigme's own color processing (same formulas and color tables as the stock ROM), rendered by "
                 + "the display shim. The sliders show the selected preset; moving one switches to Custom. Vivid and "
                 + "the presets change colored content only, so a black-and-white screen looks the same. Comic uses "
-                + "only its color table (like stock).");
+                + "only its color table (like stock). Every preset also gets the color boost below.");
+        IntCb shim = v -> Profiles.apply(this, AppProfileService.currentPackage(), false);
+        slider("Color boost (%; grays stay neutral)", "ok_sat", 0, 150, Eink.OK_SAT, shim);
+        slider("Darker text (0 = off)", "level_black", 0, 60, 0, shim);
+        note("Color boost raises color in our own stage after Bigme's (60 is the measured best; more darkens skin). "
+                + "Darker text turns the darkest grays black, so text edges get heavier; it costs shadow detail in "
+                + "pictures, so KOReader and Kindle get 20 from their profiles and other apps stay at 0. Both are also "
+                + "quick-settings tiles and per-app profile fields.");
         button("Save these colors as a named preset…", v -> {
             android.widget.EditText name = new android.widget.EditText(this);
             name.setHint("Preset name");
@@ -221,9 +311,45 @@ public class MainActivity extends Activity {
             p.edit().putBoolean("ime_fast", v).apply();
             Eink.applyRefreshMode(this);
         });
+        note("While scrolling with a finger:");
+        RadioGroup scrollGroup = new RadioGroup(this);
+        for (int i = 0; i < Profiles.SCROLL_VALUES.length; i++) scrollGroup.addView(radio(Profiles.SCROLL_NAMES[i], 6000 + i));
+        scrollGroup.check(6000 + Math.max(0, Eink.stepIndex(Profiles.SCROLL_VALUES, p.getInt("scroll", 178))));
+        root.addView(scrollGroup);
+        scrollGroup.setOnCheckedChangeListener((g, id) -> {
+            p.edit().putInt("scroll", Profiles.SCROLL_VALUES[id - 6000]).apply();
+            Eink.applyRefreshMode(this);
+        });
+        note("Fast: HD 256 and Regal scroll in Fast, then one full refresh cleans up (like stock). Extreme: faster and "
+                + "rougher, in every mode. Per app in its profile.");
+        note("Navigation buttons: when only the button row changes (a button pressed), just that row is redrawn, in:");
+        RadioGroup navGroup = new RadioGroup(this);
+        for (int i = 0; i < Eink.NAV_MODES.length; i++) navGroup.addView(radio(Eink.NAV_NAMES[i], 6100 + i));
+        navGroup.check(6100 + Math.max(0, Eink.stepIndex(Eink.NAV_MODES, p.getInt("nav_mode", 178))));
+        root.addView(navGroup);
+        navGroup.setOnCheckedChangeListener((g, id) -> {
+            p.edit().putInt("nav_mode", Eink.NAV_MODES[id - 6100]).apply();
+            Eink.applySystemModes(this);
+        });
+        note("Video: while a video plays, the whole screen in:");
+        RadioGroup videoGroup = new RadioGroup(this);
+        for (int i = 0; i < Eink.VIDEO_MODES.length; i++) videoGroup.addView(radio(Eink.VIDEO_NAMES[i], 6200 + i));
+        videoGroup.check(6200 + Math.max(0, Eink.stepIndex(Eink.VIDEO_MODES, p.getInt("video_mode", 179))));
+        root.addView(videoGroup);
+        videoGroup.setOnCheckedChangeListener((g, id) -> {
+            p.edit().putInt("video_mode", Eink.VIDEO_MODES[id - 6200]).apply();
+            Eink.applySystemModes(this);
+        });
+        note("When the video stops, one full refresh cleans up.");
+        check("Ignore touch while the pen is near (apps in Pen mode)", p.getBoolean("pen_palm", true), v -> {
+            p.edit().putBoolean("pen_palm", v).apply();
+            Root.async("setprop persist.b1051c.pen_palm " + (v ? 1 : 0));
+        });
+        note("Your hand can rest on the screen while you write. The \"Touch\" quick-settings tile turns touch off "
+                + "until the screen goes off.");
         check("Full refresh when inverted colors switch on/off", p.getBoolean("clean_on_dark", true),
                 v -> p.edit().putBoolean("clean_on_dark", v).apply());
-        slider("Full refresh every N while colors are inverted (0 = as above)", "n_dark", 0, 50, 0,
+        slider("Full refresh every N while dark: Dark theme or inverted colors (0 = as above)", "n_dark", 0, 50, 0,
                 v -> Eink.applyRefreshMode(this));
         check("Bold text (all apps)", Eink.secureInt(this, "font_weight_adjustment", 0) > 0,
                 v -> Eink.putSecure(this, "font_weight_adjustment", v ? 300 : 0));
@@ -233,80 +359,131 @@ public class MainActivity extends Activity {
         // Dual system
         section("System");
         sysStatus = note("…");
-        android.widget.Spinner sd = spinner(root, "Screen left on the panel after power-off / during a reboot",
-                ShutdownScreen.LABELS, ShutdownScreen.index(this));
-        sd.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(android.widget.AdapterView<?> a, View v, int pos, long id) {
-                p.edit().putString("shutdown_screen", ShutdownScreen.VALUES[pos]).apply();
-            }
-            @Override public void onNothingSelected(android.widget.AdapterView<?> a) {}
-        });
-        button("Boot the other system", v -> new AlertDialog.Builder(this)
+        note("Shutdown picture: " + ShutdownScreen.LABELS[ShutdownScreen.index(this)] + " (set in Lock & Sleep).");
+        button("Boot the other system", v -> Ink.bodyWeight(new AlertDialog.Builder(this)
                 .setMessage("Restart into the other system now?")
                 .setPositiveButton("Restart", (d, w) -> Eink.bootOtherSystem())
-                .setNegativeButton("Cancel", null).show());
+                .setNegativeButton("Cancel", null).show()));
         button("Export all settings and profiles", v -> new Thread(() -> {
             String r = Eink.exportSettings(this);
             runOnUiThread(() -> android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show());
         }).start());
-        button("Import settings and profiles", v -> new AlertDialog.Builder(this)
+        button("Import settings and profiles", v -> Ink.bodyWeight(new AlertDialog.Builder(this)
                 .setMessage("Replace all E-Ink Control settings with " + Eink.exportFile(this) + "?")
                 .setPositiveButton("Import", (d, w) -> new Thread(() -> {
                     String r = Eink.importSettings(this);
                     runOnUiThread(() -> { android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show(); recreate(); });
                 }).start())
-                .setNegativeButton("Cancel", null).show());
+                .setNegativeButton("Cancel", null).show()));
         // Per-app profiles
         section("Per-app profiles");
         note("Tap an app to set its own refresh mode, colors, grayscale, inverted colors, high-contrast text, "
                 + "full-refresh frequency or anti-shake. Anything left on \"Inherit\" follows the settings above. "
-                + "\"Home screen\" applies to the launcher. Needs the E-Ink Control accessibility service.");
+                + "\"Home screen\" applies to the launcher, \"Notification shade\" while the shade is pulled down, "
+                + "\"Recents\" to the app overview (it starts from the home screen's settings). Needs the E-Ink Control "
+                + "accessibility service.");
         perAppList();
 
         refreshSystemStatus();
     }
 
     private int dpiCurrent = Eink.DPI_DEFAULT;
+    private SeekBar dpiBar;
+    private TextView dpiLabel;
+
+    // The "keep?" countdown belongs to the process, not to this activity (review 2026-10-21): a Dark theme or Bold
+    // switch recreates the activity (uiMode / fontWeight are not in configChanges) and the user can swipe it away, and
+    // a dialog dismissed after that crashed the whole process (keeper and accessibility service included) before the
+    // revert ran. Now a destroyed activity only drops its dialog, a recreated one shows it again with the time left,
+    // and the revert always runs.
+    private static final android.os.Handler dpiH = new android.os.Handler(android.os.Looper.getMainLooper());
+    private static int dpiWant = -1, dpiPrev, dpiLeft;          // dpiWant >= 0 while a countdown runs
+    private static Runnable dpiTick;
+    private static MainActivity live;                            // the activity on screen, null when there is none
+    private AlertDialog dpiDialog;
 
     private static String dpiText(int dpi) {
         return "DPI: " + dpi + (dpi == Eink.DPI_DEFAULT ? "  (default)" : "  (default " + Eink.DPI_DEFAULT + ")");
     }
 
+    private static String dpiMessage() { return "Going back to " + dpiPrev + " dpi in " + dpiLeft + " s"; }
+
     /** Apply a density with a 15 s "keep?" countdown; anything but Keep restores the previous value. */
-    private void applyDpi(int want, SeekBar bar, TextView label) {
-        int prev = dpiCurrent;
-        if (want == prev) { label.setText(dpiText(prev)); bar.setProgress(prev / 10); return; }
+    private void applyDpi(int want) {
+        int prev = dpiWant >= 0 ? dpiPrev : dpiCurrent;          // a second choice mid-countdown still goes back to the original
+        dpiCancel();
+        if (want == prev) {
+            if (dpiCurrent != prev) Eink.setDpi(prev);           // back to the original before Keep: a plain revert
+            dpiCurrent = prev;
+            dpiLabel.setText(dpiText(prev));
+            dpiBar.setProgress(prev / 10);
+            return;
+        }
         Eink.setDpi(want);
-        android.os.Handler h = new android.os.Handler(android.os.Looper.getMainLooper());
-        int[] left = {15};
-        boolean[] done = {false};
-        Runnable revert = () -> {
-            if (done[0]) return;
-            done[0] = true;
-            Eink.setDpi(prev);
-            bar.setProgress(prev / 10);
-            label.setText(dpiText(prev));
+        dpiWant = want; dpiPrev = prev; dpiLeft = 15;
+        dpiTick = new Runnable() {
+            @Override public void run() {
+                if (dpiWant < 0) return;
+                if (--dpiLeft <= 0) { dpiRevert(); return; }
+                MainActivity a = live;
+                if (a != null && a.dpiDialog != null && a.dpiDialog.isShowing()) a.dpiDialog.setMessage(dpiMessage());
+                dpiH.postDelayed(this, 1000);
+            }
         };
-        AlertDialog d = new AlertDialog.Builder(this)
-                .setTitle("Keep " + want + " dpi?")
-                .setMessage("Going back to " + prev + " dpi in " + left[0] + " s")
-                .setPositiveButton("Keep", (x, w) -> {
-                    done[0] = true;
-                    dpiCurrent = want;
-                    label.setText(dpiText(want));
-                })
-                .setNegativeButton("Go back", (x, w) -> revert.run())
+        dpiH.postDelayed(dpiTick, 1000);
+        showDpiDialog();
+    }
+
+    private void showDpiDialog() {
+        dismissDpiDialog();
+        dpiDialog = new AlertDialog.Builder(this)
+                .setTitle("Keep " + dpiWant + " dpi?")
+                .setMessage(dpiMessage())
+                .setPositiveButton("Keep", (x, w) -> dpiKeep())
+                .setNegativeButton("Go back", (x, w) -> dpiRevert())
                 .setCancelable(false)
                 .create();
-        d.show();
-        h.postDelayed(new Runnable() {
-            @Override public void run() {
-                if (done[0]) return;
-                if (--left[0] <= 0) { d.dismiss(); revert.run(); return; }
-                d.setMessage("Going back to " + prev + " dpi in " + left[0] + " s");
-                h.postDelayed(this, 1000);
-            }
-        }, 1000);
+        dpiDialog.show();
+        Ink.bodyWeight(dpiDialog);                               // the countdown's setMessage keeps this TextView
+    }
+
+    private void dismissDpiDialog() {
+        AlertDialog d = dpiDialog;
+        dpiDialog = null;
+        if (d == null || !d.isShowing()) return;
+        try { d.dismiss(); } catch (RuntimeException ignored) {} // its window is already gone
+    }
+
+    /** Stop the countdown; the live activity's dialog goes with it. */
+    private static void dpiCancel() {
+        dpiWant = -1;
+        if (dpiTick != null) dpiH.removeCallbacks(dpiTick);
+        dpiTick = null;
+        MainActivity a = live;
+        if (a != null) a.dismissDpiDialog();
+    }
+
+    private static void dpiKeep() {
+        int want = dpiWant;
+        if (want < 0) return;
+        dpiCancel();
+        MainActivity a = live;
+        if (a != null) { a.dpiCurrent = want; a.dpiLabel.setText(dpiText(want)); }
+    }
+
+    private static void dpiRevert() {
+        int prev = dpiPrev;
+        dpiCancel();
+        Eink.setDpi(prev);
+        MainActivity a = live;
+        if (a != null) { a.dpiCurrent = prev; a.dpiBar.setProgress(prev / 10); a.dpiLabel.setText(dpiText(prev)); }
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissDpiDialog();                                      // the countdown itself keeps running (see applyDpi)
+        if (live == this) live = null;
+        super.onDestroy();
     }
 
     private void refreshSystemStatus() {
@@ -322,6 +499,8 @@ public class MainActivity extends Activity {
     private void perAppList() {
         android.content.pm.PackageManager pm = getPackageManager();
         appRow("Home screen (launcher)", Profiles.SYSTEM);
+        appRow("Notification shade and quick settings", Profiles.SHADE);
+        appRow("Recents", Profiles.RECENTS);
         Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
         java.util.List<android.content.pm.ResolveInfo> apps = pm.queryIntentActivities(launcher, 0);
         java.util.Collections.sort(apps, (a, b) -> a.loadLabel(pm).toString().compareToIgnoreCase(b.loadLabel(pm).toString()));
@@ -338,10 +517,10 @@ public class MainActivity extends Activity {
         Button b = new Button(this);
         b.setAllCaps(false);
         b.setTextSize(17);
-        b.setTextColor(Ink.INK);
+        b.setTextColor(pal.ink);
         b.setTypeface(Ink.font(this, 400));
         b.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-        b.setBackground(Ink.pill(this, Ink.CREAM, 14));
+        b.setBackground(Ink.pill(this, pal, pal.card, 14));
         b.setStateListAnimator(null);
         b.setPadding(dp(16), dp(10), dp(16), dp(10));
         b.setText(rowText(label, Profiles.summary(Profiles.get(this, key))));
@@ -357,8 +536,11 @@ public class MainActivity extends Activity {
         s.setSpan(new android.text.style.TypefaceSpan(Ink.font(this, 600)), 0, s.length(), 0);
         int at = s.length();
         s.append("\n").append(summary);
-        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.MUTED), at, s.length(), 0);
+        s.setSpan(new android.text.style.ForegroundColorSpan(pal.muted), at, s.length(), 0);
         s.setSpan(new android.text.style.RelativeSizeSpan(0.85f), at, s.length(), 0);
+        // the gray summary keeps the notes' weight (Ink.mutedFont) when the row's body weight differs (dark only)
+        Typeface mf = Ink.mutedFont(this);
+        if (mf != Ink.font(this, 400)) s.setSpan(new android.text.style.TypefaceSpan(mf), at, s.length(), 0);
         return s;
     }
 
@@ -384,7 +566,8 @@ public class MainActivity extends Activity {
         for (int i = 0; i < presets.length; i++) if (presets[i].equals(o.optString(Profiles.F_PRESET, null))) pi = i + 1;
         android.widget.Spinner preset = spinner(box, "Colors (preset; suggests a refresh mode)", presetOpts, pi);
         android.widget.Spinner grey = spinner(box, "Grayscale (black and white)", TRI, tri(o, Profiles.F_GREY));
-        android.widget.Spinner invert = spinner(box, "Inverted colors (dark)", TRI, tri(o, Profiles.F_INVERT));
+        android.widget.Spinner invert = spinner(box, "Inverted colors (skipped while Dark theme is on)", TRI,
+                tri(o, Profiles.F_INVERT));
         android.widget.Spinner hc = spinner(box, "High-contrast text", TRI, tri(o, Profiles.F_HC));
         String[] nOpts = new String[NS.length + 1];
         nOpts[0] = "Inherit";
@@ -393,6 +576,16 @@ public class MainActivity extends Activity {
         for (int i = 0; i < NS.length; i++) if (o.has(Profiles.F_N) && NS[i] == o.optInt(Profiles.F_N)) ni = i + 1;
         android.widget.Spinner n = spinner(box, "Full refresh every N page turns", nOpts, ni);
         android.widget.Spinner shake = spinner(box, "Anti-shake", TRI, tri(o, Profiles.F_SHAKE));
+        int[] satSteps = steps(Eink.SAT_VALUES, o, Profiles.F_SAT), blackSteps = steps(Eink.TEXT_VALUES, o, Profiles.F_BLACK);
+        android.widget.Spinner sat = spinner(box, "Color boost", stepNames(satSteps, Eink.SAT_VALUES, Eink.SAT_NAMES, " %"),
+                stepSel(satSteps, o, Profiles.F_SAT));
+        android.widget.Spinner black = spinner(box, "Darker text", stepNames(blackSteps, Eink.TEXT_VALUES, Eink.TEXT_NAMES, ""),
+                stepSel(blackSteps, o, Profiles.F_BLACK));
+        String[] scrollOpts = new String[Profiles.SCROLL_NAMES.length + 1];
+        scrollOpts[0] = "Inherit";
+        System.arraycopy(Profiles.SCROLL_NAMES, 0, scrollOpts, 1, Profiles.SCROLL_NAMES.length);
+        int si = o.has(Profiles.F_SCROLL) ? 1 + Math.max(0, Eink.stepIndex(Profiles.SCROLL_VALUES, o.optInt(Profiles.F_SCROLL))) : 0;
+        android.widget.Spinner scroll = spinner(box, "While scrolling with a finger", scrollOpts, si);
         android.widget.ScrollView sv = new android.widget.ScrollView(this);
         sv.addView(box);
         new AlertDialog.Builder(this).setTitle(label).setView(sv)
@@ -406,6 +599,9 @@ public class MainActivity extends Activity {
                         putTri(x, Profiles.F_HC, hc);
                         if (n.getSelectedItemPosition() > 0) x.put(Profiles.F_N, NS[n.getSelectedItemPosition() - 1]);
                         putTri(x, Profiles.F_SHAKE, shake);
+                        if (sat.getSelectedItemPosition() > 0) x.put(Profiles.F_SAT, satSteps[sat.getSelectedItemPosition() - 1]);
+                        if (black.getSelectedItemPosition() > 0) x.put(Profiles.F_BLACK, blackSteps[black.getSelectedItemPosition() - 1]);
+                        if (scroll.getSelectedItemPosition() > 0) x.put(Profiles.F_SCROLL, Profiles.SCROLL_VALUES[scroll.getSelectedItemPosition() - 1]);
                     } catch (org.json.JSONException ignored) {}
                     saveProfile(label, key, x, row);
                 })
@@ -419,6 +615,26 @@ public class MainActivity extends Activity {
         Profiles.apply(this, AppProfileService.currentPackage(), true);
     }
 
+    /** The editor's steps for an int field, plus the profile's own value when it is not one of them (set by an
+     *  import or an older build), so opening and saving never changes it. */
+    private static int[] steps(int[] base, org.json.JSONObject o, String f) {
+        if (!o.has(f) || Eink.stepIndex(base, o.optInt(f)) >= 0) return base;
+        int[] s = java.util.Arrays.copyOf(base, base.length + 1);
+        s[base.length] = o.optInt(f);
+        return s;
+    }
+
+    private static String[] stepNames(int[] steps, int[] base, String[] names, String unit) {
+        String[] out = new String[steps.length + 1];
+        out[0] = "Inherit";
+        for (int i = 0; i < steps.length; i++) out[i + 1] = i < base.length ? names[i] : steps[i] + unit;
+        return out;
+    }
+
+    private static int stepSel(int[] steps, org.json.JSONObject o, String f) {
+        return o.has(f) ? 1 + Eink.stepIndex(steps, o.optInt(f)) : 0;
+    }
+
     private static int tri(org.json.JSONObject o, String f) { return !o.has(f) ? 0 : o.optBoolean(f) ? 1 : 2; }
 
     private static void putTri(org.json.JSONObject x, String f, android.widget.Spinner s) throws org.json.JSONException {
@@ -430,7 +646,7 @@ public class MainActivity extends Activity {
         TextView t = new TextView(this);
         t.setText(label);
         t.setTextSize(15);
-        t.setTextColor(Ink.INK);
+        t.setTextColor(pal.ink);
         t.setTypeface(Ink.font(this, 500));
         t.setPadding(0, dp(10), 0, 0);
         box.addView(t);
@@ -446,20 +662,23 @@ public class MainActivity extends Activity {
     // ---- tiny UI helpers --------------------------------------------------------------------------
     private int dp(int v) { return Math.round(v * getResources().getDisplayMetrics().density); }
 
-    /** Board 05 identity: the title in the wordmark face, "InKognito" in the logo's steel + bordeaux. */
+    /** Board 05 identity: the title in the wordmark face, "In" + "Kognito" in the logo's steel + bordeaux (dark, card
+     *  E4a: "InK" light gold + "ognito" lifted bordeaux, cream title; the split is R.integer.brand_split). */
     private void header(String t) {
         TextView brand = new TextView(this);
         android.text.SpannableStringBuilder s = new android.text.SpannableStringBuilder("InKognito");
-        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.STEEL), 0, 2, 0);
-        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.BORDEAUX), 2, 9, 0);
+        int split = getResources().getInteger(R.integer.brand_split);
+        s.setSpan(new android.text.style.ForegroundColorSpan(pal.brandInk), 0, split, 0);
+        s.setSpan(new android.text.style.ForegroundColorSpan(pal.brandOgnito), split, 9, 0);
         s.append("  ·  Less bloat. More ink.");
-        s.setSpan(new android.text.style.ForegroundColorSpan(Ink.MUTED), 9, s.length(), 0);
+        s.setSpan(new android.text.style.ForegroundColorSpan(pal.muted), 9, s.length(), 0);
         s.setSpan(new android.text.style.RelativeSizeSpan(0.7f), 9, s.length(), 0);
         brand.setText(s);
         brand.setTextSize(20);
         brand.setTypeface(Ink.display(this));
         root.addView(brand);
         TextView tv = text(t, 36, false);
+        tv.setTextColor(pal.display);
         tv.setTypeface(Ink.display(this));
         tv.setPadding(0, dp(2), 0, dp(10));
     }
@@ -467,17 +686,19 @@ public class MainActivity extends Activity {
     /** Riveted steel band, then the section title (board 05). */
     private void section(String t) {
         View band = new View(this);
-        band.setBackground(new Ink.RivetBand(this));
+        band.setBackground(new Ink.RivetBand(this, pal));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(10));
         lp.topMargin = dp(18);
         root.addView(band, lp);
         TextView tv = text(t, 22, true);
+        tv.setTextColor(pal.heading);
         tv.setPadding(0, dp(12), 0, dp(6));
     }
 
     private TextView note(String t) {
         TextView tv = text(t, 15, false);
-        tv.setTextColor(Ink.MUTED);
+        tv.setTextColor(pal.muted);
+        tv.setTypeface(Ink.mutedFont(this));                     // T3 gray: muted_weight (light: the same Regular)
         tv.setPadding(0, dp(4), 0, dp(12));
         return tv;
     }
@@ -486,7 +707,7 @@ public class MainActivity extends Activity {
         TextView tv = new TextView(this);
         tv.setText(t);
         tv.setTextSize(sp);
-        tv.setTextColor(Ink.INK);
+        tv.setTextColor(pal.ink);
         tv.setTypeface(Ink.font(this, bold ? 600 : 400));
         root.addView(tv);
         return tv;
@@ -496,9 +717,9 @@ public class MainActivity extends Activity {
         RadioButton rb = new RadioButton(this);
         rb.setText(t);
         rb.setTextSize(18);
-        rb.setTextColor(Ink.INK);
+        rb.setTextColor(pal.ink);
         rb.setTypeface(Ink.font(this, 400));
-        rb.setButtonTintList(Ink.tint(Ink.TEAL));
+        rb.setButtonTintList(Ink.tint(pal.controlOn));
         rb.setId(id);
         rb.setPadding(dp(8), dp(10), dp(8), dp(10));
         return rb;
@@ -507,15 +728,15 @@ public class MainActivity extends Activity {
     private interface IntCb { void on(int v); }
     private interface BoolCb { void on(boolean v); }
 
-    /** On/off setting: text left, badge toggle right (teal track + light-gold knob when on). */
+    /** On/off setting: text left, badge toggle right (teal track + light-gold knob when on; dark: Ink.switchTrack). */
     private android.widget.Switch check(String t, boolean val, BoolCb cb) {
         android.widget.Switch c = new android.widget.Switch(this);
         c.setText(t);
         c.setTextSize(18);
-        c.setTextColor(Ink.INK);
+        c.setTextColor(pal.ink);
         c.setTypeface(Ink.font(this, 400));
-        c.setTrackDrawable(Ink.switchTrack(this));
-        c.setThumbDrawable(Ink.switchThumb(this));
+        c.setTrackDrawable(Ink.switchTrack(this, pal));
+        c.setThumbDrawable(Ink.switchThumb(this, pal));
         c.setTrackTintList(null);
         c.setThumbTintList(null);
         c.setSwitchMinWidth(dp(58));
@@ -537,7 +758,7 @@ public class MainActivity extends Activity {
     }
 
     private SeekBar slider(String label, String key, int min, int max, int def, IntCb cb) {
-        return slider(label, key, min, max, def, Ink.STEEL, cb);
+        return slider(label, key, min, max, def, pal.sliderCold, cb);
     }
 
     /** Labelled badge slider; {@code fill} = steel, or gold for the warm light (as in the shade). */
@@ -547,14 +768,18 @@ public class MainActivity extends Activity {
         sb.setMin(min);
         sb.setMax(max);
         sb.setProgress(p.getInt(key, def));
-        Ink.styleSeekBar(sb, fill);
+        Ink.styleSeekBar(sb, pal, fill);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar s, int v, boolean user) { tv.setText(label + ": " + v); }
-            @Override public void onStartTrackingTouch(SeekBar s) {}
-            @Override public void onStopTrackingTouch(SeekBar s) {
-                p.edit().putInt(key, s.getProgress()).apply();   // apply on release: one e-ink refresh, not dozens
-                cb.on(s.getProgress());
+            // touch: apply on release (one e-ink refresh, not dozens). Keyboard, TalkBack and Switch Access move the
+            // bar without touch events (review 2026-10-21): then apply 400 ms after the last change.
+            private boolean touching;
+            private final Runnable apply = () -> { p.edit().putInt(key, sb.getProgress()).apply(); cb.on(sb.getProgress()); };
+            @Override public void onProgressChanged(SeekBar s, int v, boolean user) {
+                tv.setText(label + ": " + v);
+                if (user && !touching) { s.removeCallbacks(apply); s.postDelayed(apply, 400); }
             }
+            @Override public void onStartTrackingTouch(SeekBar s) { touching = true; s.removeCallbacks(apply); }
+            @Override public void onStopTrackingTouch(SeekBar s) { touching = false; apply.run(); }
         });
         root.addView(sb);
         return sb;
@@ -569,8 +794,8 @@ public class MainActivity extends Activity {
         b.setTextSize(18);
         b.setAllCaps(false);
         b.setTypeface(Ink.font(this, 600));
-        b.setTextColor(primary ? Ink.CREAM : Ink.INK);
-        b.setBackground(Ink.pill(this, primary ? Ink.BORDEAUX : Ink.CREAM, 999));
+        b.setTextColor(primary ? pal.onPrimary : pal.ink);
+        b.setBackground(Ink.pill(this, pal, primary ? pal.primary : pal.card, 999));
         b.setStateListAnimator(null);
         b.setGravity(Gravity.CENTER);
         b.setOnClickListener(l);

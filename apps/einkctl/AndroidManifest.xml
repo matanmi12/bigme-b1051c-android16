@@ -13,6 +13,16 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent>
+        <!-- home screens too (Launcher3 QuickStep has no LAUNCHER activity): the "Home screen" profile and the full
+             refresh on returning home (Profiles.homePackages) -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.HOME" />
+        </intent>
+        <!-- the E-Ink SystemUI plugin: its component state is checked and restored (KeeperService.checkPlugin) -->
+        <package android:name="org.b1051c.einkui" />
+        <!-- Lock & Sleep: the settings screen offers to open it (SleepRelay sends it explicit broadcasts) -->
+        <package android:name="org.b1051c.sleep" />
     </queries>
     <!-- publish the front-light values for the QS sliders; granted with `pm grant` (development permission) -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
@@ -35,7 +45,9 @@
         </service>
 
         <!-- maintenance actions for adb (root/shell may target a non-exported receiver explicitly):
-             am broadcast -n org.b1051c.einkctl/.ActionReceiver -a org.b1051c.einkctl.WHITE_WALLPAPER -->
+             am broadcast -n org.b1051c.einkctl/.ActionReceiver -a org.b1051c.einkctl.WHITE_WALLPAPER
+             Dark theme state / re-sync: ... -a org.b1051c.einkctl.THEME_SYNC with the boolean extra dry or force
+             (see ActionReceiver.THEME_SYNC) -->
         <receiver android:name=".ActionReceiver" android:exported="false" />
         <!-- KOReader's Bigme patch (full refresh, front light); harmless actions only, see KoBridgeReceiver -->
         <receiver android:name=".KoBridgeReceiver" android:exported="true">
@@ -67,11 +79,17 @@
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
         </service>
+        <!-- TOGGLEABLE_TILE: TalkBack announces on/off for the true toggles (review 2026-10-21) -->
         <service android:name=".TileLight" android:icon="@drawable/ic_tile_light" android:label="@string/tile_light"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
         </service>
         <service android:name=".TileRom" android:icon="@drawable/ic_tile_rom" android:label="@string/tile_rom"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileLightPreset" android:label="@string/tile_light_preset" android:icon="@drawable/ic_tile_light"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
         </service>
@@ -79,17 +97,38 @@
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
         </service>
+        <service android:name=".TileBoost" android:label="@string/tile_boost" android:icon="@drawable/ic_tile_boost"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
+        <service android:name=".TileText" android:label="@string/tile_text" android:icon="@drawable/ic_tile_text"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+        </service>
         <service android:name=".TileGrey" android:label="@string/tile_grey" android:icon="@drawable/ic_tile_grey"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
         </service>
         <service android:name=".TileAntiShake" android:label="@string/tile_antishake" android:icon="@drawable/ic_tile_antishake"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
         </service>
         <service android:name=".TileColorRestore" android:label="@string/tile_colorrestore" android:icon="@drawable/ic_tile_colorrestore"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
+        </service>
+        <service android:name=".TileCover" android:label="@string/tile_cover" android:icon="@drawable/ic_tile_cover"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
+        </service>
+        <service android:name=".TileTouch" android:label="@string/tile_touch" android:icon="@drawable/ic_tile_touch"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" android:exported="true">
+            <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE" /></intent-filter>
+            <meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE" android:value="true" />
         </service>
     </application>
 </manifest>

@@ -1,0 +1,27 @@
+registration pre 0.918 post 0.920, corner shift max 0.0 px
+flat white over the card: camera G min 192 max 210 (fall-off 9 %)
+repeatability: shot to shot mean dE 0.53
+reference white   L* mean 99.1, spread 98.6..99.4
+reference gray128 L* mean 74.3, spread 70.6..77.2
+reference black   L* mean 24.7, spread 21.7..28.9
+
+gray axis (input -> L*, a*, b*):
+    0 ->  22.3   8.1 -16.7
+   32 ->  39.7   4.3 -11.5
+   64 ->  54.2   4.6 -10.8
+   96 ->  61.7   6.2 -11.5
+  128 ->  71.7   2.7  -9.6
+  159 ->  76.2   3.6  -8.3
+  191 ->  87.0   2.6  -5.3
+  223 ->  92.6   0.3  -3.5
+  255 ->  98.9   0.4  -0.0
+
+primaries and secondaries at full level (input -> L*, C*, hue; sRGB hue for reference):
+  red      L  59.6 C  18.3 h   357   (sRGB h   40, C  105)
+  yellow   L  88.0 C   7.8 h    95   (sRGB h  103, C   97)
+  green    L  63.5 C  12.5 h   198   (sRGB h  136, C  120)
+  cyan     L  87.9 C  11.3 h   219   (sRGB h  196, C   50)
+  blue     L  59.0 C  30.8 h   289   (sRGB h  306, C  134)
+  magenta  L  85.5 C  12.2 h   328   (sRGB h  328, C  116)
+
+largest chroma in the whole grid: 36.8

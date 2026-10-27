@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- InKognito palette, sampled from the boot logo (design board 05); ink is pure black on the panel. -->
+    <color name="ink">#FF000000</color>
+    <color name="paper">#FFF7F4E7</color>
+    <color name="bordeaux">#FF932845</color>
+    <color name="teal">#FF194D50</color>
+    <color name="gold">#FFCD8E2C</color>
+    <color name="light_gold">#FFF7BF5D</color>
+    <color name="steel">#FF5D7E91</color>
+    <color name="silver">#FFA7B0B6</color>
+    <color name="muted">#FF4A4342</color>
+    <!-- cream stays cream in both themes (thumb, text on bordeaux, the Night Badge title); paper is the page role -->
+    <color name="cream">#FFF7F4E7</color>
+    <!-- Night Badge constants (used by values-night, owner verdict G1): lifted bordeaux / steel, exact neutral grays -->
+    <color name="bordeaux_lift">#FFB03A57</color>
+    <color name="steel_lift">#FF8FAABA</color>
+    <color name="gray_mid">#FF8C8C8C</color>
+    <color name="gray_muted">#FFA0A0A0</color>
+
+    <!-- Roles (Ink.Pal): light = exactly the 0.13 constants, so the light look is unchanged; values-night overrides.
+         paper = page / cards / dialog fill, ink = text and the 2.5 dp outlines, muted = notes and summaries. -->
+    <color name="display">@color/ink</color>
+    <color name="heading">@color/ink</color>
+    <color name="line">@color/ink</color>
+    <color name="card">@color/paper</color>
+    <color name="pressed">@color/silver</color>
+    <color name="disabled_line">@color/silver</color>
+    <color name="primary">@color/bordeaux</color>
+    <color name="on_primary">@color/cream</color>
+    <color name="control_on">@color/teal</color>
+    <color name="switch_on">@color/teal</color>
+    <color name="switch_off">@color/silver</color>
+    <color name="knob_on">@color/light_gold</color>
+    <color name="knob_on_line">#00000000</color>
+    <color name="knob_off">#FFFFFFFF</color>
+    <color name="knob_off_line">@color/ink</color>
+    <color name="band">@color/silver</color>
+    <color name="rivet">@color/ink</color>
+    <color name="slider_track">@color/silver</color>
+    <color name="slider_cold">@color/steel</color>
+    <color name="slider_warm">@color/gold</color>
+    <color name="slider_thumb">@color/cream</color>
+    <color name="slider_dot">@color/ink</color>
+    <color name="brand_ink">@color/steel</color>
+    <color name="brand_ognito">@color/bordeaux</color>
+    <color name="dialog_button">@color/bordeaux</color>
+</resources>

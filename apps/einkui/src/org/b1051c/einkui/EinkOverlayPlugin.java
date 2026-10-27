@@ -47,7 +47,7 @@ public class EinkOverlayPlugin implements OverlayPlugin {
             styler = new ShadeStyler(sysui != null ? sysui : shadeRoot.getContext(), plugin, shadeRoot);
             styler.start();
             System.getProperties().put(LIVE, styler);
-            Log.i(TAG, "build " + Build.CODE + " attached to " + shadeRoot.getClass().getName());
+            Log.i(TAG, "build " + Build.CODE + " attached to " + shadeRoot.getClass().getName() + " (" + Build.NAME + ")");
         } catch (Throwable t) {
             Log.e(TAG, "setup failed", t);
         }

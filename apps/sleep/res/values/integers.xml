@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Rubik weight of body and small text (Ink.font 400 and the framework list/spinner text); values-night: 500 -->
+    <integer name="body_weight">400</integer>
+    <!-- Rubik weight of the gray notes and row summaries (Ink.mutedFont); values-night has its own line -->
+    <integer name="muted_weight">400</integer>
+    <!-- Wordmark color split: "In" steel + "Kognito" bordeaux; values-night: "InK" + "ognito" (card E4a) -->
+    <integer name="brand_split">2</integer>
+</resources>

@@ -1,0 +1,52 @@
+{
+ "app": "app.lawnchair",
+ "app_version": "15.Beta 3 (versionCode 1500020300)",
+ "source": "owner's live Lawnchair data read 2026-10-21 00:02 (read-only), minus layout, usage state and device state",
+ "build": "python3 -I prefs_pb.py build lawnchair-defaults.json .   (writes the two files next to this JSON)",
+ "files": {
+  "preferences.preferences_pb": "/data/data/app.lawnchair/files/datastore/preferences.preferences_pb (PreferenceManager2, DataStore name \"preferences\")",
+  "com.android.launcher3.prefs.xml": "/data/data/app.lawnchair/shared_prefs/com.android.launcher3.prefs.xml (PreferenceManager, LauncherFiles.SHARED_PREFERENCES_KEY)"
+ },
+ "datastore": [
+  {"key": "launcher_popup_order", "type": "string", "value": "+carousel|-lock|-edit_mode|+wallpaper|+widgets|+home_settings|-sys_settings", "why": "Lawnchair default value (home long-press menu); kept with its migration flag so the state equals a tested live state"},
+  {"key": "legacy_popup_options_migrated", "type": "bool", "value": true, "why": "internal migration flag belonging to launcher_popup_order (no legacy popup prefs exist on a fresh device)"},
+  {"key": "enable_smartspace", "type": "bool", "value": false, "why": "ROM: no At a Glance / smartspace widget on home (default true)"},
+  {"key": "hotseat_mode", "type": "string", "value": "disabled", "why": "ROM: no search bar in the dock (default \"lawnchair\")"},
+  {"key": "enable_wallpaper_depth_effect", "type": "bool", "value": false, "why": "ROM/e-ink: no wallpaper zoom animation (default true)"},
+  {"key": "dark_status_bar", "type": "bool", "value": false, "why": "Lawnchair default value; status bar icons follow the theme (Dark theme switch)"},
+  {"key": "enable_label_dock", "type": "bool", "value": true, "why": "design: labels under the dock icons (default false)"},
+  {"key": "drawer_icon_size_factor", "type": "float", "value": 1.1999999, "why": "design: app drawer icons 120 % (default 1.0; float32 0x3f999999 as written by Lawnchair's slider)"},
+  {"key": "drawer_icon_label_size_factor", "type": "float", "value": 1.1999999, "why": "design: app drawer labels 120 % (default 1.0)"},
+  {"key": "hide_app_drawer_search_bar", "type": "bool", "value": false, "why": "search bar in the app drawer stays visible (Lawnchair default value, explicit)"},
+  {"key": "home_icon_size_factor", "type": "float", "value": 1.1999999, "why": "design: home icons 120 % (default 1.0)"},
+  {"key": "home_icon_label_size_factor", "type": "float", "value": 1.0, "why": "design: home labels 100 % (default 1.0, explicit)"},
+  {"key": "workspace_text_color", "type": "string", "value": "AUTO", "why": "ROM: home label color follows the wallpaper (black on cream, white on the dark wallpaper; needs persist.wallpapercolors.max_dark_area 25)"}
+ ],
+ "shared_prefs": [
+  {"key": "pref_iconPackPackage", "type": "string", "value": "org.b1051c.iconpack", "why": "ROM: InKognito icon pack (install org.b1051c.iconpack before Lawnchair first starts, else Lawnchair falls back to system icons)"},
+  {"key": "pref_workspaceRows", "type": "int", "value": 7, "why": "design: home grid 5 x 7 (Lawnchair code default 5)"},
+  {"key": "pref_workspaceColumns", "type": "int", "value": 5, "why": "design: home grid 5 x 7 (Lawnchair code default 4)"},
+  {"key": "version", "type": "int", "value": 2, "why": "Lawnchair prefs schema version; a value < 2 would re-derive the grid from the (dropped) launcher DB state"},
+  {"key": "pref_shadowBGIcons", "type": "bool", "value": true, "why": "Lawnchair default value, as live"},
+  {"key": "pref_add_icon_to_home", "type": "bool", "value": false, "why": "ROM: newly installed apps are not added to the home screen (default true)"},
+  {"key": "pref_fontHeading", "type": "string", "value": "{\"className\":\"app.lawnchair.font.FontCache$SystemFont\",\"family\":\"sans-serif\",\"style\":0}", "why": "ROM: system font (Rubik via the b1051c-fonts module) instead of Lawnchair's bundled Inter"},
+  {"key": "pref_fontBody", "type": "string", "value": "{\"className\":\"app.lawnchair.font.FontCache$SystemFont\",\"family\":\"sans-serif\",\"style\":0}", "why": "ROM: system font"},
+  {"key": "pref_fontBodyMedium", "type": "string", "value": "{\"className\":\"app.lawnchair.font.FontCache$SystemFont\",\"family\":\"sans-serif-medium\",\"style\":0}", "why": "ROM: system font (medium)"},
+  {"key": "idp_grid_name", "type": "string", "value": "6_by_5", "why": "Launcher3 device-profile grid the live 5 x 7 grid was built on (kept for parity with the tested state)"},
+  {"key": "pref_hotseatColumns", "type": "int", "value": 5, "why": "design: 5 dock icons (Lawnchair code default 4)"},
+  {"key": "pref_workspaceFont", "type": "string", "value": "{\"className\":\"app.lawnchair.font.FontCache$SystemFont\",\"family\":\"sans-serif-medium\",\"style\":0}", "why": "ROM: home labels in the system font (medium)"},
+  {"key": "pref_fontHeadingMedium", "type": "string", "value": "{\"className\":\"app.lawnchair.font.FontCache$SystemFont\",\"family\":\"sans-serif-medium\",\"style\":0}", "why": "ROM: system font (medium)"}
+ ],
+ "dropped": [
+  {"what": "shared_prefs/com.android.launcher3.prefs.xml: launcher.home_bounce_count, launcher.apps_view_shown, launcher.all_apps_visited_count", "why": "usage / onboarding counters"},
+  {"what": "shared_prefs/com.android.launcher3.prefs.xml: promise_icon_ids", "why": "install-session state"},
+  {"what": "shared_prefs/com.android.launcher3.prefs.xml: migration_src_device_type, migration_src_workspace_size, migration_src_hotseat_count, migration_src_db_file", "why": "grid-migration bookkeeping of the owner's launcher DB (dropped)"},
+  {"what": "shared_prefs/com.android.launcher3.device.prefs.xml (whole file)", "why": "device state: smartspaceWidgetId (this device's AppWidget id), pref_icon_shape_path (icon-cache key), LAST_SNAPSHOT_TIME_MILLIS; regenerated by Lawnchair"},
+  {"what": "shared_prefs/plugin_prefs.xml (whole file)", "why": "plugin action cache, regenerated"},
+  {"what": "files/datastore/live-information.preferences_pb (whole file)", "why": "announcement cache downloaded from lawnchair.app, not a setting"},
+  {"what": "databases/launcher_7_5_5.db (+ -journal)", "why": "PERSONAL: the owner's home screen layout"},
+  {"what": "databases/app_icons.db", "why": "icon cache, regenerated"},
+  {"what": "databases/preferences (Room: IconOverride, Folders, FolderItems, Wallpapers)", "why": "all tables empty on the live device; nothing to ship"},
+  {"what": "files/log-*, files/downgrade_schema.json, files/customFonts/ (empty), cache/, code_cache/, no_backup/", "why": "logs, generated files, caches"}
+ ]
+}

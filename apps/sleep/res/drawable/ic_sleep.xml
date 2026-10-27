@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Manifest icon: our own drawing (padlock + crescent) in the Bigme frame, option C of
+     work/icons-bigme/custom/scripts/gen.py. On the device the private icon pack / icon RRO shows the owner's pick
+     (A = Bigme's screen-saver drawing, proprietary: never in this tree). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <path
+        android:fillColor="#ffffffff"
+        android:pathData="M0,60C0,109.41 10.59,120 60,120C109.41,120 120,109.41 120,60C120,10.59 109.41,0 60,0C10.59,0 0,10.59 0,60Z"
+        android:fillType="nonZero" />
+    <path
+        android:fillColor="#ff000000"
+        android:pathData="M60,120C10.59,120 0,109.41 0,60C0,10.59 10.59,0 60,0C109.41,0 120,10.59 120,60C120,109.41 109.41,120 60,120ZM30.65,113.67C37.64,115.22 47.43,116 60,116C72.57,116 82.36,115.22 89.35,113.67C96.54,112.07 101.99,109.42 105.7,105.7C109.42,101.98 112.07,96.54 113.67,89.35C115.22,82.36 116,72.57 116,60C116,47.43 115.22,37.64 113.67,30.65C112.07,23.46 109.42,18.01 105.7,14.3C101.99,10.58 96.54,7.93 89.35,6.33C82.36,4.78 72.57,4 60,4C47.43,4 37.64,4.78 30.65,6.33C23.46,7.93 18.02,10.58 14.3,14.3C10.58,18.01 7.93,23.46 6.33,30.65C4.78,37.64 4,47.43 4,60C4,72.57 4.78,82.36 6.33,89.35C7.93,96.54 10.58,101.98 14.3,105.7C18.02,109.42 23.46,112.07 30.65,113.67Z"
+        android:fillType="evenOdd" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M44,52L44,42A16,16 0 0,1 76,42L76,52"
+        android:strokeColor="#ff000000"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#ff3eede7"
+        android:pathData="M40,52L80,52A8,8 0 0,1 88,60L88,86A8,8 0 0,1 80,94L40,94A8,8 0 0,1 32,86L32,60A8,8 0 0,1 40,52Z"
+        android:strokeColor="#ff000000"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#ffffffff"
+        android:pathData="M61,62.42A11,11 0 1,0 61,83.58A11,11 0 0,1 61,62.42Z"
+        android:strokeColor="#ff000000"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

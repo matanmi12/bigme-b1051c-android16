@@ -1,9 +1,123 @@
-# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-19, 04:00)
+# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-22, 14:40)
 
 Plan: `~/.claude/plans/pasted-content-id-25ff-bigme-mellow-sutton.md` (approved; **Revision 2** at its top).
 Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-verity-warning-2026-10-17.md`,
 `research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
 Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
+
+## 2026-10-22 10:40–14:40 — owner at the device: physical tests, colour A/B, panel calibration, light presets
+- **Live now:** eink-compat 0.1.35 + `post-fs-data.sh` with `vivid_fast 1` and `ok_sat 60` (live copy only; module zip
+  and ROM payload not rebuilt), einkui **0.4.8** (pill behind the lock screen's "Charged"), E-Ink Control **0.15.14**
+  (ok_sat in the profile engine, adb SET_PROFILE / SET_LIGHT_PRESET, light presets Balanced / Warm-leaning / Warm /
+  Bed / Custom + QS tile "Light preset"), Lock & Sleep **0.1.2** (Android's folder picker), b1051c-icons **0.1.8**
+  (26 overlays; update-icons.py now stages as root and verifies).
+- Owner verified: FEATURE-TESTS 16 (regression, after the vivid_fast fix), 17 (colour A/B: ok_sat 60), 18 (lock screen),
+  19 (sleep picture, orientation correct). Open: 20 (light presets), 21 (calibration, paused).
+- **Colour work resume point:** `research/phase-d/color-calib-2026-10-22/README.md` (results, phone-camera rig,
+  commands, traps, the closed-loop plan). Next step waits for the owner's choice of light preset.
+
+## Morning 2026-10-22 06:30–08:00 — Lock & Sleep (feature 18 phase 1; owner's request 06:3x, plan `~/.claude/plans/eink-shimmying-creek.md`)
+- **Live now:** eink-compat **0.1.35** (vc36), einkui 0.4.7, E-Ink Control **0.15.11** (61), **Lock & Sleep 0.1.0** (vc1,
+  `org.b1051c.sleep`, `work/app/sleep`), launcher3 0.2.4. Front light off in the app. Rebooted twice (07:40 adb,
+  08:03 framework `svc power reboot`: the keeper disarmed the frame before the shutdown picture), both clean.
+- **Lock & Sleep** owns what the panel shows while locked or asleep: the lock-screen style + scrim (moved out of
+  E-Ink Control; same Secure keys, plugin unchanged), the sleep picture (off / one picture: built-in badge or a
+  picked file / folder rotation; fit or fill; date + battery overlays; preview; status) and the shutdown picture
+  choice (`b1051c_shutdown_screen`, E-Ink Control still draws it). It pre-renders the panel's raw frame (2480x1860
+  RGBX, SF's ROT_270 layout) to `/data/vendor/b1051c/sleep/frame.rgbx` as root and bumps
+  `vendor.debug.hwc.shim.standby`; the shim loads it (39 ms) and commits it as one GC16 inside `setPowerMode(OFF)`
+  before the vendor's OFF. dmesg confirms the kernel finishes that update before `eink_power_down`. While asleep nothing
+  reaches the panel (full-refresh helper, pen, vendor commits); one settled GC16 after the wake. E-Ink Control relays
+  WAKE / BATTERY / DATE / THEME and disarms the frame at ACTION_SHUTDOWN; the shim also skips while
+  `sys.shutdown.requested` is set. Verified over adb (relays, variants, folder, user file, sleep/wake, no crashes).
+- **Needs the owner's eyes (FEATURE-TESTS 19):** the picture on the panel at sleep (orientation: the layout matches the
+  touch IDC's ORIENTATION_270 mapping and a scrollbar check; `SET rot 90` flips it if wrong), typography, ghosting after
+  wake, the ~0.5 s pause before the panel darkens, folder rotation, the settings screen's look. Phase 2 (time of sleep,
+  KOReader cover, midnight repaint) is listed in ROADMAP wave 5.
+- Provisioning updated: payload.json (einkctl 0.15.11, module 0.1.35, sleep 0.1.1), provision-stage2 (`app_sleep`,
+  `app_sleep_start`), backup-layer, stage_public. Trap found: `adb shell su -c "a; b"` runs only `a` as root.
+- **09:30, owner's first note: the icon.** Redone in the Bigme language with the frame (`gen.py`): A = Bigme's
+  screen-saver drawing (applied: icon pack installed, home screen shows it; icon RRO v0.1.7 staged for the next
+  reboot), B = Bigme's lock drawing, C = our padlock + crescent (also the app's own manifest icon, 0.1.1). Owner picks
+  in `work/icons-bigme/custom/review.html`.
+
+## Night 2026-10-22 04:00–05:20 — wave 3 autonomous run (owner asleep, approved; report `research/phase-d/color/WAVE3-NIGHT-2026-10-22.md`)
+- **Live now:** eink-compat **0.1.34** (vc35; shim: row-incremental colour pass into 3 own cached ION commit buffers,
+  persistent pool, fenced client-target pick, B1051C BuildID gate + installer HWC sha check, 3D stages off in fast
+  modes, 2 cached table sets, gc16 re-runs the pass), einkui **0.4.3** (lock screen scrim: none by default,
+  `b1051c_lock_scrim`), E-Ink Control 0.15.6. Front light left OFF in the app (owner's levels stored; QS tile restores).
+- **Review Medium batch C done** (8, 9, 10). Wave 3 step 1 done; step 4 stages live as knobs (all 0 = unchanged);
+  §7 lock screen done. 4 reboots tonight (04:20, 04:45, 05:0x, 05:1x), all clean; no crashes, composer stable.
+- **Findings:** stock "HD 256" = 177 + the HWC's imageSmoothing (never reached the panel on the GSI; HD 256 = plain
+  177 here); Fast dither 3 / 6 = colour restoration off / on; a single own commit buffer serialises panel updates
+  in the kernel (hence 3); yesterday's scroll bench swiped the static pane of two-pane Settings (fixed, x=300).
+- **Morning:** regression look + A/B of the knobs on the baseline card (protocol in the report §5), then decide the
+  defaults and which knobs go per-app / QS. Rollback if anything looks wrong: module 0.1.30 zip + reboot.
+- **05:20–05:35, owner's request "the custom lock screen":** einkui **0.4.6** (`LockStyler`): Lilita One clock in the
+  display colour mirroring SystemUI's clock (which ignores setTypeface/setTextColor), own date line (the GSI has no
+  smartspace), corner shortcut hidden, all per frame and reversible (`b1051c_lock_style`); E-Ink Control **0.15.7**
+  adds a "Lock screen" section (style + scrim). Verified by screencap in light and dark; the large-clock mode (no
+  notifications) is for the morning (FEATURE-TESTS 18).
+- **05:40–06:05, review Medium batches D and F (cheap half):** E-Ink Control **0.15.10** (persistent su shell with
+  timeout, window-list foreground, KOReader sender identity, a11y status + button + notification + `A11Y_ENABLE`,
+  TalkBack tile states, keyboard/TalkBack slider apply), einkui **0.4.7** (sliders LTR), launcher3 **0.2.4** staged
+  (system fingerprint guard), KOReader patch sends with shared identity (self-test marker `.bridge-test`). Also a
+  0.1.30 vs 0.1.34 bench A/B (same per-update CPU; 0.1.34 ~12 % fewer Fast updates, ~15 % less composer CPU).
+  Open Medium now: "Android default" shade restore, the charger power-key test (owner), and the three einkd/pen
+  items (wave 4). Live: eink-compat 0.1.34, einkui 0.4.7, einkctl 0.15.10 (0.15.7–0.15.9 crashed on opening the settings screen: a label added twice, owner report 06:1x), launcher3 0.2.4 (after the next reboot).
+
+## 2026-10-21 afternoon — closing open items before wave 3 (plan ~/.claude/plans/smooth-sparking-raven.md)
+- **Live now:** E-Ink Control **0.15.4** (54), module **b1051c-eink-compat 0.1.30** (31; shim `232dc205`), new module
+  **b1051c-adbsecure 0.1.0** (USB debugging asks first; the Mac is allowed). Display: global Regal 180, Custom 50/50/50,
+  N 15, **Anti-shake off globally** (per app only, owner decision after the benchmark).
+- **Anti-shake works:** the e-ink debug nodes are opened as on stock and the composer may write them (0.1.28). Measured
+  (`research/phase-d/scroll-bench-2026-10-21.md`): no effect in Regal; Fast/Extreme ~+18 ms per update, smoother look.
+- **0.1.29 rejected** (owner: scrolling worse): it let the composer set 3 vendor props. The benchmark later showed no latency
+  change (~2x init CPU only); 0.1.30 drops those writes inside the shim, so there are no error lines (was ~140 per 2
+  swipes). The "don't sleep mid panel update" idea is parked for wave 5 (ROADMAP).
+- **Public staging fixed locally** (nothing pushed): 304 files instead of 15,437, PII scan 0 hits. The public HEAD
+  `37f7b23` still contains personal data; the owner reported it, and a fix waits for the owner's word.
+- **Kernel Q2 re-checked** (`research/phase-d/pen/KERNEL-PEN-PATH.md`): a key alone may not unlock Regal. Regal also
+  needs REGAL data in the LK waveform (unknown), the verify retries on every update, and Regal falls back to GU16 for 3 s
+  after pen/A2 updates.
+- **Security items:** all reported by the owner (14:19). **Backup:** `backups/layer-20261021-113328`.
+- **Owner decisions 21.10 evening (wave 3 opened):** the verification round (`FEATURE-TESTS.md` 1–9) is the owner's,
+  at their own pace, and does not block wave 3; per-app Anti-shake is a user setting (no action); **the lock screen
+  joins wave 3** (ROADMAP wave 3 §7: 20 % keyguard scrim + the 5 % darker home). The 24 open Medium review findings
+  got a recommended order in ROADMAP ("ממצאי ה-Medium"), batches A–F, awaiting the owner's OK. Charger power-key test
+  added as verification item 12.
+- **Medium batch A done (E-Ink Control 0.15.5 → 0.15.6, no reboot):** SystemUI plugin re-enabled once per boot
+  when a SystemUI crash disabled it; Launcher3/Recents counts as home and Settings no longer does; DPI "Keep?"
+  countdown survives activity recreation; after Active apps → Stop the accessibility service (found to stay
+  *crashed*, never rebound by the system) and the keeper are recovered from the tiles / settings screen / KOReader
+  bridge. All but the DPI dialog verified on the tablet. Log: settings-changes.log 15:57 and 16:02.
+- **Medium batch B done:** KOReader light patch `1-bigme-eink.lua` (959da9d9) on the tablet: re-reads the QS/E-Ink
+  Control light before every action, Toggle works when KOReader starts with the light off, "+" after "off" keeps the
+  state in step. Loads clean (12 s launch over adb); interactive check = FEATURE-TESTS item 15.
+- **Wave 3 step 0 done (16:20–17:09, owner at the device):** baseline card (`work/design/color-baseline/`) shot in
+  6 states (S1 daily Regal+Custom, S2 pipeline off, S3 HD 256, S5 Fast, S6 Fast+colour restore, S7 = S1 with the
+  front light on); S4 skipped because on this GSI "HD 256" reaches the kernel as 177 dither 0 (global_dither 0) =
+  plain 177. Fast = dither 3, with colour restore dither 6. Folder `research/phase-d/color-baseline-2026-10-21/`
+  (screencaps + states.log; the owner's photos go to `photos/`, `sort_photos.py` names them). Tablet back to daily
+  state. Next = batch C = wave 3 step 1 (shim: rect-only colour, own CT + fence, BuildID gate).
+- **Still open for the owner:** copying the backup + `work/app/debug.keystore` off the Mac.
+
+## 2026-10-21 night + morning — code review + InKognito alpha 1 ROM (plan ~/.claude/plans/smooth-sparking-raven.md)
+- **Review of the live code:** method from github.com/FelixGraeber/claude-android-audit-skill (its pipeline ran on a
+  staged copy: gates C1/C7/H2/H5/H6, score withheld; its checklists used as lenses) + 9 lenses incl. native, root
+  scripts, sepolicy and fresh-device readiness. Every live artifact was hash-matched to its source (no drift).
+  122 findings, 102 survived adversarial verification (9 High, all handled; 38 Medium, 55 Low, 0 Critical). Report:
+  `docs/REVIEW-2026-10-21.md` (+ appendix `docs/REVIEW-2026-10-21-findings.md`).
+- **Fixed and live (verified on the tablet):** E-Ink Control **0.15.3** (53; KOReader bridge only while KOReader is
+  in front, root/adb `SET_LIGHT`, LEDs never lit while the screen is off), module **b1051c-eink-compat 0.1.26** (27; shim pen-up watchdog, einkd survives
+  vanished input devices + SYN_DROPPED resync, GSI detection by /system/phh, install guard). Reboot 07:54 OK.
+- **ROM:** `release/InKognito-B1051CPro-alpha1-20261021/` (system.img `24b2c073…` (+ Anti-shake, module 0.1.28); owner decisions 21.10: density 350 = module 0.1.27, USB debugging asks first = ro.adb.secure=1 in the image; = TD16 GSI + /system/etc/inkognito
+  payload + init hook; boot/vbmeta/logo = the live partitions; fastboot scripts for mac/linux/windows; docs).
+  Builder `tools/scripts/build-rom.py`, sources `work/rom/`. First boot: stage 1 (zygote-start) installs the Magisk
+  modules and reboots (after committing any pending userdata checkpoint), stage 2 installs/configures the apps during
+  Google setup. Zip 1.25 GB `b2026ea1d4505e59…`. **Not flashed anywhere yet; test plan in the review report §6.**
+- **Backup 21.10 11:33:** `backups/layer-20261021-113328` (399 MB, SHA256SUMS 18/18). Correction (critic): of the 9 High review findings, 4 are fixed and verified on the tablet; 5 exist only in the ROM provisioning (dry-run only).
+- **Incident 00:01:** a read-only `magisk --sqlite 'SELECT sql FROM sqlite_master'` crashed magiskd; fixed by a reboot.
 
 ## Night 2026-10-19 02:15–04:00 — design board 05 applied (owner asleep, overnight work approved)
 - **Live:** E-Ink SystemUI plugin **0.3.4** build 23 (InKognito palette in the shade, riveted light sliders,

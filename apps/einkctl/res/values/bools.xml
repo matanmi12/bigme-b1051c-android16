@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- dark status / navigation bar icons on the cream page; values-night: light icons on black -->
+    <bool name="light_bars">true</bool>
+</resources>

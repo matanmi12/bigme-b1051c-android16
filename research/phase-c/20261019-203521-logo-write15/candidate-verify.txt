@@ -1,0 +1,3 @@
+logo_pre_live.bin 574cd488d488c981... (= live logo, WRITE 11)
+logo_w15.bin 1b58093906373b8d6d2aa0dab45bdec7e83eccd276288419ac3a3eef020d7a23
+images 0 and 38 <- work/bootlogo/bw-cream/bw-step0.png (make_bw_frames.py --paper F7F4E7); image 2 (charging, white) and all others unchanged; logo_tool check round trip identical

@@ -1,0 +1,21 @@
+                    L white    L cream    L black    dL 0>26   dL 26>51 dL 230>255   C cc1-18   C hue S1  C hue S.5    C greys     C skin     L skin
+A0                     33.8       31.4       15.9        1.4       -0.0        1.9        6.5        5.6        4.3        4.3        7.2       19.6
+level_white=20         32.9       37.3       14.3        1.8       -0.1       -0.9        8.2        6.0        5.1        4.3        6.8       21.2
+level_white=40         58.4       59.0       14.9        1.4        1.4        3.5       10.2        7.9        6.2        5.2        6.6       25.5
+level_white=60         34.2       37.7       15.4        1.0        1.4       -0.6        8.5        6.4        5.0        4.7        6.8       23.5
+level_black=20         82.6       81.2       35.3       -0.8       -0.8        6.2       13.2        9.8        7.2        5.9        9.6       46.7
+ok_sat=30              72.1       74.3       35.3        1.5       -2.8        3.9       12.3        8.6        7.2        5.8       10.3       44.9
+ok_sat=60              68.5       70.6       35.5        2.3       -1.1        2.7       12.7        8.9        7.9        6.2       11.0       42.9
+ok_sat=100             70.3       72.2       35.3        0.8      -12.9        4.0       13.0        8.8        8.2        5.7       11.7       40.6
+
+Notes (2026-10-22 12:2x, analyze_photos.py, registration score >= 0.86 except level_black=40 = 0.34, blurred, excluded):
+- Two exposure groups: A0..level_white=60 at 1/27 s (underexposed: paper L ~33, black ~15) and level_black=20..ok_sat=100
+  at 1/11 s. No A0 in the second group; level_black=20 is the stand-in (input black point only).
+- Lighting not constant inside a group: paper white L 82.6 / 72.1 / 68.5 / 70.3 across lb20 / ok30 / ok60 / ok100,
+  although ok_sat cannot change white (body shadow or room light). L-based metrics are unusable; chroma is compared
+  as C / L(paper white).
+- C/Lwhite: ColorChecker 1-18 .160 / .171 / .185 / .185, half-saturation hues .087 / .100 / .115 / .117,
+  skin .116 / .143 / .161 / .166, greys .071 / .080 / .090 / .081 (lb20 / ok_sat 30 / 60 / 100): ok_sat raises chroma,
+  most on skin and pastels, and flattens after 60 (panel gamut). Greys stay near neutral.
+- Gray ramp 0 / 26 / 51 indistinguishable in every photo (dL < 2.5): the panel's dark end is already merged.
+- level_white: not measurable in round 1 (underexposed + lighting changed between shots).

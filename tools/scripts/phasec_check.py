@@ -16,6 +16,10 @@ write on this slot ends in data-CRC errors and MediaTek's bad-card removal. Ever
 mmc@11240000/max-frequency = 50 MHz, in every FDT inside the image.
   sd-status <img>...          print the SD cap of each image; exit 1 if any image is not capped
   sd-patch  <in> <out>        write a copy with the cap set (only those 4-byte values change; verified)
+
+Double tap to wake (roadmap 21): the Parade touch node comes from the dtbo overlay, not from boot_b's DTB.
+  dtbo-patch <in> <out>       copy with tsc@24/parade,core/parade,flags minus POWEROFF_ON_SLEEP (0x02); verified
+  dtbo <candidate> <stock>    same size as stock; differs only in that value; the value is stock minus 0x02
 """
 import hashlib, struct, sys, zlib
 
@@ -199,6 +203,62 @@ def check_boot(cand, stock):
        f'{SD_CAP / 1e6:g} MHz; ramdisk {len(sr)} -> {len(cr)} B; image {len(cb)} B')
 
 
+# ---- dtbo: touch controller power flags (double tap to wake) --------------------------------------------------
+TSC_PATH, TSC_PROP, POWEROFF_ON_SLEEP = ['tsc@24', 'parade,core'], 'parade,flags', 0x02
+
+
+def dtbo_flag_offsets(b):
+    """Absolute offsets of every 4-byte .../tsc@24/parade,core/parade,flags value in the entries of a DT table image."""
+    magic, _, _, esz, cnt, eoff = struct.unpack_from('>6I', b, 0)
+    if magic != 0xd7b7ab1e: fail('not a DT table (dtbo) image')
+    found = []
+    for i in range(cnt):
+        sz, off = struct.unpack_from('>2I', b, eoff + i * esz)
+        f = b[off:off + sz]
+        if f[:4] != FDT_MAGIC: fail(f'dtbo entry {i} is not a plain FDT')
+        tot, ost, ostr = struct.unpack_from('>3I', f, 4)
+        pos, path = ost, []
+        while pos < tot:
+            tok = struct.unpack_from('>I', f, pos)[0]; pos += 4
+            if tok == 1:
+                e = f.index(b'\0', pos); path.append(f[pos:e].decode()); pos = (e + 1 + 3) & ~3
+            elif tok == 2: path.pop()
+            elif tok == 3:
+                ln, no = struct.unpack_from('>2I', f, pos); v = pos + 8
+                name = f[ostr + no:f.index(b'\0', ostr + no)].decode()
+                if path[-2:] == TSC_PATH and name == TSC_PROP:
+                    if ln != 4: fail(f'{TSC_PROP} has length {ln}')
+                    found.append(off + v)
+                pos = (v + ln + 3) & ~3
+            elif tok == 4: pass
+            elif tok == 9: break
+            else: fail(f'malformed FDT in dtbo entry {i} (token {tok})')
+    if not found: fail('tsc@24/parade,core/parade,flags not found in the dtbo')
+    return found
+
+
+def dtbo_patch(src, dst):
+    a = open(src, 'rb').read(); b = bytearray(a)
+    offs = dtbo_flag_offsets(a)
+    for o in offs: struct.pack_into('>I', b, o, struct.unpack_from('>I', a, o)[0] & ~POWEROFF_ON_SLEEP)
+    open(dst, 'wb').write(b)
+    check_dtbo(dst, src)
+
+
+def check_dtbo(cand, stock):
+    c, s = open(cand, 'rb').read(), open(stock, 'rb').read()
+    if len(c) != len(s): fail('dtbo size differs from stock')
+    offs = dtbo_flag_offsets(s)
+    if dtbo_flag_offsets(c) != offs: fail('touch flags moved')
+    allowed = {o + k for o in offs for k in range(4)}
+    other = [i for i in range(len(c)) if c[i] != s[i] and i not in allowed]
+    if other: fail(f'dtbo differs from stock outside the touch flags (first at {other[0]:#x})')
+    pairs = [(struct.unpack_from('>I', s, o)[0], struct.unpack_from('>I', c, o)[0]) for o in offs]
+    if any(new != old & ~POWEROFF_ON_SLEEP for old, new in pairs): fail(f'unexpected flag values {pairs}')
+    ok(f'dtbo: only tsc@24 parade,flags changed ' + ', '.join(f'{old:#x} -> {new:#x} @ {o:#x}' for o, (old, new)
+       in zip(offs, pairs)) + f'; {sum(c[i] != s[i] for i in range(len(c)))} byte(s) differ; size {len(c)} B')
+
+
 def check_boot_kernel(img, stock):
     if boot_sections(img)[1] != boot_sections(stock)[1]: fail(f'{img}: kernel differs from stock boot_b')
     ok(f'{img}: kernel identical to stock boot_b')
@@ -214,4 +274,4 @@ if __name__ == '__main__':
     cmd, args = sys.argv[1], sys.argv[2:]
     {'gpt': check_gpt, 'misc': check_misc, 'super': check_super, 'zeros': check_zeros,
      'boot': check_boot, 'boot-kernel': check_boot_kernel, 'avb': check_avb,
-     'sd-status': sd_status, 'sd-patch': sd_patch}[cmd](*args)
+     'sd-status': sd_status, 'sd-patch': sd_patch, 'dtbo': check_dtbo, 'dtbo-patch': dtbo_patch}[cmd](*args)

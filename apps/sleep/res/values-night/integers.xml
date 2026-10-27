@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Owner verdict G1 (T1 rows b/d): white body and small text on black in Rubik Medium -->
+    <integer name="body_weight">500</integer>
+    <!-- T3 gray A0A0A0 notes and row summaries: Rubik 400 as card E7a draws them (G1 gives 500 to T1 white only).
+         If the owner wants them like the body text, set 500 here and rebuild. -->
+    <integer name="muted_weight">400</integer>
+    <!-- Card E4a: "InK" light gold + "ognito" lifted bordeaux -->
+    <integer name="brand_split">3</integer>
+</resources>

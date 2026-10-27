@@ -11,7 +11,7 @@ public class TileRefresh extends TileService {
         int global = Eink.normMode(Eink.prefs(this).getInt("mode", 0));
         String note = null, who = Tiles.foregroundName(this);
         if (who != null) {
-            int eff = Profiles.resolve(this, AppProfileService.currentPackage()).refresh;
+            int eff = Profiles.resolve(this, AppProfileService.appPackage()).refresh;
             if (eff != global) note = who + " keeps its own mode (" + Eink.MODE_NAMES[Eink.modeIndex(eff)]
                     + "). This choice is for all other apps.";
         }

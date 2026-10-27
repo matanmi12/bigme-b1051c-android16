@@ -1,0 +1,179 @@
+{
+ "version": "InKognito-B1051CPro-alpha2-20261027",
+ "entries": [
+  {
+   "dest": "magisk/magisk",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libmagisk.so",
+   "sha256": "2d8419018dda41f7",
+   "note": "= live /data/adb/magisk/magisk"
+  },
+  {
+   "dest": "magisk/busybox",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libbusybox.so",
+   "sha256": "4d60ab3f5a59ebb2",
+   "note": "= live /data/adb/magisk/busybox"
+  },
+  {
+   "dest": "magisk/magiskboot",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libmagiskboot.so",
+   "sha256": "d7440e2cd8989942",
+   "note": "= live /data/adb/magisk/magiskboot"
+  },
+  {
+   "dest": "magisk/magiskinit",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libmagiskinit.so",
+   "sha256": "383670a7ba3a6a4b",
+   "note": "= live /data/adb/magisk/magiskinit"
+  },
+  {
+   "dest": "magisk/magiskpolicy",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libmagiskpolicy.so",
+   "sha256": "9837db9db475eb74",
+   "note": "= live /data/adb/magisk/magiskpolicy"
+  },
+  {
+   "dest": "magisk/init-ld",
+   "src": "work/magisk/v30.7-extract/lib/arm64-v8a/libinit-ld.so",
+   "sha256": "c71e69780bb7ce6d",
+   "note": "= live /data/adb/magisk/init-ld"
+  },
+  {
+   "dest": "magisk/util_functions.sh",
+   "src": "work/magisk/v30.7-extract/assets/util_functions.sh",
+   "sha256": "efe385ffdb72c7fc",
+   "note": "= live /data/adb/magisk/util_functions.sh"
+  },
+  {
+   "dest": "magisk/boot_patch.sh",
+   "src": "work/magisk/v30.7-extract/assets/boot_patch.sh",
+   "sha256": "20de7208d610a267",
+   "note": "= live /data/adb/magisk/boot_patch.sh"
+  },
+  {
+   "dest": "magisk/addon.d.sh",
+   "src": "work/magisk/v30.7-extract/assets/addon.d.sh",
+   "sha256": "ab56d64e7d846def",
+   "note": "= live /data/adb/magisk/addon.d.sh"
+  },
+  {
+   "dest": "magisk/stub.apk",
+   "src": "work/magisk/v30.7-extract/assets/stub.apk",
+   "sha256": "f0230e0864be255d",
+   "note": "= live /data/adb/magisk/stub.apk"
+  },
+  {
+   "dest": "modules/10-b1051c-eink-compat-v0.1.47.zip",
+   "src": "work/module/b1051c-eink-compat-v0.1.47.zip",
+   "sha256": "c234a2fd97aef9bf"
+  },
+  {
+   "dest": "modules/20-b1051c-launcher3-v0.2.4.zip",
+   "src": "work/module/b1051c-launcher3-v0.2.4.zip",
+   "sha256": "a01e8ba03b997bc8"
+  },
+  {
+   "dest": "modules/30-b1051c-bootanim-v0.2.2-rom1.zip",
+   "src": "work/rom/modules/b1051c-bootanim-v0.2.2-rom1.zip",
+   "sha256": "f76f8e23bdcdd3f7"
+  },
+  {
+   "dest": "modules/40-b1051c-fonts-v0.1.0-rom1.zip",
+   "src": "work/rom/modules/b1051c-fonts-v0.1.0-rom1.zip",
+   "sha256": "ddcb9b82d7436272"
+  },
+  {
+   "dest": "modules/50-b1051c-icons-v0.1.8.zip",
+   "src": "work/icons-bigme/module/b1051c-icons-v0.1.8.zip",
+   "sha256": "12d51fa8f69142bd"
+  },
+  {
+   "dest": "modules/60-b1051c-gapps-suw1.zip",
+   "src": "work/rom/modules/b1051c-gapps-suw1.zip",
+   "sha256": "e09e17b562a2de6d"
+  },
+  {
+   "dest": "apps/com.topjohnwu.magisk.apk",
+   "src": "work/magisk/Magisk-v30.7.apk",
+   "sha256": "e0d32d2123532860"
+  },
+  {
+   "dest": "apps/org.b1051c.einkctl.apk",
+   "src": "work/app/einkctl-0.15.19.apk",
+   "sha256": "fb3ac08e902fa071"
+  },
+  {
+   "dest": "apps/org.b1051c.einkui.apk",
+   "src": "work/app/einkui-0.4.8.apk",
+   "sha256": "74db563862078ac2"
+  },
+  {
+   "dest": "apps/org.b1051c.sleep.apk",
+   "src": "work/app/sleep-0.1.2.apk",
+   "sha256": "13d6c46f79861579",
+   "note": "Lock & Sleep: lock-screen look, sleep picture (shim standby frame), shutdown picture choice"
+  },
+  {
+   "dest": "apps/org.b1051c.overlay.launcher.apk",
+   "src": "work/app/launcheroverlay/build/B1051cLauncherOverlay.apk",
+   "sha256": "ab9eb678b776c739"
+  },
+  {
+   "dest": "apps/org.b1051c.iconpack.apk",
+   "src": "work/icons-bigme/iconpack/BigmeIconPack.apk",
+   "sha256": "2440220d66741ae5"
+  },
+  {
+   "dest": "apps/app.lawnchair.apk",
+   "src": "work/lawnchair/Lawnchair.15.0.0.Beta.3.0.apk",
+   "sha256": "d4200d0985169fd7"
+  },
+  {
+   "dest": "apps/org.koreader.launcher.apk",
+   "src": "work/rom/third-party/koreader-v2026.07.1-119462.apk",
+   "sha256": "89cecbe06eacd2ff"
+  },
+  {
+   "dest": "provision-stage1.sh",
+   "src": "work/rom/payload-src/provision-stage1.sh"
+  },
+  {
+   "dest": "provision-stage2.sh",
+   "src": "work/rom/payload-src/provision-stage2.sh"
+  },
+  {
+   "dest": "defaults/apply-system-defaults.sh",
+   "src": "work/rom/defaults/system/apply-system-defaults.sh",
+   "sha256": null
+  },
+  {
+   "dest": "defaults/einkctl-defaults.json",
+   "src": "work/rom/defaults/apps/einkctl-defaults.json",
+   "sha256": null
+  },
+  {
+   "dest": "defaults/wallpaper-D-cream.png",
+   "src": "work/design/cat-test/wallpaper-D-cream.png",
+   "sha256": "4d8d487b9fc9dd1b"
+  },
+  {
+   "dest": "defaults/dark-D.png",
+   "src": "work/design/dark-test/dark-D.png",
+   "sha256": "84a2ad266876d2f7"
+  },
+  {
+   "dest": "defaults/lawnchair/com.android.launcher3.prefs.xml",
+   "src": "work/rom/defaults/apps/lawnchair/com.android.launcher3.prefs.xml",
+   "sha256": null
+  },
+  {
+   "dest": "defaults/lawnchair/preferences.preferences_pb",
+   "src": "work/rom/defaults/apps/lawnchair/preferences.preferences_pb",
+   "sha256": null
+  },
+  {
+   "dest": "defaults/koreader.tar",
+   "src": "work/rom/defaults/koreader-skel",
+   "tar": true
+  }
+ ]
+}

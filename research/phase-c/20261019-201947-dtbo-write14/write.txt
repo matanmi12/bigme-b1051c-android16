@@ -1,0 +1,11 @@
+write14 2026-10-19 20:19:46
+_b
+/dev/block/sdc57
+live=7090611f680bd54ba72d4b4c63eb51024b1f52336c3d7e6e17b13e6e03c71b2d
+cand=3068aa5c357f1cf781a8227200b86cf5e9d0eca7d73735bf312f4c284374f0b5
+8+0 records in
+8+0 records out
+8388608 bytes (8.0 M) copied, 0.025 s, 320 M/s
+dd-exit=0
+3068aa5c357f1cf781a8227200b86cf5e9d0eca7d73735bf312f4c284374f0b5  /dev/block/by-name/dtbo_b
+end 20:19:47

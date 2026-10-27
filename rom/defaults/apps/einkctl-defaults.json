@@ -1,0 +1,114 @@
+{
+ "app": "org.b1051c.einkctl",
+ "format": 1,
+ "prefs": {
+  "mode": {
+   "t": "i",
+   "v": 180
+  },
+  "profile": {
+   "t": "i",
+   "v": 4
+  },
+  "vivid": {
+   "t": "i",
+   "v": 50
+  },
+  "contrast": {
+   "t": "i",
+   "v": 50
+  },
+  "cbright": {
+   "t": "i",
+   "v": 50
+  },
+  "clean_every": {
+   "t": "i",
+   "v": 15
+  },
+  "n_dark": {
+   "t": "i",
+   "v": 0
+  },
+  "anti_flicker": {
+   "t": "b",
+   "v": false
+  },
+  "auto_clean": {
+   "t": "b",
+   "v": false
+  },
+  "color_restoration": {
+   "t": "b",
+   "v": false
+  },
+  "anti_alias": {
+   "t": "b",
+   "v": false
+  },
+  "home_clean": {
+   "t": "b",
+   "v": true
+  },
+  "ime_fast": {
+   "t": "b",
+   "v": true
+  },
+  "clean_on_dark": {
+   "t": "b",
+   "v": true
+  },
+  "nav_refresh": {
+   "t": "b",
+   "v": true
+  },
+  "cover_wake": {
+   "t": "b",
+   "v": true
+  },
+  "shutdown_screen": {
+   "t": "s",
+   "v": "anim_bw"
+  },
+  "theme_wallpaper": {
+   "t": "b",
+   "v": true
+  },
+  "theme_keyboard": {
+   "t": "b",
+   "v": true
+  },
+  "wallpaper_light": {
+   "t": "s",
+   "v": "wallpaper-D-cream.png"
+  },
+  "wallpaper_dark": {
+   "t": "s",
+   "v": "dark-D.png"
+  },
+  "presets": {
+   "t": "s",
+   "v": "[{\"name\": \"KOReader\", \"vivid\": 0, \"contrast\": 30, \"cbright\": 0, \"mode\": 4, \"refresh\": 180}]"
+  },
+  "profile:org.koreader.launcher": {
+   "t": "s",
+   "v": "{\"refresh\": 180, \"preset\": \"KOReader\", \"n\": 0}"
+  },
+  "profile:com.google.android.keep": {
+   "t": "s",
+   "v": "{\"refresh\": 1029}"
+  },
+  "profile:com.amazon.kindle": {
+   "t": "s",
+   "v": "{\"refresh\":180}"
+  },
+  "seeded_v1": {
+   "t": "b",
+   "v": true
+  },
+  "migrated_app_v1": {
+   "t": "b",
+   "v": true
+  }
+ }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night Badge, final: owner verdict G1 (2026-10-20 20:21, judged on the panel under HD 256), the one token table
+         for every dark surface (einkui Palette.DARK uses the same values). Codes are the dark palette card
+         (work/design/palette_card.py dark mode). Rules: the page is exact #000000, grays are exact R=G=B, light gold
+         leads ("on"), lifted bordeaux second (headings, main action), steel secondary; ink text on light fills, cream
+         text on dark fills. Body text also turns Rubik 500 in dark (values-night/integers.xml body_weight). -->
+    <!-- page, cards, dialog fill -->
+    <color name="paper">#FF000000</color>
+    <!-- T1: body text, the 2.5 dp outlines, rivets -->
+    <color name="ink">#FFFFFFFF</color>
+    <!-- T3 / E7: notes, summaries, the tagline (exact neutral: the light #4A4342 is warm and turns red on Kaleido) -->
+    <color name="muted">@color/gray_muted</color>
+    <!-- E4d: the title "E-Ink Control" (Lilita 36 sp) in cream; G1 named no title code, so unchanged since v0 -->
+    <color name="display">@color/cream</color>
+    <!-- E5a: section titles, Rubik 600 22 sp -->
+    <color name="heading">@color/bordeaux_lift</color>
+    <!-- E9 (unchanged since v0): pressed fill 8C8C8C, text stays white; unavailable / disabled outline 8C8C8C -->
+    <color name="pressed">@color/gray_mid</color>
+    <color name="disabled_line">@color/gray_mid</color>
+    <!-- E6a: main button fill B03A57 with cream text (on_primary) and the white outline -->
+    <color name="primary">@color/bordeaux_lift</color>
+    <!-- F1: default "on" = light gold (radio buttons, checked list items, colorControlActivated) -->
+    <color name="control_on">@color/light_gold</color>
+    <!-- E1a: on = light-gold track, black knob ringed white. E1c (unchanged since v0): off = black track, gray knob -->
+    <color name="switch_on">@color/light_gold</color>
+    <color name="switch_off">@color/paper</color>
+    <color name="knob_on">#FF000000</color>
+    <color name="knob_on_line">@color/ink</color>
+    <color name="knob_off">@color/gray_mid</color>
+    <color name="knob_off_line">#00000000</color>
+    <!-- E2a (unchanged since v0): RivetBand outline only, white rivets and outline on black -->
+    <color name="band">@color/paper</color>
+    <!-- E3b + V4a: black track with white outline and rivets, cold fill 8FAABA, warm fill F7BF5D, cream thumb
+         (slider_thumb, no override) ringed white with a black center dot -->
+    <color name="slider_track">@color/paper</color>
+    <color name="slider_cold">@color/steel_lift</color>
+    <color name="slider_warm">@color/light_gold</color>
+    <color name="slider_dot">#FF000000</color>
+    <!-- E4a: wordmark "InK" light gold + "ognito" B03A57 (split: integers.xml brand_split), tagline in muted -->
+    <color name="brand_ink">@color/light_gold</color>
+    <color name="brand_ognito">@color/bordeaux_lift</color>
+    <!-- E8b: dialog buttons (Cancel / OK) light gold; the radio buttons are control_on -->
+    <color name="dialog_button">@color/light_gold</color>
+</resources>

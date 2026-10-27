@@ -21,7 +21,7 @@ $ADB exec-out "cat /data/adb/magisk.db" > "$OUT/magisk.db"
 for m in $mods; do sh_ "cat /data/adb/modules/$m/module.prop" | grep -E '^(id|version|versionCode)=' | sed "s/^/$m: /"; done > "$OUT/modules.txt"
 
 # 2. Our apps: APKs + app data (E-Ink Control keeps everything in shared_prefs)
-for pkg in org.b1051c.einkctl org.b1051c.einkui; do
+for pkg in org.b1051c.einkctl org.b1051c.einkui org.b1051c.sleep; do
   apk=$(sh_ "pm path $pkg" | sed -n 's/^package://p' | head -1)
   [ -n "$apk" ] || { echo "not installed: $pkg"; continue; }
   $ADB exec-out "cat $apk" > "$OUT/$pkg.apk"

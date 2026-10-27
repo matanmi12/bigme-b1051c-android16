@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.b1051c.sleep">
+    <uses-sdk android:minSdkVersion="31" android:targetSdkVersion="35" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- the lock screen look lives in Settings.Secure (read by the SystemUI plugin); granted with `pm grant` -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <!-- "pictures from a folder" under /sdcard/Pictures; a single picked picture is copied into the app's own dir -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <queries>
+        <package android:name="org.b1051c.einkctl" />
+    </queries>
+
+    <application android:label="@string/app_name" android:icon="@drawable/ic_sleep"
+        android:theme="@style/InkTheme" android:allowBackup="false" android:largeHeap="true">
+
+        <activity android:name=".MainActivity" android:exported="true"
+            android:configChanges="orientation|screenSize|density|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Started by the ROM provisioning and by adb: clears Android 15's "stopped" state without a window and
+             renders the first frame. -->
+        <activity android:name=".WakeActivity" android:exported="true" android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <!-- E-Ink Control relays what a manifest receiver cannot get on its own: SCREEN_ON (WAKE), battery level
+             and charging changes (BATTERY), date / time / zone changes (DATE), a Dark theme switch (THEME). Each one
+             only re-renders the sleep picture (nothing else can be triggered), so the receiver is exported. -->
+        <receiver android:name=".SleepReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="org.b1051c.sleep.WAKE" />
+                <action android:name="org.b1051c.sleep.BATTERY" />
+                <action android:name="org.b1051c.sleep.DATE" />
+                <action android:name="org.b1051c.sleep.THEME" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- adb as root only (a non-exported receiver silently ignores the shell user): see DebugReceiver.java for
+             the RENDER / SET / NEXT / STATUS actions and their extras. -->
+        <receiver android:name=".DebugReceiver" android:exported="false" />
+    </application>
+</manifest>

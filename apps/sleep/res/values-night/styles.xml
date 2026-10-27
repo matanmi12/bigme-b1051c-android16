@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android's Dark theme: the same InkTheme / InkDialog / TileDialog (values/styles.xml) on the Material dark
+         parents; the role colors come from values-night/colors.xml. -->
+    <style name="BaseInkTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <!-- Body text 500 in dark (owner verdict G1): the app's own text gets it from Ink.font; the framework-drawn
+             spinner text (selected item and its pick-list items) from these. The system sans-serif is the variable
+             Rubik (b1051c-fonts, wght axis), so weight 500 is real Rubik Medium. -->
+        <item name="android:spinnerItemStyle">@style/NightSpinnerItem</item>
+        <item name="android:spinnerDropDownItemStyle">@style/NightSpinnerDropDownItem</item>
+        <!-- the text field of "New color preset" (an EditText made with the screen's context). Dialog messages are a
+             fixed framework style no theme reaches: Ink.bodyWeight sets those in code. -->
+        <item name="android:editTextStyle">@style/NightEditText</item>
+    </style>
+
+    <!-- The black card itself is dialog_card (paper + ink); these keep Material's #424242 dialog panel from showing
+         anywhere inside it (lists, the tile pick lists, spinner dialogs). -->
+    <style name="BaseInkDialog" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorBackground">@color/paper</item>
+        <item name="android:colorBackgroundFloating">@color/paper</item>
+        <item name="android:textColorAlertDialogListItem">@color/ink</item>
+        <!-- the tile pick-list items (select_dialog_singlechoice_material: ?textAppearanceMedium), weight 500 -->
+        <item name="android:textAppearanceMedium">@style/NightBodyMedium</item>
+    </style>
+
+    <style name="NightBodyMedium" parent="@android:style/TextAppearance.Material.Medium">
+        <item name="android:textFontWeight">@integer/body_weight</item>
+    </style>
+
+    <style name="NightSpinnerItem" parent="@android:style/Widget.Material.TextView.SpinnerItem">
+        <item name="android:textFontWeight">@integer/body_weight</item>
+    </style>
+
+    <style name="NightSpinnerDropDownItem" parent="@android:style/Widget.Material.DropDownItem.Spinner">
+        <item name="android:textFontWeight">@integer/body_weight</item>
+    </style>
+
+    <!-- Theme.Material's own editTextStyle is Widget.Material.EditText, so only the weight changes -->
+    <style name="NightEditText" parent="@android:style/Widget.Material.EditText">
+        <item name="android:textFontWeight">@integer/body_weight</item>
+    </style>
+</resources>

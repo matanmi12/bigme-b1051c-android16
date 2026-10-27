@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="config_displayColorFadeDisabled">true</bool>
+    <!-- Night Light = our night mode (owner 2026-10-27; hidden 2026-10-20..27): the QS tile and Settings > Display >
+         Night Light (switch, schedule, intensity) stay Android's, E-Ink Control (NightMode.java) turns them into the
+         front light's Night preset + Dark theme, intensity Night -> Bed. The stock value is a reference to
+         config_setColorTransformAccelerated, which the phh nightmode overlay sets true and which also gates
+         color-transform acceleration, so this bool is set directly. -->
+    <bool name="config_nightDisplayAvailable">true</bool>
+    <!-- No amber tint: every channel's coefficient is 0*T^2 + 0*T + 1, so ColorDisplayService's night matrix is the
+         identity (SurfaceFlinger then hands the HWC an identity transform, no GPU fallback). The warmth comes from the
+         amber LEDs, the panel's colours stay as calibrated. Both arrays: which one is used depends on the colour mode. -->
+    <string-array name="config_nightDisplayColorTemperatureCoefficients" translatable="false">
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+    </string-array>
+    <string-array name="config_nightDisplayColorTemperatureCoefficientsNative" translatable="false">
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+        <item>0.0</item><item>0.0</item><item>1.0</item>
+    </string-array>
+    <!-- Intensity starts at its lowest (= the Night preset); the slider runs from max (Night) to min (Bed) -->
+    <integer name="config_nightDisplayColorTemperatureDefault">4082</integer>
     <!-- App icon shape = squircle (path from AOSP IconShapeSquircleOverlay, Apache 2.0), close to Bigme's own
          icon frame. TrebleDroid's auto-generated product RRO (priority 27) sets a circle; this overlay is above it. -->
     <string name="config_icon_mask" translatable="false">"M50,0 C10,0 0,10 0,50 0,90 10,100 50,100 90,100 100,90 100,50 100,10 90,0 50,0 Z"</string>

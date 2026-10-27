@@ -14,10 +14,11 @@ import android.graphics.drawable.Drawable;
  * Used as the SeekBar's progress drawable (the SeekBar sets its level). The bounds span thumb centre 0..max, so a
  * touch maps exactly to where the thumb is drawn; the pill reaches {@code ext} px past both ends and the icon sits
  * in the SeekBar's left padding (ProgressBar draws the progress drawable translated by the padding, unclipped).
+ * The thumb has its own ring and rivet colours: on the dark shade a white rivet on the cream thumb would vanish.
  */
 final class SliderTrack extends Drawable {
     static final class Colors {
-        int track, line, fill, thumb;
+        int track, line, fill, thumb, thumbRing, thumbDot;
         boolean rivets;
     }
 
@@ -73,9 +74,10 @@ final class SliderTrack extends Drawable {
         p.setColor(k.thumb);
         c.drawCircle(x, cy, tr, p);
         p.setStyle(Paint.Style.STROKE);
-        p.setColor(k.line);
+        p.setColor(k.thumbRing);
         c.drawCircle(x, cy, tr, p);
         p.setStyle(Paint.Style.FILL);
+        p.setColor(k.thumbDot);
         c.drawCircle(x, cy, Math.max(2f, d * 0.09f), p);
 
         if (icon != null) {

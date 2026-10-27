@@ -15,10 +15,12 @@ public class TileRom extends TileService {
 
     @Override
     public void onClick() {
-        AlertDialog d = new AlertDialog.Builder(this)
+        // TileDialog: a Service context carries no app theme, so without it this was a stock light dialog
+        AlertDialog d = new AlertDialog.Builder(this, R.style.TileDialog)
                 .setMessage("Restart into the other system?")
                 .setPositiveButton("Restart", (x, w) -> Eink.bootOtherSystem())
                 .setNegativeButton("Cancel", null).create();
-        showDialog(d);
+        showDialog(d);                                          // shows it at once, so the message view exists
+        Ink.bodyWeight(d);
     }
 }

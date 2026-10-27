@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="pref_iconPackPackage">org.b1051c.iconpack</string>
+    <int name="pref_workspaceRows" value="7" />
+    <int name="pref_workspaceColumns" value="5" />
+    <int name="version" value="2" />
+    <boolean name="pref_shadowBGIcons" value="true" />
+    <boolean name="pref_add_icon_to_home" value="false" />
+    <string name="pref_fontHeading">{&quot;className&quot;:&quot;app.lawnchair.font.FontCache$SystemFont&quot;,&quot;family&quot;:&quot;sans-serif&quot;,&quot;style&quot;:0}</string>
+    <string name="pref_fontBody">{&quot;className&quot;:&quot;app.lawnchair.font.FontCache$SystemFont&quot;,&quot;family&quot;:&quot;sans-serif&quot;,&quot;style&quot;:0}</string>
+    <string name="pref_fontBodyMedium">{&quot;className&quot;:&quot;app.lawnchair.font.FontCache$SystemFont&quot;,&quot;family&quot;:&quot;sans-serif-medium&quot;,&quot;style&quot;:0}</string>
+    <string name="idp_grid_name">6_by_5</string>
+    <int name="pref_hotseatColumns" value="5" />
+    <string name="pref_workspaceFont">{&quot;className&quot;:&quot;app.lawnchair.font.FontCache$SystemFont&quot;,&quot;family&quot;:&quot;sans-serif-medium&quot;,&quot;style&quot;:0}</string>
+    <string name="pref_fontHeadingMedium">{&quot;className&quot;:&quot;app.lawnchair.font.FontCache$SystemFont&quot;,&quot;family&quot;:&quot;sans-serif-medium&quot;,&quot;style&quot;:0}</string>
+</map>

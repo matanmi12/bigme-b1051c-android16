@@ -1,0 +1,21 @@
+window -..-  policy runs=1157  no-dirty skips=609  skip-same-frame=129  commits=412  pen samples=3502 (p>0: 3468)
+commit start -> commit OK (ioctl)      n= 412 min=  18.0 med=  36.0 mean=  39.1 p90=  55.0 max=  86.0 ms
+commit start -> next commit start      n= 411 min=  25.0 med=  45.0 mean= 432.4 p90= 894.0 max=8036.0 ms
+policy (dirty ratio) -> commit start   n= 412 min=   0.0 med=  15.0 mean=  15.2 p90=  25.0 max=  60.0 ms
+commit OK -> next commit start (idle)  n= 411 min=   0.0 med=   2.0 mean= 393.4 p90= 836.0 max=8002.0 ms
+    409 x normal mode=b3 area=(0,0,2479,1859)
+      3 x normal mode=4 area=(0,0,2479,1859)
+  dirty ratio of committed frames: 0.465054:215, 0.922177:101, 1.0:79, 0.0:13, 0.021371:3, 0.000255:1
+pen sample interval                    n=3501 min=   0.0 med=   3.0 mean=   2.8 p90=   3.0 max=   4.0 ms
+pen-down span 9624 ms (3468 samples); commits in span: 13
+
+== pen-down window 22:17:49.0-22:18:00.5 ==
+window 22:17:49.0..22:18:00.5  policy runs=491  no-dirty skips=470  skip-same-frame=2  commits=20  pen samples=3502 (p>0: 3468)
+commit start -> commit OK (ioctl)      n=  20 min=  28.0 med=  31.0 mean=  31.8 p90=  36.0 max=  38.0 ms
+commit start -> next commit start      n=  19 min=  30.0 med=  37.0 mean= 597.1 p90=1023.0 max=8036.0 ms
+policy (dirty ratio) -> commit start   n=  20 min=   4.0 med=  13.5 mean=  15.8 p90=  24.0 max=  24.0 ms
+commit OK -> next commit start (idle)  n=  19 min=   1.0 med=   2.0 mean= 565.3 p90= 993.0 max=8002.0 ms
+     20 x normal mode=b3 area=(0,0,2479,1859)
+  dirty ratio of committed frames: 0.465054:10, 1.0:5, 0.0:4, 0.021371:1
+pen sample interval                    n=3501 min=   0.0 med=   3.0 mean=   2.8 p90=   3.0 max=   4.0 ms
+pen-down span 9624 ms (3468 samples); commits in span: 13

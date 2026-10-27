@@ -51,7 +51,9 @@ final class Eink {
 
     static void applyFrontlight(Context c) {
         int[] v = frontlightValues(c);
-        Root.async(frontlightCmd(v[0], v[1]));
+        // asleep: never light the panel (brightness follow, import, keeper start); the keeper applies it at SCREEN_ON
+        // (review 2026-10-21, same rule as setLight)
+        if (c.getSystemService(android.os.PowerManager.class).isInteractive()) Root.async(frontlightCmd(v[0], v[1]));
         publishLight(c, v);
     }
 
@@ -127,7 +129,7 @@ final class Eink {
         SharedPreferences p = prefs(c);
         SharedPreferences.Editor e = p.edit().putBoolean("light_on", cold + warm > 0);
         if (cold + warm > 0) {
-            e.putBoolean("link_brightness", false);
+            e.putBoolean("link_brightness", false).putInt("light_preset", LIGHT_CUSTOM);   // a slider moved: Custom
             e.putInt("cold", clamp(cold, 0, FL_MAX)).putInt("warm", clamp(warm, 0, FL_MAX));
         }
         e.apply();
@@ -139,18 +141,60 @@ final class Eink {
 
     static void frontlightOff() { Root.async(frontlightCmd(0, 0)); }
 
+    // ---- front-light presets (owner 2026-10-22; redone 2026-10-26: "not useful") ---------------------------
+    // The raw scale is exponential (stock's 37-step table is evenly spaced at the top; Gentle Glow models the same
+    // LEDs as lux = e^(raw/34)/17), so the 22.10 mixes jumped 0.14..27 "lux" while only meaning to change the tint.
+    // Now brightness and warmth (share of the light from the amber LEDs) are chosen per use, after stock's
+    // Day/Night/Bed and Gentle Glow's Day 60%/33%, Sunset 30%/80%, Night 12%/85% (x1.5 for the darker colour panel):
+    //   Morning ~40 lux 25 % warm (the owner's daily brightness, enough amber to stop the blue grays)
+    //   Night   ~3.8 lux 80 % warm (evening reading in a lit room)
+    //   Bed     ~0.8 lux amber only (dark room)
+    //   Color   ~41 lux 54 % warm (most neutral grays + skin near its hue, light-mix test 22.10; calibration target)
+    // Custom = the sliders (moving one, in the app, in the shade or from KOReader, switches to it).
+    static final String[] LIGHT_NAMES = {"Morning", "Night", "Bed", "Color", "Custom"};
+    /** {cold, warm}, raw 0..FL_MAX; Custom (-1) keeps the sliders. */
+    static final int[][] LIGHT_PRESETS = {{212, 175}, {87, 134}, {0, 90}, {196, 202}, {-1, -1}};
+    static final int LIGHT_CUSTOM = 4;
+
+    static int lightPreset(Context c) { return clamp(prefs(c).getInt("light_preset", LIGHT_CUSTOM), 0, LIGHT_CUSTOM); }
+
+    /** Select a light preset: switches the light on at its values (the QS sliders follow), or keeps the sliders. */
+    static void selectLight(Context c, int idx) {
+        idx = clamp(idx, 0, LIGHT_CUSTOM);
+        SharedPreferences.Editor e = prefs(c).edit().putInt("light_preset", idx);
+        int[] v = LIGHT_PRESETS[idx];
+        if (v[0] >= 0) e.putBoolean("light_on", true).putBoolean("link_brightness", false).putInt("cold", v[0]).putInt("warm", v[1]);
+        e.apply();
+        applyFrontlight(c);
+    }
+
     // ---- refresh mode -----------------------------------------------------------------------
     // Global override read live by the vendor HWC: vendor.xrz.global_refresh_mode (0 = no override, i.e. the
     // HWC default 178 / per-layer). force_global_refresh_mode is the HWC's one-shot full-refresh knob — reset
     // it to -1 so a value left by app v0.5 doesn't pin a mode.
     static final int UNSET = Integer.MIN_VALUE;
 
-    /** Stock Eink Center modes (HD 256 = 177 | DITHER_256, Fast 178, Extreme 179, Regal 180, Hyper 183) + A2. */
-    static final int[] MODES = {0, -2147483471, 178, 179, 180, 183, 16};
-    static final String[] MODE_NAMES = {"Auto (app default)", "HD 256", "Fast", "Extreme", "Regal", "Hyper",
-            "A2 (fastest, black/white)"};
+    /** Stock Eink Center modes (HD 256 = 177 | DITHER_256, Fast 178, Extreme 179, Regal 180) + A2. Stock Hyper (183)
+     *  is gated by the kernel on panel size (is_support_hyper_mode: w*h < 2,123,521; this panel is 2496x1944), so
+     *  every 0xb7 update is rejected ("This mode(0xb7) is unsupport") and the panel freezes (owner 2026-10-20)
+     *  -> not offered, stored 183 = Fast. */
+    static final int HYPER = 183;
+    /** Pen (owner 2026-10-20, stock's ink layer over WPS & co.): the app runs in Fast, and while the pen writes the
+     *  HWC shim draws the stroke itself and commits only its box in the stock handwriting mode 1029 (einkd feeds it
+     *  the Wacom reports). Stored as 1029; never sent to the vendor HWC as a mode. */
+    static final int PEN = 1029;
+    static final int[] MODES = {0, -2147483471, 178, 179, 180, 16, PEN};
+    // "Regal (GU16)": without the stock /system/eink_key the kernel remaps Regal 0xb4 to GU16 0x84 (dmesg "this machine
+    // not support regal mode", 2026-10-20); the mode value stays 180
+    static final String[] MODE_NAMES = {"Auto (app default)", "HD 256", "Fast", "Extreme", "Regal (GU16)",
+            "A2 (fastest, black/white)", "Pen (ink layer)"};
 
-    static int normMode(int m) { return m == -1 ? 0 : m; }   // app <= 0.5 stored -1 for Auto
+    static int normMode(int m) {   // app <= 0.5 stored -1 for Auto
+        if (m == -1) return 0;
+        if ((m & 0xffff) == HYPER) return 178;
+        for (int x : MODES) if (x == m) return m;
+        return 0;   // anything else (an imported or hand-edited value) never reaches the vendor HWC (review 2026-10-21)
+    }
 
     /** Mode for a package: its own profile if set, else the global mode. */
     static int modeFor(Context c, String pkg) {
@@ -163,8 +207,11 @@ final class Eink {
      *  Owner test 2026-10-18: slightly sharper text, but grey backgrounds turn into stripes -> off by default. */
     static String modeCmd(Context c, int mode) {
         mode = normMode(mode);
+        boolean pen = mode == PEN;
+        if (pen) mode = 178;
         boolean aa = prefs(c).getBoolean("anti_alias", false) && (mode == 178 || mode == 0);
-        return "setprop vendor.xrz.global_refresh_mode " + mode + "; echo " + (aa ? 1 : 0) + " > " + ED + "anti_alias";
+        return "setprop vendor.xrz.global_refresh_mode " + mode + "; setprop vendor.debug.hwc.shim.ink " + (pen ? 1 : 0)
+                + "; echo " + (aa ? 1 : 0) + " > " + ED + "anti_alias";
     }
 
     /** Global refresh setting changed: the profile engine decides what the current app gets. */
@@ -190,14 +237,32 @@ final class Eink {
 
     // ---- colour profiles (stock Eink Center presets; rendered by the HWC shim's port of Bigme's shader) --
     static final String[] PROFILE_NAMES = {"Default", "Magazine", "Comic", "Video", "Custom"};
-    /** {refresh mode or UNSET (keep), vivid, contrast, colour brightness, colour mode, auto clean, anti-shake}
-     *  from the stock system build.prop sys.maga_* / sys.comic_* / sys.video_* (vivid is 0 in Extreme on stock). */
+    /** The shim's OKLCh chroma stage (vendor.debug.hwc.shim.ok_sat) when a preset does not set its own: the owner's
+     *  pick from the colour A/B of 2026-10-22 (research/phase-d/color-baseline-2026-10-22/round2/RESULTS.md). */
+    static final int OK_SAT = 60;
+    /** Steps offered by the tiles and the per-app editor (sliders in the app take any value). Color boost = ok_sat;
+     *  Darker text = the shim's input black point (level_black): the owner liked 20 for reading apps, 40 merges the
+     *  darkest grays (A/B round 2), off elsewhere. */
+    static final int[] SAT_VALUES = {0, 30, 60, 100};
+    static final String[] SAT_NAMES = {"Off", "Low (30 %)", "Normal (60 %)", "High (100 %)"};
+    static final int[] TEXT_VALUES = {0, 20, 40};
+    static final String[] TEXT_NAMES = {"Off", "Darker (20)", "Darkest (40)"};
+
+    /** Index of v in a step list, or -1. */
+    static int stepIndex(int[] steps, int v) {
+        for (int i = 0; i < steps.length; i++) if (steps[i] == v) return i;
+        return -1;
+    }
+    /** {refresh mode or UNSET (keep), vivid, contrast, colour brightness, colour mode, auto clean, anti-shake, ok_sat
+     *  (-1 = the "ok_sat" setting)}. Magazine / Comic / Video from the stock system build.prop sys.maga_* / sys.comic_*
+     *  / sys.video_* (vivid is 0 in Extreme on stock). Default = stock's Default (0.15.12 made it the owner's look for an
+     *  hour; the owner reverted that the same day and kept ok_sat 60 for every preset). */
     static final int[][] PRESETS = {
-            {UNSET, 0, 0, 0, 0, -1, -1},
-            {-2147483471, 70, 0, 0, 1, 0, 0},
-            {180, 90, 90, 0, 2, 0, 0},
-            {179, 0, 0, 0, 3, 1, 1},
-            {UNSET, -1, -1, -1, 4, -1, -1},
+            {UNSET, 0, 0, 0, 0, -1, -1, -1},
+            {-2147483471, 70, 0, 0, 1, 0, 0, -1},
+            {180, 90, 90, 0, 2, 0, 0, -1},
+            {179, 0, 0, 0, 3, 1, 1, -1},
+            {UNSET, -1, -1, -1, 4, -1, -1, -1},
     };
 
     /** Select a profile: stores its values (Custom keeps the sliders) and applies everything. */
@@ -229,8 +294,22 @@ final class Eink {
         Profiles.apply(c, AppProfileService.currentPackage(), true);
     }
 
+    /** Modes for parts of the screen the HWC shim recognises by their layer (owner 2026-10-27): the navigation button
+     *  row when only it changed, and a playing video. 0 = the app's own mode. */
+    static final int[] NAV_MODES = {178, 179, 16, 0}, VIDEO_MODES = {179, 178, 0};
+    static final String[] NAV_NAMES = {"Fast", "Extreme", "A2 (black/white)", "Same as the app"},
+            VIDEO_NAMES = {"Extreme", "Fast", "Same as the app"};
+
+    static void applySystemModes(Context c) {
+        SharedPreferences p = prefs(c);
+        Root.async("setprop vendor.debug.hwc.shim.nav_mode " + p.getInt("nav_mode", 178)
+                + "; setprop vendor.debug.hwc.shim.video_mode " + p.getInt("video_mode", 179));
+    }
+
     static void applyAll(Context c) {
-        Root.async("setprop vendor.xrz.force_global_refresh_mode -1");
+        Root.async("setprop vendor.xrz.force_global_refresh_mode -1; setprop persist.b1051c.pen_palm "
+                + (prefs(c).getBoolean("pen_palm", true) ? 1 : 0));
+        applySystemModes(c);
         applyRefreshMode(c);
         applyImage(c);
         applyFrontlight(c);
@@ -260,6 +339,7 @@ final class Eink {
             Profiles.importAll(c, new org.json.JSONObject(new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8)));
             if (src == drop) drop.delete();
             applyAll(c);
+            ThemeSync.request(c, "import", false);   // the follow switches / wallpaper names may have changed
             return "Imported " + src;
         } catch (Exception e) {
             return "Import failed: " + e;
@@ -286,8 +366,9 @@ final class Eink {
     }
 
     /** Wallpaper from an image in the app's external files dir (adb: push it there, then ActionReceiver
-     *  SET_WALLPAPER). which = home, lock or both (default). Used for panel-tuned versions of the owner's images. */
-    static void setWallpaper(Context c, String name, String which) {
+     *  SET_WALLPAPER; ThemeSync on a Dark theme switch). which = home, lock or both (default). Used for panel-tuned
+     *  versions of the owner's images. Not on the UI thread; true when the wallpaper was set. */
+    static boolean setWallpaper(Context c, String name, String which) {
         java.io.File dir = c.getExternalFilesDir(null);
         java.io.File f = new java.io.File(dir, name == null ? "wallpaper.png" : name);
         int flags = "home".equals(which) ? android.app.WallpaperManager.FLAG_SYSTEM
@@ -299,8 +380,10 @@ final class Eink {
                 android.app.WallpaperManager.getInstance(c).setStream(in, null, true, flags);
             }
             android.util.Log.i("einkctl", "wallpaper set from " + f + " (flags " + flags + ")");
+            return true;
         } catch (java.io.IOException | SecurityException e) {
             android.util.Log.w("einkctl", "wallpaper failed: " + e);
+            return false;
         }
     }
 
@@ -308,7 +391,25 @@ final class Eink {
     /** "gsi_tool status" output: "normal" (no DSU), "installed", "running" …; empty when unknown. */
     static String dsuStatus() { return Root.run("gsi_tool status 2>&1 | head -1"); }
 
-    static boolean runningDsu() { return "1".equals(Root.run("getprop ro.gsid.image_running")); }
+    private static Boolean dsuCached;
+    /** ro.* is fixed until reboot: read once per process (review 2026-10-21: a root shell on every shade pull). */
+    static boolean runningDsu() {
+        Boolean v = dsuCached;
+        if (v == null) {
+            String r = "";
+            try {   // plain getprop, no root: ro.* is world-readable
+                Process p = new ProcessBuilder("getprop", "ro.gsid.image_running").redirectErrorStream(true).start();
+                try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()))) {
+                    String line = br.readLine();
+                    if (line != null) r = line.trim();
+                }
+                p.waitFor();
+            } catch (Exception ignored) {}
+            v = "1".equals(r);
+            dsuCached = v;
+        }
+        return v;
+    }
 
     /** Boot the other system once: from the base system enable the DSU for one boot; from the DSU just reboot. */
     static void bootOtherSystem() {

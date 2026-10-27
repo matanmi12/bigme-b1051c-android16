@@ -8,7 +8,7 @@
 #    "disable HW overlays" (transaction 1008) on, re-applied whenever surfaceflinger (re)starts.
 MODDIR=${0%/*}
 [ -f "$MODDIR/disable" ] && exit 0
-case "$(getprop ro.build.fingerprint)" in *treble*|*tdgsi*|*phh*) ;; *) exit 0 ;; esac
+case "$([ -d /system/phh ] && echo phh-gsi; getprop ro.build.fingerprint)" in *treble*|*tdgsi*|*phh*) ;; *) exit 0 ;; esac   # = post-fs-data.sh
 TAG=b1051c-compat
 resetprop persist.sys.phh.enable_sf_gl_backpressure false
 resetprop persist.sys.phh.enable_sf_hwc_backpressure false

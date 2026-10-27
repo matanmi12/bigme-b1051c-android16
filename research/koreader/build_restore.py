@@ -18,8 +18,8 @@ import json, os, re, shutil, sqlite3, sys
 BAK, BAK_SIDE, CUR, PMD5, PLAN, OUT = sys.argv[1:7]
 OLD_BOOKS, NEW_BOOKS = "/storage/emulated/0/Books", "/storage/<SD_UUID>/Books"
 # stock sidecar -> substring of the SD file name holding the same book as a different file (checked by title/pages)
-TITLE_MATCH = {"DontMessWithADragon-fixed.sdr": "<book>",
-               "D&D vs Rick and Morty - l ydv`.sdr": "Dungeons & Dragons vs Rick and Morty"}
+TITLE_MATCH = {"<book>.sdr": "<book>",
+               "<book>.sdr": "<book>"}
 SKIP_TOP = {"ota", "cache"}          # taken from the current install
 
 

@@ -120,6 +120,9 @@ final class LightSliders {
         b.setSplitTrack(false);
         b.setBackground(null);
         b.setPadding(0, 0, 0, 0);
+        // cold on the left, warm icon in the left zone, in every locale: SeekBar mirrors its track in RTL (Hebrew), which
+        // drew the badge icon off the right edge (review 2026-10-21)
+        b.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
         int h = dp(c, 48);
         b.setMinHeight(h);
         b.setMaxHeight(h);                               // the default SeekBar style caps the track at a thin line
@@ -170,18 +173,22 @@ final class LightSliders {
         warm.setProgressDrawable(drawable(c, s, plugin.getDrawable(R.drawable.ic_light_warm)));
     }
 
-    /** Board 05: silver riveted track, steel (cold) or gold (warm) fill, cream thumb; dark shade = black track,
-     *  white ink, silver / light gold fill. */
+    /** Board 05, colours from the shade tokens: riveted track, cold / warm fill, cream thumb with its own ring and
+     *  rivet; light = silver track, steel / gold, ink lines; dark = black track, white lines, lifted steel / light
+     *  gold. The icon keeps its two colours on both papers (core or flame fill + line), built from white masks. */
     private void badge(SeekBar b, ShadeStyler s, boolean isCold) {
+        Palette.Tokens t = s.tok;
         SliderTrack.Colors k = new SliderTrack.Colors();
-        boolean dark = s.mode == 2;
-        k.track = dark ? 0xFF000000 : Palette.SILVER;
-        k.line = s.fg;
-        k.fill = isCold ? (dark ? Palette.SILVER : Palette.STEEL) : (dark ? Palette.LIGHT_GOLD : Palette.GOLD);
-        k.thumb = dark ? 0xFF000000 : Palette.CREAM;
+        k.track = t.track;
+        k.line = t.line;
+        k.fill = isCold ? t.cold : t.warm;
+        k.thumb = t.thumb;
+        k.thumbRing = t.thumbRing;
+        k.thumbDot = t.thumbDot;
         k.rivets = true;
-        Drawable icon = plugin.getDrawable(isCold ? R.drawable.ic_light_cold_badge : R.drawable.ic_light_warm_badge).mutate();
-        if (dark) icon.setTint(s.fg);                   // the ink outlines would vanish on black: white silhouette
+        Drawable icon = isCold
+                ? layered(R.drawable.ic_light_cold_core, t.iconCold, R.drawable.ic_light_cold_lines, t.iconLine)
+                : layered(R.drawable.ic_light_warm_body, t.iconWarm, R.drawable.ic_light_warm_line, t.iconLine);
         int h = b.getLayoutParams() != null && b.getLayoutParams().height > 0 ? b.getLayoutParams().height : dp(b.getContext(), 48);
         float d = h * 0.8f;
         int ext = Math.round(d / 2f + s.stroke), zone = Math.round(h * 0.9f);
@@ -193,6 +200,15 @@ final class LightSliders {
         ld.setId(0, android.R.id.progress);
         ld.setId(1, android.R.id.secondaryProgress);
         b.setProgressDrawable(ld);
+    }
+
+    /** Two of our single-colour vector masks stacked, each a fresh mutated copy tinted on its own (plugin
+     *  resources only; SystemUI's cached drawables are never touched). Lower layer first. */
+    private Drawable layered(int maskA, int colorA, int maskB, int colorB) {
+        Drawable a = plugin.getDrawable(maskA).mutate(), b = plugin.getDrawable(maskB).mutate();
+        a.setTint(colorA);
+        b.setTint(colorB);
+        return new LayerDrawable(new Drawable[] {a, b});
     }
 
     private Drawable drawable(Context c, ShadeStyler s, Drawable icon) {

@@ -42,6 +42,10 @@ def pick(pkg, rules, approved):
     if pkg in approved:
         c = os.path.join(CUSTOM, "xml", approved[pkg] + ".xml")
         if os.path.exists(c): return c
+    # no drawing at all: the icon pack's own render (the app's icon in the Bigme frame, pulled from the built
+    # BigmeIconPack.apk into framed/), so recents and settings show what the drawer shows (owner 2026-10-22)
+    c = os.path.join(ICONS, "framed", pkg + ".png")
+    if os.path.exists(c): return c
 
 
 def main():
@@ -79,7 +83,10 @@ def main():
     zipf = os.path.join(os.path.dirname(MOD), f"b1051c-icons-v{ver}.zip")
     sh("zip", "-q", "-r", "-X", zipf, ".", "-x", "*.DS_Store", cwd=MOD)
     sh("adb", "push", zipf, "/data/local/tmp/")
-    print(adb("/data/adb/magisk/magisk --install-module /data/local/tmp/" + os.path.basename(zipf) + " 2>&1 | tail -1"))
+    # as root: with adb unrooted the shell user cannot even see /data/adb (2026-10-22: 0.1.7 was reported staged and never was)
+    print(adb("su -c '/data/adb/magisk/magisk --install-module /data/local/tmp/" + os.path.basename(zipf) + " 2>&1 | tail -1'"))
+    if f"version={ver}" not in adb("su -c 'cat /data/adb/modules_update/b1051c-icons/module.prop'"):
+        sys.exit(f"b1051c-icons v{ver} was NOT staged (see the line above); zip: {zipf}")
     print(f"staged b1051c-icons v{ver} ({len(os.listdir(ov))} overlays): reboot to apply, then clear the launcher icon cache")
     shutil.rmtree(tmp)
 
