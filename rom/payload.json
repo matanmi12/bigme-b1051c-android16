@@ -1,5 +1,5 @@
 {
- "version": "InKognito-B1051CPro-alpha2-20261027",
+ "version": "InKognito-B1051CPro-alpha6-20261110",
  "entries": [
   {
    "dest": "magisk/magisk",
@@ -62,14 +62,14 @@
    "note": "= live /data/adb/magisk/stub.apk"
   },
   {
-   "dest": "modules/10-b1051c-eink-compat-v0.1.47.zip",
-   "src": "work/module/b1051c-eink-compat-v0.1.47.zip",
-   "sha256": "c234a2fd97aef9bf"
+   "dest": "modules/10-b1051c-eink-compat-v0.1.49.zip",
+   "src": "work/module/b1051c-eink-compat-v0.1.49.zip",
+   "sha256": "29b7f225590982fe"
   },
   {
-   "dest": "modules/20-b1051c-launcher3-v0.2.4.zip",
-   "src": "work/module/b1051c-launcher3-v0.2.4.zip",
-   "sha256": "a01e8ba03b997bc8"
+   "dest": "modules/20-b1051c-launcher3-v0.2.5.zip",
+   "src": "work/module/b1051c-launcher3-v0.2.5.zip",
+   "sha256": "fa2a74b80dcbc66d"
   },
   {
    "dest": "modules/30-b1051c-bootanim-v0.2.2-rom1.zip",
@@ -87,9 +87,9 @@
    "sha256": "12d51fa8f69142bd"
   },
   {
-   "dest": "modules/60-b1051c-gapps-suw1.zip",
-   "src": "work/rom/modules/b1051c-gapps-suw1.zip",
-   "sha256": "e09e17b562a2de6d"
+   "dest": "modules/60-b1051c-gapps-suw2.zip",
+   "src": "work/rom/modules/b1051c-gapps-suw2.zip",
+   "sha256": "54a01655d2da7a23"
   },
   {
    "dest": "apps/com.topjohnwu.magisk.apk",
@@ -98,19 +98,19 @@
   },
   {
    "dest": "apps/org.b1051c.einkctl.apk",
-   "src": "work/app/einkctl-0.15.19.apk",
-   "sha256": "fb3ac08e902fa071"
+   "src": "work/app/einkctl-0.15.22.apk",
+   "sha256": "17f940117d4b1dd9"
   },
   {
    "dest": "apps/org.b1051c.einkui.apk",
-   "src": "work/app/einkui-0.4.8.apk",
-   "sha256": "74db563862078ac2"
+   "src": "work/app/einkui-0.4.10.apk",
+   "sha256": "cb4ff334775ac3e7"
   },
   {
    "dest": "apps/org.b1051c.sleep.apk",
-   "src": "work/app/sleep-0.1.2.apk",
-   "sha256": "13d6c46f79861579",
-   "note": "Lock & Sleep: lock-screen look, sleep picture (shim standby frame), shutdown picture choice"
+   "src": "work/app/sleep-0.2.6.apk",
+   "sha256": "9d188f250b617857",
+   "note": "Lock & Sleep: lock-screen look, sleep picture (shim standby frame, time of sleep, KOReader cover), shutdown picture choice, power while asleep (Wi-Fi, power-off), apps kept out of the background, settings file"
   },
   {
    "dest": "apps/org.b1051c.overlay.launcher.apk",

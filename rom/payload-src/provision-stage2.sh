@@ -4,6 +4,8 @@
 # logged and skipped, never retried in a loop. Phases leave markers, so a reboot during setup resumes instead of
 # redoing them. Nothing personal is set: language, time, Wi-Fi and accounts come from Google setup.
 # Android-level defaults and the per-app steps live in defaults/apply-system-defaults.sh (run as a command).
+# Update (new payload VERSION over an existing install, after stage 1 re-staged the modules): only the apps are
+# installed again (an app the user removed stays removed); settings and defaults are left as they are.
 # Test hook: ROOT=<dir> DRY_RUN=1 runs the checks and logs the actions instead of doing them.
 P=${ROOT}/system/etc/inkognito
 D=${ROOT}/data/adb/b1051c
@@ -15,10 +17,38 @@ LAWN=app.lawnchair
 KO=org.koreader.launcher
 APPS="com.topjohnwu.magisk org.b1051c.iconpack $EINK org.b1051c.einkui org.b1051c.sleep org.b1051c.overlay.launcher $LAWN $KO"
 
-[ -f $D/stage2.done ] && exit 0
-[ -f $D/stage1.done ] || exit 0          # stage 1 has not run (no Magisk boot?) or is about to reboot
+V=$(cat $P/VERSION 2>/dev/null)
 log() { echo "$(date '+%F %T') stage2: $*" >> $LOG; }
-run() { if [ -n "$DRY_RUN" ]; then log "DRY: $*"; else "$@" >> $LOG 2>&1 || { log "WARN: failed ($?): $*"; return 1; }; fi; }
+# logged CMD...: run CMD with its output captured through a pipe, then appended to the log by this shell. Never
+# redirect pm/am/cmd/settings/appops/ime straight into $LOG: they hand their stdout fd to system_server, which may not
+# write adb_data_file, so the whole call fails ("Failed transaction", test flash 2026-11-10).
+logged() { _lo=$("$@" 2>&1); _lr=$?; [ -n "$_lo" ] && printf '%s\n' "$_lo" >> $LOG; return $_lr; }
+if [ -f $D/stage2.done ]; then
+  [ "$(cat $D/payload.version 2>/dev/null)" = "$V" ] && exit 0
+  [ "$(cat $D/update.stage1.done 2>/dev/null)" = "$V" ] || exit 0   # stage 1 re-stages the modules first
+  until [ "$(getprop sys.user.0.ce_available)" = true ] || [ -n "$DRY_RUN" ]; do sleep 2; done
+  until cmd package list packages android >/dev/null 2>&1; do sleep 2; done
+  log "update to $V: apps"
+  for pkg in $APPS; do
+    a=$P/apps/$pkg.apk
+    [ -f "$a" ] || continue
+    if [ -z "$(pm path $pkg 2>/dev/null)" ] && grep -qx "$pkg" $D/apps.installed 2>/dev/null; then
+      log "skip $pkg: removed by the user"; continue
+    fi
+    if [ -n "$DRY_RUN" ]; then log "DRY: pm install -r $a"; continue; fi
+    if logged pm install -r --user 0 "$a"; then log "updated $pkg"; grep -qx "$pkg" $D/apps.installed 2>/dev/null || echo $pkg >> $D/apps.installed
+    else log "ERROR: pm install $pkg failed"; ufail=$((ufail+1)); fi
+  done
+  [ -n "$DRY_RUN" ] || echo "$V" > $D/payload.version
+  if [ "${ufail:-0}" = 0 ]; then log "update to $V done"
+  else
+    log "update to $V done with errors ($ufail app(s) not updated)"
+    [ -n "$DRY_RUN" ] || logged cmd notification post -S bigtext -t InKognito inkognito "The update could not install $ufail app(s). Log: /data/adb/b1051c/provision.log"
+  fi
+  exit 0
+fi
+[ -f $D/stage1.done ] || exit 0          # stage 1 has not run (no Magisk boot?) or is about to reboot
+run() { if [ -n "$DRY_RUN" ]; then log "DRY: $*"; else logged "$@" || { log "WARN: failed ($?): $*"; return 1; }; fi; }
 sd() { LOG=$LOG MARK_DIR=$D DRY_RUN=${DRY_RUN:+1} sh "$SD" "$@" || { log "WARN: defaults step '$*' reported a problem"; FAILED=1; }; }
 done_() { [ -f $D/stage2.$1.done ]; }
 mark() { [ -n "$DRY_RUN" ] || touch $D/stage2.$1.done; log "phase $1 done"; }
@@ -62,7 +92,7 @@ if ! done_ apps; then
     a=$P/apps/$pkg.apk
     [ -f "$a" ] || { log "ERROR: missing $a"; FAILED=1; continue; }
     if [ -n "$DRY_RUN" ]; then log "DRY: pm install $a"; continue; fi
-    if pm install -r --user 0 "$a" >> $LOG 2>&1; then log "installed $pkg"
+    if logged pm install -r --user 0 "$a"; then log "installed $pkg"; echo $pkg >> $D/apps.installed
     else log "ERROR: pm install $pkg failed"; FAILED=1; fi
   done
   sd verifier_restore
@@ -133,6 +163,7 @@ if ! done_ cfg; then
   sd app_sleep org.b1051c.sleep              # Lock & Sleep: su policy (it publishes the sleep picture as root), grants
   sd app_runtime_overlay org.b1051c.overlay.launcher
   sd qs_tiles_default $EINK
+  sd app_einkctl_hide_dsu_tile $EINK      # "Switch system" (DSU) off the tile editor too (owner 09.11)
   sd ime_defaults
   sd app_all_files_access $KO
   einkctl_files
@@ -146,7 +177,11 @@ fi
 # ---- 4. after setup: Lawnchair as home, Home, re-assert what a Google restore may replace, one full refresh --------
 done_ post || { sd post_setup $LAWN $EINK; mark post; }
 
+# ---- 5. InKognito Setup (E-Ink Control): untick the parts you don't want; shown once ------------------------------
+done_ setupui || { run am start --user 0 -n $EINK/.SetupActivity; mark setupui; }
+
 touch $D/stage2.done
+[ -n "$DRY_RUN" ] || echo "$V" > $D/payload.version
 if [ $FAILED = 0 ]; then log "done"
 else
   log "done with errors"

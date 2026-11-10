@@ -6,12 +6,12 @@ InKognito is a custom Android 16 build for the **Bigme B1051C Pro**, the 10.3" K
 (MediaTek MT6877, Wi-Fi only). It puts a clean, current Android on the tablet and adds the e-ink layer a
 generic Android image is missing on this panel: e-ink refresh modes, color handling, pen and touch tuning,
 front light control and the magnetic cover. It also comes with a reading-first setup: KOReader, a simple
-launcher and Google Play.
+launcher and Google Play (or, if you prefer, no Google at all).
 
-> **This is alpha 2** (`InKognito-B1051CPro-alpha2-20261027`), an early test build.
-> It was built and checked offline. At release time the full install and the first boot had **not yet been
-> run on a tablet**. Make a full backup before you install, and only install it if you are comfortable
-> restoring that backup. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+> **This is alpha 6** (`InKognito-B1051CPro-alpha6-20261110`), an early test build.
+> It was built and checked offline, and the installer was tested against a simulated tablet. Updating was run once
+> on a real tablet; at release time a full install and its first boot had **not yet been run on a tablet**. The installer always backs up first; only
+> install it if you are comfortable going back with that backup. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
 
 ---
 
@@ -48,7 +48,9 @@ launcher and Google Play.
 ### Apps and services
 - **KOReader 2026.07.1** with Bigme e-ink patches, plus the derainbowify and ZenOS UI plugins.
 - **MindTheGapps 16 core** (Google Play services, Play Store, Google Services Framework) and the
-  **Google Setup Wizard**.
+  **Google Setup Wizard**, or a second system image without any Google apps.
+- **InKognito Setup**: after the first setup, switch off the parts you don't want (KOReader, Lawnchair, the icon
+  pack) and they are removed.
 - **Magisk 30.7** (root).
 - Tweaks for a Wi-Fi-only tablet without a fingerprint sensor.
 
@@ -69,47 +71,52 @@ _Screenshots will be added here._
 - An **unlocked bootloader**. InKognito does not unlock it for you. Guide:
   <https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/> (written for the HiBreak Pro; the
   steps are the same for the B1051C, according to the BigmeB1051CProPatcher project by dbenjaminb).
-- A computer with **Windows, macOS or Linux**, Android **platform-tools**, and a good USB cable.
+- A computer with **Windows, macOS or Linux**, **Python 3.8+**, **mtkclient** (<https://github.com/bkerler/mtkclient>,
+  the tool used to unlock the bootloader), Android **platform-tools** (adb), a good USB cable and about 20 GB free.
 - Battery at **50% or more**.
-- A **full backup** made with mtkclient: <https://github.com/bkerler/mtkclient>. Strongly recommended.
-  It is your way back if anything goes wrong.
 - You accept that **everything on the tablet's internal storage is erased**. Your microSD card is not touched.
+  The installer backs up every partition it changes first; that backup is your way back.
 
 ## What is in the download
 
-| File | What it is | Written to |
-|---|---|---|
-| `system.img` | TrebleDroid Android 16 GSI (`android_16.0.0_r1`, `ci-20250617`, arm64 bvS userdebug) with the InKognito layer built in | `system_<slot>` |
-| `boot.img` | Bigme's stock kernel (firmware 4.9.0) with Magisk 30.7, the microSD fix and the off-mode charging setup | `boot_<slot>` |
-| `vbmeta.img` | Stock firmware 4.9.0 vbmeta with dm-verity hashtree checking off (`flags=1`, HASHTREE_DISABLED) | `vbmeta_<slot>` |
-| `logo.img` | InKognito boot logo and charging picture (optional) | `logo` |
-| `flash-inkognito.sh` | Installer for macOS and Linux | |
-| `flash-inkognito.bat` | Installer for Windows | |
-| `SHA256SUMS` | Checksums. The installers check every image against them before they start. | |
-| `README.md`, `INSTALL.md`, `KNOWN-ISSUES.md`, `CHANGELOG.md`, `CREDITS.md` | Documentation | |
+| File | What it is |
+|---|---|
+| `system.img` | TrebleDroid Android 16 GSI (`android_16.0.0_r1`, `ci-20250617`, arm64 bvS userdebug) with the InKognito layer and Google Play built in. Written to `system_<slot>` inside `super`. |
+| `system-nogapps.img` | The same without any Google apps or services. |
+| `kit/` | InKognito's own parts for the boot image (Magisk 30.7 files, the charging-screen setting) and the boot logo pictures. |
+| `inkognito.py` | The installer (install, update, restore-stock, backup, prepare). Python, standard library only. |
+| `flash-inkognito.sh`, `flash-inkognito.bat` | Short front ends for macOS/Linux and Windows. |
+| `SHA256SUMS` | Checksums. The installer checks every file against them before it starts. |
+| `README.md`, `INSTALL.md`, `KNOWN-ISSUES.md`, `CHANGELOG.md`, `CREDITS.md`, `LICENSES.md`, `licenses/` | Documentation |
 
-`<slot>` is the tablet's active slot, `a` or `b`. The installer finds it for you.
-Nothing else is written: no vendor, dtbo, lk, preloader, tee, seccfg, nvram or any other partition.
+**Nothing of Bigme's is in the download.** The installer builds `boot`, `vbmeta` and the boot `logo` on your
+computer from your own tablet's backup: the stock kernel and device tree stay byte-identical (plus the 50 MHz
+microSD cap), and Magisk and the InKognito parts are added the way Magisk's own patcher does it.
+
+`<slot>` is the tablet's active slot, `a` or `b`; the installer finds it. Written are `boot_<slot>`,
+`vbmeta_<slot>`, `logo` (optional), `system_<slot>`, and `metadata`/`userdata` are erased. Nothing else: no
+vendor, dtbo, lk, preloader, tee, seccfg, nvram, waveform or any other partition.
 
 ## Quick start
 
 Full step-by-step instructions are in **[INSTALL.md](INSTALL.md)**. In short:
 
-1. Unlock the bootloader, then make a **full mtkclient backup**.
-2. Install platform-tools on your computer, turn on **USB debugging** on the tablet, and connect it.
-3. Charge the tablet to at least 50%.
-4. Unzip the download and run the installer from that folder. Try a dry run first; it only prints what
+1. Unlock the bootloader. Install Python, mtkclient and platform-tools.
+2. Turn on **USB debugging** on the tablet, connect it, charge it to at least 50%.
+3. Unzip the download and run the installer from that folder. Try a dry run first; it only prints what
    would happen:
    - macOS / Linux: `bash flash-inkognito.sh --dry-run`, then `bash flash-inkognito.sh`
    - Windows: `flash-inkognito.bat --dry-run`, then `flash-inkognito.bat`
-5. Check the summary and type `FLASH` to start.
-6. Wait about 5 minutes. The tablet **restarts once by itself** during the first start, then shows Google
-   setup.
-7. After setup, turn **USB debugging off** (see [KNOWN-ISSUES.md](KNOWN-ISSUES.md)).
+4. The installer backs up (about 12.5 GB), checks everything, shows a summary: type `FLASH` to start.
+5. Wait about 5 minutes. The tablet **restarts once by itself** during the first start, then shows setup.
+6. After setup, **InKognito Setup** opens once; then turn **USB debugging off** (see [KNOWN-ISSUES.md](KNOWN-ISSUES.md)).
+
+Later: `update` installs a newer release and keeps your data; `restore-stock --backup <folder>` goes back to
+stock.
 
 ## More
 
-- [INSTALL.md](INSTALL.md): installation, troubleshooting, and how to go back
+- [INSTALL.md](INSTALL.md): installation, updating, troubleshooting, and how to go back
 - [KNOWN-ISSUES.md](KNOWN-ISSUES.md): what does not work yet
 - [CHANGELOG.md](CHANGELOG.md): what changed
 - [CREDITS.md](CREDITS.md): the projects InKognito is built on, and their licenses

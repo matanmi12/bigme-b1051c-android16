@@ -9,15 +9,15 @@ Post as the public handle matanmi12 only.
 
 [CENTER][SIZE=7][B]InKognito[/B][/SIZE]
 [SIZE=5][I]Less bloat. More ink.[/I][/SIZE]
-Android 16 for the Bigme B1051C Pro - alpha 1
+Android 16 for the Bigme B1051C Pro - alpha 6
 [/CENTER]
 
-[QUOTE][B]Alpha release.[/B] InKognito alpha 1 was built and checked offline. At release time the full install and the first start had [B]not yet been run on a tablet[/B]. Make a full mtkclient backup before installing, and only install it if you are comfortable restoring that backup. Read the disclaimer at the end of this post.[/QUOTE]
+[QUOTE][B]Alpha release.[/B] InKognito alpha 6 was built and checked offline, and its installer was run end to end against a simulated tablet. Updating was run once on a real tablet (alpha 5, 2026-11-10). At release time a full install and its first start had [B]not yet been run on a real tablet[/B]. The installer always backs up first; only install it if you are comfortable going back with that backup. Read the disclaimer at the end of this post.[/QUOTE]
 
 [SIZE=5][B]What is InKognito?[/B][/SIZE]
 InKognito is a custom Android 16 build for the Bigme B1051C Pro, the 10.3" Kaleido color e-ink tablet (MediaTek MT6877, Wi-Fi only). It runs the TrebleDroid Android 16 GSI and adds the e-ink layer a generic image is missing on this panel: refresh modes, color handling, pen and touch tuning, front light control and the magnetic cover. On top of that you get a reading-first setup with KOReader, Lawnchair and Google Play.
 
-Bigme's kernel and vendor partition stay as they are. The install writes only system, boot, vbmeta and (optionally) the boot logo.
+Bigme's kernel and vendor partition stay as they are, and nothing of Bigme's is in the download: the installer builds boot, vbmeta and the boot logo on your computer from your own tablet's backup. It writes only system, boot, vbmeta and (optionally) the boot logo, through mtkclient, with a backup first and a readback of every write.
 
 {{SCREENSHOTS: add 3 to 5 screenshots from a clean test install - never from a personal device}}
 
@@ -61,57 +61,43 @@ Not included: other Google or Amazon apps (get them from the Play Store), and an
 [LIST]
 [*]Bigme B1051C Pro only, on stock firmware [B]B1051C_R_4.9.0[/B] only
 [*][B]Unlocked bootloader[/B]. Guide (written for the HiBreak Pro; the steps are the same for the B1051C according to dbenjaminb's BigmeB1051CProPatcher): [URL]https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/[/URL]
-[*]A computer with Windows, macOS or Linux and up-to-date Android platform-tools
+[*]A computer with Windows, macOS or Linux, Python 3.8+, mtkclient ([URL]https://github.com/bkerler/mtkclient[/URL]), Android platform-tools (adb) and about 20 GB free
 [*]Battery at 50% or more
-[*]A full backup with mtkclient, strongly recommended: [URL]https://github.com/bkerler/mtkclient[/URL]
 [*]Everything on internal storage is erased. The microSD card is not touched.
 [/LIST]
 
 [SIZE=5][B]Downloads[/B][/SIZE]
 [LIST]
-[*]InKognito-B1051CPro-alpha1-20261021.zip: {{DOWNLOAD LINK}}
-[*]SHA-256 of the zip: {{ZIP SHA256}}
+[*]With Google Play: InKognito-B1051CPro-alpha6-20261110-gapps.zip: {{DOWNLOAD LINK GAPPS}}
+[*]Without Google: InKognito-B1051CPro-alpha6-20261110-nogapps.zip: {{DOWNLOAD LINK NOGAPPS}}
+[*]SHA-256: {{SHA256 GAPPS}} (with Google), {{SHA256 NOGAPPS}} (without Google)
 [/LIST]
-The zip contains system.img, boot.img, vbmeta.img, logo.img, the installers (flash-inkognito.sh for macOS/Linux, flash-inkognito.bat for Windows), SHA256SUMS and the documentation (README, INSTALL, KNOWN-ISSUES, CHANGELOG, CREDITS).
+Each zip contains one system image (system.img with Google Play, or system-nogapps.img without any Google apps), the installer inkognito.py with front ends for macOS/Linux and Windows, the InKognito boot and logo parts (kit/), SHA256SUMS and the documentation (README, INSTALL, KNOWN-ISSUES, CHANGELOG, CREDITS, LICENSES).
 
 [SIZE=5][B]Installation[/B][/SIZE]
-Full step-by-step instructions, troubleshooting and how to go back are in [B]INSTALL.md[/B] in the zip. Short version:
+Full step-by-step instructions, updating, troubleshooting and how to go back are in [B]INSTALL.md[/B] in the zip. Short version:
 [LIST=1]
-[*]Unlock the bootloader, then make a full mtkclient backup.
-[*]Install platform-tools, turn on USB debugging, connect the tablet, charge it to at least 50%.
-[*]Unzip, open a terminal in that folder, and do a dry run first (it runs no adb or fastboot command at all):
+[*]Unlock the bootloader. Install Python, mtkclient and platform-tools.
+[*]Turn on USB debugging, connect the tablet, charge it to at least 50%.
+[*]Unzip, open a terminal in that folder, and do a dry run first (it runs neither mtkclient nor adb):
 [CODE]bash flash-inkognito.sh --dry-run      (macOS / Linux)
 flash-inkognito.bat --dry-run          (Windows)[/CODE]
-[*]Run the installer for real, check the summary, and type FLASH:
+[*]Run the installer for real. It restarts the tablet into mtkclient, backs up every partition it will change (about 12.5 GB), checks the backup, builds boot/vbmeta/logo, shows a summary: type FLASH.
 [CODE]bash flash-inkognito.sh
 flash-inkognito.bat[/CODE]
-[*]Wait about 5 minutes. The first start restarts once by itself, then Google setup appears.
+[*]Wait about 5 minutes. The first start restarts once by itself, then setup appears, then InKognito Setup lets you drop the parts you don't want.
 [*]After setup, turn USB debugging off.
 [/LIST]
-The installer checks every image against SHA256SUMS, checks the tablet (firmware, screen, battery, bootloader unlocked, partition sizes, active slot), writes vbmeta, boot and the logo in bootloader mode, then system in fastbootd with the slot letter spelled out, wipes data, and sets the slot active as its last step. It never writes any other partition and stops at the first error.
-
-[SPOILER="Manual install (advanced)"]
-Replace <slot> with your active slot (a or b). Stop at the first error.
-[CODE]adb reboot bootloader
-fastboot getvar current-slot
-fastboot flash vbmeta_<slot> vbmeta.img
-fastboot flash boot_<slot> boot.img
-fastboot flash logo logo.img
-fastboot reboot fastboot
-fastboot getvar current-slot
-fastboot getvar partition-size:vendor_<slot>     (if 0x0: STOP)
-fastboot getvar snapshot-update-status           (if not none: fastboot snapshot-update cancel)
-fastboot flash system_<slot> system.img
-fastboot -w                                      (no "Erasing 'userdata'" line? then: fastboot erase userdata, fastboot erase metadata)
-fastboot set_active <slot>
-fastboot reboot[/CODE]
-[/SPOILER]
+[B]Updating[/B] to a newer release keeps your data: [CODE]bash flash-inkognito.sh update[/CODE]
+[B]Going back[/B] to stock from the backup: [CODE]bash flash-inkognito.sh restore-stock --backup B1051C-backup-<date-time>[/CODE]
+The installer never writes any partition other than boot, vbmeta, logo, system (inside super, without changing its partition table), metadata and the start of userdata, and it stops at the first error.
 
 [SIZE=5][B]Known issues[/B][/SIZE]
 [LIST]
-[*]Alpha: the full install and first start had not been run on a tablet at release time
+[*]Alpha: a full install and its first start had not been run on a tablet at release time (updating was)
 [*]The first start restarts once by itself (expected)
-[*]On the developer's tablet, fastbootd once came up on the other slot. The installer handles it (explicit slot suffix, set_active at the end, and a stop if fastbootd's partition table looks outdated). This has not been tested on a device yet.
+[*]The installer builds the boot image itself from your backup; its contents equal the developer's boot image (only the gzip compression differs). A boot image built this way has booted on the developer's tablet
+[*]Not yet run on a tablet: a full install, the image without Google, InKognito Setup (update has run twice)
 [*]"Hyper" refresh mode is not available (the kernel rejects it for this panel size)
 [*]Pen (ink layer) mode is experimental
 [*]Not Play Protect certified (GSI). Register your GSF Android ID at [URL]https://www.google.com/android/uncertified[/URL] if Google complains; sign-in can be skipped during setup
@@ -123,7 +109,7 @@ fastboot reboot[/CODE]
 [/LIST]
 Full list: KNOWN-ISSUES.md in the zip.
 
-When you report a problem, please include the installer output and the slot letters it printed. Do not post serial numbers, your GSF Android ID, Wi-Fi network names or account names.
+When you report a problem, please include the installer output (or its inkognito.log) and the slot letter it printed. Never post your backup folder. Do not post serial numbers, your GSF Android ID, Wi-Fi network names or account names.
 
 [SIZE=5][B]Credits[/B][/SIZE]
 InKognito stands on the work of many projects. {{CREDITS: paste the short list from CREDITS.md}}
@@ -132,7 +118,7 @@ Full credits and licenses: CREDITS.md in the zip.
 [SIZE=5][B]Source code[/B][/SIZE]
 [LIST]
 [*]InKognito (MIT): [URL]https://github.com/matanmi12/bigme-b1051c-android16[/URL]
-[*]Kernel: {{KERNEL SOURCE / GPL NOTE: the boot image carries Bigme's stock kernel; link or statement from CREDITS.md}}
+[*]Kernel: InKognito does not distribute a kernel; the installer keeps Bigme's stock kernel already on your tablet, unchanged (see LICENSES.md, "Kernel source")
 [*]Third-party components: see CREDITS.md for each project's source and license
 [/LIST]
 
@@ -142,6 +128,6 @@ Full credits and licenses: CREDITS.md in the zip.
 [B]Developer:[/B] matanmi12
 [B]ROM OS version:[/B] Android 16
 [B]Based on:[/B] TrebleDroid Android 16 GSI (android_16.0.0_r1, ci-20250617)
-[B]Version:[/B] alpha 1 (InKognito-B1051CPro-alpha1-20261021)
+[B]Version:[/B] alpha 6 (InKognito-B1051CPro-alpha6-20261110)
 [B]Status:[/B] Alpha
 [B]Release date:[/B] {{RELEASE DATE}}

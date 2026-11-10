@@ -1,26 +1,29 @@
-# Known issues: InKognito alpha 2
+# Known issues: InKognito alpha 6
 
-Release `InKognito-B1051CPro-alpha2-20261027`. This list will change as testers report back.
+Release `InKognito-B1051CPro-alpha6-20261110`. This list will change as testers report back.
 
 ## Status of this release
 
-- **This is an alpha.** It was built and checked offline. At release time the full install (the flash) and
-  the first start had **not yet been run on a tablet**. Make a full mtkclient backup before you install
-  (INSTALL.md, step 5), and expect rough edges.
+- **This is an alpha.** It was built and checked offline. The installer (install, update, restore-stock) was run
+  end to end against a simulated tablet: a disk image laid out like the B1051C Pro and filled from a stock 4.9.0
+  backup, with a stand-in for mtkclient. The `update` path was run once on a real tablet
+  (alpha 5 over the developer's tablet, 2026-11-10; the fixes it led to are in this release). At release time a
+  full install (with the data erase) and its first start had **not yet been run on a real tablet**. The installer always backs up first; keep that backup.
+- The boot image the installer builds holds the same kernel, device tree and ramdisk contents as the one on the
+  developer's tablet. Only the ramdisk's gzip compression differs: Python's zlib instead of Magisk's zopfli.
+  A boot image built this way has booted on the developer's tablet (2026-11-10, through `update`).
+- `update` has run twice on a real tablet (alpha 5, then alpha 6). Not yet run on a tablet: a full `install`, the
+  image without Google (`system-nogapps.img`, Android's own setup instead of Google's) and the InKognito Setup
+  screen (it opens only after a full install).
 
 ## Installing
 
 - **The first start restarts once by itself.** Boot 1 installs the InKognito layer and reboots before any
   setup screen appears. This is expected; let it run.
-- **fastbootd and the active slot.** On the developer's tablet, `fastboot reboot fastboot` once came up on
-  the other slot and changed the active slot, which caused a boot loop. The installer handles this by writing
-  `system_<slot>` with an explicit slot letter and setting `<slot>` active as its last step. This mitigation
-  has not been tested on a device yet. The installer also stops before writing system if fastbootd's view of
-  the partition table does not match your slot (`vendor_<slot>` reported as `0x0`), because writing system
-  from that view could damage the vendor partition. See INSTALL.md, Troubleshooting.
-- **`fastboot -w` may not wipe anything here.** This tablet's fastbootd does not report partition types, and
-  fastboot then skips the wipe. The installer notices this and erases `userdata` and `metadata` directly. If
-  you install by hand, check that `fastboot -w` printed an "Erasing 'userdata'" line (INSTALL.md, section 11).
+- **mtkclient has to catch the tablet while it starts.** The installer restarts it over adb; without adb, hold
+  power for about 12 seconds with the cable connected. The e-ink screen may show nothing while this happens.
+- **Only over stock firmware 4.9.0.** The installer builds the InKognito boot image from your stock one; a boot
+  image rooted with Magisk, or from another firmware, is refused before anything is written.
 - **"Orange state" notice.** With an unlocked bootloader, the bootloader shows a notice for about 5 seconds at
   every start. The e-ink panel may not display it. This is normal.
 - **Hidden power-off warning.** If the tablet ever switches itself off about 5 seconds into starting, with
@@ -28,6 +31,7 @@ Release `InKognito-B1051CPro-alpha2-20261027`. This list will change as testers 
   stick after a verification failure. Workaround: switch on, and when the screen flashes, press power briefly
   about once per second for about 10 seconds (INSTALL.md, Troubleshooting).
 - **e-ink during boot.** The screen can sit unchanged for a minute or more at a time while the tablet starts.
+- **Going back to stock** erases your data unless your backup also holds `userdata` (INSTALL.md, section 12).
 
 ## Display and pen
 
@@ -35,14 +39,12 @@ Release `InKognito-B1051CPro-alpha2-20261027`. This list will change as testers 
 - **Anti-shake is off by default.** Turn it on from its Quick Settings tile, or per app in an E-Ink Control
   profile. It makes scrolling look smoother in Fast and Extreme, but each screen update takes longer. In Regal it
   makes no difference.
-- **Long-pressing an app icon in the taskbar can crash the system launcher** while Lawnchair is the home screen. The
-  launcher restarts by itself. A fix is planned.
 - **Pen (ink layer) mode is experimental.** InKognito draws a provisional stroke right away, and the app's own
   stroke then replaces it.
 
 ## Google
 
-- **Not Play Protect certified.** InKognito is based on a GSI. If Google sign-in or the Play Store complains,
+- **Not Play Protect certified** (`system.img`). InKognito is based on a GSI. If Google sign-in or the Play Store complains,
   register the tablet's GSF Android ID at <https://www.google.com/android/uncertified>. You can skip sign-in
   during setup and do it later.
 - Only the MindTheGapps core (Play services, Play Store, Google Services Framework) and the Google Setup

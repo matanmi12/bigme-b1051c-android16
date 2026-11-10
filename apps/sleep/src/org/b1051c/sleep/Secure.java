@@ -8,6 +8,7 @@ import android.provider.Settings;
 final class Secure {
     static final String LOCK_STYLE = "b1051c_lock_style";        // 1 InKognito (default), 0 Android's lock screen
     static final String LOCK_SCRIM = "b1051c_lock_scrim";        // 1 none (default), 2 page colour, 0 Android's 20 %
+    static final String LOCK_BATTERY = "b1051c_lock_battery";    // 1 (default) battery level after the date (plugin 0.4.9+)
     static final String SHUTDOWN = "b1051c_shutdown_screen";     // anim_bw | logo_cream | black | off (E-Ink Control draws it)
 
     private Secure() {}

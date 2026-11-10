@@ -24,6 +24,9 @@ final class Root {
     /** Synchronous; returns stdout+stderr (trimmed), or "ERR: …". Do not call on the UI thread. */
     static String run(String cmd) { return NORMAL.exec(cmd, TIMEOUT_MS); }
 
+    /** run with its own timeout, for slow commands (pm uninstall of a large app; SetupActivity). */
+    static String run(String cmd, long timeoutMs) { return NORMAL.exec(cmd, timeoutMs); }
+
     /** Like run, but in the global mount namespace (su -mm). su inherits this app's namespace, where app data
      *  isolation hides other apps' /data/user_de and /data/data folders (e.g. LatinIME's prefs). */
     static String runGlobal(String cmd) { return GLOBAL.exec(cmd, TIMEOUT_MS); }

@@ -59,7 +59,11 @@ LATIN_IME=com.android.inputmethod.latin/.LatinIME
 # Helpers
 run() {                                   # run CMD...: execute (output into the log) or, with DRY_RUN=1, only log it
   if [ "$DRY_RUN" = 1 ]; then say "DRY-RUN: $*"; return 0; fi
-  "$@" >> "$LOG" 2>&1
+  # through a pipe, never ">> $LOG": pm/am/cmd/settings hand their stdout fd to system_server, which may not write
+  # the log's adb_data_file, and then the call itself fails ("Failed transaction", test flash 2026-11-10)
+  _ro=$("$@" 2>&1); _rr=$?
+  [ -n "$_ro" ] && printf '%s\n' "$_ro" >> "$LOG"
+  return $_rr
 }
 sget() { settings get "$1" "$2" 2>/dev/null | tr -d '\r'; }
 in_list() {                               # in_list VALUE "a b c"

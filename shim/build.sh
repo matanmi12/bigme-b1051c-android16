@@ -8,7 +8,7 @@
 # shim only touches liblog/libdl/libc, so API 30 is a safe floor.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-NDK="${ANDROID_NDK_HOME:-/opt/homebrew/share/android-ndk}"
+NDK="${ANDROID_NDK_HOME:-/opt/homebrew/share/android-commandlinetools/ndk/26.3.11579264}"   # 26.3 rebuilds 0.1.47 byte-identical
 TC="$NDK/toolchains/llvm/prebuilt"
 HOST="$(ls "$TC" | head -1)"
 CXX="$TC/$HOST/bin/clang++"

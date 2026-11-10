@@ -62,6 +62,9 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
     private final Resources res;
     private final ContentResolver cr;
     private final LightSliders sliders;
+    /** Plain tap / long-press timing on QS tiles (TileTaps; b1051c_qs_tap, 1 default). */
+    private final TileTaps taps = new TileTaps();
+    private boolean tapFix = true;
     private final Handler h = new Handler(Looper.getMainLooper());
 
     /** Resolved style: 0 = vanilla, 1 = light, 2 = dark. */
@@ -137,6 +140,7 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         cr.registerContentObserver(Settings.Secure.getUriFor(Palette.KEY_TUNE_DARK), false, obs);
         cr.registerContentObserver(Settings.Secure.getUriFor(KEY_LOCK), false, obs);
         cr.registerContentObserver(Settings.Secure.getUriFor(LockStyler.KEY), false, obs);
+        cr.registerContentObserver(Settings.Secure.getUriFor(TileTaps.KEY), false, obs);
         root.getViewTreeObserver().addOnPreDrawListener(this);
         root.invalidate();
     }
@@ -155,6 +159,7 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         for (View s : scrimForced.keySet().toArray(new View[0])) unforceScrim(s);
         if (footer != null) footer.setRenderEffect(null);
         if (lock != null) lock.destroy();
+        taps.detachAll();
     }
 
     /** Runs on SystemUI's main thread (observer callback): any exception here would take SystemUI down, so it falls
@@ -165,6 +170,9 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
             strokePref = Settings.Secure.getInt(cr, KEY_STROKE, -1);
             lockPref = Settings.Secure.getInt(cr, KEY_LOCK, 1);
             lockStyle = Settings.Secure.getInt(cr, LockStyler.KEY, 1);
+            boolean tf = Settings.Secure.getInt(cr, TileTaps.KEY, 1) != 0;
+            if (!tf && tapFix) taps.detachAll();
+            tapFix = tf;
             palettePref = Settings.Secure.getInt(cr, Palette.KEY, 1);
             String tl = Settings.Secure.getString(cr, Palette.KEY_TUNE_LIGHT);
             String td = Settings.Secure.getString(cr, Palette.KEY_TUNE_DARK);
@@ -285,7 +293,10 @@ final class ShadeStyler implements ViewTreeObserver.OnPreDrawListener {
         }
         if (v.getVisibility() == View.GONE) return;
         if (id == idFooterActions && id != 0) { styleFooter(v); return; }
-        if (v.getClass().getName().endsWith(".QSTileViewImpl")) noMarquee(v);
+        if (v.getClass().getName().endsWith(".QSTileViewImpl")) {   // exact class: the editor's CustomizeTileView keeps its drag
+            noMarquee(v);
+            if (tapFix) taps.attach(v);
+        }
         if (mode != 0) {
             String cn = v.getClass().getName();
             if (cn.endsWith(".QSTileViewImpl")) { styleTile(v); return; }

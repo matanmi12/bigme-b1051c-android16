@@ -7,8 +7,18 @@
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
     <!-- "pictures from a folder" under /sdcard/Pictures; a single picked picture is copied into the app's own dir -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- power while asleep (0.2.0): Wi-Fi state, and alarms that fire on time while the tablet sleeps (the grant is
+         given with appops, as root, when an alarm is first armed) -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <queries>
         <package android:name="org.b1051c.einkctl" />
+        <package android:name="org.koreader.launcher" />
+        <!-- "Apps in the background" lists the launchable apps (Android 11+ hides other packages without this) -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
     </queries>
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_sleep"
@@ -27,22 +37,28 @@
         <activity android:name=".WakeActivity" android:exported="true" android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoDisplay" />
 
-        <!-- E-Ink Control relays what a manifest receiver cannot get on its own: SCREEN_ON (WAKE), battery level
-             and charging changes (BATTERY), date / time / zone changes (DATE), a Dark theme switch (THEME). Each one
-             only re-renders the sleep picture (nothing else can be triggered), so the receiver is exported. -->
+        <!-- E-Ink Control relays what a manifest receiver cannot get on its own: SCREEN_ON (WAKE), SCREEN_OFF (SLEEP,
+             0.15.21+), battery level and charging changes (BATTERY), date / time / zone changes (DATE), a Dark theme
+             switch (THEME). KOReader's patch sends COVER (accepted only from KOReader). Each one only re-renders the
+             sleep picture or arms / undoes the power alarms, so the receiver is exported. -->
         <receiver android:name=".SleepReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="org.b1051c.sleep.WAKE" />
+                <action android:name="org.b1051c.sleep.SLEEP" />
                 <action android:name="org.b1051c.sleep.BATTERY" />
                 <action android:name="org.b1051c.sleep.DATE" />
                 <action android:name="org.b1051c.sleep.THEME" />
+                <action android:name="org.b1051c.sleep.COVER" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
 
+        <!-- The power alarms (Wi-Fi off, power-off): this app's own PendingIntents only. -->
+        <receiver android:name=".PowerReceiver" android:exported="false" />
+
         <!-- adb as root only (a non-exported receiver silently ignores the shell user): see DebugReceiver.java for
-             the RENDER / SET / NEXT / STATUS actions and their extras. -->
+             the RENDER / SET / NEXT / STATUS / POWER actions and their extras. -->
         <receiver android:name=".DebugReceiver" android:exported="false" />
     </application>
 </manifest>

@@ -22,6 +22,8 @@ import android.widget.TextView;
  *  - Lock screen: the SystemUI plugin reads Settings.Secure b1051c_lock_style / b1051c_lock_scrim.
  *  - Sleep picture: rendered by Renderer into the raw frame the HWC shim commits at panel power-off.
  *  - Shutdown: E-Ink Control draws the picture; the choice is Settings.Secure b1051c_shutdown_screen.
+ *  - Power while asleep (0.2.0): Wi-Fi off after N minutes, power-off after N hours (Power).
+ *  - Settings file (0.2.0): export / import (Backup).
  */
 public class MainActivity extends Activity {
     private static final int REQ_PICK = 11, REQ_PERM = 12, REQ_FOLDER = 13;
@@ -33,8 +35,8 @@ public class MainActivity extends Activity {
     private Prefs prefs;
     private Ink.Pal pal;
     private LinearLayout root;
-    private TextView status, sourceLine, folderLine;
-    private LinearLayout pictureBox, folderBox;
+    private TextView status, sourceLine, folderLine, coverLine, powerLine, restrictLine;
+    private LinearLayout pictureBox, folderBox, coverBox;
 
     // No uiMode in the manifest configChanges: Android's Dark theme recreates the screen with the night palette.
     @Override
@@ -87,6 +89,8 @@ public class MainActivity extends Activity {
         }
         sc.setOnCheckedChangeListener((g, id) -> Secure.putInt(this, Secure.LOCK_SCRIM, scrimVals[id - 3200]));
         root.addView(sc);
+        check("Battery level after the date", Secure.getInt(this, Secure.LOCK_BATTERY, 1) == 1,
+                v -> Secure.putInt(this, Secure.LOCK_BATTERY, v ? 1 : 0));
         note("The lock screen itself stays Android's: swipe or PIN, notifications, the lock icon. Only its look changes.");
 
         // ---- Sleep picture ------------------------------------------------------------------------------------
@@ -94,8 +98,9 @@ public class MainActivity extends Activity {
         note("Shown on the panel from the moment the screen goes to sleep until it wakes. It is drawn ahead of time, "
                 + "so falling asleep is not delayed.");
         RadioGroup mg = new RadioGroup(this);
-        String[] modeNames = {"Nothing (the last screen stays)", "One picture", "Pictures from a folder, in turn"};
-        String[] modeVals = {Prefs.MODE_OFF, Prefs.MODE_PICTURE, Prefs.MODE_FOLDER};
+        String[] modeNames = {"Nothing (the last screen stays)", "One picture", "Pictures from a folder, in turn",
+                "The cover of the book open in KOReader"};
+        String[] modeVals = {Prefs.MODE_OFF, Prefs.MODE_PICTURE, Prefs.MODE_FOLDER, Prefs.MODE_COVER};
         String curMode = prefs.mode();
         for (int i = 0; i < modeNames.length; i++) {
             RadioButton rb = radio(modeNames[i], 4100 + i);
@@ -144,6 +149,14 @@ public class MainActivity extends Activity {
         });
         root = saved;
 
+        // Book cover: KOReader's patch exports the cover of each book it opens
+        coverBox = new LinearLayout(this);
+        coverBox.setOrientation(LinearLayout.VERTICAL);
+        root.addView(coverBox);
+        root = coverBox;
+        coverLine = note("…");
+        root = saved;
+
         mg.setOnCheckedChangeListener((g, id) -> {
             prefs.p.edit().putString(Prefs.MODE, modeVals[id - 4100]).apply();
             showMode();
@@ -170,7 +183,9 @@ public class MainActivity extends Activity {
         section("On the picture");
         check("Date", prefs.showDate(), v -> { prefs.p.edit().putBoolean(Prefs.SHOW_DATE, v).apply(); rerender(); });
         check("Battery", prefs.showBattery(), v -> { prefs.p.edit().putBoolean(Prefs.SHOW_BATTERY, v).apply(); rerender(); });
-        note("Top-left, where the lock screen's clock sits. The date is the day the tablet fell asleep.");
+        check("Time it fell asleep", prefs.showTime(), v -> { prefs.p.edit().putBoolean(Prefs.SHOW_TIME, v).apply(); rerender(); });
+        note("Top-left, where the lock screen's clock sits. The date and the time are when the tablet fell asleep: "
+                + "a sleeping panel cannot be redrawn, so they do not move on overnight.");
 
         // ---- Preview + status ---------------------------------------------------------------------------------
         section("Preview");
@@ -198,6 +213,44 @@ public class MainActivity extends Activity {
         });
         note("Drawn by E-Ink Control when the tablet shuts down or reboots. Follows the Dark theme (black around the drawing).");
 
+        // ---- Power while asleep (ROADMAP 22) ------------------------------------------------------------------
+        section("Power while asleep");
+        int[] wifiVals = {0, 5, 15, 30, 60};
+        String[] wifiNames = {"Keep Wi-Fi on", "Off after 5 minutes", "Off after 15 minutes", "Off after 30 minutes", "Off after an hour"};
+        android.widget.Spinner ws = spinner(root, "Wi-Fi", wifiNames, indexOf(wifiVals, prefs.wifiSleepMin(), 2));
+        onPick(ws, pos -> prefs.p.edit().putInt(Prefs.WIFI_SLEEP_MIN, wifiVals[pos]).apply());
+        note("Wi-Fi comes back on when the tablet wakes. A Wi-Fi you switched off yourself stays off.");
+        int[] offVals = {0, 6, 12, 24, 48, 72};
+        String[] offNames = {"Never", "After 6 hours asleep", "After 12 hours asleep", "After a day asleep", "After 2 days asleep", "After 3 days asleep"};
+        android.widget.Spinner ps = spinner(root, "Power off", offNames, indexOf(offVals, prefs.powerOffHours(), 0));
+        onPick(ps, pos -> prefs.p.edit().putInt(Prefs.POWER_OFF_H, offVals[pos]).apply());
+        note("To power off, the screen wakes for a moment with the light off, so the shutdown picture reaches the panel. "
+                + "Starting again takes a long press of the power button.");
+        powerLine = note("…");
+
+        // ---- Apps kept out of the background (ROADMAP 19) -----------------------------------------------------
+        section("Apps in the background");
+        note("Apps on this list still open and work as usual, but do nothing while they are not on screen: no syncing, "
+                + "no alarms, no background services. It is Android's own \"Restricted\" battery setting, for several apps at once.");
+        button("Choose apps…", v -> chooseRestricted());
+        restrictLine = note("…");
+        showRestricted();
+
+        // ---- Settings file ------------------------------------------------------------------------------------
+        section("Settings file");
+        button("Export the settings", v -> new Thread(() -> {
+            String r = Backup.exportSettings(this);
+            runOnUiThread(() -> android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show());
+        }).start());
+        button("Import the settings", v -> Ink.bodyWeight(new AlertDialog.Builder(this)
+                .setMessage("Replace the Lock & Sleep settings with " + Backup.exportFile(this) + "?")
+                .setPositiveButton("Import", (d, w) -> new Thread(() -> {
+                    String r = Backup.importSettings(this);
+                    runOnUiThread(() -> { android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show(); recreate(); });
+                }).start())
+                .setNegativeButton("Cancel", null).show()));
+        note("The choices on this screen, in " + Backup.exportFile(this) + ". A picked picture is not part of it.");
+
         showMode();
         showSource();
         showFolder();
@@ -224,6 +277,88 @@ public class MainActivity extends Activity {
         String m = prefs.mode();
         pictureBox.setVisibility(Prefs.MODE_PICTURE.equals(m) ? View.VISIBLE : View.GONE);
         folderBox.setVisibility(Prefs.MODE_FOLDER.equals(m) ? View.VISIBLE : View.GONE);
+        coverBox.setVisibility(Prefs.MODE_COVER.equals(m) ? View.VISIBLE : View.GONE);
+        showCover();
+    }
+
+    private void showCover() {
+        String title = prefs.p.getString(Prefs.S_COVER_TITLE, "");
+        long at = prefs.p.getLong(Prefs.S_COVER_AT, 0);
+        boolean have = Cover.file(this).isFile();
+        coverLine.setText((have ? "Cover: " + (title.isEmpty() ? "(no title)" : title) + ", from "
+                + android.text.format.DateUtils.getRelativeTimeSpanString(at) + "."
+                : "No cover yet: open a book in KOReader. Until then the badge is shown.")
+                + "\nKOReader sends the cover of each book it opens (its patch 3-inkognito-cover.lua). The last book's cover stays.");
+    }
+
+    private void showRestricted() {
+        java.util.Set<String> l = Restrict.list(this);
+        if (l.isEmpty()) { restrictLine.setText("No apps on the list."); return; }
+        StringBuilder sb = new StringBuilder("On the list: ");
+        android.content.pm.PackageManager pm = getPackageManager();
+        boolean first = true;
+        for (String p : l) {
+            String label;
+            try { label = String.valueOf(pm.getApplicationLabel(pm.getApplicationInfo(p, 0))); }
+            catch (PackageManager.NameNotFoundException e) { label = p + " (not installed)"; }
+            sb.append(first ? "" : ", ").append(label);
+            first = false;
+        }
+        restrictLine.setText(sb.append('.'));
+    }
+
+    private void chooseRestricted() {
+        java.util.List<Restrict.App> apps = Restrict.candidates(this);
+        java.util.Set<String> cur = Restrict.list(this);
+        String[] labels = new String[apps.size()];
+        boolean[] on = new boolean[apps.size()];
+        for (int i = 0; i < apps.size(); i++) { labels[i] = apps.get(i).label; on[i] = cur.contains(apps.get(i).pkg); }
+        Ink.bodyWeight(new AlertDialog.Builder(this).setTitle("Keep out of the background")
+                .setMultiChoiceItems(labels, on, (d, w, checked) -> on[w] = checked)
+                .setPositiveButton("Save", (d, w) -> {
+                    java.util.Set<String> now = new java.util.TreeSet<>();
+                    for (String p : cur) {                          // apps not offered now (uninstalled) stay as they are
+                        boolean offered = false;
+                        for (Restrict.App a : apps) if (a.pkg.equals(p)) offered = true;
+                        if (!offered) now.add(p);
+                    }
+                    for (int i = 0; i < apps.size(); i++) if (on[i]) now.add(apps.get(i).pkg);
+                    new Thread(() -> {
+                        String r = Restrict.save(this, now);
+                        runOnUiThread(() -> {
+                            if (isDestroyed()) return;
+                            android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show();
+                            showRestricted();
+                            showPower();
+                        });
+                    }).start();
+                })
+                .setNegativeButton("Cancel", null).create()).show();
+    }
+
+    private interface PosCb { void on(int pos); }
+
+    private void onPick(android.widget.Spinner s, PosCb cb) {
+        s.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            private boolean first = true;
+            @Override public void onItemSelected(android.widget.AdapterView<?> a, View v, int pos, long id) {
+                if (first) { first = false; return; }           // the initial selection is not a change
+                cb.on(pos);
+                showPower();
+            }
+            @Override public void onNothingSelected(android.widget.AdapterView<?> a) {}
+        });
+    }
+
+    private static int indexOf(int[] vals, int v, int def) {
+        for (int i = 0; i < vals.length; i++) if (vals[i] == v) return i;
+        return def;
+    }
+
+    private void showPower() {
+        String log = prefs.p.getString(Prefs.S_POWER_LOG, "");
+        powerLine.setText((log.isEmpty() ? "Nothing done yet." : "Last actions:\n" + log)
+                + (relayCode() >= 71 ? "" : "\nNeeds E-Ink Control 0.15.21 or newer (it tells this app when the screen goes off)."));
     }
 
     private void showSource() {
@@ -253,11 +388,16 @@ public class MainActivity extends Activity {
                 .append(android.text.format.DateUtils.getRelativeTimeSpanString(at)).append(" in ")
                 .append(prefs.p.getLong(Prefs.S_LAST_MS, 0)).append(" ms.");
         if (!err.isEmpty()) s.append("\nLast error: ").append(err);
+        String clock = prefs.p.getString(Prefs.S_CLOCK, "");
+        if (clock.startsWith("needs")) s.append("\nTime it fell asleep: ").append(clock).append(" (the display module draws it).");
         s.append("\nE-Ink Control relay: ").append(relay());
         status.setText(s);
+        showPower();
+        showCover();
     }
 
-    /** E-Ink Control 0.15.11 (build 61) relays wake, battery, date and theme changes to this app. */
+    /** E-Ink Control 0.15.11 (build 61) relays wake, battery, date and theme changes to this app; 0.15.21 (71) also
+     *  the screen going off, for the power section. */
     private String relay() {
         try {
             android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(EINKCTL, 0);
@@ -266,6 +406,11 @@ public class MainActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             return "E-Ink Control is missing; the picture only updates when this app runs";
         }
+    }
+
+    private long relayCode() {
+        try { return getPackageManager().getPackageInfo(EINKCTL, 0).getLongVersionCode(); }
+        catch (PackageManager.NameNotFoundException e) { return 0; }
     }
 
     private void pick() {

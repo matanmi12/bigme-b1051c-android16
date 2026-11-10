@@ -23,6 +23,12 @@
         <package android:name="org.b1051c.einkui" />
         <!-- Lock & Sleep: the settings screen offers to open it (SleepRelay sends it explicit broadcasts) -->
         <package android:name="org.b1051c.sleep" />
+        <!-- InKognito Setup: the optional parts it offers to remove (KOReader and Lawnchair are also visible through the
+             intents above, the icon pack has no launcher activity) and the home screen it switches to -->
+        <package android:name="org.koreader.launcher" />
+        <package android:name="app.lawnchair" />
+        <package android:name="org.b1051c.iconpack" />
+        <package android:name="com.android.launcher3" />
     </queries>
     <!-- publish the front-light values for the QS sliders; granted with `pm grant` (development permission) -->
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
@@ -37,6 +43,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- InKognito Setup: first run, started by root (non-exported: root and this app only):
+             am start -n org.b1051c.einkctl/.SetupActivity ; later from the settings screen (System) -->
+        <activity android:name=".SetupActivity" android:exported="false" android:label="@string/setup_title"
+            android:configChanges="orientation|screenSize|density|keyboardHidden" />
 
         <service android:name=".KeeperService" android:exported="false"
             android:foregroundServiceType="specialUse">

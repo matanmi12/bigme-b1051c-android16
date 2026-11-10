@@ -51,6 +51,11 @@ final class Pictures {
     /** Name the picture for the next sleep. `advance` moves a folder on by one (a wake). Null = page colour only. */
     static Choice choose(Context c, Prefs p, boolean night, boolean advance) {
         String mode = p.mode();
+        if (Prefs.MODE_COVER.equals(mode)) {
+            File f = Cover.file(c);   // the name carries the file's time: a new cover re-renders
+            if (f.isFile()) return new Choice("cover " + p.p.getString(Prefs.S_COVER_TITLE, "") + " @" + f.lastModified() / 1000, f);
+            return new Choice(night ? "badge-dark.png" : "badge-cream.png", null);   // until KOReader opens a book
+        }
         if (Prefs.MODE_FOLDER.equals(mode)) {
             List<File> files = folderPictures(p.folder());
             if (files.isEmpty()) return null;
@@ -91,7 +96,7 @@ final class Pictures {
     private static final String EXTERNAL = "com.android.externalstorage.documents";
 
     /** The file path of a folder picked in Android's folder picker ("primary:Pictures/X" -> /sdcard/Pictures/X,
-     *  "<SD_UUID>:Books" -> /storage/<SD_UUID>/Books). Null for other providers (Drive, Downloads, ...): the folder
+     *  "1234-ABCD:Books" -> /storage/<SD_UUID>/Books). Null for other providers (Drive, Downloads, ...): the folder
      *  is read as files with the photo permission. */
     static String treePath(Uri tree) {
         if (tree == null || !EXTERNAL.equals(tree.getAuthority())) return null;

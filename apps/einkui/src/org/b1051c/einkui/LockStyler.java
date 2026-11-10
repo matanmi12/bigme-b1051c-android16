@@ -20,7 +20,8 @@ import java.util.WeakHashMap;
  * The InKognito lock screen (ROADMAP wave 3 §7, owner 2026-10-22: "the custom lock screen feature"), on top of the
  * stock keyguard inside the shade window:
  *  - the clock (small or large) in the display face (Lilita One) and the page's display colour;
- *  - a date line of our own under the clock (the GSI has no smartspace, so the stock lock screen shows no date);
+ *  - a date line of our own under the clock (the GSI has no smartspace, so the stock lock screen shows no date), with
+ *    the battery level after it (0.4.9, ROADMAP wave 5; Settings.Secure b1051c_lock_battery 0 = date only);
  *  - the bottom-left shortcut hidden (nothing useful behind it on this tablet);
  *  - a page-colour pill behind the bottom indication ("Charged"): the wallpaper's paw prints sit right behind it
  *    (owner 2026-10-22, the "C" of "Charged" on a black print).
@@ -29,7 +30,7 @@ import java.util.WeakHashMap;
  * style is off or the plugin is destroyed. Settings.Secure b1051c_lock_style 0 = Android's, 1 = InKognito (default).
  */
 final class LockStyler {
-    static final String KEY = "b1051c_lock_style";
+    static final String KEY = "b1051c_lock_style", KEY_BATTERY = "b1051c_lock_battery";
 
     private final ViewGroup root;
     private final Context sysui;
@@ -209,6 +210,8 @@ final class LockStyler {
             Locale l = sysui.getResources().getConfiguration().getLocales().get(0);
             String pattern = DateFormat.getBestDateTimePattern(l, "EEEEdMMMM");
             String s = DateFormat.format(pattern, System.currentTimeMillis()).toString();
+            int pct = android.provider.Settings.Secure.getInt(sysui.getContentResolver(), KEY_BATTERY, 1) == 1 ? battery() : -1;
+            if (pct >= 0) s += " · " + pct + " %";   // as on the sleep picture; "Charging" stays in the bottom line
             if (!s.equals(dateText)) { dateText = s; date.setText(s); }
         }
         if (date.getCurrentTextColor() != color) date.setTextColor(color);
@@ -227,6 +230,14 @@ final class LockStyler {
             f.addAction(Intent.ACTION_DATE_CHANGED);
             try { sysui.registerReceiver(tick, f); ticking = true; } catch (RuntimeException ignored) {}
         }
+    }
+
+    /** The level from the sticky ACTION_BATTERY_CHANGED (no receiver kept: the minute tick re-reads it), or -1. */
+    private int battery() {
+        Intent i = sysui.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        if (i == null) return -1;
+        int level = i.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1), scale = i.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, 100);
+        return level < 0 || scale <= 0 ? -1 : level * 100 / scale;
     }
 
     private void hideDate() {

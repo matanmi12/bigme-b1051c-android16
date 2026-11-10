@@ -1,14 +1,15 @@
-# Installing InKognito alpha 2 on the Bigme B1051C Pro
+# Installing InKognito alpha 6 on the Bigme B1051C Pro
 
-This guide takes you from a stock B1051C Pro to InKognito. Plan for about an hour the first time, most of it
-for the backup. If you have flashed an Android device with fastboot before, you will recognize every step.
+Release `InKognito-B1051CPro-alpha6-20261110`. This guide takes you from a stock B1051C Pro to InKognito. Plan for
+about an hour the first time, most of it for the backup.
 
 **Before you start, know this:**
 
 - **Everything on the tablet's internal storage is erased**: apps, books, notes, settings. Copy what you want
-  to keep to your computer or to the microSD card first. The microSD card is not touched by the install.
-- This is an **alpha**. At release time the full install and first boot had not yet been run on a tablet.
-  Make the backup in step 5. Without it you may not be able to go back.
+  to keep to your computer or to the microSD card first. The microSD card is not touched.
+- This is an **alpha**. Updating was tested once on a real tablet (alpha 5, 2026-11-10); a full install and its
+  first start had not yet been run on one.
+  The installer always makes a backup first and checks every write; keep that backup.
 - Only for the **B1051C Pro on firmware B1051C_R_4.9.0**. The installer checks this and stops otherwise.
 
 **Disclaimer.** InKognito is provided "as is", without warranty of any kind. You install it at your own risk.
@@ -16,354 +17,280 @@ Unlocking the bootloader and flashing custom software may void your warranty, an
 tablet unable to start until you restore a backup. Nobody involved in InKognito is responsible for damage or
 lost data. InKognito is an independent community project and is not made, supported or endorsed by Bigme.
 
+## How the install works
+
+The installer, `inkognito.py`, talks to the tablet through **mtkclient**, the tool that also unlocks its
+bootloader. mtkclient reaches the tablet through MediaTek's boot ROM, which works even when Android does not.
+There is no fastboot step: on this tablet, fastboot's "fastbootd" mode once started on the wrong slot and left the
+tablet in a boot loop.
+
+In order, the installer:
+
+1. checks the release files and, over adb, the tablet (firmware, screen, battery, active slot);
+2. **backs up** every partition it will change, about 12.5 GB, into a folder on your computer;
+3. checks the backup: active slot, stock boot image, stock vbmeta, no system update pending, and where
+   `system_<slot>` lies inside the `super` partition;
+4. **builds** `boot`, `vbmeta` and the boot `logo` from your own tablet's partitions (nothing of Bigme's is in
+   the download; see "What is changed" below);
+5. shows a summary and waits for you to type `FLASH`;
+6. writes each partition and **reads it back** to compare; it stops at the first difference;
+7. erases user data and restarts the tablet.
+
+### What is changed
+
+| Partition | Change |
+|---|---|
+| `boot_<slot>` | Your stock boot image with Magisk 30.7 added the way Magisk's own patcher adds it, the microSD speed fix (50 MHz) and a setting for the charging screen. The kernel stays byte-identical. |
+| `vbmeta_<slot>` | Your stock vbmeta with dm-verity hashtree checking switched off (one byte). |
+| `logo` | The boot picture becomes the InKognito badge (optional, `--no-logo` keeps yours). |
+| `system_<slot>` | Inside `super`: the InKognito system (TrebleDroid Android 16 GSI + the InKognito layer). The partition table of `super` is not changed. |
+| `metadata`, start of `userdata` | Erased; Android formats them on the first start. |
+
+Nothing else is written. The installer refuses, in code, to touch preloader, lk, seccfg, nvram, waveform and the
+other device-specific partitions.
+
 ## Contents
 
 1. [Check your tablet](#1-check-your-tablet)
-2. [Install platform-tools on your computer](#2-install-platform-tools-on-your-computer)
+2. [Install Python, mtkclient and platform-tools](#2-install-python-mtkclient-and-platform-tools)
 3. [Unlock the bootloader](#3-unlock-the-bootloader)
 4. [Turn on USB debugging](#4-turn-on-usb-debugging)
-5. [Make a full backup with mtkclient](#5-make-a-full-backup-with-mtkclient-strongly-recommended)
-6. [Charge the tablet](#6-charge-the-tablet)
-7. [Download and unzip](#7-download-and-unzip)
-8. [Run the installer](#8-run-the-installer)
+5. [Charge the tablet and free disk space](#5-charge-the-tablet-and-free-disk-space)
+6. [Download and unzip](#6-download-and-unzip)
+7. [Dry run](#7-dry-run)
+8. [Install](#8-install)
 9. [The first start](#9-the-first-start)
 10. [After setup](#10-after-setup)
-11. [Manual install (advanced)](#11-manual-install-advanced)
-12. [Troubleshooting](#12-troubleshooting)
-13. [Going back](#13-going-back)
+11. [Updating to a newer release](#11-updating-to-a-newer-release)
+12. [Going back to stock](#12-going-back-to-stock)
+13. [Troubleshooting](#13-troubleshooting)
 14. [Asking for help](#14-asking-for-help)
 
 ---
 
 ## 1. Check your tablet
 
-You need a **Bigme B1051C Pro** on stock firmware **B1051C_R_4.9.0**.
+You need a **Bigme B1051C Pro** on stock firmware **B1051C_R_4.9.0**. Look at the firmware version in the tablet's
+settings (About / system information), or, once adb works (step 4): `adb shell getprop ro.build.versionName`.
+On an older firmware, update with Bigme's own system update first, and let it finish completely (restart once
+after it).
 
-- Look at the firmware version in the tablet's settings (the About / system information screen), or, once
-  adb works (step 4), run:
+## 2. Install Python, mtkclient and platform-tools
 
-  ```
-  adb shell getprop ro.build.versionName
-  ```
+- **Python 3.8 or newer**: <https://www.python.org/downloads/> (on Windows, tick "Add python.exe to PATH").
+  macOS and most Linux distributions already have it: `python3 --version`.
+- **mtkclient**: <https://github.com/bkerler/mtkclient>. Follow its README, including the USB driver steps for
+  Windows and the udev rules for Linux. If you unlocked the bootloader with it, it is already set up. Check that it
+  runs: `mtk --help` (or `python mtk.py --help` in its folder).
+- **platform-tools** (adb), Google's official package: <https://developer.android.com/tools/releases/platform-tools>.
+  The installer uses adb for its checks and to restart the tablet into the mode mtkclient needs. (fastboot is not
+  used.)
 
-  It must print `B1051C_R_4.9.0`.
-- On an older firmware, update the tablet with Bigme's own system update to 4.9.0 first.
-- If you are already running another custom system on top of firmware 4.9.0, that is fine too. The installer
-  then checks `ro.vendor.build.version.incremental`, which must be `mp1V15125`.
-
-## 2. Install platform-tools on your computer
-
-platform-tools is Google's official package with `adb` and `fastboot`. Always use a recent version; the
-installer needs fastboot 31 or newer and stops with a message if yours is older.
-
-Official download: <https://developer.android.com/tools/releases/platform-tools>
-
-**Windows**
-
-1. Download "SDK Platform-Tools for Windows" and unzip it, for example to `C:\platform-tools`.
-2. Either add that folder to your `PATH`, or simply unzip the InKognito release **into the same folder**, so
-   that `adb.exe`, `fastboot.exe` and `flash-inkognito.bat` sit side by side.
-3. Install the **Google USB Driver**: <https://developer.android.com/studio/run/win-usb>. You need it for the
-   bootloader and fastbootd steps (see [Troubleshooting](#waiting-for-device-or-the-tablet-is-not-found-in-bootloader-mode)).
-4. Open a Command Prompt and check: `adb version` and `fastboot --version`.
-
-**macOS**
-
-1. Either download "SDK Platform-Tools for Mac" and unzip it, or install it with Homebrew:
-   `brew install --cask android-platform-tools`.
-2. If you used the zip, either add the folder to your `PATH` or copy the release into it.
-3. Open Terminal and check: `adb version` and `fastboot --version`.
-
-**Linux**
-
-1. Download "SDK Platform-Tools for Linux" from Google and unzip it. Distribution packages are often too old.
-2. Add the folder to your `PATH` (or copy the release into it).
-3. Install udev rules so that your user may talk to the tablet. Many distributions have a package called
-   `android-udev-rules` (or `android-sdk-platform-tools-common`). Replug the tablet afterwards.
-4. Check: `adb version` and `fastboot --version`.
+If the `mtk` command is not on your PATH, tell the installer where mtkclient is, for example
+`--mtk "python C:\mtkclient\mtk.py"`, or put the `mtkclient` folder next to `inkognito.py`.
 
 ## 3. Unlock the bootloader
 
-InKognito needs an **unlocked bootloader**. The installer does not unlock it; it checks that it is unlocked and
-stops if not.
-
-Follow this guide: <https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/>
-
-It is written for the Bigme HiBreak Pro. According to the BigmeB1051CProPatcher project by dbenjaminb, the
-steps are the same for the B1051C Pro. Unlocking usually erases the tablet, so do it before you set things
-up again.
+InKognito needs an **unlocked bootloader**; the installer does not unlock it. Guide:
+<https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/>. It is written for the HiBreak Pro;
+according to the BigmeB1051CProPatcher project by dbenjaminb, the steps are the same for the B1051C Pro.
+Unlocking usually erases the tablet.
 
 After unlocking, the bootloader shows an "orange state" notice for about 5 seconds at every start. The e-ink
-screen may not display it at all. That is normal.
+screen may not display it. That is normal.
 
 ## 4. Turn on USB debugging
 
-On the tablet, in stock Android:
+On the tablet: Settings, About, tap **Build number** seven times, then Developer options, **USB debugging** on.
+Connect the tablet directly (no hub), run `adb devices` on the computer, and accept **"Allow USB debugging?"**
+on the tablet. `adb devices` must list one device with the word `device`.
 
-1. Open Settings, go to the About screen, and tap **Build number** seven times until it says you are a
-   developer.
-2. Open the new **Developer options** and turn on **USB debugging**.
-3. Connect the tablet to your computer with a USB cable, directly (no hub if you can avoid it).
-4. On your computer, run `adb devices`. On the tablet, accept **"Allow USB debugging?"** and tick
-   **Always allow from this computer**.
-5. `adb devices` must now list one device with the word `device` next to it.
+## 5. Charge the tablet and free disk space
 
-## 5. Make a full backup with mtkclient (strongly recommended)
+- Battery **50% or more**. The installer reads the level and stops if it is lower.
+- About **20 GB free** on the computer: 12.5 GB for the backup, the rest for the built images and the
+  readback copies.
 
-mtkclient (<https://github.com/bkerler/mtkclient>) reads the tablet's partitions directly through the
-MediaTek boot ROM. A backup made with it is the only reliable way back if the install goes wrong. If you
-unlocked the bootloader with mtkclient, you already have it set up.
+## 6. Download and unzip
 
-1. Install mtkclient by following its README, including the drivers it needs on Windows.
-2. Make sure you have enough free disk space. The partitions together are large, and `userdata` alone is
-   about 113 GB.
-3. Make the backup **after** unlocking (step 3) and **right before** installing, so that it matches the
-   tablet's current state.
-4. Start the backup command, then restart the tablet with the USB cable connected (for example with
-   `adb reboot`, or by holding power for about 10 to 12 seconds; if it is off, press power). mtkclient
-   catches the tablet while it starts up.
+The release comes as **two downloads**. Pick one:
 
-   ```
-   python mtk.py rl B1051C-backup
-   ```
+- `InKognito-B1051CPro-alpha6-20261110-gapps.zip`: with Google Play (Play Store, Play services, Google setup).
+  The system image inside is `system.img`.
+- `InKognito-B1051CPro-alpha6-20261110-nogapps.zip`: without any Google apps or services; Android's own short
+  setup runs instead. The system image inside is `system-nogapps.img`.
 
-   This reads every partition into the folder `B1051C-backup`. If you do not need the data on the tablet
-   any more, you can leave out the very large userdata partition by adding `--skip userdata`.
-   (Newer mtkclient versions install a command called `mtk`; then use `mtk rl B1051C-backup`.)
-5. Keep this folder somewhere safe until you are sure you want to stay on InKognito.
+Check the download against its `.sha256` file if you like, then unzip it. Keep all files together; the installer
+checks the system image and the kit against `SHA256SUMS` before it starts. (`SHA256SUMS` lists both images; the
+one you did not download is simply not checked.)
 
-## 6. Charge the tablet
+With one image in the folder the installer uses it. If you put both images in one folder, it asks which one you
+want, or pass `--variant gapps` / `--variant nogapps`.
 
-The battery must be at **50% or more**. The installer reads the level and stops if it is lower.
+## 7. Dry run
 
-## 7. Download and unzip
-
-Download `InKognito-B1051CPro-alpha2-20261027.zip` and unzip it. Keep all files together in one folder.
-The installer checks every image against `SHA256SUMS` before it does anything, so a damaged download is
-caught automatically.
-
-If you want to check the files yourself:
-
-- macOS / Linux: `shasum -a 256 -c SHA256SUMS` (or `sha256sum -c SHA256SUMS`)
-- Windows: `certutil -hashfile system.img SHA256`, and compare with the line in `SHA256SUMS`
-
-## 8. Run the installer
-
-Open a terminal (macOS / Linux) or a Command Prompt (Windows) **in the release folder**.
-
-**First, do a dry run.** It checks the files and prints every command the installer would run, without
-touching the tablet. adb and fastboot are not run at all:
+Open a terminal (macOS / Linux) or a Command Prompt (Windows) in the release folder:
 
 ```
 bash flash-inkognito.sh --dry-run          # macOS / Linux
 flash-inkognito.bat --dry-run              # Windows
 ```
 
-**Then run it for real**, with the tablet started normally into Android and connected:
+This prints every check and every mtkclient command in order and runs neither mtkclient nor adb. Without a
+backup it cannot know where `system_<slot>` lies inside `super`, so that line shows a placeholder.
+
+## 8. Install
+
+With the tablet started normally into Android and connected:
 
 ```
-bash flash-inkognito.sh                    # macOS / Linux
-flash-inkognito.bat                        # Windows (you can also double-click it)
+bash flash-inkognito.sh                    # macOS / Linux   (= python3 inkognito.py install)
+flash-inkognito.bat                        # Windows         (you can also double-click it)
 ```
 
-What the installer does, in this order. It stops with a clear message at the first problem and never
-continues after an error.
+1. The installer checks the tablet over adb.
+2. It starts mtkclient, which waits for the tablet, and restarts the tablet (`adb reboot`). mtkclient catches it
+   while it starts. If nothing happens within a minute, hold the power button for about 10 to 12 seconds with the
+   cable connected. The e-ink screen may not change at all; watch the computer.
+3. It checks the partition table, then **backs up** into a new folder `B1051C-backup-<date-time>` in the current
+   folder (or where `--backup` says). This takes a while.
+4. It checks the backup and builds the images. If anything is unexpected it **stops here, before writing
+   anything**, and says why.
+5. It shows a summary. **Write down the slot letter.** Type `FLASH` and press Enter to start; anything else
+   cancels.
+6. It writes and reads back each partition, erases user data, and restarts the tablet.
+7. After that restart the tablet often stays dark, or shows the charging picture, instead of starting Android.
+   Then hold the power button for **3 to 5 seconds** and let go (if the charging picture appears, do it once more).
+   Do not hold it for 10 seconds or longer, and do not press it while the boot logo or animation is shown.
 
-1. **Checks your computer:** adb and fastboot are installed and fastboot is recent enough.
-2. **Checks the files:** every image matches `SHA256SUMS`.
-3. **Checks the tablet over adb:** exactly one device is connected, firmware `B1051C_R_4.9.0` (or vendor
-   build `mp1V15125`), screen size `1860x2480`, battery at least 50%, and which slot is active (`a` or `b`).
-4. **Restarts the tablet into bootloader mode** (`adb reboot bootloader`). The e-ink screen may not show
-   much; watch your computer, not the tablet.
-5. **Checks the bootloader:** product `k6877v1_64_k419`, bootloader unlocked, an e-ink `waveform` partition,
-   the expected partition sizes, and the same active slot as Android reported.
-6. **Shows a summary** of exactly what it will write. Write down the slot letter. Type `FLASH` (capital
-   letters) and press Enter to start. Anything else cancels, and nothing is written.
-7. **Writes in bootloader mode:** `vbmeta_<slot>`, `boot_<slot>`, and the InKognito boot `logo`.
-8. **Restarts into fastbootd** (`fastboot reboot fastboot`), the mode needed to write the system partition,
-   and waits for it.
-9. **Checks fastbootd:** it prints the slot fastbootd reports. That can be the other slot on this tablet;
-   the install is built for that (it writes `system_<slot>` by name and sets `<slot>` active at the end).
-   It also checks that fastbootd sees a real `vendor_<slot>` partition and **stops before writing system**
-   if not (see [Troubleshooting](#fastbootd-reports-a-different-slot)). If a system update is still
-   pending, it cancels it (`fastboot snapshot-update cancel`).
-10. **Writes `system_<slot>`.** This takes a few minutes.
-11. **Erases user data** (`fastboot -w`). If this tablet's fastbootd skips that, the installer erases
-    `userdata` and `metadata` directly instead.
-12. **Makes `<slot>` the active slot** (`fastboot set_active <slot>`) and **restarts** the tablet.
-
-Options:
+Options (after `install`):
 
 | Option | What it does |
 |---|---|
-| `--dry-run` | Prints every step and command. Runs no adb or fastboot command at all. |
-| `--skip-adb` | For a tablet that is already in bootloader mode. Skips the Android-side checks (firmware, screen size, battery), so make sure of those yourself. |
-| `--slot a` / `--slot b` | Extra safety check: stop unless that slot is the active one. Useful with `--skip-adb` after an interrupted install. It never changes which slot is written. |
-| `--no-logo` | Keep your current boot logo; do not write `logo.img`. |
-| `--strict-slot` | Stop before writing system whenever fastbootd reports a different slot than the bootloader. |
-| `--help` | Shows all options. |
+| `--dry-run` | Prints every step and command; runs neither mtkclient nor adb. With `--backup` it also checks that backup and builds the images, offline. |
+| `--backup FOLDER` | Where to put the backup. If the folder already holds a backup made by this installer, it is reused after checking that it still matches the tablet. |
+| `--variant gapps` / `nogapps` | Which system image (see step 6). |
+| `--no-logo` | Keep your current boot logo. |
+| `--skip-adb` | The tablet does not start Android, or adb is not available. Skips the Android-side checks (firmware, screen, battery), so make sure of those yourself. You then start the tablet into mtkclient by hand (power button, see above). |
+| `--slot a` / `--slot b` | Extra safety check: stop unless this is the active slot. |
+| `--mtk "COMMAND"` | How to run mtkclient, if `mtk` is not on your PATH. |
+| `--work FOLDER` | Where the log and the built images go (default: a new `inkognito-work-<date-time>` folder). |
+
+To check a backup without touching the tablet: `python3 inkognito.py prepare --backup <folder>`.
 
 ## 9. The first start
 
 The first start takes about **5 minutes**. Do not interrupt it.
 
-1. **Boot logo.** Android prepares the freshly erased data partition. (The "orange state" notice of an
-   unlocked bootloader may not be visible on e-ink.)
-2. **The first start installs the InKognito layer and then restarts the tablet by itself**, before any
-   setup screen appears. This is expected.
-3. **Second start:** the boot animation plays, then **Google setup** appears: Wi-Fi, an optional Google
-   account, and restore. Signing in can be skipped and done later.
-4. While you go through setup, the rest is installed and configured in the background: E-Ink Control, the
-   e-ink shade theme, Lawnchair, KOReader, Magisk and the icon pack.
-5. After setup you land on the **Lawnchair** home screen.
+1. **Boot logo.** Android formats the freshly erased data partition.
+2. **The first start installs the InKognito layer and then restarts the tablet by itself**, before any setup
+   screen appears. This is expected.
+3. **Second start:** the boot animation, then **Google setup** (with `system.img`) or Android's own short setup
+   (with `system-nogapps.img`).
+4. While you go through setup, the rest is installed and configured in the background: E-Ink Control, the e-ink
+   shade theme, Lawnchair, KOReader, Magisk and the icon pack.
+5. After setup you land on the **Lawnchair** home screen, and the **InKognito Setup** screen opens once.
 
-On e-ink the screen can sit unchanged for a minute or more at a time. That alone does not mean anything is
-wrong. Give it at least 10 minutes before you assume a problem.
-
-For the curious: the background install writes a log to `/data/adb/b1051c/provision.log` (readable with root).
+On e-ink the screen can sit unchanged for a minute or more at a time. Give it at least 10 minutes before you
+assume a problem. The background install writes a log to `/data/adb/b1051c/provision.log` (readable with root).
 
 ## 10. After setup
 
-- **USB debugging:** it is on, and the tablet asks "Allow USB debugging?" the first time a computer connects.
-  Only allow your own computer: an allowed computer can get a root shell (`adb root`, userdebug build). Turn it
-  off in Settings, Developer options, when you do not need it. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
-  (Leave it on until you are happy with the install if you want to use the Troubleshooting commands below.)
-- **Google sign-in or Play Store complains that the device is not certified:** see
-  [Troubleshooting](#google-says-the-device-is-not-certified).
-- Install the apps you want from the Play Store. No other Google or Amazon apps are bundled.
-- E-Ink Control is where the refresh modes, color modes, per-app profiles and the front light live. Its
-  Quick Settings tiles can be added from the edit button in Quick Settings.
+- **InKognito Setup** (opens once after setup; later in E-Ink Control, System, "InKognito Setup"): switch off what
+  you don't want and tap Apply. KOReader, the Lawnchair home screen (Android's own home screen takes over) and the
+  InKognito icon pack can be removed; Anti-shake can be switched on. "Keep everything" changes nothing.
+- **USB debugging** is on, and the tablet asks "Allow USB debugging?" the first time a computer connects. Only
+  allow your own computer: an allowed computer can get a root shell (`adb root`, userdebug build). Turn it off in
+  Developer options when you do not need it.
+- **Google says the device is not certified:** see [Troubleshooting](#google-says-the-device-is-not-certified).
+- E-Ink Control is where the refresh modes, color modes, per-app profiles and the front light live. Its Quick
+  Settings tiles can be added from the edit button in Quick Settings.
 
-## 11. Manual install (advanced)
+## 11. Updating to a newer release
 
-This is exactly what the installer does. Run the commands from the release folder. Replace `<slot>` with the
-active slot letter, `a` or `b`, and stop at the first error.
-
-```
-adb shell getprop ro.boot.slot_suffix      # _a or _b: your <slot> is a or b
-adb reboot bootloader
-
-fastboot getvar product                    # must be k6877v1_64_k419
-fastboot getvar unlocked                   # must be yes
-fastboot getvar current-slot               # must be <slot>
-
-fastboot flash vbmeta_<slot> vbmeta.img
-fastboot flash boot_<slot> boot.img
-fastboot flash logo logo.img               # optional: the InKognito boot logo
-
-fastboot reboot fastboot
-fastboot getvar is-userspace               # must be yes (you are in fastbootd)
-fastboot getvar current-slot               # may differ from <slot>; see Troubleshooting
-fastboot getvar partition-size:vendor_<slot>   # if this is 0x0: STOP, see Troubleshooting
-fastboot getvar snapshot-update-status     # if not "none":  fastboot snapshot-update cancel
-
-fastboot flash system_<slot> system.img    # always with the explicit _<slot> suffix
-fastboot -w                                # if the output has no "Erasing 'userdata'" line, run:
-                                           #   fastboot erase userdata
-                                           #   fastboot erase metadata
-fastboot set_active <slot>
-fastboot reboot
-```
-
-Never flash or erase any other partition.
-
-## 12. Troubleshooting
-
-### "No tablet found over adb" or "has not allowed this computer yet"
-
-- Check that USB debugging is on (step 4) and that the cable carries data (some cables only charge).
-- Unlock the tablet's screen and accept the "Allow USB debugging?" prompt. If it never appears, turn USB
-  debugging off and on again and replug the cable.
-- If the tablet is already in bootloader mode, run the installer with `--skip-adb`.
-
-### "This tablet is not on firmware B1051C_R_4.9.0"
-
-Update the stock firmware to 4.9.0 with Bigme's own update first. InKognito's boot image and vbmeta come from
-that firmware and are not meant for any other.
-
-### "waiting for device", or the tablet is not found in bootloader mode
-
-- **Windows:** the bootloader and fastbootd need a USB driver. Install the Google USB Driver (step 2). If
-  Device Manager still shows an unknown "Android" device, right-click it, choose Update driver, Browse my
-  computer, Let me pick, then Android Device, and select **Android Bootloader Interface**. Do this again for fastbootd if it shows
-  up as a new unknown device.
-- **Linux:** install the udev rules (step 2) and replug the cable. If `fastboot devices` says "no
-  permissions", the rules are missing.
-- **All systems:** try another USB port and cable, avoid hubs, and close other phone tools.
-
-### "fastbootd never shows up"
-
-After `fastboot reboot fastboot` the tablet restarts into fastbootd, which is a different USB device than
-the bootloader. On Windows it usually needs the driver step above once more.
-
-When `fastboot devices` lists the tablet again, follow what the installer printed. Usually:
+A newer InKognito release can be installed over an older one **without erasing your data**:
 
 ```
-fastboot set_active <slot>
-fastboot reboot bootloader
+bash flash-inkognito.sh update             # macOS / Linux
+flash-inkognito.bat update                 # Windows
 ```
 
-and run the installer again with `--skip-adb --slot <slot>`.
+The update reads only the partitions it needs (no 12.5 GB backup), writes the new system and, only if they
+changed, boot, vbmeta and logo, each with a readback, and restarts. On the first start the new InKognito layer is
+installed and the tablet restarts once by itself. Apps and settings stay; parts you removed in InKognito Setup
+stay removed. Keep the backup from your first install: it is still your way back to stock.
 
-### fastbootd reports a different slot
+`update` refuses to run on a tablet that does not have InKognito, and `install` refuses to run on one that does.
 
-On the developer's tablet, `fastboot reboot fastboot` once came up on the other slot (A, while B was active)
-and changed the active slot, which left the tablet in a boot loop. The install is built for this: it writes
-`system_<slot>` with the slot letter spelled out, and sets `<slot>` active again as the very last step. So a
-different slot letter in fastbootd alone does not stop the installer. (If you prefer it to stop in that case,
-use `--strict-slot`.)
+## 12. Going back to stock
 
-What does stop it, **on purpose and before writing system**, is when fastbootd's view of the partition table
-does not match your slot, shown as `vendor_<slot>` with size `0x0`. That is what the developer's tablet showed
-in the situation above. fastbootd writes the partition table it sees back to the tablet when it writes
-system, so continuing could damage the vendor partition.
-
-If the installer stopped for either reason, boot and vbmeta are written, but system and vendor are untouched.
-Run:
+The backup made by `install` is your way back:
 
 ```
-fastboot set_active <slot>
-fastboot reboot
+bash flash-inkognito.sh restore-stock --backup B1051C-backup-<date-time>
+flash-inkognito.bat restore-stock --backup B1051C-backup-<date-time>
 ```
 
-with the slot letter from the summary. If Android does not start, restore `boot_<slot>` and `vbmeta_<slot>`
-from your backup (section 13). Please report it in the XDA thread with the two slot letters.
+It checks the backup against its `SHA256SUMS`, checks that `super`'s partition table on the tablet still matches
+the backup, and writes back `boot_<slot>`, `vbmeta_<slot>`, `logo` and `system_<slot>` (each read back and
+compared). Then it erases `metadata` and the start of `userdata`, so stock Android starts fresh, like after a
+factory reset. Type `RESTORE` to start.
 
-### Writing system fails ("not enough space" or similar)
+- If the backup folder also holds a `userdata.bin` (you made a full mtkclient backup yourself), `metadata` and
+  `userdata` are restored from it instead of erased.
+- If `super`'s partition table changed since the backup (it should not), add `--full-super` to write the whole
+  12 GiB `super` back.
+- A backup you made earlier with `mtk rl` works too, as long as it has the partition files the installer needs
+  (`boot_a.bin` … `super.bin`); without a `SHA256SUMS` its contents cannot be checked.
 
-Do not delete or resize partitions to make room. Leave the tablet in fastbootd, run
-`fastboot set_active <slot>`, then `fastboot reboot bootloader`, and ask in the XDA thread with the
-installer's output. You can also restore your backup (section 13).
+## 13. Troubleshooting
 
-### The installer stopped in the middle
+### mtkclient never catches the tablet
 
-Read the message at the end of the output. It says what was already written and what to do next, usually a
-few commands to run or "run the installer again with `--skip-adb --slot <slot>`". Do not start Android in
-between unless the message says so. If in doubt, ask in the thread before you do anything else.
+- Windows: install the drivers from mtkclient's README (UsbDk) and try again.
+- Linux: install mtkclient's udev rules and replug the cable.
+- All systems: another USB port and cable, no hub, close other phone tools. With the cable connected, hold power
+  for about 12 seconds so that the tablet restarts; mtkclient catches it while it starts.
+
+### The installer stopped
+
+Read the message at the end. It always says whether anything was written and what to do next.
+
+- **Before the summary**, nothing was written. If the tablet is still connected to mtkclient, restart it with
+  `mtk reset` or by holding power for about 12 seconds.
+- **During writing**, do not start the tablet. Either fix the problem and run the same command again, or go
+  back with `restore-stock --backup <folder>` (the installer prints the exact command). Ask in the thread if you
+  are unsure, with the log file it names.
+
+### "a system update is still pending"
+
+The tablet is in the middle of a Bigme system update (Virtual A/B). Start stock Android, let the update finish,
+restart once, then run the installer again; it makes a new backup.
+
+### "the tablet's boot image is not the stock one"
+
+The installer only installs over the stock 4.9.0 boot image, because it builds the InKognito boot from it. If you
+rooted the tablet with Magisk, restore the stock boot image first (Magisk: Uninstall, Restore images), or flash
+Bigme's 4.9.0 firmware again.
 
 ### The tablet switches itself off about 5 seconds into starting, with nothing on screen
 
-This is the bootloader's dm-verity warning. The bootloader draws it, but the e-ink panel does not show it, and
-if no button is pressed it powers the tablet off after about 5 seconds. Once triggered (by a verification
-failure), the state can stick across restarts.
-
-Workaround: hold power for 3 to 5 seconds to switch the tablet on, release, and when the screen flashes,
-**press power briefly about once per second for about 10 seconds**. Then stop and let Android start.
+This is the bootloader's dm-verity warning. The bootloader draws it, but the e-ink panel does not show it, and if
+no button is pressed it powers the tablet off after about 5 seconds. Workaround: hold power for 3 to 5 seconds to
+switch the tablet on, release, and when the screen flashes, **press power briefly about once per second for about
+10 seconds**. Then let Android start.
 
 ### Stuck at the logo, or restarting over and over
 
 - The first start restarts once by itself. That is normal (section 9).
 - Give it at least 10 minutes. On e-ink, nothing may change on screen for a long time.
-- USB debugging is on by default on this build, so you can check from your computer whether Android is
-  running: `adb devices`, then `adb shell getprop sys.boot_completed` (prints `1` when Android has started).
-  `adb devices` shows `unauthorized` until you tap Allow on the tablet's "Allow USB debugging?" prompt.
-- If it keeps restarting, hold power for about 30 seconds to force it off, unplug USB, wait a minute, and
-  switch it on again. If that does not help, restore your backup (section 13) and report it in the thread.
+- USB debugging is on by default, so you can check whether Android is running: `adb devices`, then
+  `adb shell getprop sys.boot_completed` (prints `1` when Android has started).
+- If it keeps restarting, go back with `restore-stock` (section 12) and report it in the thread.
 
 ### Google setup gets stuck
 
-USB debugging is on by default on this build, so you can skip the rest of setup from your computer (tap
-Allow on the tablet's "Allow USB debugging?" prompt first; it also shows over the setup screens):
+Tap Allow on the tablet's "Allow USB debugging?" prompt (it also shows over the setup screens), then:
 
 ```
 adb shell settings put secure user_setup_complete 1
@@ -374,58 +301,22 @@ adb shell pm disable-user --user 0 com.google.android.setupwizard
 The last line stops Google setup from taking the home screen again. To undo it later:
 `adb shell pm enable com.google.android.setupwizard`.
 
-The InKognito first-start log can help when you report a problem: `adb root`, then
-`adb shell cat /data/adb/b1051c/provision.log`. It contains no names, networks or account data.
-
 ### Google says the device is not certified
 
-InKognito is based on a GSI and is not Play Protect certified. If Google sign-in or the Play Store
-complains, register the tablet's GSF Android ID at <https://www.google.com/android/uncertified>, wait a while,
-and try again. You can skip sign-in during setup and do it later.
-
-One way to read the GSF Android ID on this build is from a root adb shell. Run `adb root`, then `adb shell`,
-then:
-
-```
-sqlite3 /data/data/com.google.android.gsf/databases/gservices.db "select value from main where name='android_id';"
-```
-
-If `sqlite3` is not available, use a device ID app. Keep this number private; do not post it in the thread.
-
-## 13. Going back
-
-Going back means **restoring your mtkclient backup** (step 5).
-
-The install changes these partitions: `vbmeta_<slot>`, `boot_<slot>`, `logo`, `super` (which holds
-`system_<slot>`), `userdata` and `metadata` (erased), and `misc` (where the active slot is stored). Restore
-**all** of them **before** you start the tablet again. Restoring only some of them, for example the stock
-vbmeta together with the InKognito system, makes the start fail verification and can trigger the hidden
-warning described above.
-
-Restore the partitions from the backup folder with mtkclient (one line):
-
-```
-python mtk.py w boot_a,boot_b,vbmeta_a,vbmeta_b,logo,super,misc,metadata B1051C-backup/boot_a.bin,B1051C-backup/boot_b.bin,B1051C-backup/vbmeta_a.bin,B1051C-backup/vbmeta_b.bin,B1051C-backup/logo.bin,B1051C-backup/super.bin,B1051C-backup/misc.bin,B1051C-backup/metadata.bin
-```
-
-Use the file names that are actually in your backup folder. Start the command, then restart the tablet with
-USB connected, as in step 5.
-
-- If your backup **includes userdata**, restore it too (`w userdata B1051C-backup/userdata.bin`) to get your
-  old data back.
-- If it **does not**, erase the data partitions instead so that stock Android starts fresh: restart into
-  bootloader mode and run `fastboot erase userdata` and `fastboot erase metadata`, then `fastboot reboot`.
-
-Do not restore partitions that InKognito never touched (preloader, lk, seccfg and so on) unless you know
-why you need to.
+InKognito is based on a GSI and is not Play Protect certified. Register the tablet's GSF Android ID at
+<https://www.google.com/android/uncertified>, wait a while, and try again. One way to read the ID: `adb root`,
+`adb shell`, then
+`sqlite3 /data/data/com.google.android.gsf/databases/gservices.db "select value from main where name='android_id';"`.
+Keep this number private; do not post it in the thread.
 
 ## 14. Asking for help
 
 Post in the XDA thread with:
 
-- the full output of the installer (copy it from the terminal),
-- the slot letters it printed,
+- the installer's output (copy it from the terminal), or the `inkognito.log` file it names;
+- the slot letter it printed;
 - what the tablet showed and what you tried.
 
-Do **not** post your serial number, GSF Android ID, Wi-Fi network names or account names. The installer does
-not print any of these, but other tools you run might.
+Do **not** post your serial number, GSF Android ID, Wi-Fi network names or account names. The installer's log
+holds none of these, but other tools you run might. Never post your backup folder: it holds your tablet's own
+partitions.

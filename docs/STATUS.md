@@ -1,9 +1,51 @@
-# Project status — Bigme B1051C Pro → Android 16 (updated 2026-10-22, 14:40)
+# Project status — Bigme B1051C Pro → Android 16 (updated 2026-11-09, 22:30)
 
 Plan: `~/.claude/plans/pasted-content-id-25ff-bigme-mellow-sutton.md` (approved; **Revision 2** at its top).
 Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-verity-warning-2026-10-17.md`,
 `research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
 Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
+
+## 2026-11-09 evening — Phase E decisions, ROM alpha 4 + alpha 5, taskbar crash fix
+- **Live now:** eink-compat 0.1.49, E-Ink Control 0.15.22, Lock & Sleep 0.2.6, einkui **0.4.10** (QS tile tap fix,
+  afternoon), launcher3 **0.2.5** (rebooted ~20:51). Tablet asleep, Lawnchair in front.
+- **Taskbar long-press crash (since 18.10) fixed:** launcher3 0.2.5 = `work/launcher3patch/build.sh` hook c): the shared,
+  never-init()ed `TaskbarUIController.DEFAULT` is replaced by a fresh, init()ed controller per taskbar. Verified on the
+  tablet: popup with Split screen, drag into split screen, no FATAL. Owner test: FEATURE-TESTS 37.
+- **Phase E decisions closed (owner approved all recommendations):** list in ROADMAP "החלטות שלב E". Publishing only
+  at the very end of the process (no "untested" release). DSU (31) deferred to the very end.
+- **ROM:** alpha 4 (= live tablet) and then **alpha 5** built: `release/InKognito-B1051CPro-alpha5-20261109/` (zip
+  ee6e82e0, system.img c2f9c97e, nogapps 9a92c07d) = alpha 4 + gapps suw2 (no GooglePartnerSetup) + launcher3 0.2.5 +
+  stage 2 hides the Switch system tile. dev-tests 43/43, sim 23/23, pii_scan third-party noise only. NOT flashed,
+  NOT published. Building needs no tablet.
+- **10.11:** fresh backups; alpha 5 test-flashed as `update` (boot_b + system_b), the stage-2 log-redirect bug found
+  and fixed; **alpha 6** built (zip 104bfa16) and flashed as update (system_b only), verified, LIVE. **Soak started
+  10.11 on alpha 6, shorter than two weeks (owner: alpha 5 ran almost without complaints); the owner ends it.**
+  Distribution package prepared locally (nothing published). Rollback: `backups/device-20261110-204759`.
+- **(superseded 10.11) Next (owner's call, "not yet" on 09.11):** fresh device backup + `inkognito.py --dry-run --backup` (does the
+  installer pick update = keep data, or install = wipe, on this GSI+Magisk tablet?); declare the soak (≥2 weeks,
+  FEATURE-TESTS round); then the test flash with per-write approval.
+
+## Night 2026-10-29/30 — wave 5 (sleep and power), owner asleep, pre-approved ("all writes and reads"; no partition writes)
+- **Live now:** eink-compat **0.1.49** (vc50, rebooted 00:58), E-Ink Control **0.15.22** (72), Lock & Sleep **0.2.6** (vc10),
+  einkui **0.4.9** (34), KOReader patch `2-inkognito-cover.lua`. ROM payload.json points at all of them (sha prefixes
+  verified, pii_scan clean); no ROM rebuilt.
+- **Time of sleep on the sleep picture:** Android's SCREEN_OFF arrives 650 ms after setPowerMode(OFF) (measured), so the
+  app leaves a box after "asleep since" and writes `clock.bin` (its font's digit glyphs + UTC offset / next DST change)
+  next to the frame; the shim writes the local time into the box at OFF (0.5 ms; knob `standby_clock`).
+- **KOReader cover mode:** the patch exports the open book's cover (3 s after open) and sends COVER with its identity;
+  Lock & Sleep accepts it only from KOReader, copies it as root, pre-renders. Text over a picture sits on a page-colour plate.
+- **Power while asleep:** Wi-Fi off after 15 min asleep (default; back at wake / boot), power-off after N hours (default
+  never; quiet wake via `b1051c_quiet_wake` so E-Ink Control keeps the light off and draws the shutdown picture).
+  E-Ink Control relays SLEEP (screen off) now.
+- **Also:** battery level on the lock screen's date line (einkui, switch in Lock & Sleep), apps kept out of the
+  background (feature 19, Android's Restricted level, list starts empty), Lock & Sleep settings export / import.
+- **Closed:** auto-brightness (16.3, no light sensor on this unit), midnight repaint (a sleeping panel takes no updates;
+  date and time read as "asleep since").
+- **Wave 6 started:** stock / a9 e-ink broadcasts (E-Ink Control 0.15.22, FEATURE-TESTS 36); the API emulation was
+  researched and dropped (owner, 2026-10-30; research/phase-d/API-EMULATION-2026-10-30.md).
+- **Owner tests:** FEATURE-TESTS 29–36. Details: research/phase-c/settings-changes.log (2026-10-29 22:5x onwards).
+- **Fixed on the way:** I reused version 0.15.20 that alpha 3 had already taken and overwrote its APK; restored from
+  work/rom/out/payload, my build became 0.15.21. Trap: mksh's 32-bit arithmetic broke shell-computed epoch-ms values.
 
 ## 2026-10-22 10:40–14:40 — owner at the device: physical tests, colour A/B, panel calibration, light presets
 - **Live now:** eink-compat 0.1.35 + `post-fs-data.sh` with `vivid_fast 1` and `ok_sat 60` (live copy only; module zip

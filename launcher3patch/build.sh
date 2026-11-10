@@ -2,7 +2,8 @@
 # Launcher3QuickStep with a transparent taskbar on a third-party home screen (org.b1051c.l3.HomeBg).
 # Input: the GSI's own Launcher3QuickStep.apk (sha bf92e8d5…, from work/gsi/system-td-arm64-vanilla.img).
 # Steps: apktool d -r (code only) -> smali hooks in TaskbarDragLayerController.updateBackgroundAlpha() and
-# FallbackTaskbarUIController.createAnimToRecentsState() ->
+# FallbackTaskbarUIController.createAnimToRecentsState(), and no shared uninitialised TaskbarUIController.DEFAULT
+# (taskbar long-press crash with a third-party home, 2026-11-09) ->
 # apktool b -> + classes2.dex (HomeBg, built with javac + d8 against compile-only stubs) -> dex stored, zipalign,
 # signed with the public AOSP testkey (= Launcher3's own certificate a40da80a…, so it updates in place).
 # Output: build/Launcher3QuickStep.apk, then a Magisk module zip (module/). Never touches a device.
@@ -71,6 +72,29 @@ for name, anchor, hook in hooks:
     assert s.count(anchor) == 1, "hook anchor not found exactly once in " + name
     open(p, "w").write(s.replace(anchor, hook))
     print("hook inserted:", name)
+
+# c) Taskbar long-press crash with a third-party home (fix 2026-11-09). With Lawnchair as home there is no
+#    RecentsViewContainer when the taskbar is created, so TaskbarControllers keeps its initial uiController, the
+#    shared static TaskbarUIController.DEFAULT, which was never init()ed (and is shared by every taskbar, so a later
+#    onDestroy() nulls it again). A long-press on a taskbar app -> getSplitMenuOptions() -> mControllers null -> NPE,
+#    and the crashed process's full-screen drag window then swallows all touch. Fix: every use of the shared DEFAULT
+#    gets its own new TaskbarUIController; the initial one in TaskbarControllers.<init> is init(this)ed right away
+#    (setUIController() already calls init() for the others). Nothing compares against DEFAULT by identity.
+import re
+U = "Lcom/android/launcher3/taskbar/TaskbarUIController;"
+SGET = re.compile(r"    sget-object ([vp]\d+), " + re.escape(U + "->DEFAULT:" + U) + r"\n")
+for name in ("TaskbarControllers.smali", "TaskbarActivityContext.smali", "TaskbarManager.smali", "TaskbarManager$2.smali"):
+    p = os.path.join(d, name)
+    s = open(p).read()
+    m = SGET.findall(s)
+    assert len(m) == 1, "DEFAULT read not found exactly once in " + name
+    r = m[0]
+    new = "    new-instance %s, %s\n\n    invoke-direct {%s}, %s-><init>()V\n" % (r, U, r, U)
+    if name == "TaskbarControllers.smali":
+        new += "\n    invoke-virtual {%s, p0}, %s->init(Lcom/android/launcher3/taskbar/TaskbarControllers;)V\n" % (r, U)
+    s = SGET.sub(lambda _: new, s)
+    open(p, "w").write(s)
+    print("DEFAULT replaced:", name, r)
 PY
 
 # 3. rebuild, add the helper dex (stored, like the original classes.dex), align, sign

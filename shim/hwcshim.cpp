@@ -72,6 +72,9 @@
 //   vendor.debug.hwc.shim.standby_wake_gc16  1 (default) -> one settled full refresh after the first commit of a wake
 //   vendor.debug.hwc.shim.standby_dither -1 (default: the last commit's value) or the dither field of that GC16
 //   vendor.debug.hwc.shim.standby_hold_ms 0  -> wait this long between our commit and the vendor's OFF
+//   Time of sleep (Lock & Sleep 0.2.0; module 0.1.48): clock.bin next to the frame holds the app's glyphs for
+//   "0-9 : AM PM" and an empty box of the frame; the shim writes the local time into that box at OFF.
+//   vendor.debug.hwc.shim.standby_clock  1 (default) -> draw it; 0 = leave the box empty
 //
 // No STL, no libc++: the only DT_NEEDED are liblog, libdl, libc.
 
@@ -404,6 +407,33 @@ static Standby g_standby;           // under g_standby_lock
 #define STANDBY_W 2480
 #define STANDBY_H 1860
 #define STANDBY_BYTES ((size_t)STANDBY_W * STANDBY_H * 4)
+#define PAGE_W STANDBY_H   // the portrait page the app draws: 1860 wide, 2480 tall
+#define PAGE_H STANDBY_W
+// Time of sleep (Lock & Sleep 0.2.0, module 0.1.48). Android tells apps about the screen going off ~650 ms after
+// setPowerMode(OFF) (measured 2026-10-29: OFF 22 ms after "Going to sleep", SCREEN_OFF 650 ms later), so the app
+// cannot draw the time into the frame. It leaves a box of the frame empty and writes clock.bin next to it: header,
+// glyph table, 8-bit coverage per glyph (box height, page orientation). At OFF the shim writes the local time into
+// the box, from the frame's own pixels under it (saved at load), so each sleep starts from a clean box.
+#define CLOCK_MAGIC "B1SLPCK1"
+#define CLOCK_MAX_GLYPHS 16
+struct ClockHdr {
+    char magic[8]; uint32_t seq;   // the frame counter this file belongs to
+    uint32_t flags;                // bit 0: 24-hour; bit 1: rot 90 (else SurfaceFlinger's ROT_270)
+    int32_t off_s, off2_s;         // UTC offset now, and after trans_s (next DST change; 0 = none)
+    int64_t trans_s;
+    uint32_t fg;                   // text colour, bytes R,G,B,A
+    int32_t box_x, box_y, box_w, box_h, x0, nglyph, reserved;   // page px; x0 = pen start (left aligned)
+};
+struct ClockGlyph { uint8_t ch, pad[3]; int32_t adv_q6, left, w; };   // advance in 1/64 px; bitmap x = pen + left
+static_assert(sizeof(ClockHdr) == 64, "clock.bin header");
+static_assert(sizeof(ClockGlyph) == 16, "clock.bin glyph");
+struct Clock {
+    bool valid = false; ClockHdr h; ClockGlyph g[CLOCK_MAX_GLYPHS]; const uint8_t* bits[CLOCK_MAX_GLYPHS];
+    uint8_t* file = nullptr;       // the whole file; bits[] point into it
+    uint8_t* bg = nullptr;         // the frame under the box, page order, 4 B/px
+    int draws = 0;
+};
+static Clock g_clock;              // under g_standby_lock
 
 // ---------------------------------------------------------------- helpers
 
@@ -1857,6 +1887,129 @@ static void standby_path(char* out, size_t cap) {
     else snprintf(out, cap, "%s", "/data/vendor/b1051c/sleep/frame.rgbx");
 }
 
+// Page pixel (x right, y down on the portrait page) -> byte offset in the raw frame (see Lock & Sleep's Renderer).
+static size_t clock_raw_off(uint32_t flags, int x, int y) {
+    int X = (flags & 2) ? STANDBY_W - 1 - y : y, Y = (flags & 2) ? x : STANDBY_H - 1 - x;
+    return ((size_t)Y * STANDBY_W + X) * 4;
+}
+
+static void clock_free_locked() {
+    free(g_clock.file); free(g_clock.bg);
+    g_clock.file = nullptr; g_clock.bg = nullptr; g_clock.valid = false;
+}
+
+// clock.bin for frame #seq, right after the frame itself was loaded. Caller holds g_standby_lock. No file = no time.
+static void clock_load_locked(int seq) {
+    clock_free_locked();
+    char path[PROP_VALUE_MAX + 16];
+    standby_path(path, sizeof(path));
+    char* slash = strrchr(path, '/');
+    if (!slash) return;
+    snprintf(slash + 1, sizeof(path) - (size_t)(slash + 1 - path), "clock.bin");
+    int fd = open(path, O_RDONLY | O_CLOEXEC);
+    if (fd < 0) {
+        if (errno != ENOENT) LOGW("standby clock: open(%s): %s", path, strerror(errno));
+        return;
+    }
+    struct stat st; memset(&st, 0, sizeof(st));
+    if (fstat(fd, &st) != 0 || !S_ISREG(st.st_mode) || st.st_size < (off_t)sizeof(ClockHdr) || st.st_size > (1 << 20)) {
+        LOGW("standby clock: %s is not a clock file (%lld B)", path, (long long)st.st_size);
+        close(fd);
+        return;
+    }
+    size_t len = (size_t)st.st_size, got = 0;
+    uint8_t* f = (uint8_t*)malloc(len);
+    while (f && got < len) {
+        ssize_t n = read(fd, f + got, len - got);
+        if (n < 0 && errno == EINTR) continue;
+        if (n <= 0) break;
+        got += (size_t)n;
+    }
+    close(fd);
+    if (!f || got != len) { free(f); LOGW("standby clock: short read of %s", path); return; }
+    ClockHdr h; memcpy(&h, f, sizeof(h));
+    const char* bad = nullptr;
+    size_t need = sizeof(ClockHdr) + (size_t)(h.nglyph > 0 ? h.nglyph : 0) * sizeof(ClockGlyph);
+    if (memcmp(h.magic, CLOCK_MAGIC, 8) != 0) bad = "bad magic";
+    else if ((int)h.seq != seq) bad = "written for another frame";
+    else if (h.nglyph < 1 || h.nglyph > CLOCK_MAX_GLYPHS || need > len) bad = "glyph table";
+    else if (h.box_w < 1 || h.box_h < 1 || h.box_w > PAGE_W || h.box_h > 512 || h.box_x < 0 || h.box_y < 0
+             || h.box_x > PAGE_W || h.box_y > PAGE_H || h.box_x + h.box_w > PAGE_W || h.box_y + h.box_h > PAGE_H
+             || h.x0 < -PAGE_W || h.x0 > 2 * PAGE_W) bad = "box outside the page";   // bounds first: no int overflow
+    if (!bad) {
+        memcpy(g_clock.g, f + sizeof(ClockHdr), (size_t)h.nglyph * sizeof(ClockGlyph));
+        size_t at = need;
+        for (int i = 0; i < h.nglyph && !bad; i++) {
+            const ClockGlyph& g = g_clock.g[i];
+            if (g.w < 1 || g.w > 1024 || g.left < -512 || g.left > 512 || g.adv_q6 < 0 || g.adv_q6 > 1024 * 64) {
+                bad = "glyph size";
+                break;
+            }
+            size_t sz = (size_t)g.w * h.box_h;
+            if (at + sz > len) { bad = "glyph bitmaps truncated"; break; }
+            g_clock.bits[i] = f + at;
+            at += sz;
+        }
+        if (!bad && at != len) bad = "trailing bytes";
+    }
+    if (bad) { free(f); LOGW("standby clock: %s ignored (%s)", path, bad); return; }
+    uint8_t* bg = (uint8_t*)malloc((size_t)h.box_w * h.box_h * 4);
+    if (!bg) { free(f); return; }
+    dmabuf_sync(g_standby.fd, DMA_BUF_SYNC_START | DMA_BUF_SYNC_READ);
+    for (int y = 0; y < h.box_h; y++)
+        for (int x = 0; x < h.box_w; x++)
+            memcpy(bg + ((size_t)y * h.box_w + x) * 4, g_standby.map + clock_raw_off(h.flags, h.box_x + x, h.box_y + y), 4);
+    dmabuf_sync(g_standby.fd, DMA_BUF_SYNC_END | DMA_BUF_SYNC_READ);
+    g_clock.h = h; g_clock.file = f; g_clock.bg = bg; g_clock.valid = true;
+    LOGI("standby clock: %d glyphs for #%d, box [%d,%d %dx%d] x0=%d %s", h.nglyph, seq, h.box_x, h.box_y, h.box_w, h.box_h,
+         h.x0, (h.flags & 1) ? "24h" : "12h");
+}
+
+// Write the local time into the frame's box, just before the sleep commit. Caller holds g_standby_lock.
+static void clock_draw_locked(const char* why) {
+    if (!g_clock.valid || (int)g_clock.h.seq != g_standby.loaded_seq || !g_standby.valid) return;
+    if (!prop_int("vendor.debug.hwc.shim.standby_clock", 1)) return;
+    uint64_t t0 = now_ns();
+    const ClockHdr& h = g_clock.h;
+    int64_t t = (int64_t)time(nullptr);
+    time_t lt = (time_t)(t + ((h.trans_s && t >= h.trans_s) ? h.off2_s : h.off_s));
+    struct tm tm; memset(&tm, 0, sizeof(tm));
+    gmtime_r(&lt, &tm);
+    char s[16];
+    if (h.flags & 1) snprintf(s, sizeof(s), "%02d:%02d", tm.tm_hour, tm.tm_min);
+    else snprintf(s, sizeof(s), "%d:%02d %s", (tm.tm_hour + 11) % 12 + 1, tm.tm_min, tm.tm_hour < 12 ? "AM" : "PM");
+    const uint32_t fc[3] = {h.fg & 0xff, (h.fg >> 8) & 0xff, (h.fg >> 16) & 0xff};
+    uint8_t* m = g_standby.map;
+    dmabuf_sync(g_standby.fd, DMA_BUF_SYNC_START | DMA_BUF_SYNC_RW);
+    for (int y = 0; y < h.box_h; y++)   // the previous sleep's time goes first
+        for (int x = 0; x < h.box_w; x++)
+            memcpy(m + clock_raw_off(h.flags, h.box_x + x, h.box_y + y), g_clock.bg + ((size_t)y * h.box_w + x) * 4, 4);
+    int64_t pen = (int64_t)h.x0 * 64;
+    int n = 0;
+    for (const char* c = s; *c; c++) {
+        int gi = -1;
+        for (int i = 0; i < h.nglyph; i++) if (g_clock.g[i].ch == (uint8_t)*c) { gi = i; break; }
+        if (gi < 0) continue;
+        const ClockGlyph& g = g_clock.g[gi];
+        int gx = (int)((pen + 32) / 64) + g.left;
+        for (int y = 0; y < h.box_h; y++) {
+            const uint8_t* row = g_clock.bits[gi] + (size_t)y * g.w;
+            for (int x = 0; x < g.w; x++) {
+                uint32_t a = row[x];
+                int px = gx + x;
+                if (!a || px < h.box_x || px >= h.box_x + h.box_w) continue;
+                uint8_t* d = m + clock_raw_off(h.flags, px, h.box_y + y);
+                for (int k = 0; k < 3; k++) d[k] = (uint8_t)((d[k] * (255 - a) + fc[k] * a + 127) / 255);
+            }
+        }
+        pen += g.adv_q6;
+        n++;
+    }
+    dmabuf_sync(g_standby.fd, DMA_BUF_SYNC_END | DMA_BUF_SYNC_RW);
+    g_clock.draws++;
+    LOGI("standby clock (%s): \"%s\" drawn, %d glyphs, %" PRIu64 " us", why, s, n, (now_ns() - t0) / 1000);
+}
+
 // Load frame #seq from the file into our buffer. Caller holds g_standby_lock.
 static bool standby_load_locked(int seq) {
     char path[PROP_VALUE_MAX + 1];
@@ -1906,6 +2059,7 @@ static bool standby_load_locked(int seq) {
     }
     g_standby.loaded_seq = seq; g_standby.valid = true; g_standby.load_ms = now_ns() / 1000000;
     LOGI("standby: loaded #%d from %s (%zu B) in %" PRIu64 " ms", seq, path, got, (now_ns() - t0) / 1000000);
+    clock_load_locked(seq);
     return true;
 }
 
@@ -1944,6 +2098,11 @@ static bool standby_commit(const char* why) {
         static Limiter L = {0, 10, 50};
         if (lim(L)) LOGW("standby (%s): frame #%d requested but none loaded (%d failures, last errno %d)", why, seq, fails, err);
         return false;
+    }
+    if (g_standby.commit_ns && now_ns() - g_standby.commit_ns < 1500ull * 1000000) {
+        // the kernel may still read the buffer of the last standby commit (see standby_poll): no clock rewrite now
+    } else {
+        clock_draw_locked(why);
     }
     drm_eink_update u;
     memset(&u, 0, sizeof(u));

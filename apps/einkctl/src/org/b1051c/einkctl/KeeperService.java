@@ -22,14 +22,21 @@ public class KeeperService extends Service {
     private static final String CH = "keeper2", OLD_CH = "keeper";
     private final BroadcastReceiver screen = new BroadcastReceiver() {
         @Override public void onReceive(Context c, Intent i) {
-            if (Intent.ACTION_SCREEN_OFF.equals(i.getAction())) { Eink.frontlightOff(); TileTouch.release(c); }
-            else { Eink.applyFrontlight(c); checkPlugin(c, "screen on"); SleepRelay.send(c, SleepRelay.WAKE); }
+            if (Intent.ACTION_SCREEN_OFF.equals(i.getAction())) {
+                Eink.frontlightOff(); TileTouch.release(c); SleepRelay.send(c, SleepRelay.SLEEP);
+            } else {
+                if (SleepRelay.quietWake(c)) android.util.Log.i("einkctl", "screen on for Lock & Sleep's power-off: light stays off");
+                else Eink.applyFrontlight(c);
+                checkPlugin(c, "screen on"); SleepRelay.send(c, SleepRelay.WAKE);
+            }
         }
     };
     /** Battery and clock changes for the sleep picture (Lock & Sleep draws the level and the date on it). */
     private final BroadcastReceiver battery = new BroadcastReceiver() {
         @Override public void onReceive(Context c, Intent i) { SleepRelay.battery(c, i); }
     };
+    /** Other apps' e-ink broadcasts (com.xrz.GlobalRefresh, a9's EINK_*): runtime-registered, so implicit ones arrive. */
+    private final CompatBroadcasts compat = new CompatBroadcasts();
     private final BroadcastReceiver clock = new BroadcastReceiver() {
         @Override public void onReceive(Context c, Intent i) { SleepRelay.send(c, SleepRelay.DATE); }
     };
@@ -109,6 +116,7 @@ public class KeeperService extends Service {
         cf.addAction(Intent.ACTION_TIME_CHANGED);
         cf.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         registerReceiver(clock, cf);
+        CompatBroadcasts.register(this, compat);
         getContentResolver().registerContentObserver(
                 android.provider.Settings.System.getUriFor(android.provider.Settings.System.SCREEN_BRIGHTNESS),
                 false, brightness);
@@ -173,6 +181,7 @@ public class KeeperService extends Service {
         unregisterReceiver(shutdown);
         unregisterReceiver(battery);
         unregisterReceiver(clock);
+        unregisterReceiver(compat);
         getContentResolver().unregisterContentObserver(brightness);
         getContentResolver().unregisterContentObserver(qsLight);
         getContentResolver().unregisterContentObserver(night);

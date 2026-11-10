@@ -231,6 +231,9 @@ final class Profiles {
         apply(c, AppProfileService.currentPackage(), false);
     }
 
+    /** Someone else set the refresh mode (CompatBroadcasts): the next apply sends the app's own mode again. */
+    static synchronized void refreshOverridden() { if (last != null) last.refresh = Integer.MIN_VALUE; }
+
     /** Fast is the mode for typing (2.3 B); Extreme and A2 are faster already. */
     private static boolean slow(int mode) { return mode != 178 && mode != 179 && mode != 16; }
 

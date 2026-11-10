@@ -131,6 +131,11 @@ public class MainActivity extends Activity {
         });
         note("Bottom-left, in the row of back / home / recents. Tap = full refresh (clears ghosting); "
                 + "long-press = open E-Ink Control.");
+        check("Accept e-ink broadcasts from other apps", p.getBoolean("compat_broadcasts", true),
+                v -> p.edit().putBoolean("compat_broadcasts", v).apply());
+        note("For Tasker and apps made for Bigme or other e-ink Android builds: a full refresh (com.xrz.GlobalRefresh, "
+                + "EINK_FORCE_CLEAR), or a refresh mode for the app on screen until you switch apps "
+                + "(EINK_REFRESH_SPEED_CLEAR / BALANCED / SMOOTH / FAST = Regal / HD 256 / Fast / Extreme).");
 
         // Display density
         section("Display density (DPI)");
@@ -375,6 +380,9 @@ public class MainActivity extends Activity {
                     runOnUiThread(() -> { android.widget.Toast.makeText(this, r, android.widget.Toast.LENGTH_LONG).show(); recreate(); });
                 }).start())
                 .setNegativeButton("Cancel", null).show()));
+        // InKognito Setup: the first-run screen, reopened as a manual tool
+        button(getString(R.string.setup_open), v -> startActivity(new Intent(this, SetupActivity.class)));
+        note(getString(R.string.setup_open_note));
         // Per-app profiles
         section("Per-app profiles");
         note("Tap an app to set its own refresh mode, colors, grayscale, inverted colors, high-contrast text, "

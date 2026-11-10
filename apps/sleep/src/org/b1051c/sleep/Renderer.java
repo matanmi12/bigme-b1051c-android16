@@ -35,6 +35,7 @@ final class Renderer {
     static final int W = 2480, H = 1860, BYTES = W * H * 4;
     // the keyguard's block (clock top-left at 332,53 with the small clock, see LockStyler): the date takes its place
     static final float BLOCK_X = 332f, BLOCK_Y = 53f, DATE_PX = 110f, BATTERY_PX = 44f, GAP_PX = 14f;
+    static final float PLATE_PAD_X = 28f, PLATE_PAD_Y = 18f, PLATE_R = 30f;   // page-colour plate over a picture
 
     private static final ExecutorService EXEC = Executors.newSingleThreadExecutor(r -> {
         Thread t = new Thread(r, "sleep-render");
@@ -73,10 +74,13 @@ final class Renderer {
         int rot = rotOverride != 0 ? rotOverride : p.rot();
         String date = p.showDate() ? dateText(c) : "";
         String battery = p.showBattery() ? batteryText(c) : "";
+        boolean h24 = DateFormat.is24HourFormat(c);
+        boolean time = p.showTime() && Clock.shimDraws();   // the shim writes the time at power-off (Clock)
         Pictures.Choice choice = Pictures.choose(c, p, night, advance);   // names only: no decode before the skip check
         String name = choice == null ? "(none)" : choice.name;
         String sig = mode + "|" + p.source() + "|" + name + "|" + (night ? "dark" : "light") + "|" + p.scale() + "|" + date + "|"
-                + battery + "|" + rot + "|" + BuildInfo.CODE;
+                + battery + "|" + (time ? Clock.zoneKey(h24) : "-") + "|" + rot + "|" + BuildInfo.CODE;
+        p.p.edit().putString(Prefs.S_CLOCK, !p.showTime() ? "off" : time ? "on" : "needs eink-compat 0.1.48").apply();
         long boot = Prefs.bootEpoch();
         if (!advance && !png && themeOverride == null && rotOverride == 0 && sig.equals(p.p.getString(Prefs.S_SIG, ""))
                 && p.p.getLong(Prefs.S_BOOT, -1) == boot && p.p.getInt(Prefs.S_STANDBY, 0) > 0) {
@@ -92,7 +96,7 @@ final class Renderer {
             tc = c.createConfigurationContext(conf);
         }
         Ink.Pal pal = Ink.pal(tc);
-        Scene s = new Scene(pal, pic, p.scale(), date, battery, Ink.display(c), Ink.font(c, 500));
+        Scene s = new Scene(pal, pic, p.scale(), date, battery, time, h24, null, Ink.display(c), Ink.font(c, 500));
 
         Bitmap frame = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(frame);
@@ -100,7 +104,7 @@ final class Renderer {
         s.draw(cv, 1f);
         String result;
         try {
-            File tmp = new File(c.getFilesDir(), "frame.rgbx.tmp");
+            File tmp = new File(c.getFilesDir(), "frame.rgbx.tmp"), ctmp = new File(c.getFilesDir(), "clock.bin.tmp");
             ByteBuffer buf = ByteBuffer.allocateDirect(BYTES);
             if (frame.getRowBytes() != W * 4) throw new IllegalStateException("row bytes " + frame.getRowBytes());
             frame.copyPixelsToBuffer(buf);
@@ -108,12 +112,20 @@ final class Renderer {
             try (FileOutputStream o = new FileOutputStream(tmp)) { o.getChannel().write(buf); }
             int seq = Math.max(1, p.p.getInt(Prefs.S_STANDBY, 0) + 1);
             if (p.p.getLong(Prefs.S_BOOT, -1) != boot) seq = 1;
-            String cmd = "D=" + DIR + "; S=" + tmp.getAbsolutePath() + "; mkdir -p $D && chown root:root /data/vendor/b1051c $D"
+            // clock.bin carries the frame's counter: it is in place before the counter announces the frame
+            byte[] clock = s.spot != null ? Clock.build(s.spot, seq, h24, rot, pal.display) : null;
+            if (clock != null) try (FileOutputStream o = new FileOutputStream(ctmp)) { o.write(clock); }
+            String clockCmd = clock != null
+                    ? " && cp -f $C $D/clock.bin.tmp && chown root:root $D/clock.bin.tmp && chmod 0644 $D/clock.bin.tmp && mv -f $D/clock.bin.tmp $D/clock.bin"
+                    : " && rm -f $D/clock.bin";
+            String cmd = "D=" + DIR + "; S=" + tmp.getAbsolutePath() + "; C=" + ctmp.getAbsolutePath()
+                    + "; mkdir -p $D && chown root:root /data/vendor/b1051c $D"
                     + " && chmod 0755 /data/vendor/b1051c $D && cp -f $S $D/frame.rgbx.tmp && chown root:root $D/frame.rgbx.tmp"
-                    + " && chmod 0644 $D/frame.rgbx.tmp && [ \"$(stat -c %s $D/frame.rgbx.tmp)\" = " + BYTES + " ]"
+                    + " && chmod 0644 $D/frame.rgbx.tmp && [ \"$(stat -c %s $D/frame.rgbx.tmp)\" = " + BYTES + " ]" + clockCmd
                     + " && mv -f $D/frame.rgbx.tmp $D/frame.rgbx && restorecon -R /data/vendor/b1051c >/dev/null 2>&1; setprop " + PROP + " " + seq + " && echo ok";
             String r = Root.run(cmd);
             tmp.delete();
+            ctmp.delete();
             boolean ok = "ok".equals(r);
             p.p.edit().putString(Prefs.S_SIG, ok ? sig : "").putInt(Prefs.S_STANDBY, ok ? seq : 0).putLong(Prefs.S_BOOT, boot)
                     .putLong(Prefs.S_RENDERED_AT, System.currentTimeMillis()).putString(Prefs.S_LAST_FILE, name)
@@ -140,8 +152,11 @@ final class Renderer {
         Prefs p = new Prefs(c);
         boolean night = (c.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         Bitmap pic = Prefs.MODE_OFF.equals(p.mode()) ? null : Pictures.load(c, Pictures.choose(c, p, night, false));
+        boolean time = p.showTime() && Clock.shimDraws(), h24 = DateFormat.is24HourFormat(c);
+        String sample = h24 ? DateFormat.format("HH:mm", System.currentTimeMillis()).toString()
+                : DateFormat.format("h:mm a", System.currentTimeMillis()).toString().toUpperCase(Locale.ROOT);
         Scene s = new Scene(Ink.pal(c), pic, p.scale(), p.showDate() ? dateText(c) : "",
-                p.showBattery() ? batteryText(c) : "", Ink.display(c), Ink.font(c, 500));
+                p.showBattery() ? batteryText(c) : "", time, h24, sample, Ink.display(c), Ink.font(c, 500));
         Bitmap b = Bitmap.createBitmap(Math.round(Pictures.PAGE_W * scale), Math.round(Pictures.PAGE_H * scale), Bitmap.Config.ARGB_8888);
         s.draw(new Canvas(b), scale);
         if (pic != null) pic.recycle();
@@ -172,11 +187,17 @@ final class Renderer {
         return pct + " %" + (plugged ? " · charging" : "");
     }
 
-    /** What is drawn, in portrait page coordinates; the canvas transform decides the raw layout. */
+    /** What is drawn, in portrait page coordinates; the canvas transform decides the raw layout. With `time`, line 2
+     *  ends in "asleep since" and then the time: `sample` in a preview, else an empty box noted in `spot` (k = 1)
+     *  that the shim fills at power-off. */
     static final class Scene {
-        final Ink.Pal pal; final Bitmap pic; final String scale, date, battery; final android.graphics.Typeface display, text;
-        Scene(Ink.Pal pal, Bitmap pic, String scale, String date, String battery, android.graphics.Typeface display, android.graphics.Typeface text) {
-            this.pal = pal; this.pic = pic; this.scale = scale; this.date = date; this.battery = battery; this.display = display; this.text = text;
+        final Ink.Pal pal; final Bitmap pic; final String scale, date, battery, sample; final boolean time, h24;
+        final android.graphics.Typeface display, text;
+        Clock.Spot spot;
+        Scene(Ink.Pal pal, Bitmap pic, String scale, String date, String battery, boolean time, boolean h24, String sample,
+              android.graphics.Typeface display, android.graphics.Typeface text) {
+            this.pal = pal; this.pic = pic; this.scale = scale; this.date = date; this.battery = battery; this.time = time;
+            this.h24 = h24; this.sample = sample; this.display = display; this.text = text;
         }
 
         void draw(Canvas cv, float k) {
@@ -193,26 +214,40 @@ final class Renderer {
                 cv.drawBitmap(pic, null, dst, pp);
                 cv.restore();
             }
-            float y = BLOCK_Y * k;
-            if (!date.isEmpty()) {
-                Paint t = new Paint(Paint.ANTI_ALIAS_FLAG);
-                t.setTypeface(display);
-                t.setTextSize(DATE_PX * k);
-                t.setColor(pal.display);
-                Paint.FontMetrics fm = t.getFontMetrics();
-                y -= fm.ascent;                                   // top of the glyphs at BLOCK_Y
-                cv.drawText(date, BLOCK_X * k, y, t);
-                y += fm.descent + GAP_PX * k;
+            Paint dp = new Paint(Paint.ANTI_ALIAS_FLAG);
+            dp.setTypeface(display);
+            dp.setTextSize(DATE_PX * k);
+            dp.setColor(pal.display);
+            Paint bp = new Paint(Paint.ANTI_ALIAS_FLAG);
+            bp.setTypeface(text);
+            bp.setTextSize(BATTERY_PX * k);
+            bp.setColor(pal.display);
+            bp.setLetterSpacing(0.03f);
+            Paint.FontMetrics dfm = dp.getFontMetrics(), bfm = bp.getFontMetrics();
+            String line2 = !time ? battery : battery.isEmpty() ? "Asleep since " : battery + " · asleep since ";
+            // layout first: the top of the date's glyphs at BLOCK_Y, line 2 under it
+            float y = BLOCK_Y * k, yDate = 0, y2 = 0, bottom = y;
+            if (!date.isEmpty()) { yDate = y - dfm.ascent; y = yDate + dfm.descent + GAP_PX * k; bottom = yDate + dfm.descent; }
+            if (!line2.isEmpty()) { y2 = y - bfm.ascent; bottom = y2 + bfm.descent; }
+            float x2 = (BLOCK_X + 3f) * k;
+            if (pic != null && bottom > BLOCK_Y * k) {
+                // a picture behind the text (a busy book cover): a page-colour plate, as the lock screen's pill behind
+                // "Charged" (einkui 0.4.8), wide enough for the widest time the shim may write
+                float w = date.isEmpty() ? 0 : dp.measureText(date);
+                if (!line2.isEmpty()) w = Math.max(w, 3f * k + bp.measureText(line2) + (time ? Clock.widest(bp, h24) : 0));
+                Paint plate = new Paint(Paint.ANTI_ALIAS_FLAG);
+                plate.setColor(pal.paper);
+                cv.drawRoundRect(BLOCK_X * k - PLATE_PAD_X * k, BLOCK_Y * k - PLATE_PAD_Y * k, BLOCK_X * k + w + PLATE_PAD_X * k,
+                        bottom + PLATE_PAD_Y * k, PLATE_R * k, PLATE_R * k, plate);
             }
-            if (!battery.isEmpty()) {
-                Paint t = new Paint(Paint.ANTI_ALIAS_FLAG);
-                t.setTypeface(text);
-                t.setTextSize(BATTERY_PX * k);
-                t.setColor(pal.display);
-                t.setLetterSpacing(0.03f);
-                Paint.FontMetrics fm = t.getFontMetrics();
-                y -= fm.ascent;
-                cv.drawText(battery, (BLOCK_X + 3f) * k, y, t);
+            if (!date.isEmpty()) cv.drawText(date, BLOCK_X * k, yDate, dp);
+            if (!line2.isEmpty()) {
+                cv.drawText(line2, x2, y2, bp);
+                if (time) {
+                    float tx = x2 + bp.measureText(line2);
+                    if (sample != null) cv.drawText(sample, tx, y2, bp);
+                    else if (k == 1f) spot = new Clock.Spot(tx, y2, new Paint(bp));
+                }
             }
             Rect r = cv.getClipBounds();   // keep the compiler quiet about unused imports in some builds
             if (r == null) Log.v(TAG, "no clip");

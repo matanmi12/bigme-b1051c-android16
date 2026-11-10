@@ -3,13 +3,22 @@
 # release into /data/adb/modules_update with Magisk's own installer (the path every module took on the developer's
 # tablet), then reboot so Magisk mounts them and loads their sepolicy rules from boot 2 on.
 # Never loops: at most 2 attempts, then the device boots without the layer and stage 2 reports it.
+# Update (inkognito.py update: new system, data kept): when the payload VERSION differs from the one stage 2 recorded,
+# the modules are installed again the same way (a module the user removed stays removed), then stage 2 updates the apps.
 # Test hook: ROOT=<dir> DRY_RUN=1 runs every check and prints the actions instead of doing them.
 P=${ROOT}/system/etc/inkognito
 D=${ROOT}/data/adb/b1051c
 LOG=$D/provision.log
 MAGISK=${MAGISK:-/debug_ramdisk/magisk}
 
-[ -f $D/stage1.done ] && exit 0
+V=$(cat $P/VERSION 2>/dev/null)
+MODE=first
+if [ -f $D/stage1.done ]; then
+  [ -f $D/stage2.done ] || exit 0                                   # first install still running
+  [ "$(cat $D/payload.version 2>/dev/null)" = "$V" ] && exit 0      # up to date (alpha 2 never wrote this file)
+  [ "$(cat $D/update.stage1.done 2>/dev/null)" = "$V" ] && exit 0   # modules staged; stage 2 finishes the update
+  MODE=update
+fi
 
 # /data is f2fs with checkpoint=fs. If this boot runs inside an uncommitted userdata checkpoint (the slot is not marked
 # successful yet: an interrupted earlier boot, an OTA slot switch), every write below would be rolled back by the
@@ -23,13 +32,17 @@ fi
 mkdir -p $D && chmod 0700 $D
 log() { echo "$(date '+%F %T') stage1: $*" >> $LOG; }
 run() { if [ -n "$DRY_RUN" ]; then log "DRY: $*"; else "$@"; fi; }
-finish() { run touch $D/stage1.done; exit 0; }
+finish() { if [ $MODE = update ]; then [ -n "$DRY_RUN" ] || echo "$V" > $D/update.stage1.done; else run touch $D/stage1.done; fi; exit 0; }
 
-n=$(cat $D/stage1.attempts 2>/dev/null); n=$(( ${n:-0} + 1 )); echo $n > $D/stage1.attempts
-log "attempt $n ($(getprop ro.build.display.id); payload $(cat $P/VERSION 2>/dev/null); userdata checkpoint: $cp_state)"
+A=$D/stage1.attempts; [ $MODE = update ] && A=$D/update.attempts
+[ $MODE = update ] && [ "$(sed -n 1p $A 2>/dev/null)" != "$V" ] && printf '%s\n0\n' "$V" > $A
+n=$(tail -n 1 $A 2>/dev/null); n=$(( ${n:-0} + 1 ))
+if [ $MODE = update ]; then printf '%s\n%s\n' "$V" $n > $A; else echo $n > $A; fi
+log "$MODE attempt $n ($(getprop ro.build.display.id); payload $V; userdata checkpoint: $cp_state)"
 if [ $n -gt 2 ]; then
   log "ERROR: two attempts failed; booting without the InKognito layer (see above)"
-  touch $D/stage1.failed; finish
+  [ $MODE = first ] && touch $D/stage1.failed
+  finish
 fi
 
 # /data/adb/magisk = Magisk's own binaries and scripts from the bundled Magisk 30.7 APK (what the Magisk app's
@@ -75,9 +88,15 @@ reboot_now() { log "$1"; run setprop sys.powerctl "reboot,inkognito-stage1"; exi
 # cream wallpaper gets dark-text hints (black Lawnchair labels / nav buttons). Persistent props are loaded by now.
 run setprop persist.wallpapercolors.max_dark_area 25
 
-ok=0; bad=0
+ok=0; bad=0; ids=""
 for z in $P/modules/*.zip; do
   [ -f "$z" ] || continue
+  id=$(/data/adb/magisk/busybox unzip -p "$z" module.prop 2>/dev/null | sed -n 's/^id=//p' | tr -d '\r')
+  # Update: a module installed before and gone now was removed by the user (InKognito Setup): leave it out
+  if [ $MODE = update ] && [ -n "$id" ] && grep -qx "$id" $D/modules.installed 2>/dev/null && [ ! -d ${ROOT}/data/adb/modules/$id ]; then
+    log "skip $(basename $z): removed by the user"; continue
+  fi
+  ids="$ids $id"
   if [ -n "$DRY_RUN" ]; then log "DRY: install $z"; ok=$((ok+1)); continue; fi
   # = magisk --install-module, with BOOTMODE set explicitly: util_functions.sh otherwise decides by looking for a
   # running zygote, which is stopped here (BOOTMODE=false = recovery-mode install). Checked on the dev tablet.
@@ -94,6 +113,7 @@ if [ $bad -gt 0 ]; then                # no marker: the next boot retries (attem
   reboot_now "rebooting to retry"
 fi
 
-touch $D/stage1.done
+for id in $ids; do grep -qx "$id" $D/modules.installed 2>/dev/null || echo "$id" >> $D/modules.installed; done
+if [ $MODE = update ]; then echo "$V" > $D/update.stage1.done; else touch $D/stage1.done; fi
 [ -n "$NO_REBOOT" ] && { log "modules staged; the caller reboots"; exit 0; }
 reboot_now "rebooting into the layer"
