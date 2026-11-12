@@ -8,8 +8,9 @@ about an hour the first time, most of it for the backup.
 - **Everything on the tablet's internal storage is erased**: apps, books, notes, settings. Copy what you want
   to keep to your computer or to the microSD card first. The microSD card is not touched.
 - This is a **beta**. A full install, its first start and going back to stock were run on a real tablet
-  (alpha 6, 2026-11-11); what that run found is fixed in this release. The image without Google has not been
-  run on a tablet yet. The installer always makes a backup first and checks every write; keep that backup.
+  (alpha 6, 2026-11-11); what that run found is fixed in this release, which was itself installed on a real
+  tablet as an update (2026-11-12). A fresh install of this release and the image without Google have not
+  been run on a tablet yet. The installer always makes a backup first and checks every write; keep that backup.
 - Only for the **B1051C Pro on firmware B1051C_R_4.9.0**. The installer checks this and stops otherwise.
 
 **Disclaimer.** InKognito is provided "as is", without warranty of any kind. You install it at your own risk.

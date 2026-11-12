@@ -2,9 +2,10 @@
 
 ## beta 1 (`InKognito-B1051CPro-beta1-20261112`), 2026-11-12
 
-**Status: in preparation, not released yet.** The first beta. It is alpha 7 (below; alpha 7 was run as an update on a real tablet on 2026-11-11
-but never published) plus the changes here. Coming from alpha 6 you get both sections. This build itself had
-not been run on a tablet when it was packaged. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+**Status:** the first beta. It is alpha 7 (below; alpha 7 was run as an update on a real tablet on 2026-11-11
+but never published) plus the changes here. Coming from alpha 6 you get both sections. This release was
+installed on a real tablet as an update (2026-11-12); a fresh install of it and the image without Google have
+not been run on a tablet yet. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
 
 New:
 

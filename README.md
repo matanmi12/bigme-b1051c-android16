@@ -30,8 +30,8 @@ and going back to stock have been run on one tablet. Since alpha 6: a HeliBoard 
 its own refresh handling ([`apps/heliboardoverlay/`](apps/heliboardoverlay),
 [`module/b1051c-heliboard/`](module/b1051c-heliboard)), "Clear all" in Recents ([`launcher3patch/`](launcher3patch)),
 the device name, installer progress, and module updates through the Magisk app ([`rom/updates/`](rom/updates)).
-**beta 1** runs on the developer's tablet (installed as an update on 2026-11-12); its fresh-install path still waits
-for a second clean install, so **no release is published at the moment**. Open items:
+**Latest release: beta 1** (pre-release, see Releases). It runs on the developer's tablet, installed as an update
+on 2026-11-12; a fresh install of beta 1 has not been run on a tablet yet. Open items:
 [`docs/BETA1-FINDINGS.md`](docs/BETA1-FINDINGS.md) (in Hebrew).
 
 ## ⚠️ Read before trying

@@ -5,16 +5,19 @@ Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-ver
 `research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
 Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
 
-## 2026-11-12 — ROM beta 1 live on the tablet (update), nothing released
+## 2026-11-12 — ROM beta 1 live on the tablet (update) and released as a GitHub pre-release
 - **Live:** `InKognito-B1051CPro-beta1-20261112` (update from alpha 7, only system_b written). Modules eink-compat
   0.1.55, launcher3 0.2.7, heliboard 0.2.1 (all three with updateJson), icons 0.1.9-rom1, gapps suw3; E-Ink Control
   0.15.24. Verified after the boot: 7 modules / 0 failed, 8 apps updated without a Play Protect dialog, Phone and
   Messaging hidden, new keyboard and Calendar icons, status in `persist.debug.inkognito.status`, 0 debugfs denials.
-- **Built:** `release/InKognito-B1051CPro-beta1-20261112/` (gapps zip c3f30e3c, nogapps 9ab736eb; system.img 79350e55 /
+- **Built:** `release/InKognito-B1051CPro-beta1-20261112/` (gapps zip 4306e95b, nogapps cb046d06; system.img 79350e55 /
   7b5e6888; unit + cli + sim 115/115). Drafts: `release/DIST-InKognito-B1051CPro-beta1-20261112/`.
 - **Icon pack / icons module:** the ones shipped in alpha 2..7 were built from the developer's tablet. beta 1 ships a
   ROM pack (`build-iconpack.py --rom`) and a ROM variant of the icons module; `build-rom.py payload` refuses a payload
-  the private scanner flags. The public alpha 6 release was deleted on 2026-11-12 (owner); no release is public now.
+  the private scanner flags. The public alpha 6 release was deleted on 2026-11-12 (owner).
+- **Released:** beta 1 as a GitHub pre-release (tag `beta1-20261112`; owner's decision, without waiting for the second
+  clean install: a fresh install of beta 1 has not been run on a tablet). Assets: the two zips + .sha256, the three
+  module zips the update links point to, the HeliBoard 4.2 source archive. XDA text ready, posted by the owner.
 - **Open:** docs/BETA1-FINDINGS.md (second clean install, owner tests, publishing beta 1; cold light maximum and
   Gboard handwriting deferred by the owner).
 

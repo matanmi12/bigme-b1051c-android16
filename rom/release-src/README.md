@@ -8,10 +8,12 @@ generic Android image is missing on this panel: e-ink refresh modes, color handl
 front light control and the magnetic cover. It also comes with a reading-first setup: KOReader, a simple
 launcher and Google Play (or, if you prefer, no Google at all).
 
-> **This is alpha 6** (`InKognito-B1051CPro-alpha6-20261110`), an early test build.
-> It was built and checked offline, and the installer was tested against a simulated tablet. Updating was run once
-> on a real tablet; at release time a full install and its first boot had **not yet been run on a tablet**. The installer always backs up first; only
-> install it if you are comfortable going back with that backup. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+> **This is beta 1** (`InKognito-B1051CPro-beta1-20261112`), a test build.
+> A full install, its first start and going back to stock were run on a real tablet (alpha 6, 2026-11-11), and
+> what that run found is fixed here. This build itself was installed on a real tablet as an update
+> (2026-11-12). A fresh install of this build and the image without Google have **not yet been run on a
+> tablet**. The installer always backs up first; only install it if you are comfortable
+> going back with that backup. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
 
 ---
 
@@ -35,6 +37,8 @@ launcher and Google Play (or, if you prefer, no Google at all).
 - A refresh button in the navigation bar.
 - A shutdown screen with the animated InKognito badge.
 - Dark theme sync: the wallpaper and the keyboard follow Android's Dark theme.
+- A refresh mode of its own for the keyboard: Fast while you type, A2 for the swipe trail, and a cleanup of the
+  keyboard area after a pause.
 - KOReader bridge: KOReader works together with E-Ink Control.
 
 ### Look and feel
@@ -42,8 +46,18 @@ launcher and Google Play (or, if you prefer, no Google at all).
   sliders right in the shade.
 - **Lawnchair 15 Beta 3** as the home screen, with the InKognito icon pack (Bigme-style icons),
   a transparent navigation row on the home screen and spray-paint style navigation buttons.
-- A patched Launcher3QuickStep with a Recents (stash) fix.
+- A patched Launcher3QuickStep with a Recents (stash) fix and a **Clear all** button that is there as soon as
+  Recents opens, next to Screenshot and Split screen.
 - Boot animation (light and dark), the Rubik system font, and Dark theme with one switch.
+- The tablet identifies itself as **InKognito B1051C Pro** (USB, About tablet, Bluetooth, your Google device
+  list).
+
+### Keyboard
+- **HeliBoard 4.2**, an open-source keyboard without internet permission, with an e-ink look: white keys with a
+  black outline, no key pop-ups, light and dark.
+- **Swipe typing** in the download with Google (it uses Google's swipe library from MindTheGapps).
+- It follows your system languages. A Hebrew dictionary is included (HeliBoard has none built in).
+- Handwriting is not part of it: install Gboard from the Play Store if you want it.
 
 ### Apps and services
 - **KOReader 2026.07.1** with Bigme e-ink patches, plus the derainbowify and ZenOS UI plugins.
@@ -99,17 +113,22 @@ vendor, dtbo, lk, preloader, tee, seccfg, nvram, waveform or any other partition
 
 ## Quick start
 
-Full step-by-step instructions are in **[INSTALL.md](INSTALL.md)**. In short:
+The ten-step quick start with what you should see after each step, and the full instructions, are in
+**[INSTALL.md](INSTALL.md)**. In short:
 
 1. Unlock the bootloader. Install Python, mtkclient and platform-tools.
-2. Turn on **USB debugging** on the tablet, connect it, charge it to at least 50%.
+2. Turn on **USB debugging** on the tablet. Bigme's settings hide the Build number; the free app Activity
+   Launcher (F-Droid) opens that screen. Connect the tablet and charge it to at least 50%.
 3. Unzip the download and run the installer from that folder. Try a dry run first; it only prints what
    would happen:
    - macOS / Linux: `bash flash-inkognito.sh --dry-run`, then `bash flash-inkognito.sh`
    - Windows: `flash-inkognito.bat --dry-run`, then `flash-inkognito.bat`
-4. The installer backs up (about 12.5 GB), checks everything, shows a summary: type `FLASH` to start.
-5. Wait about 5 minutes. The tablet **restarts once by itself** during the first start, then shows setup.
-6. After setup, **InKognito Setup** opens once; then turn **USB debugging off** (see [KNOWN-ISSUES.md](KNOWN-ISSUES.md)).
+4. The installer backs up (about 12.5 GB, with a progress line), checks everything, shows a summary: type
+   `FLASH` to start.
+5. If the screen stays dark afterwards, hold power for 3 to 5 seconds. Wait about 5 minutes. The tablet
+   **restarts once by itself** during the first start, then shows setup.
+6. After setup, **InKognito Setup** opens once. Then **restart the tablet once** and turn **USB debugging off**
+   (see [KNOWN-ISSUES.md](KNOWN-ISSUES.md)).
 
 Later: `update` installs a newer release and keeps your data; `restore-stock --backup <folder>` goes back to
 stock.

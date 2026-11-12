@@ -12,7 +12,7 @@ Post as the public handle matanmi12 only.
 Android 16 for the Bigme B1051C Pro - beta 1
 [/CENTER]
 
-[QUOTE][B]Beta release.[/B] A full install, its first start, updating and going back to stock have all been run on a real tablet (the full install and restore-stock with alpha 6 on 2026-11-11; this release fixes what that run found). The image [B]without Google has not yet been run on a tablet[/B]. The installer always backs up first; only install it if you are comfortable going back with that backup. Read the disclaimer at the end of this post.[/QUOTE]
+[QUOTE][B]Beta release.[/B] A full install, its first start and going back to stock were run on a real tablet with alpha 6 (2026-11-11). This release fixes what that run found and was itself installed on a real tablet as an update (2026-11-12). [B]A fresh install of this release and the image without Google have not yet been run on a tablet.[/B] The installer always backs up first; only install it if you are comfortable going back with that backup. Read the disclaimer at the end of this post.[/QUOTE]
 
 [SIZE=5][B]What is InKognito?[/B][/SIZE]
 InKognito is a custom Android 16 build for the Bigme B1051C Pro, the 10.3" Kaleido color e-ink tablet (MediaTek MT6877, Wi-Fi only). It runs the TrebleDroid Android 16 GSI and adds the e-ink layer a generic image is missing on this panel: refresh modes, color handling, pen and touch tuning, front light control and the magnetic cover. On top of that you get a reading-first setup with KOReader, Lawnchair, an e-ink styled keyboard and Google Play.
@@ -45,7 +45,7 @@ Bigme's kernel and vendor partition stay as they are, and nothing of Bigme's is 
 [B]Look and feel[/B]
 [LIST]
 [*]InKognito theme for the shade and Quick Settings (light and dark), with cold/warm light sliders in the shade
-[*]Lawnchair 15 Beta 3 as home, InKognito icon pack (Bigme-style icons), transparent navigation row on the home screen, spray-paint navigation buttons
+[*]Lawnchair 15 Beta 3 as home, InKognito icon pack (Bigme-style icons, with our own for the keyboard and Calendar), transparent navigation row on the home screen, spray-paint navigation buttons
 [*]Patched Launcher3QuickStep: Recents stash fix, and a "Clear all" button that is there as soon as Recents opens
 [*]Boot animation (light and dark), Rubik system font, Dark theme with one switch
 [*]The tablet identifies itself as "InKognito B1051C Pro" (USB, About tablet, Bluetooth)
@@ -62,7 +62,8 @@ Bigme's kernel and vendor partition stay as they are, and nothing of Bigme's is 
 [*]KOReader 2026.07.1 with Bigme e-ink patches, derainbowify and ZenOS UI plugins
 [*]MindTheGapps 16 core (Play services, Play Store, Google Services Framework) and Google Setup Wizard
 [*]Magisk 30.7 (root)
-[*]Tweaks for Wi-Fi only and no fingerprint sensor
+[*]Tweaks for Wi-Fi only and no fingerprint sensor; Phone and Messaging are switched off (no SIM slot), Contacts stays
+[*]Module updates through the Magisk app for the display, Launcher3 and keyboard modules (new, not yet run)
 [/LIST]
 Not included: other Google or Amazon apps (get them from the Play Store), and anything personal. The tablet starts fresh.
 
@@ -106,9 +107,9 @@ The installer never writes any partition other than boot, vbmeta, logo, system (
 
 [SIZE=5][B]Known issues[/B][/SIZE]
 [LIST]
-[*]Alpha. Not yet run on a tablet: the image without Google
+[*]Beta. Not yet run on a tablet: a fresh install of this release (updating to it has been), and the image without Google
 [*]The first start restarts once by itself (expected)
-[*]Restart once after setup (temporary): on the alpha 6 test install part of the display layer's permissions only loaded from the second start on. Alpha 7 fixes this, but the fix is not yet confirmed on a second clean install
+[*]Restart once after setup (temporary): on the alpha 6 test install part of the display layer's permissions only loaded from the second start on. This release fixes that, but the fix is not yet confirmed on a second clean install
 [*]If something asks for root in the first minute after the first start, a "Magisk needs an internet connection" message can appear. Close it; nothing needs to be downloaded
 [*]A root request while the screen is off is denied after 10 seconds. Ask again with the screen on
 [*]Keyboard: swipe typing only in the download with Google; no handwriting (install Gboard); no word suggestions in fields that switch them off, such as the Settings search field

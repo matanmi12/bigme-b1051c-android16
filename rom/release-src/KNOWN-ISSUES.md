@@ -6,10 +6,11 @@ Release `InKognito-B1051CPro-beta1-20261112`. This list will change as testers r
 
 - **This is a beta.** A full install (with the data erase), its first start with Google setup and InKognito
   Setup, and `restore-stock` were run on a real tablet with alpha 6 (the developer's tablet, 2026-11-11). The
-  problems that run found are fixed in this release. `update` has run on a real tablet with alpha 5, alpha 6
-  and alpha 7 (the build before this one; it was not published, and beta 1 is alpha 7 plus the changes listed
-  in CHANGELOG.md). The fix for the first start of a fresh install has not been confirmed by a second clean
-  install yet, which is why the restart after setup is still asked for. The installer always backs up first; keep that backup.
+  problems that run found are fixed in this release. `update` has run on a real tablet with alpha 5, alpha 6,
+  alpha 7 (not published) and this release (beta 1, 2026-11-12). **A fresh install of this release has not
+  been run on a tablet yet.** That includes the fix for the first start of a fresh install, which is why the
+  restart after setup is still asked for, and the new first-start steps (keyboard, hidden Phone and
+  Messaging). The installer always backs up first; keep that backup.
 - **Not yet run on a tablet:** the image without Google (`system-nogapps.img`, Android's own setup instead of
   Google's), and a tablet whose bootloader is already stuck on the hidden dm-verity warning (see "Hidden
   power-off warning" below).

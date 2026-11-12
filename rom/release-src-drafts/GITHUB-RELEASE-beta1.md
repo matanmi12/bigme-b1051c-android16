@@ -12,7 +12,8 @@
 modes, color, front light, pen, touch and the magnetic cover, plus a reading-first setup (KOReader, Lawnchair).
 
 > **Beta.** A full install (which erases the tablet), its first start and `restore-stock` were run on a real
-> tablet with alpha 6 on 2026-11-11, and `update` with alpha 5, alpha 6 and alpha 7 (not published). This release fixes what the full
+> tablet with alpha 6 on 2026-11-11, and `update` with alpha 5, alpha 6, alpha 7 (not published) and this
+> release (2026-11-12). **A fresh install of this release has not been run on a tablet yet.** This release fixes what the full
 > install found. The image **without Google has not yet been run on a tablet**. The installer always makes a
 > backup first. Keep it.
 
