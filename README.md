@@ -1,5 +1,7 @@
 # Bigme B1051C Pro → Android 16 (TrebleDroid GSI) with a working colour e-ink layer
 
+<a href="https://buymeacoffee.com/miningpharm"><img src=".github/buy-me-a-coffee.png" alt="Buy Me a Coffee: Fuel my next project" width="260"></a>
+
 Android 16 on the **Bigme B1051C Pro** (MediaTek MT6877, 10.3" Kaleido 3 colour e-ink, stock firmware B1051C_R_4.9.0),
 using the TrebleDroid A16 arm64 GSI on the stock vendor and kernel. The repo holds everything needed to make the
 panel usable and to bring back the stock ROM's e-ink features:
