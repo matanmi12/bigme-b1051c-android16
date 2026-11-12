@@ -287,14 +287,35 @@ public class AppProfileService extends AccessibilityService {
         return keyboards.contains(pkg);
     }
 
-    /** Keyboard window shown/hidden -> Fast while typing (decision 2.3 B). */
+    /** Keyboard window shown/hidden -> Fast while typing (decision 2.3 B), and its area for the shim's keyboard modes. */
     private void checkIme() {
         boolean ime = false;
+        android.graphics.Rect b = new android.graphics.Rect();
         try {
             for (android.view.accessibility.AccessibilityWindowInfo w : getWindows())
-                if (w.getType() == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD) { ime = true; break; }
+                if (w.getType() == android.view.accessibility.AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
+                    ime = true;
+                    w.getBoundsInScreen(b);
+                    break;
+                }
         } catch (RuntimeException ignored) {}
         Profiles.setIme(this, ime);
+        publishImeRect(ime ? b : null);
+    }
+
+    private String imeRect = "";
+
+    /** The keyboard window for the HWC shim (owner 2026-11-11, ALPHA7-PLAN 3.4): "l,t,r,b,rotation" in display pixels,
+     *  "0" when no keyboard is shown. The shim redraws keyboard-only changes as that area alone (Fast while typing,
+     *  A2 while a swipe trail runs) and cleans the area once after a pause. Sent only when it changes. */
+    private void publishImeRect(android.graphics.Rect b) {
+        int rot = 0;
+        try { rot = getSystemService(android.view.WindowManager.class).getDefaultDisplay().getRotation(); } catch (RuntimeException ignored) {}
+        String v = b == null || b.isEmpty() ? "0" : b.left + "," + b.top + "," + b.right + "," + b.bottom + "," + rot;
+        if (v.equals(imeRect)) return;
+        imeRect = v;
+        android.util.Log.d("einkctl", "keyboard area " + v);
+        Root.async("setprop vendor.debug.hwc.shim.ime_rect " + v);
     }
 
     @Override public void onInterrupt() {}

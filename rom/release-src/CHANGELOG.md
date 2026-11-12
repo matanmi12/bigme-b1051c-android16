@@ -1,5 +1,88 @@
 # Changelog
 
+## beta 1 (`InKognito-B1051CPro-beta1-20261112`), 2026-11-12
+
+**Status: in preparation, not released yet.** The first beta. It is alpha 7 (below; alpha 7 was run as an update on a real tablet on 2026-11-11
+but never published) plus the changes here. Coming from alpha 6 you get both sections. This build itself had
+not been run on a tablet when it was packaged. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+
+New:
+
+- **Phone and Messaging are switched off.** The tablet has no SIM slot, so the dialer and the SMS app no longer
+  show in the app list. First install, and once on an update; Settings › Apps › See all apps brings them back.
+  Contacts stays.
+- **Icons for the keyboard and Calendar** in the style of the rest of the icon set (Settings, Recents and, with
+  the icon pack, the home screen).
+- **Module updates through the Magisk app.** The display module (eink-compat), the Launcher3 module and the
+  keyboard module carry an update link. When a newer version of one of them is published, the Magisk app offers
+  it, so a fix can arrive without a full release. Nothing is downloaded unless you accept the update. This has
+  not been run on a tablet yet.
+- **The result of the first-start setup without root, for good:** besides Android's log, the last result is kept
+  in a property that survives restarts: `adb shell getprop persist.debug.inkognito.status`.
+
+Fixed:
+
+- **Updating without a Play Protect question** (found by the alpha 7 update): see the alpha 7 section.
+
+Display module eink-compat 0.1.55, Launcher3 module 0.2.7, keyboard module 0.2.1 (the same code as in alpha 7,
+with the update link); icons module 0.1.9; E-Ink Control 0.15.24.
+
+## alpha 7 (`InKognito-B1051CPro-alpha7-20261111`), 2026-11-11 (not published)
+
+**Status:** a full install, its first start and `restore-stock` were run on a real tablet for the first time
+(alpha 6, 2026-11-11). This release fixes what that run found and adds a new keyboard and a Recents button. The
+image without Google has still not been run on a tablet. See [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
+
+Fixed (found by the first full install):
+
+- **Display permissions on a fresh install:** after the data erase, the security rules of the InKognito modules
+  were not loaded on the first start with setup, only from the next restart on. Until then the display layer
+  ran with some operations blocked. The first start now loads them itself. Until this is confirmed on a second
+  clean install, restart once after setup (INSTALL.md, section 9).
+- **App icons in the navigation row:** on the first start both launchers filled a dock of their own, and the
+  icons showed behind the Back button. Both docks now start empty. First install only; your own layout is never
+  touched.
+- **"WebView Browser Test"**, a test app of the base system, no longer shows in the app list.
+- **Screen timeout:** the 10-minute default now applies. Before, the screen went off after two minutes.
+- **Updating without a Play Protect question:** while an update installs InKognito's own apps, Google Play
+  Protect's check of computer-installed apps is paused and put back right after, as on a first install. Before,
+  a "send the app for a security check?" dialog could hold the update until someone answered it.
+- **Checking the first start without root:** every finished setup step is also written to Android's log
+  (`adb logcat -d -s InKognito`).
+
+New:
+
+- **Device name: InKognito B1051C Pro.** USB, Settings › About tablet, Bluetooth and your Google device list
+  showed "TrebleDroid vanilla". The build number now reads
+  "InKognito alpha 7 (TrebleDroid 16, BP2A.250605.031.A3)". On an update, the device name and the Bluetooth
+  name change only if you had not renamed them.
+- **"Clear all" in Recents:** a button next to Screenshot and Split screen that is there as soon as Recents
+  opens. Before, Clear all was only at the far end of the list.
+- **New keyboard: HeliBoard 4.2** instead of Android's own keyboard. Open source, no internet permission.
+  - An e-ink look: white keys with a black outline, a short bar under a pressed key instead of a pop-up, light
+    and dark (it follows Dark theme).
+  - **Swipe typing** in the download with Google.
+  - Follows your system languages; a Hebrew dictionary is included.
+  - Word suggestions without automatic replacement, key sound on, clipboard history off.
+  - Handwriting is not included: install Gboard from the Play Store.
+  - On an update, the keyboard changes only if your default was still Android's own keyboard.
+- **A refresh mode of its own for the keyboard:** Fast while you type, A2 for the swipe trail (finger or pen),
+  and one cleanup of the keyboard area after a pause. While you swipe in an app that updates results as you
+  go, only the keyboard is refreshed; the rest of the screen follows once when you stop. The modes and the
+  pause are under "Keyboard" in E-Ink Control.
+- **Color contrast: Medium** by default (Settings › Accessibility › Color contrast). First install only.
+
+Installer:
+
+- **Progress line** during every long read and write (backup, system write, readback, `restore-stock`): the
+  partition, percent, size done, speed and time left. Before, the screen showed nothing for many minutes.
+- **Closing message:** restart once after setup; allow USB debugging when the tablet asks, and turn it off at
+  the end.
+- **INSTALL.md:** a ten-step quick start at the top; how to reach Developer options on Bigme's stock firmware
+  (its settings hide the Build number); a troubleshooting entry for a tablet that stays off after the install.
+
+E-Ink Control 0.15.24, display module eink-compat 0.1.54, Launcher3 module 0.2.6, new module b1051c-heliboard.
+
 ## alpha 6 (`InKognito-B1051CPro-alpha6-20261110`), 2026-11-10
 
 **Status:** built and checked offline like alpha 5. `update` was run once on a real tablet (alpha 5 over

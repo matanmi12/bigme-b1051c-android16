@@ -1,0 +1,7 @@
+id=b1051c-heliboard
+name=HeliBoard keyboard (InKognito)
+version=0.2.1
+versionCode=4
+author=matanmi12
+description=HeliBoard 4.2 (GPL-3.0, unmodified, signed by its developer; no internet permission) as a system app, plus the InKognito key look (outlined keys, RRO org.b1051c.overlay.heliboard). As a system app it can load the system gesture-typing library, which the Google apps module (b1051c-gapps) carries; without that module there is no swipe typing unless you load a library in HeliBoard's settings.
+updateJson=https://raw.githubusercontent.com/matanmi12/bigme-b1051c-android16/main/rom/updates/b1051c-heliboard.json

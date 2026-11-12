@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark theme pressed key: the same key with a short white bar near its bottom edge. No fill change,
+     so the e-ink panel only redraws a thin strip. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ink_key_normal" />
+    <item android:gravity="bottom|center_horizontal" android:bottom="7dp" android:width="22dp" android:height="2.5dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFFFF" />
+            <corners android:radius="1dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,5 +1,5 @@
 {
- "version": "InKognito-B1051CPro-alpha6-20261110",
+ "version": "InKognito-B1051CPro-beta1-20261112",
  "entries": [
   {
    "dest": "magisk/magisk",
@@ -62,14 +62,14 @@
    "note": "= live /data/adb/magisk/stub.apk"
   },
   {
-   "dest": "modules/10-b1051c-eink-compat-v0.1.49.zip",
-   "src": "work/module/b1051c-eink-compat-v0.1.49.zip",
-   "sha256": "29b7f225590982fe"
+   "dest": "modules/10-b1051c-eink-compat-v0.1.55.zip",
+   "src": "work/module/b1051c-eink-compat-v0.1.55.zip",
+   "sha256": "beb8e17b829c2e25"
   },
   {
-   "dest": "modules/20-b1051c-launcher3-v0.2.5.zip",
-   "src": "work/module/b1051c-launcher3-v0.2.5.zip",
-   "sha256": "fa2a74b80dcbc66d"
+   "dest": "modules/20-b1051c-launcher3-v0.2.7.zip",
+   "src": "work/module/b1051c-launcher3-v0.2.7.zip",
+   "sha256": "0e681f248956d69a"
   },
   {
    "dest": "modules/30-b1051c-bootanim-v0.2.2-rom1.zip",
@@ -82,14 +82,21 @@
    "sha256": "ddcb9b82d7436272"
   },
   {
-   "dest": "modules/50-b1051c-icons-v0.1.8.zip",
-   "src": "work/icons-bigme/module/b1051c-icons-v0.1.8.zip",
-   "sha256": "12d51fa8f69142bd"
+   "dest": "modules/50-b1051c-icons-v0.1.9.zip",
+   "src": "work/icons-bigme/module/b1051c-icons-v0.1.9.zip",
+   "sha256": "cd9be30c208424ea"
   },
   {
-   "dest": "modules/60-b1051c-gapps-suw2.zip",
-   "src": "work/rom/modules/b1051c-gapps-suw2.zip",
-   "sha256": "54a01655d2da7a23"
+   "dest": "modules/60-b1051c-gapps-suw3.zip",
+   "src": "work/rom/modules/b1051c-gapps-suw3.zip",
+   "note": "suw2 + MindTheGapps libjni_latinimegoogle.so (gesture typing library for HeliBoard); left out of the no-Google image",
+   "sha256": "8713bbf7d6715146"
+  },
+  {
+   "dest": "modules/70-b1051c-heliboard-v0.2.1.zip",
+   "src": "work/module/b1051c-heliboard-v0.2.1.zip",
+   "sha256": "c92d27c63b6c2f13",
+   "note": "HeliBoard 4.2 (unmodified upstream APK 69b2b2fb, GPL-3.0) as a system app + RRO org.b1051c.overlay.heliboard 0.1.1 (971b1c9a)"
   },
   {
    "dest": "apps/com.topjohnwu.magisk.apk",
@@ -98,8 +105,8 @@
   },
   {
    "dest": "apps/org.b1051c.einkctl.apk",
-   "src": "work/app/einkctl-0.15.22.apk",
-   "sha256": "17f940117d4b1dd9"
+   "src": "work/app/einkctl-0.15.24.apk",
+   "sha256": "9e110045a3a83185"
   },
   {
    "dest": "apps/org.b1051c.einkui.apk",
@@ -169,6 +176,18 @@
    "dest": "defaults/lawnchair/preferences.preferences_pb",
    "src": "work/rom/defaults/apps/lawnchair/preferences.preferences_pb",
    "sha256": null
+  },
+  {
+   "dest": "defaults/heliboard/preferences.xml",
+   "src": "work/rom/defaults/apps/heliboard/preferences.xml",
+   "sha256": "cc5d6044bc91d7df",
+   "note": "HeliBoard shared prefs (InKognito light/dark colors, key borders, popup off, gesture typing); languages follow the system"
+  },
+  {
+   "dest": "defaults/heliboard/main_he.dict",
+   "src": "work/rom/defaults/apps/heliboard/main_he__experimental.dict",
+   "sha256": "150a376283d4b84f",
+   "note": "Hebrew dictionary, Codeberg Helium314/aosp-dictionaries (CC BY-SA 4.0), staged as files/dicts/he/main_user.dict"
   },
   {
    "dest": "defaults/koreader.tar",

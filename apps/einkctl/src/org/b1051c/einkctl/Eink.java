@@ -300,10 +300,18 @@ final class Eink {
     static final String[] NAV_NAMES = {"Fast", "Extreme", "A2 (black/white)", "Same as the app"},
             VIDEO_NAMES = {"Extreme", "Fast", "Same as the app"};
 
+    /** The keyboard area (owner 2026-11-11): typing, the swipe trail, one clean-up of the area after a pause. */
+    static final int[] IME_MODES = {178, 179, 16, 0}, IME_SWIPE_MODES = {16, 179, 178, 0};
+    static final String[] IME_NAMES = {"Fast", "Extreme", "A2 (black/white)", "Same as the app"},
+            IME_SWIPE_NAMES = {"A2 (black/white)", "Extreme", "Fast", "Same as typing"};
+
     static void applySystemModes(Context c) {
         SharedPreferences p = prefs(c);
         Root.async("setprop vendor.debug.hwc.shim.nav_mode " + p.getInt("nav_mode", 178)
-                + "; setprop vendor.debug.hwc.shim.video_mode " + p.getInt("video_mode", 179));
+                + "; setprop vendor.debug.hwc.shim.video_mode " + p.getInt("video_mode", 179)
+                + "; setprop vendor.debug.hwc.shim.ime_mode " + p.getInt("ime_mode", 178)
+                + "; setprop vendor.debug.hwc.shim.ime_swipe_mode " + p.getInt("ime_swipe_mode", 16)
+                + "; setprop vendor.debug.hwc.shim.ime_clean_ms " + (p.getBoolean("ime_clean", true) ? 1500 : 0));
     }
 
     static void applyAll(Context c) {

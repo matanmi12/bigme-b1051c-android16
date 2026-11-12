@@ -331,6 +331,8 @@ struct LayerState {
     buffer_handle_t damaged_for;   // boot_damage: buffer we last forced full damage for
     uint64_t chg_seq;              // g_layer_seq when its picture or geometry last changed
     uint64_t buf_ms;               // when it last got a new buffer (a playing video)
+    hwc_rect_t dmg;                // SF's surface damage for dmg_buf (union, buffer pixels; full = the whole crop)
+    buffer_handle_t dmg_buf;       // the buffer that damage belongs to (the keyboard area classifies by it)
 };
 #define MAX_LAYERS 96
 static LayerState g_layers[MAX_LAYERS];
@@ -347,6 +349,27 @@ static uint64_t g_layer_seq, g_commit_layer_seq, g_layer_gone_seq;
 static hwc_rect_t g_gone_box;      // union of the layers removed since the last vendor commit (empty: right <= left)
 static int g_nav_mode = 178, g_video_mode = 179;
 static uint64_t g_video_ms;        // atomic: last commit with a playing video
+// Keyboard area (owner 2026-11-11, ALPHA7-PLAN 3.4). E-Ink Control publishes the keyboard window as
+// vendor.debug.hwc.shim.ime_rect "l,t,r,b,rotation" in display pixels ("0" = no keyboard; rotation 0 only). A commit
+// where only layers inside that area changed goes out as the area alone, in
+//   ime_mode N        178 Fast (default) while typing; 0 = the app's mode
+//   ime_swipe_mode N  0x10 A2 (default) from the 3rd keyboard-only commit in a row, each closer than ime_swipe_gap_ms
+//                     (default 150) to the one before: a swipe trail is being drawn; 0 = ime_mode
+// and every commit that touched the area arms one GC16 of that area ime_clean_ms (default 1500, 0 = off) after the
+// last of them, once the screen is quiet (the settled full refresh helper sends it).
+static pthread_mutex_t g_ime_lock = PTHREAD_MUTEX_INITIALIZER;
+static int g_ime_l, g_ime_t, g_ime_r, g_ime_b, g_ime_ok;   // display pixels of the keyboard window (under g_ime_lock)
+static int g_ime_mode = 178, g_ime_swipe_mode = 0x10, g_ime_swipe_gap = 150, g_ime_clean_ms = 1500;
+static uint64_t g_ime_last_ms;     // under g_ime_lock: the last commit that touched the keyboard area
+static hwc_rect_t g_ime_clean_rect;   // under g_ime_lock: the area to clean
+static int g_ime_clean;            // atomic: a clean-up of g_ime_clean_rect is due
+// While a swipe runs in an app that changes the screen too (live search results), only the keyboard area goes out;
+// the rest waits until the swipe pauses for ime_rest_ms (default 150) and then goes out once in the app's mode.
+static int g_ime_rest_ms = 150;
+static int g_ime_rest;             // atomic: the rest of the screen is due (g_ime_rest_rect, g_ime_rest_mode)
+static hwc_rect_t g_ime_rest_rect; // under g_ime_lock
+static uint32_t g_ime_rest_mode;   // under g_ime_lock
+static int g_ime_rest_dither;      // under g_ime_lock: the app's own dither for that update
 
 struct Counters {
     uint64_t validate, present, set_client_target, create_layer, destroy_layer;
@@ -486,6 +509,20 @@ static void refresh_knobs() {
     g_scroll_mode = prop_int("vendor.debug.hwc.shim.scroll", 178);
     g_scroll_clean = prop_int("vendor.debug.hwc.shim.scroll_clean", 1);
     g_nav_mode = prop_int("vendor.debug.hwc.shim.nav_mode", 178);
+    g_ime_mode = prop_int("vendor.debug.hwc.shim.ime_mode", 178);
+    g_ime_swipe_mode = prop_int("vendor.debug.hwc.shim.ime_swipe_mode", 0x10);
+    g_ime_swipe_gap = clampi(prop_int("vendor.debug.hwc.shim.ime_swipe_gap_ms", 150), 20, 1000);
+    g_ime_clean_ms = clampi(prop_int("vendor.debug.hwc.shim.ime_clean_ms", 1500), 0, 10000);
+    g_ime_rest_ms = clampi(prop_int("vendor.debug.hwc.shim.ime_rest_ms", 150), 30, 2000);
+    {
+        char v[PROP_VALUE_MAX] = {0};
+        int l = 0, t = 0, r = 0, b = 0, rot = -1;
+        bool ok = __system_property_get("vendor.debug.hwc.shim.ime_rect", v) > 0
+                  && sscanf(v, "%d,%d,%d,%d,%d", &l, &t, &r, &b, &rot) == 5 && rot == 0 && r > l && b > t;
+        pthread_mutex_lock(&g_ime_lock);
+        g_ime_ok = ok; g_ime_l = l; g_ime_t = t; g_ime_r = r; g_ime_b = b;
+        pthread_mutex_unlock(&g_ime_lock);
+    }
     g_video_mode = prop_int("vendor.debug.hwc.shim.video_mode", 179);
     if (g_cp_want.sat < 0) g_cp_want.sat = 0; if (g_cp_want.sat > 100) g_cp_want.sat = 100;
     if (g_cp_want.con < 0) g_cp_want.con = 0; if (g_cp_want.con > 100) g_cp_want.con = 100;
@@ -1622,6 +1659,10 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
     // Navigation strip / video (see g_nav_mode): what changed since the last vendor commit, by layer
     bool nav_only = false, nav_split = false, video = false;
     hwc_rect_t nav = {0, 0, 0, 0};
+    bool ime_only = false;               // see g_ime_mode
+    bool ime_split = false;              // a swipe while the app changes too: keyboard area + the rest as 2 updates
+    hwc_rect_t ime = {0, 0, 0, 0};       // the keyboard area in panel pixels (empty = none)
+    uint32_t ime_mode = 0;
     int scr_w = 2480, scr_h = 1860;
     if ((g_nav_mode > 0 || g_video_mode > 0) && (mod.mode & 0xffff) != 4) {
         uint64_t ms = now_ns() / 1000000;
@@ -1666,6 +1707,50 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
         if (g_layer_gone_seq > since) {
             if (nav_i >= 0 && g_gone_box.right > g_gone_box.left) classify(g_gone_box); else mixed = true;
         }
+        // Keyboard area: panel x = display y, panel y = panel height - display x (rotation 0; as the nav strip).
+        bool ime_any = false, ime_out = false;
+        pthread_mutex_lock(&g_ime_lock);
+        if (g_ime_ok) { ime.left = g_ime_t; ime.right = g_ime_b; ime.top = scr_h - g_ime_r; ime.bottom = scr_h - g_ime_l; }
+        pthread_mutex_unlock(&g_ime_lock);
+        if (ime.left < 0) ime.left = 0;
+        if (ime.top < 0) ime.top = 0;
+        if (ime.right > scr_w) ime.right = scr_w;
+        if (ime.bottom > scr_h) ime.bottom = scr_h;
+        if (ime.right - ime.left >= 64 && ime.bottom - ime.top >= 64) {
+            const int m = 8;   // a layer may overhang the window by a few pixels (rounding, shadows)
+            auto touch = [&](const hwc_rect_t& f) {
+                bool apart = f.right <= ime.left || f.left >= ime.right || f.bottom <= ime.top || f.top >= ime.bottom;
+                bool within = f.left >= ime.left - m && f.right <= ime.right + m && f.top >= ime.top - m && f.bottom <= ime.bottom + m;
+                if (!apart) ime_any = true;
+                if (!within) ime_out = true;
+            };
+            // A window's layer can be far larger than what it draws (the keyboard window covers the screen below the
+            // status bar, transparent above the keys): judge its new buffer by SF's damage in it, mapped to the panel
+            // (no transform only; anything else, a geometry change or no damage known, by its frame).
+            auto changed_box = [](const LayerState& l) -> hwc_rect_t {
+                const hwc_rect_t& f = l.frame;
+                float cw = l.crop.right - l.crop.left, ch = l.crop.bottom - l.crop.top;
+                const hwc_rect_t& d = l.dmg;
+                if (l.transform != 0 || l.dmg_buf != l.buffer || !l.buffer || cw <= 0 || ch <= 0
+                    || d.right <= d.left || d.bottom <= d.top) return f;
+                float sx = (f.right - f.left) / cw, sy = (f.bottom - f.top) / ch;
+                hwc_rect_t r;
+                r.left = f.left + (int32_t)floorf((d.left - l.crop.left) * sx);
+                r.top = f.top + (int32_t)floorf((d.top - l.crop.top) * sy);
+                r.right = f.left + (int32_t)ceilf((d.right - l.crop.left) * sx);
+                r.bottom = f.top + (int32_t)ceilf((d.bottom - l.crop.top) * sy);
+                if (r.left < f.left) r.left = f.left;
+                if (r.top < f.top) r.top = f.top;
+                if (r.right > f.right) r.right = f.right;
+                if (r.bottom > f.bottom) r.bottom = f.bottom;
+                return r.right > r.left && r.bottom > r.top ? r : f;
+            };
+            for (int i = 0; i < MAX_LAYERS; i++)
+                if (g_layers[i].used && g_layers[i].chg_seq > since) touch(changed_box(g_layers[i]));
+            if (g_layer_gone_seq > since && g_gone_box.right > g_gone_box.left) touch(g_gone_box);
+        } else {
+            ime.left = ime.top = ime.right = ime.bottom = 0;
+        }
         g_gone_box.left = g_gone_box.top = g_gone_box.right = g_gone_box.bottom = 0;
         if (nav_chg && mixed) {
             static Limiter LW = {0, 20, 200};
@@ -1674,6 +1759,32 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
         pthread_mutex_unlock(&g_lock);
         nav_only = g_nav_mode > 0 && nav_i >= 0 && nav_chg && !mixed && !video && !scrolling;
         nav_split = nav_only && other;
+        if (ime_any && !video) {
+            // a key, the trail or the suggestion strip changed: clean the area once typing pauses
+            pthread_mutex_lock(&g_ime_lock);
+            g_ime_last_ms = ms;
+            g_ime_clean_rect = ime;
+            pthread_mutex_unlock(&g_ime_lock);
+            if (g_ime_clean_ms > 0) __atomic_store_n(&g_ime_clean, 1, __ATOMIC_RELEASE);
+        }
+        static uint64_t s_ime_prev_ms;
+        static int s_ime_burst;
+        if (ime_any && !video) {
+            // A swipe (gesture typing): einkd reports the drag as a scroll, or the keyboard area changes in a quick
+            // run of commits (the trail). Apps that update while you swipe (live search results) change the screen
+            // too: then the keyboard area and the rest go out as two updates, the rest in the app's mode.
+            s_ime_burst = ms - s_ime_prev_ms <= (uint64_t)g_ime_swipe_gap ? s_ime_burst + 1 : 1;
+            s_ime_prev_ms = ms;
+            bool swipe = (scrolling && !ime_out) || s_ime_burst >= 3;
+            if (!ime_out) {
+                ime_mode = swipe && g_ime_swipe_mode > 0 ? (uint32_t)g_ime_swipe_mode : (uint32_t)(g_ime_mode > 0 ? g_ime_mode : 0);
+                ime_only = ime_mode > 0;
+            } else if (swipe && g_ime_swipe_mode > 0 && !scrolling) {
+                ime_mode = (uint32_t)g_ime_swipe_mode;
+                ime_only = ime_split = true;
+            }
+            if (ime_only) { nav_only = false; nav_split = false; }
+        }
         if (video) {
             static uint64_t s_video_said;
             if (ms - __atomic_load_n(&g_video_ms, __ATOMIC_ACQUIRE) > 5000 && ms - s_video_said > 5000) {
@@ -1685,7 +1796,8 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
             rewritten = true;
         }
     }
-    if ((scrolling || video) && ((mod.mode & 0xffff) == 178 || (mod.mode & 0xffff) == 179)) __atomic_store_n(&g_scroll_fast, 1, __ATOMIC_RELEASE);
+    // (a swipe in the keyboard area is no scroll to clean: the keyboard area's own clean-up follows it)
+    if ((scrolling || video) && !ime_only && ((mod.mode & 0xffff) == 178 || (mod.mode & 0xffff) == 179)) __atomic_store_n(&g_scroll_fast, 1, __ATOMIC_RELEASE);
     // Regal requested but the HWC fell back to 177: commit 180 (dither and flag bits kept). Logged at the
     // normal rate, not as a rewrite, since it happens on every commit while Regal is on.
     bool regal = false;
@@ -1790,6 +1902,39 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
         if (lim(LN)) LOGI("navigation strip: [%d,%d,%d,%d] as 0x%x%s", mod.left, mod.top, mod.right, mod.bottom, g_nav_mode,
                           nav_split ? ", the rest of the screen in the app's mode" : " alone");
     }
+    if (ime_split) {   // the rest of the screen: the app's mode, everything outside the keyboard band
+        rest = mod;
+        rest.left = 0; rest.top = 0; rest.right = scr_w - 1; rest.bottom = scr_h - 1;
+        if (ime.right >= scr_w && ime.left > 0) rest.right = ime.left - 1;          // the keyboard along the right edge
+        else if (ime.left <= 0 && ime.right < scr_w) rest.left = ime.right;         // left edge
+        else if (ime.bottom >= scr_h && ime.top > 0) rest.bottom = ime.top - 1;     // bottom
+        else if (ime.top <= 0 && ime.bottom < scr_h) rest.top = ime.bottom;         // top
+        else ime_split = false;                                                     // not a band: one update
+        if (!ime_split) {
+            ime_only = false;
+        } else {   // the rest waits for the swipe to pause (see g_ime_rest_ms); the panel is the trail's meanwhile
+            hwc_rect_t rr = {rest.left, rest.top, rest.right + 1, rest.bottom + 1};
+            pthread_mutex_lock(&g_ime_lock);
+            g_ime_rest_rect = rr;
+            g_ime_rest_mode = rest.mode & 0xffff;
+            g_ime_rest_dither = (int)rest.dither;
+            pthread_mutex_unlock(&g_ime_lock);
+            __atomic_store_n(&g_ime_rest, 1, __ATOMIC_RELEASE);
+        }
+    }
+    if (ime_only) {
+        mod.mode = (mod.mode & ~0xffffu) | ime_mode;
+        mod.dither = 0;
+        mod.left = ime.left;
+        mod.top = ime.top;
+        mod.right = ime.right - 1;
+        mod.bottom = ime.bottom - 1;
+        rewritten = true;
+        static Limiter LK = {0, 10, 200};
+        if (lim(LK)) LOGI("keyboard area: [%d,%d,%d,%d] as 0x%x%s%s%s", mod.left, mod.top, mod.right, mod.bottom, ime_mode,
+                          ime_mode == (uint32_t)g_ime_swipe_mode && ime_mode != (uint32_t)g_ime_mode ? " (swipe trail)" : "",
+                          scrolling ? ", einkd drag" : "", ime_split ? ", the rest of the screen after the swipe" : "");
+    }
     bool use_mod = rewritten || regal || colored || dith;
     if (use_mod) u = &mod;
     bool pv = take_preview();
@@ -1817,7 +1962,7 @@ static int hook_mtk_commit(const drm_eink_update* orig) {
 
 // Settled full refresh (see g_commit_lock above): re-send the last commit as GC16 (mode 4), or after a scroll in
 // the app's own mode (no flash). stage_mode = the mode whose colour stages the frame gets.
-static void recommit(const char* why, uint32_t stage_mode, uint32_t mode) {
+static void recommit(const char* why, uint32_t stage_mode, uint32_t mode, const hwc_rect_t* area = nullptr, int dither = -1) {
     pthread_mutex_lock(&g_commit_lock);
     if (__atomic_load_n(&g_display_off, __ATOMIC_ACQUIRE)) {   // the panel sleeps (sleep picture): nothing goes out
         pthread_mutex_unlock(&g_commit_lock);
@@ -1867,6 +2012,13 @@ static void recommit(const char* why, uint32_t stage_mode, uint32_t mode) {
     if ((mode != 4 || g_gc16_prep >= 1) && fast_last) u.dither = 0;   // the fast commit's 3 / 6 would be 1-bit
     u.mode = mode;
     u.left = 0; u.top = 0; u.right = (int32_t)u.stride - 1; u.bottom = (int32_t)u.height - 1;   // the last may be the nav strip
+    if (dither >= 0) u.dither = (uint32_t)dither;   // a deferred app update keeps the app's own dither
+    if (area && area->right > area->left && area->bottom > area->top) {   // one part of the screen (the keyboard area)
+        u.left = area->left > 0 ? area->left : 0;
+        u.top = area->top > 0 ? area->top : 0;
+        if (area->right - 1 < u.right) u.right = area->right - 1;
+        if (area->bottom - 1 < u.bottom) u.bottom = area->bottom - 1;
+    }
     uint64_t t0 = now_ns();
     int ret = real_mtk_commit(&u);
     uint64_t t1 = now_ns();
@@ -2181,6 +2333,32 @@ static void* gc16_thread(void*) {
                 uint32_t base = (uint32_t)prop_int("vendor.xrz.global_refresh_mode", 0) & 0xffff;
                 recommit("scroll end", base == 177 || base == 180 ? base : 178, (uint32_t)sp);
                 __atomic_store_n(&g_scroll_cleaned, 1, __ATOMIC_RELEASE);
+            }
+        }
+        if (__atomic_load_n(&g_ime_rest, __ATOMIC_ACQUIRE) && !__atomic_load_n(&g_display_off, __ATOMIC_ACQUIRE)
+            && !__atomic_load_n(&g_ink_session, __ATOMIC_ACQUIRE)) {
+            uint64_t last = __atomic_load_n(&g_last_commit_ms, __ATOMIC_ACQUIRE);
+            if (now - last >= (uint64_t)g_ime_rest_ms && __atomic_exchange_n(&g_ime_rest, 0, __ATOMIC_ACQ_REL)) {
+                pthread_mutex_lock(&g_ime_lock);
+                hwc_rect_t rr = g_ime_rest_rect;
+                uint32_t rm = g_ime_rest_mode ? g_ime_rest_mode : 178;
+                int rd = g_ime_rest_dither;
+                pthread_mutex_unlock(&g_ime_lock);
+                recommit("after the swipe", rm, rm, &rr, rd);
+            }
+        }
+        if (g_ime_clean_ms > 0 && __atomic_load_n(&g_ime_clean, __ATOMIC_ACQUIRE)
+            && !__atomic_load_n(&g_display_off, __ATOMIC_ACQUIRE) && !__atomic_load_n(&g_ink_session, __ATOMIC_ACQUIRE)) {
+            pthread_mutex_lock(&g_ime_lock);
+            uint64_t il = g_ime_last_ms;
+            hwc_rect_t ir = g_ime_clean_rect;
+            pthread_mutex_unlock(&g_ime_lock);
+            uint64_t quiet = (uint64_t)prop_int("vendor.debug.hwc.shim.gc16_quiet_ms", 350);
+            uint64_t last = __atomic_load_n(&g_last_commit_ms, __ATOMIC_ACQUIRE);
+            if (now - il >= (uint64_t)g_ime_clean_ms && now - last >= quiet
+                && __atomic_exchange_n(&g_ime_clean, 0, __ATOMIC_ACQ_REL)) {
+                uint32_t base = (uint32_t)prop_int("vendor.xrz.global_refresh_mode", 0) & 0xffff;
+                recommit("keyboard pause", base == 177 || base == 180 ? base : 178, 4, &ir);
             }
         }
         int r = prop_int("vendor.debug.hwc.shim.gc16_req", 0);
@@ -3069,6 +3247,21 @@ static int32_t hook_setLayerSurfaceDamage(hwc2_device_t* dev, hwc2_display_t dis
         whole = {(int32_t)l->crop.left, (int32_t)l->crop.top, (int32_t)ceilf(l->crop.right), (int32_t)ceilf(l->crop.bottom)};
     else if (l && l->buf.valid && l->buf.w > 0 && l->buf.h > 0)
         whole = {0, 0, l->buf.w, l->buf.h};
+    if (l) {   // what changed in this buffer: the keyboard area tells a key or a swipe trail from a popup above it
+        hwc_rect_t u = whole;
+        if (damage.numRects > 0 && damage.rects) {
+            u = damage.rects[0];
+            for (size_t i = 1; i < damage.numRects; i++) {
+                const hwc_rect_t& r = damage.rects[i];
+                if (r.left < u.left) u.left = r.left;
+                if (r.top < u.top) u.top = r.top;
+                if (r.right > u.right) u.right = r.right;
+                if (r.bottom > u.bottom) u.bottom = r.bottom;
+            }
+        }
+        l->dmg = u;
+        l->dmg_buf = l->buffer;
+    }
     pthread_mutex_unlock(&g_lock);
     if (damage.numRects != 0 || prop_int("vendor.debug.hwc.shim.full_damage", 1) == 0) return real(dev, display, layer, damage);
     static Limiter L = {0, 5, 600};

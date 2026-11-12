@@ -1,9 +1,26 @@
-# Project status — Bigme B1051C Pro → Android 16 (updated 2026-11-09, 22:30)
+# Project status — Bigme B1051C Pro → Android 16 (updated 2026-11-11, evening)
 
 Plan: `~/.claude/plans/pasted-content-id-25ff-bigme-mellow-sutton.md` (approved; **Revision 2** at its top).
 Phase C procedure: `docs/PHASE-C-RUNBOOK.md`. Key evidence: `research/hidden-verity-warning-2026-10-17.md`,
 `research/codex-recovery-2026-10-17/RECOVERY.md`. Day-by-day log: `research/phase-c/settings-changes.log`.
 Feature plan: `docs/ROADMAP.md` (waves 0–8 → soak → Phase E ROM); owner test log: `docs/FEATURE-TESTS.md`.
+
+## 2026-11-11 evening — ROM alpha 7 built (not flashed, not published)
+- **Built:** `release/InKognito-B1051CPro-alpha7-20261111/` (+ `-gapps.zip` 4f13a2bd, `-nogapps.zip` 8bb96a46; system.img
+  4dcb017e, nogapps 8d500953). Tests on the assembled release: unit + cli + sim 115/115. PII scan clean (third-party
+  noise only). Distribution drafts: `release/DIST-InKognito-B1051CPro-alpha7-20261111/` (PUBLISH-CHECKLIST.md).
+- **What is in it** (docs/ALPHA7-PLAN.md, status table at its top): stage 1 creates Magisk's preinit store, stage 2
+  checks module sepolicy rules against the running policy and loads missing ones live; logcat tag `InKognito`; screen
+  timeout / contrast Medium / qs_auto_tiles fixes; model `InKognito B1051C Pro` + build number; Recents "Clear all"
+  (launcher3 0.2.6); HeliBoard 4.2 keyboard (module b1051c-heliboard 0.2.0 + RRO, prefs + Hebrew dictionary staged by
+  stage 2, Google's swipe library in gapps suw3); keyboard refresh (eink-compat 0.1.54, E-Ink Control 0.15.24);
+  installer progress meter + closing message.
+- **Live on the tablet (still alpha 6 system image):** eink-compat 0.1.54, E-Ink Control 0.15.24, launcher3 **0.2.6**,
+  b1051c-heliboard 0.1.1 (test build with the Google library), einkui 0.4.10, Lock & Sleep 0.2.6.
+  Layer backup before the update: `backups/layer-20261111-161651`.
+- **Next (owner):** approve the `update` to alpha 7 on the tablet (writes system_b only), then check provision.log,
+  the device name, Clear all, the keyboard, 0 shim denials. Then the second clean install (proves the sepolicy fix),
+  XDA screenshots from it, and only then publishing (each step with the owner's own approval).
 
 ## 2026-11-09 evening — Phase E decisions, ROM alpha 4 + alpha 5, taskbar crash fix
 - **Live now:** eink-compat 0.1.49, E-Ink Control 0.15.22, Lock & Sleep 0.2.6, einkui **0.4.10** (QS tile tap fix,

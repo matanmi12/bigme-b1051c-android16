@@ -1,6 +1,7 @@
-# InKognito alpha 2: licenses and sources
+# InKognito beta 1: licenses and sources
 
-Release: `InKognito-B1051CPro-alpha2-20261027`. Checked against the upstream repositories on 2026-10-21.
+Release: `InKognito-B1051CPro-beta1-20261112`. Checked against the upstream repositories on 2026-10-21; the
+keyboard rows (HeliBoard, its dictionary, the swipe library) were added on 2026-11-11.
 
 This release combines our own code with third-party software, fonts and data. The table lists each part, its
 license and where its source is. The license texts are in [licenses/](licenses/). Where a part has no license
@@ -10,14 +11,18 @@ statement, or its terms are unclear, we say so instead of guessing. Nothing here
 
 | Component | Version in this release | Where it is | License | Source | Notes |
 |---|---|---|---|---|---|
-| **InKognito layer** (E-Ink Control, E-Ink SystemUI plugin, einkd, Magisk modules, first-boot scripts, KOReader patches, charging-mode rc, flash scripts) | alpha 3 | `system.img` / `system-nogapps.img` (`/system/etc/inkognito`, `/system/etc/init/inkognito.rc`), `kit/boot` (charging-mode rc and script, put into `overlay.d` of the boot image the installer builds), `inkognito.py` and its front ends | MIT | https://github.com/matanmi12/bigme-b1051c-android16 | `licenses/MIT-InKognito.txt`. Copyright "The bigme-b1051c-android16 contributors". The brand art (badge, boot logo, wallpapers, nav buttons) is listed separately below. |
-| **HWC display shim** (`hwcomposer.mtk_common.so`) | in module `b1051c-eink-compat` 0.1.47 | `system.img` payload | Our changes: MIT. The original project has **no license file**. | Ours: `shim/` in our repo. Original: https://github.com/awong-dev/hibreak-pro-color (`tools/hwcshim`, commit `4a65ee9`) | Started as a port of awong-dev's shim. The original design and code are its author's; we credit it and offer only our changes under MIT. It also contains Bigme-derived data and logic (see "Bigme components"). |
+| **InKognito layer** (E-Ink Control, E-Ink SystemUI plugin, Lock & Sleep, einkd, Magisk modules, the keyboard look overlay, first-boot scripts, KOReader patches, charging-mode rc, installer) | beta 1 | `system.img` / `system-nogapps.img` (`/system/etc/inkognito`, `/system/etc/init/inkognito.rc`), `kit/boot` (charging-mode rc and script, put into `overlay.d` of the boot image the installer builds), `inkognito.py` and its front ends | MIT | https://github.com/matanmi12/bigme-b1051c-android16 | `licenses/MIT-InKognito.txt`. Copyright "The bigme-b1051c-android16 contributors". The brand art (badge, boot logo, wallpapers, nav buttons) is listed separately below. |
+| **HWC display shim** (`hwcomposer.mtk_common.so`) | in module `b1051c-eink-compat` 0.1.55 | `system.img` payload | Our changes: MIT. The original project has **no license file**. | Ours: `shim/` in our repo. Original: https://github.com/awong-dev/hibreak-pro-color (`tools/hwcshim`, commit `4a65ee9`) | Started as a port of awong-dev's shim. The original design and code are its author's; we credit it and offer only our changes under MIT. It also contains Bigme-derived data and logic (see "Bigme components"). |
 | **TrebleDroid GSI** | `ci-20250617`, `system-td-arm64-vanilla` (`treble_arm64_bvS`, userdebug, test-keys) | `system.img` (base image) | AOSP licenses (mostly Apache-2.0, plus GPL, LGPL and others). TrebleDroid's build scripts: Apache-2.0. `device_phh_treble`, `vendor_hardware_overlay` and `treble_app` have no license file on GitHub. | https://github.com/TrebleDroid/treble_experimentations/releases/tag/ci-20250617 ; https://github.com/TrebleDroid/treble_manifest (branch `android-16.0`) and the repos it lists | Download `system-td-arm64-vanilla.img.xz` sha256 `d06c66e4…ae55ad6` = the GitHub release asset. InKognito adds its payload and one init file to this image. The GSI's full license notices: `/system/etc/NOTICE.xml.gz` (Settings > About tablet > Legal information). |
 | **AOSP** (inside the GSI) | Android 16, build ID `BP2A.250605.031.A3` | `system.img` | Mostly Apache-2.0, plus others | https://android.googlesource.com/platform/manifest | Google's build-number table maps this build ID to tag `android-16.0.0_r2`. The TrebleDroid release title says `android_16.0.0_r1`. The image includes GPL and LGPL programs, for example e2fsprogs, f2fs-tools, iproute2, iptables, dnsmasq, gptfdisk and exfatprogs (listed in its NOTICE file). |
-| **Launcher3QuickStep, patched** | from the GSI above | Magisk module `b1051c-launcher3` | Apache-2.0 | AOSP/TrebleDroid source of the GSI; our patch: `launcher3patch/` in our repo | A modified build of the GSI's own Launcher3 (one hook plus one added class for the transparent nav row on the home screen), re-signed with the public AOSP test key. |
+| **Launcher3QuickStep, patched** | from the GSI above | Magisk module `b1051c-launcher3` | Apache-2.0 | AOSP/TrebleDroid source of the GSI; our patch: `launcher3patch/` in our repo | A modified build of the GSI's own Launcher3 (hooks plus added classes for the transparent nav row on the home screen and the "Clear all" button in Recents), re-signed with the public AOSP test key. |
 | **Magisk** | v30.7 | `kit/boot` (`magiskinit` and the xz-compressed `magisk`, `stub` and `init-ld` binaries that go into the boot ramdisk the installer builds) and the Magisk app in the payload | GPL-3.0-or-later | https://github.com/topjohnwu/Magisk/tree/v30.7 (with submodules) | `Magisk-v30.7.apk` sha256 `e0d32d21…afae9ebd5` = the GitHub release asset. It contains BusyBox 1.36.1 (`libbusybox.so`, GPL-2.0), source: https://github.com/topjohnwu/ndk-busybox. Texts: `licenses/GPL-3.0.txt`, `licenses/GPL-2.0.txt`. |
 | **Lawnchair** | 15 Beta 3 (`v15.0.0-beta3.0`) | APK in the payload | **Apache-2.0** | https://github.com/LawnchairLauncher/lawnchair/tree/v15.0.0-beta3.0 | Unmodified. APK sha256 `d4200d09…4c7623f86059` = the GitHub release asset. `LICENSE.txt` at this tag is Apache-2.0 (Lawnchair 1.x was GPL-3.0). Text: `licenses/Apache-2.0.txt`. |
 | **KOReader** | v2026.07.1 (arm64) | APK in the payload | AGPL-3.0 | https://github.com/koreader/koreader/tree/v2026.07.1 ; https://github.com/koreader/koreader-base ; https://github.com/koreader/android-luajit-launcher (MIT) | Unmodified official APK: sha256 `89cecbe0…6b515ed8b00d152412` = `koreader-android-arm64-v2026.07.1.apk`. It bundles third-party libraries under their own licenses (notices inside the APK). Text: `licenses/AGPL-3.0.txt`. |
+| **HeliBoard** | 4.2 | Magisk module `b1051c-heliboard` in the payload (installed as a system app, `/system/product/app/HeliBoard`) | **GPL-3.0** (parts from the AOSP keyboard: Apache-2.0) | https://github.com/Helium314/HeliBoard/tree/v4.2 ; the corresponding source archive of tag `v4.2` is attached to the InKognito release | Unmodified official APK, signed by its developer: sha256 `69b2b2fb349934371b1ed2d3569541cc0bda987f8aaf5eb5f5b157961f76de86` = the GitHub release asset of v4.2. It has no internet permission. Its dictionaries and other bundled parts keep their own licenses (notices inside the app). Texts: `licenses/GPL-3.0.txt`, `licenses/Apache-2.0.txt`. |
+| **HeliBoard key look** (overlay `org.b1051c.overlay.heliboard`) | 0.1.1 | Magisk module `b1051c-heliboard` | MIT (ours) | `apps/heliboardoverlay/` in our repo | A resource overlay with our own drawings (outlined keys, light and dark). It changes how HeliBoard looks at run time and contains no HeliBoard code and no Bigme files. |
+| **Hebrew dictionary for HeliBoard** (`main_he`, experimental) | file dated 2025-11-11, about 505,000 words | In the payload; the first-boot setup copies it into HeliBoard's data as `dicts/he/main_user.dict` | **CC BY-SA 4.0** | https://codeberg.org/Helium314/aosp-dictionaries (experimental dictionaries, `main_he`) | Unmodified; only the file name differs. Attribution: the aosp-dictionaries contributors; per that repository it is built from the Leipzig Corpora Collection and FrequencyWords. Text: `licenses/CC-BY-SA-4.0.txt`. |
+| **Google swipe typing library** (`libjni_latinimegoogle.so`) | from MTG `16.0.0-arm64-20260915_222150` | Magisk module `b1051c-gapps` (`/system/product/lib64`), **only in the download with Google** | **Proprietary, Google LLC** | MindTheGapps (same release as the Google apps row below) | Unmodified. HeliBoard loads it for swipe typing. Not in `system-nogapps.img`. See "Google apps". |
 | **ZenOS** (`zenos.koplugin`) | 3.0.0 | KOReader plugins folder (installed at first boot) | GPL-3.0 | https://github.com/xZenLabs/zen-os/tree/v3.0.0 (formerly `AnthonyGress/zen_ui.koplugin`) | Unmodified (checked `main.lua`, `_meta.lua`, `LICENSE.md` against the tag). Bundled fonts: see the font rows. |
 | **Bookshelf** (`bookshelf.koplugin`), if included | 4.2.2 | KOReader plugins folder | AGPL-3.0 | https://github.com/AndyHazz/bookshelf.koplugin/tree/v4.2.2 | Unmodified (checked `main.lua`, `_meta.lua`, `LICENSE`). It carries its own font licenses (Caveat and Inter: OFL-1.1, Roboto Condensed: Apache-2.0). |
 | **derainbowify** (`derainbowify.koplugin`) | 0.0.12 (commit `f2892a2`, same code as tag `v0.0.12` plus README changes) | KOReader plugins folder | GPL-3.0 | https://github.com/Euphoriyy/derainbowify.koplugin/tree/f2892a219da65bd765d34ae2140a5dd706dfc42b | Lua files unmodified. The two Android arm64 libraries (`libs/*.so`) were **built by us** from that commit's `ffi/` sources with NDK r26d; they are not the binaries from the upstream release zip. The moire filter uses PFFFT (FFTPACK license): `licenses/BSD-PFFFT-FFTPACK.txt`. |
@@ -71,8 +76,8 @@ Draft text for the release:
 
 ## Google apps
 
-Google Play services, Google Play Store, Google Services Framework, Google Setup Wizard and Google Restore are
-proprietary software of Google LLC. They come unmodified from MindTheGapps 16, which repackages
+Google Play services, Google Play Store, Google Services Framework, Google Setup Wizard, Google Restore and the
+swipe typing library `libjni_latinimegoogle.so` are proprietary software of Google LLC. They come unmodified from MindTheGapps 16, which repackages
 them from Google's images. MTG's `LICENSE` says it does not own these files and refers to their authors for
 licensing. Neither InKognito nor MindTheGapps grants any license to them. Their use is subject to Google's terms:
 https://policies.google.com/terms and https://play.google.com/about/play-terms/. Google licenses its apps to device
@@ -89,10 +94,11 @@ matanmi12 says so.
 | File | For |
 |---|---|
 | `MIT-InKognito.txt` | Our code |
-| `Apache-2.0.txt` | Lawnchair, AOSP parts (patched Launcher3, plugin API), Material Design icons, Roboto Condensed (Bookshelf) |
+| `Apache-2.0.txt` | Lawnchair, AOSP parts (patched Launcher3, plugin API, the AOSP keyboard code inside HeliBoard), Material Design icons, Roboto Condensed (Bookshelf) |
 | `GPL-2.0.txt` | Linux kernel (Bigme binary), BusyBox in Magisk, MindTheGapps' own files |
-| `GPL-3.0.txt` | Magisk, ZenOS, derainbowify |
+| `GPL-3.0.txt` | Magisk, HeliBoard, ZenOS, derainbowify |
 | `AGPL-3.0.txt` | KOReader, Bookshelf |
+| `CC-BY-SA-4.0.txt` | Hebrew dictionary for HeliBoard |
 | `OFL-1.1-Rubik.txt` | Rubik |
 | `OFL-1.1-LilitaOne.txt` | Lilita One |
 | `OFL-1.1-Readerly.txt`, `OFL-1.1-Libron.txt`, `OFL-1.1-Hyperreadable.txt` | Fonts bundled in ZenOS |

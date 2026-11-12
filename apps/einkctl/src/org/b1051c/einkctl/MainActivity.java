@@ -346,6 +346,28 @@ public class MainActivity extends Activity {
             Eink.applySystemModes(this);
         });
         note("When the video stops, one full refresh cleans up.");
+        note("Keyboard: when only the keyboard changes (a key pressed), just its area is redrawn, in:");
+        RadioGroup imeGroup = new RadioGroup(this);
+        for (int i = 0; i < Eink.IME_MODES.length; i++) imeGroup.addView(radio(Eink.IME_NAMES[i], 6300 + i));
+        imeGroup.check(6300 + Math.max(0, Eink.stepIndex(Eink.IME_MODES, p.getInt("ime_mode", 178))));
+        root.addView(imeGroup);
+        imeGroup.setOnCheckedChangeListener((g, id) -> {
+            p.edit().putInt("ime_mode", Eink.IME_MODES[id - 6300]).apply();
+            Eink.applySystemModes(this);
+        });
+        note("While you swipe (gesture typing, also with the pen), the keyboard area in:");
+        RadioGroup swipeGroup = new RadioGroup(this);
+        for (int i = 0; i < Eink.IME_SWIPE_MODES.length; i++) swipeGroup.addView(radio(Eink.IME_SWIPE_NAMES[i], 6400 + i));
+        swipeGroup.check(6400 + Math.max(0, Eink.stepIndex(Eink.IME_SWIPE_MODES, p.getInt("ime_swipe_mode", 16))));
+        root.addView(swipeGroup);
+        swipeGroup.setOnCheckedChangeListener((g, id) -> {
+            p.edit().putInt("ime_swipe_mode", Eink.IME_SWIPE_MODES[id - 6400]).apply();
+            Eink.applySystemModes(this);
+        });
+        check("Clean the keyboard area after a pause in typing (one quality refresh of that area)", p.getBoolean("ime_clean", true), v -> {
+            p.edit().putBoolean("ime_clean", v).apply();
+            Eink.applySystemModes(this);
+        });
         check("Ignore touch while the pen is near (apps in Pen mode)", p.getBoolean("pen_palm", true), v -> {
             p.edit().putBoolean("pen_palm", v).apply();
             Root.async("setprop persist.b1051c.pen_palm " + (v ? 1 : 0));

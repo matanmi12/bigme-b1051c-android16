@@ -29,8 +29,14 @@ License details for each part are in [LICENSES.md](LICENSES.md). The license tex
     Julien Pommier.
   - **Bookshelf** by **AndyHazz** (if included in this build): a home screen for KOReader.
     https://github.com/AndyHazz/bookshelf.koplugin
+- **HeliBoard** by **Helium314** and the HeliBoard contributors (a fork of OpenBoard, itself based on the AOSP
+  keyboard): the keyboard. https://github.com/Helium314/HeliBoard
+- **Hebrew dictionary for HeliBoard** from the dictionary collection kept by Helium314 and its contributors
+  (https://codeberg.org/Helium314/aosp-dictionaries), built from the Leipzig Corpora Collection and
+  FrequencyWords. Licensed CC BY-SA 4.0.
 - **MindTheGapps** by the MindTheGapps project: the packaging of Google's core apps used here.
-  https://github.com/MindTheGapps. The Google apps themselves are made by Google LLC.
+  https://github.com/MindTheGapps. The Google apps themselves, and the swipe typing library the keyboard uses in
+  the download with Google, are made by Google LLC.
 
 ## E-ink display work
 
@@ -73,6 +79,6 @@ Thanks to everyone who shared notes, dumps, guides and findings about Bigme devi
 ## Trademarks and affiliation
 
 InKognito is an independent community project. It is not affiliated with, endorsed by, or supported by Bigme,
-Google, MediaTek, E Ink, TrebleDroid, Magisk, Lawnchair, KOReader or MindTheGapps. Android, Google, Google Play and
+Google, MediaTek, E Ink, TrebleDroid, Magisk, Lawnchair, KOReader, HeliBoard or MindTheGapps. Android, Google, Google Play and
 other names and logos are trademarks of their owners. They are used here only to say what the software is and what
 it works with.

@@ -30,7 +30,9 @@ if [ -z "$DRY_RUN" ]; then
   vdc checkpoint needsCheckpoint >/dev/null 2>&1; [ $? = 1 ] && { cp_state=committed; vdc checkpoint commitChanges >/dev/null 2>&1 || cp_state=commit-failed; }
 fi
 mkdir -p $D && chmod 0700 $D
-log() { echo "$(date '+%F %T') stage1: $*" >> $LOG; }
+# Every stage line also goes to logcat (tag InKognito), so an install can be checked without root:
+#   adb logcat -d -s InKognito
+log() { echo "$(date '+%F %T') stage1: $*" >> $LOG; [ -n "$DRY_RUN" ] || /system/bin/log -p i -t InKognito "stage1: $*" 2>/dev/null; }
 run() { if [ -n "$DRY_RUN" ]; then log "DRY: $*"; else "$@"; fi; }
 finish() { if [ $MODE = update ]; then [ -n "$DRY_RUN" ] || echo "$V" > $D/update.stage1.done; else run touch $D/stage1.done; fi; exit 0; }
 
@@ -70,10 +72,34 @@ if ! $MAGISK --path >/dev/null 2>&1; then
 fi
 MAGISKTMP=$($MAGISK --path)
 
-# Module sepolicy rules go to the preinit store ($MAGISKTMP/.magisk/preinit -> e.g. /metadata/...), which the wipe
-# emptied; Magisk's copy step skips the rules when the directory is missing.
-pre=$(readlink $MAGISKTMP/.magisk/preinit)
-[ -n "$pre" ] && [ ! -d "$pre" ] && { run mkdir -p "$pre"; log "created preinit dir $pre"; }
+# Module sepolicy rules go to Magisk's preinit store ($MAGISKTMP/.magisk/preinit -> /metadata/watchdog/magisk here):
+# magiskinit loads <store>/sepolicy.rule early in the NEXT boot, and Magisk's installer copies the rules there only
+# when the directory exists. magiskd creates the directory and the symlink at boot-complete, which boot 1 never
+# reaches, and the install wiped /metadata: on a fresh device neither exists here (install test 2026-11-11: "Unable to
+# find preinit dir", the layer then ran its first boot without its rules). Create both the way Magisk does.
+preinit_dir() {                            # prints the directory Magisk will use on the mounted preinit partition
+  local dev=$MAGISKTMP/.magisk/device/preinit mm mp
+  [ -b $dev ] || dev=/dev/block/$(sed -n 's/^PREINITDEVICE=//p' $MAGISKTMP/.magisk/config 2>/dev/null)
+  [ -b $dev ] || return 1
+  mm=$(( 0x$(stat -c %t $dev) )):$(( 0x$(stat -c %T $dev) ))
+  mp=$(awk -v d="$mm" '$3 == d && $4 == "/" { print $5; exit }' /proc/self/mountinfo)
+  [ -n "$mp" ] || return 1
+  if [ -e $mp/unencrypted ]; then echo $mp/unencrypted/magisk
+  elif [ -e $mp/adb ]; then echo $mp/adb/modules
+  elif [ -e $mp/watchdog ]; then echo $mp/watchdog/magisk
+  else echo $mp/magisk; fi
+}
+PRE=$MAGISKTMP/.magisk/preinit
+if [ ! -d $PRE ]; then
+  pre=$(readlink $PRE); [ -n "$pre" ] || pre=$(preinit_dir)
+  if [ -n "$pre" ]; then
+    run mkdir -p "$pre"; run chmod 0700 "$pre"
+    [ -L $PRE ] || run ln -s "$pre" $PRE
+    log "created preinit dir $pre"
+  else
+    log "WARN: no preinit dir (device node or mount point not found); stage 2 loads the module rules live"
+  fi
+fi
 
 # Boot 1 only from here on. init started zygote just before this trigger; system_server would wait for the HALs and
 # SurfaceFlinger (started by "boot", after us) and could be restarted by its watchdog while the modules unpack, which
@@ -107,7 +133,8 @@ for z in $P/modules/*.zip; do
     bad=$((bad+1)); log "ERROR: install failed for $(basename $z)"
   fi
 done
-log "modules: $ok installed, $bad failed; rules: $(wc -l < $MAGISKTMP/.magisk/preinit/sepolicy.rule 2>/dev/null) lines"
+nr=$(grep -c . $PRE/sepolicy.rule 2>/dev/null)
+log "modules: $ok installed, $bad failed; sepolicy rules in the preinit store: ${nr:-0}"
 if [ $bad -gt 0 ]; then                # no marker: the next boot retries (attempt counter above stops a loop)
   [ -n "$NO_REBOOT" ] && exit 0
   reboot_now "rebooting to retry"

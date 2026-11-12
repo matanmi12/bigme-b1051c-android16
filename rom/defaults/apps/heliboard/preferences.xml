@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <boolean name="auto_correction" value="false" />
+    <boolean name="enable_clipboard_history" value="false" />
+    <boolean name="gesture_dynamic_preview_follow_system" value="false" />
+    <boolean name="gesture_floating_preview_dynamic" value="false" />
+    <boolean name="gesture_floating_preview_text" value="false" />
+    <boolean name="gesture_input" value="true" />
+    <boolean name="gesture_preview_trail" value="true" />
+    <int name="gesture_trail_fadeout_duration" value="400" />
+    <string name="icon_style">Rounded</string>
+    <boolean name="navbar_color" value="true" />
+    <string name="popup_keys_labels_order">number:true|language_priority:true|layout:true|symbols:true|language:false</string>
+    <boolean name="popup_on" value="false" />
+    <boolean name="remove_redundant_popups" value="true" />
+    <boolean name="save_subtype_per_app" value="false" />
+    <boolean name="show_language_switch_key" value="true" />
+    <boolean name="sound_on" value="true" />
+    <boolean name="theme_auto_day_night" value="true" />
+    <string name="theme_colors">InKognito</string>
+    <string name="theme_colors_night">InKognitoDark</string>
+    <boolean name="theme_key_borders" value="true" />
+    <string name="theme_style">Rounded</string>
+    <string name="user_colors_InKognito">[{"name":"background","auto":false,"color":-1},{"name":"keys","auto":false,"color":-1},{"name":"functional_keys","auto":false,"color":-1},{"name":"spacebar","auto":false,"color":-1},{"name":"text","auto":false,"color":-16777216},{"name":"hint_text","auto":false,"color":-10855846},{"name":"suggestion_text","auto":false,"color":-16777216},{"name":"spacebar_text","auto":false,"color":-10855846},{"name":"accent","auto":false,"color":-16777216},{"name":"gesture","auto":false,"color":-16777216}]</string>
+    <string name="user_colors_InKognitoDark">[{"name":"background","auto":false,"color":-16777216},{"name":"keys","auto":false,"color":-1},{"name":"functional_keys","auto":false,"color":-1},{"name":"spacebar","auto":false,"color":-1},{"name":"text","auto":false,"color":-1},{"name":"hint_text","auto":false,"color":-5921371},{"name":"suggestion_text","auto":false,"color":-1},{"name":"spacebar_text","auto":false,"color":-5921371},{"name":"accent","auto":false,"color":-1},{"name":"gesture","auto":false,"color":-1}]</string>
+    <int name="version_code" value="4201" />
+</map>

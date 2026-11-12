@@ -54,7 +54,14 @@ Total ~5 min. If Google setup ever gets stuck: `adb shell settings put secure us
   shutdown screen (animated InKognito badge), Dark theme sync (wallpaper, keyboard), KOReader bridge.
 - E-ink SystemUI plugin: InKognito shade/QS theme (light + dark), cold/warm light sliders.
 - Launcher: Lawnchair 15 Beta 3 default + InKognito icon pack (Bigme-style icons), transparent nav row on home,
-  spray-paint nav buttons, patched Launcher3QuickStep (Recents stash fix).
+  spray-paint nav buttons, patched Launcher3QuickStep (Recents stash fix, "Clear all" in the Recents action row).
+- Keyboard (alpha 7): HeliBoard 4.2 as a system app (module b1051c-heliboard) with the InKognito outlined-key RRO,
+  staged prefs + Hebrew dictionary, its own refresh handling in the shim (Fast typing, A2 swipe trail, GC16 of the
+  keyboard area after a pause); Google's swipe library comes with the gapps module only.
+- Identity (alpha 7): build-rom.py sets ro.product.product.model = "InKognito B1051C Pro" and ro.build.display.id =
+  "InKognito alpha N (TrebleDroid 16, BP2A.250605.031.A3)"; fingerprint/device/name/brand are never edited.
+- Provisioning (alpha 7): stage 1 creates Magisk's preinit store when it is missing, stage 2 checks every module
+  sepolicy rule against the running policy and loads missing ones live; stage lines go to logcat tag InKognito.
 - Boot animation (light/dark), Rubik system font, Dark theme (one switch).
 - KOReader 2026.07.1 with Bigme e-ink patches, derainbowify and ZenOS UI plugins.
 - MindTheGapps 16 core (Play services, Play Store, GSF) + Google Setup Wizard. Wi-Fi-only/fingerprint-less tweaks.

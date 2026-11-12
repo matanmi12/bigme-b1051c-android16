@@ -1,21 +1,46 @@
-# Installing InKognito alpha 6 on the Bigme B1051C Pro
+# Installing InKognito beta 1 on the Bigme B1051C Pro
 
-Release `InKognito-B1051CPro-alpha6-20261110`. This guide takes you from a stock B1051C Pro to InKognito. Plan for
+Release `InKognito-B1051CPro-beta1-20261112`. This guide takes you from a stock B1051C Pro to InKognito. Plan for
 about an hour the first time, most of it for the backup.
 
 **Before you start, know this:**
 
 - **Everything on the tablet's internal storage is erased**: apps, books, notes, settings. Copy what you want
   to keep to your computer or to the microSD card first. The microSD card is not touched.
-- This is an **alpha**. Updating was tested once on a real tablet (alpha 5, 2026-11-10); a full install and its
-  first start had not yet been run on one.
-  The installer always makes a backup first and checks every write; keep that backup.
+- This is a **beta**. A full install, its first start and going back to stock were run on a real tablet
+  (alpha 6, 2026-11-11); what that run found is fixed in this release. The image without Google has not been
+  run on a tablet yet. The installer always makes a backup first and checks every write; keep that backup.
 - Only for the **B1051C Pro on firmware B1051C_R_4.9.0**. The installer checks this and stops otherwise.
 
 **Disclaimer.** InKognito is provided "as is", without warranty of any kind. You install it at your own risk.
 Unlocking the bootloader and flashing custom software may void your warranty, and a mistake can leave the
 tablet unable to start until you restore a backup. Nobody involved in InKognito is responsible for damage or
 lost data. InKognito is an independent community project and is not made, supported or endorsed by Bigme.
+
+## Quick start
+
+Ten steps. Each one links to its full explanation under [Details](#details). The commands are for macOS and
+Linux; on Windows use `flash-inkognito.bat` where a step says `bash flash-inkognito.sh`.
+
+| # | Do this | You should see |
+|---|---|---|
+| 1 | Check the firmware in the tablet's settings ([details](#1-check-your-tablet)). | **B1051C_R_4.9.0** |
+| 2 | Install Python 3.8+, mtkclient and platform-tools ([details](#2-install-python-mtkclient-and-platform-tools)), then run `mtk --help`. | mtkclient's help text |
+| 3 | Unlock the bootloader ([details](#3-unlock-the-bootloader)). This usually erases the tablet. | The tablet starts stock Android again. |
+| 4 | Turn on USB debugging. Bigme hides the Build number, so use Activity Launcher ([details](#4-turn-on-usb-debugging)). Connect the cable, run `adb devices`, and tap Allow on the tablet. | One line that ends in `device` |
+| 5 | Charge the tablet to 50% or more and free about 20 GB on the computer ([details](#5-charge-the-tablet-and-free-disk-space)). | |
+| 6 | Unzip the download and open a terminal in the unzipped folder ([details](#6-download-and-unzip)): `cd InKognito-B1051CPro-beta1-20261112` | |
+| 7 | Dry run ([details](#7-dry-run)): `bash flash-inkognito.sh --dry-run` | A list of every step. Nothing is run on the tablet. |
+| 8 | Install ([details](#8-install)): `bash flash-inkognito.sh` and, at the summary, type `FLASH`. | A progress line during the backup (about 12.5 GB) and each write, then the installer's closing message with what to do next. |
+| 9 | If the screen stays dark or shows the charging picture, hold power for 3 to 5 seconds. Then wait about 5 minutes ([details](#9-the-first-start)). | The tablet restarts once by itself, then setup appears. After setup: the home screen and **InKognito Setup**. |
+| 10 | After InKognito Setup, **restart the tablet once**, then turn USB debugging off ([details](#10-after-setup)). | The home screen again. Done. |
+
+Later: [updating](#11-updating-to-a-newer-release) keeps your data, and
+[going back to stock](#12-going-back-to-stock) uses the backup from step 8.
+
+---
+
+# Details
 
 ## How the install works
 
@@ -101,9 +126,24 @@ screen may not display it. That is normal.
 
 ## 4. Turn on USB debugging
 
-On the tablet: Settings, About, tap **Build number** seven times, then Developer options, **USB debugging** on.
-Connect the tablet directly (no hub), run `adb devices` on the computer, and accept **"Allow USB debugging?"**
-on the tablet. `adb devices` must list one device with the word `device`.
+USB debugging is switched on in Android's **Developer options**, which appear after you tap **Build number**
+seven times. Bigme's own Settings app on the stock firmware does not show the screen with the Build number, so
+open it with a small helper app:
+
+1. Connect the tablet to Wi-Fi.
+2. In the tablet's browser, open <https://f-droid.org/packages/de.szalkowski.activitylauncher/> and download
+   **Activity Launcher** (open source, no account needed). Install the downloaded file; Android asks once to
+   allow installs from the browser.
+3. Open Activity Launcher, find **Settings** in its list and open the entry **About tablet** (on some versions
+   it is named "My device info").
+4. Tap **Build number** seven times, until it says you are a developer.
+5. Open **Developer options** (in Settings under System, or again through Activity Launcher) and switch
+   **USB debugging** on.
+
+Alternative to step 2: the app "Settings Shortcut" from Google Play does the same job.
+
+Then connect the tablet directly (no hub), run `adb devices` on the computer, and accept
+**"Allow USB debugging?"** on the tablet. `adb devices` must list one device with the word `device`.
 
 ## 5. Charge the tablet and free disk space
 
@@ -115,9 +155,9 @@ on the tablet. `adb devices` must list one device with the word `device`.
 
 The release comes as **two downloads**. Pick one:
 
-- `InKognito-B1051CPro-alpha6-20261110-gapps.zip`: with Google Play (Play Store, Play services, Google setup).
+- `InKognito-B1051CPro-beta1-20261112-gapps.zip`: with Google Play (Play Store, Play services, Google setup).
   The system image inside is `system.img`.
-- `InKognito-B1051CPro-alpha6-20261110-nogapps.zip`: without any Google apps or services; Android's own short
+- `InKognito-B1051CPro-beta1-20261112-nogapps.zip`: without any Google apps or services; Android's own short
   setup runs instead. The system image inside is `system-nogapps.img`.
 
 Check the download against its `.sha256` file if you like, then unzip it. Keep all files together; the installer
@@ -153,7 +193,7 @@ flash-inkognito.bat                        # Windows         (you can also doubl
    while it starts. If nothing happens within a minute, hold the power button for about 10 to 12 seconds with the
    cable connected. The e-ink screen may not change at all; watch the computer.
 3. It checks the partition table, then **backs up** into a new folder `B1051C-backup-<date-time>` in the current
-   folder (or where `--backup` says). This takes a while.
+   folder (or where `--backup` says). This takes a while; the progress line (below) shows how far it is.
 4. It checks the backup and builds the images. If anything is unexpected it **stops here, before writing
    anything**, and says why.
 5. It shows a summary. **Write down the slot letter.** Type `FLASH` and press Enter to start; anything else
@@ -162,6 +202,20 @@ flash-inkognito.bat                        # Windows         (you can also doubl
 7. After that restart the tablet often stays dark, or shows the charging picture, instead of starting Android.
    Then hold the power button for **3 to 5 seconds** and let go (if the charging picture appears, do it once more).
    Do not hold it for 10 seconds or longer, and do not press it while the boot logo or animation is shown.
+8. The installer ends with a short list of what to do next: allow USB debugging if the tablet asks, restart once
+   after setup, and turn USB debugging off at the end (sections 9 and 10).
+
+**The progress line.** During every long read or write (the backup, writing the system, each readback, and
+`restore-stock`) the installer shows one line that keeps updating: the partition, the percentage, how much is
+done out of the total, the speed and the time left. It looks roughly like this:
+
+```
+system_b: 12% (590 MB / 5.06 GB), 7.5 MB/s, ~9 min left
+```
+
+The backup of about 12.5 GB and the system write of about 5 GB each take several minutes; as long as the line
+moves, all is well. When the output goes to a file instead of a terminal, a line is printed every 10%. The full
+mtkclient output is in the log file the installer names.
 
 Options (after `install`):
 
@@ -190,18 +244,35 @@ The first start takes about **5 minutes**. Do not interrupt it.
 4. While you go through setup, the rest is installed and configured in the background: E-Ink Control, the e-ink
    shade theme, Lawnchair, KOReader, Magisk and the icon pack.
 5. After setup you land on the **Lawnchair** home screen, and the **InKognito Setup** screen opens once.
+6. **Restart the tablet once** when you are done with InKognito Setup: hold the power button until the power menu
+   appears and tap **Restart**. On the alpha 6 test install, part of the display layer's permissions only
+   loaded from the second start on. This release fixes that, but the fix has not yet been confirmed on a second
+   clean install, so restart once to be safe.
 
 On e-ink the screen can sit unchanged for a minute or more at a time. Give it at least 10 minutes before you
-assume a problem. The background install writes a log to `/data/adb/b1051c/provision.log` (readable with root).
+assume a problem.
+
+**Root requests in the first minute.** Right after the first start, Magisk is still finishing its own setup. If
+an app or a computer asks for root in that minute (for example `adb shell su`), the tablet can show a message
+that Magisk needs an internet connection to finish installing. Close it (Cancel); nothing needs to be
+downloaded. Wait until the home screen is up before you use root.
+
+**Checking the background install.** Each finished step is written to Android's log with the tag `InKognito`;
+read it without root with `adb logcat -d -s InKognito`; the result of the last run is also kept in
+`adb shell getprop persist.debug.inkognito.status`, which survives restarts. The full log is `/data/adb/b1051c/provision.log`
+(readable with root).
 
 ## 10. After setup
 
 - **InKognito Setup** (opens once after setup; later in E-Ink Control, System, "InKognito Setup"): switch off what
   you don't want and tap Apply. KOReader, the Lawnchair home screen (Android's own home screen takes over) and the
   InKognito icon pack can be removed; Anti-shake can be switched on. "Keep everything" changes nothing.
+- **Restart once** after InKognito Setup (section 9, step 6).
 - **USB debugging** is on, and the tablet asks "Allow USB debugging?" the first time a computer connects. Only
   allow your own computer: an allowed computer can get a root shell (`adb root`, userdebug build). Turn it off in
   Developer options when you do not need it.
+- **Keyboard:** HeliBoard, with swipe typing in the download with Google. For handwriting, install Gboard from
+  the Play Store. Details in [KNOWN-ISSUES.md](KNOWN-ISSUES.md).
 - **Google says the device is not certified:** see [Troubleshooting](#google-says-the-device-is-not-certified).
 - E-Ink Control is where the refresh modes, color modes, per-app profiles and the front light live. Its Quick
   Settings tiles can be added from the edit button in Quick Settings.
@@ -221,6 +292,15 @@ installed and the tablet restarts once by itself. Apps and settings stay; parts 
 stay removed. Keep the backup from your first install: it is still your way back to stock.
 
 `update` refuses to run on a tablet that does not have InKognito, and `install` refuses to run on one that does.
+
+**From alpha 6 to beta 1** your apps, settings and books stay. What changes by itself:
+
+- Phone and Messaging are switched off (the tablet has no SIM slot). Settings › Apps brings them back.
+- The keyboard becomes HeliBoard, but only if your default keyboard was still Android's own (AOSP) keyboard. If
+  you chose another keyboard, it stays.
+- The device name and the Bluetooth name become "InKognito B1051C Pro", but only if they still were
+  "TrebleDroid vanilla". A name you chose stays.
+- Settings you changed (screen timeout, color contrast and the like) are not touched.
 
 ## 12. Going back to stock
 
@@ -273,6 +353,13 @@ The installer only installs over the stock 4.9.0 boot image, because it builds t
 rooted the tablet with Magisk, restore the stock boot image first (Magisk: Uninstall, Restore images), or flash
 Bigme's 4.9.0 firmware again.
 
+### The tablet stays off, or shows the charging picture, after the install
+
+After the installer's final restart (also after `update` and `restore-stock`) the tablet often does not start
+Android by itself. Hold the power button for **3 to 5 seconds** and let go. If the charging picture appears
+instead of the boot logo, do it once more. Do not hold the button for 10 seconds or longer, and do not press it
+while the boot logo or animation is shown.
+
 ### The tablet switches itself off about 5 seconds into starting, with nothing on screen
 
 This is the bootloader's dm-verity warning. The bootloader draws it, but the e-ink panel does not show it, and if
@@ -285,7 +372,8 @@ switch the tablet on, release, and when the screen flashes, **press power briefl
 - The first start restarts once by itself. That is normal (section 9).
 - Give it at least 10 minutes. On e-ink, nothing may change on screen for a long time.
 - USB debugging is on by default, so you can check whether Android is running: `adb devices`, then
-  `adb shell getprop sys.boot_completed` (prints `1` when Android has started).
+  `adb shell getprop sys.boot_completed` (prints `1` when Android has started), and
+  `adb logcat -d -s InKognito` for the steps of the background install.
 - If it keeps restarting, go back with `restore-stock` (section 12) and report it in the thread.
 
 ### Google setup gets stuck

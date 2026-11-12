@@ -22,6 +22,15 @@ stock ROM as a DSU, Bluetooth/audio in depth. Notes in [`docs/STATUS.md`](docs/S
 [`research/phase-d/CONCLUSIONS.md`](research/phase-d/CONCLUSIONS.md). Ideas and open questions for later:
 [`research/phase-d/FEATURES-NEXT.md`](research/phase-d/FEATURES-NEXT.md) (in Hebrew).
 
+Update (2026-11-12): the layer is packaged as the **InKognito** ROM with its own installer; sources in [`rom/`](rom),
+user docs in [`rom/release-src/`](rom/release-src) (README, INSTALL, KNOWN-ISSUES, CHANGELOG). Latest release:
+alpha 6 (see Releases). A full install, updates and going back to stock have been run on one tablet. Since then:
+a HeliBoard keyboard with an e-ink key look and its own refresh handling
+([`apps/heliboardoverlay/`](apps/heliboardoverlay), [`module/b1051c-heliboard/`](module/b1051c-heliboard)), "Clear
+all" in Recents ([`launcher3patch/`](launcher3patch)), the device name, installer progress, and module updates
+through the Magisk app ([`rom/updates/`](rom/updates)). alpha 7 ran as an update on the developer's tablet and was
+not released; **beta 1 is in preparation** and has not been run on a tablet yet.
+
 ## ⚠️ Read before trying
 This was done on one unit and **can brick yours**. Facts that matter on this device (details in the runbook):
 - Virtual A/B; only **slot B** holds a bootable system after the stock OTAs. **Never `set_active a`**, and do not use

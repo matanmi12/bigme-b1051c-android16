@@ -38,7 +38,11 @@
 DEFAULTS_VERSION=1
 
 log() { echo "$*" >> "$LOG"; }
-say() { log "$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null) sys-defaults: $*"; }
+say() {                                   # problems also go to logcat (tag InKognito): readable without root
+  log "$(date '+%Y-%m-%d %H:%M:%S' 2>/dev/null) sys-defaults: $*"
+  case "$*" in WARN*|ERROR*) [ "$DRY_RUN" = 1 ] || /system/bin/log -p w -t InKognito "sys-defaults: $*" 2>/dev/null ;; esac
+  return 0
+}
 
 # ---------------------------------------------------------------------------------------------------------------
 # ROM values (one place to edit)
@@ -54,6 +58,9 @@ QS_AUTO_DONE="wallet cast night font_scaling inversion"
 QS_TILES_TEMPLATE='internet,bt,rotation,custom(@E@TileRefresh),custom(@E@TileColour),custom(@E@TileCover),custom(@E@TileGrey),inversion,dark,night,dnd,airplane,custom(@E@TileAntiShake),custom(@E@TileColorRestore)'
 EINKCTL_CLASS_PKG=org.b1051c.einkctl
 LATIN_IME=com.android.inputmethod.latin/.LatinIME
+HELI_IME=helium314.keyboard/.latin.LatinIME            # HeliBoard 4.2, system app from the module b1051c-heliboard
+CONTRAST_LEVEL=0.5                                     # Settings > Accessibility > Color contrast: Medium (owner 2026-11-11)
+GSI_DEVICE_NAME="TrebleDroid vanilla"                  # the GSI's ro.product.model; the ROM image names the device itself
 
 # ---------------------------------------------------------------------------------------------------------------
 # Helpers
@@ -149,8 +156,13 @@ sys_animations() {
   for _k in $ANIM_KEYS; do ensure_setting global "$_k" 0 "null 1 1.0 0.0"; done
 }
 
-# The panel keeps the last frame; reading needs more than the GSI's 1 minute.
-sys_screen_timeout() { ensure_setting system screen_off_timeout "$SCREEN_OFF_MS" "null 60000"; }
+# The panel keeps the last frame; reading needs more than the GSI's 1 minute. 121000 (2 min + 1 s) is what a fresh
+# install shows before anyone touched it (install test 2026-11-11), so it counts as a platform value too.
+sys_screen_timeout() { ensure_setting system screen_off_timeout "$SCREEN_OFF_MS" "null 60000 121000"; }
+
+# Color contrast "Medium": e-ink shows the default Material tones of buttons and switches too pale. First install
+# only, and only over the platform default (0).
+sys_contrast() { ensure_setting secure contrast_level "$CONTRAST_LEVEL" "null 0 0.0"; }
 
 # Stay awake while charging kept the lock screen (and the front light) on at night. 0 = AOSP default, ensured.
 sys_stay_on() { ensure_setting global stay_on_while_plugged_in 0 "null 1 2 3 4 5 6 7"; }
@@ -206,11 +218,34 @@ sys_qs_auto_tiles() {
     case ",$_qn," in *",$_t,"*) ;; *) _qn=${_qn:+$_qn,}$_t ;; esac
   done
   if [ "$_qn" = "$_qa" ]; then say "qs_auto_tiles = $_qa (ok)"; return 0; fi
-  sput secure qs_auto_tiles "$_qn" && say "qs_auto_tiles: ${_qa:-null} -> $_qn"
+  # No read-back: SystemUI owns this key and writes its own list back at once (it merges what it has already added),
+  # which made every install log a warning. The put is best effort; the layout itself is set by qs_tiles_default.
+  if run settings put secure qs_auto_tiles "$_qn"; then say "qs_auto_tiles: ${_qa:-null} -> $_qn (SystemUI may rewrite it)"
+  else say "ERROR settings put secure qs_auto_tiles failed"; return 1; fi
 }
 
 # Night Light = our night mode (fwoverlay 1.3: no tint; E-Ink Control NightMode: Night light + Dark theme). A fresh
 # device starts with it off, like the light theme.
+# The GSI's own test app shows up in the app drawer as "WebView Browser Test" (owner 2026-11-11: hide it). Disabled for
+# user 0 only, so Settings > Apps can turn it back on; nothing is removed from the system image.
+sys_hide_test_apps() {
+  for _tp in org.chromium.webview_shell; do
+    pm path "$_tp" >/dev/null 2>&1 || continue
+    if run pm disable-user --user 0 "$_tp"; then say "$_tp hidden (disabled for user 0)"; else say "WARN could not hide $_tp"; fi
+  done
+}
+
+# Phone and Messaging: the tablet has no SIM slot and no cellular radio, so the dialer and the SMS app only take
+# room in the app list (owner 2026-11-12). Disabled for user 0 only: Settings > Apps brings them back, nothing is
+# removed from the image. Contacts stays (owner). The telephony services themselves are left alone.
+PHONE_APPS="com.android.dialer com.android.messaging"
+sys_hide_phone_apps() {
+  for _pp in $PHONE_APPS; do
+    pm path "$_pp" >/dev/null 2>&1 || { say "$_pp not installed (nothing to hide)"; continue; }
+    if run pm disable-user --user 0 "$_pp"; then say "$_pp hidden (disabled for user 0)"; else say "WARN could not hide $_pp"; fi
+  done
+}
+
 sys_night_light_off() {
   [ "$(sget secure night_display_activated)" = 1 ] || { say "Night Light not active (ok)"; return 0; }
   sput secure night_display_activated 0 && say "night_display_activated: 1 -> 0"
@@ -240,6 +275,7 @@ apply_system_defaults() {
   sys_webview                 # first: the Setup Wizard's Google sign-in needs a WebView provider
   sys_animations
   sys_screen_timeout
+  sys_contrast
   sys_stay_on
   sys_display_color_mode
   sys_night_mode
@@ -247,6 +283,8 @@ apply_system_defaults() {
   sys_wallpaper_dark_area
   sys_qs_auto_tiles
   sys_night_light_off
+  sys_hide_test_apps
+  sys_hide_phone_apps
   sys_checks
   if [ "$DRY_RUN" != 1 ]; then
     echo "v$DEFAULTS_VERSION $(date '+%Y-%m-%d %H:%M:%S')" > "$MARK_DIR/system-defaults.done"
@@ -431,16 +469,48 @@ qs_tiles_ensure() {                       # re-set the layout only when one of o
   say "QS custom tiles present (ok)"
 }
 
-# LatinIME is the only IME (Gboard is not bundled). Its prefs stay AOSP defaults; pref_keyboard_theme_20140509
-# (3 light / 4 dark) is owned by E-Ink Control's ThemeSync. Sets the default only when none is set.
+# The keyboard. HeliBoard (alpha 7 on: gesture typing, InKognito key look) becomes the default when none is set or the
+# default is still the AOSP keyboard; the AOSP keyboard is then hidden for user 0 (Settings > Apps brings it back).
+# A keyboard the user chose is kept. Without HeliBoard (module removed or not mounted) the AOSP keyboard stays, as
+# before alpha 7. HeliBoard's own settings are staged by stage 2 before this call.
 ime_defaults() {                          # ime_defaults [IME_ID]
-  _i=${1:-$LATIN_IME}
+  _i=${1:-$HELI_IME}
+  pkg_installed "${_i%%/*}" || { say "WARN ${_i%%/*} not installed: the AOSP keyboard stays"; _i=$LATIN_IME; }
   _id=$(sget secure default_input_method)
   case "$_id" in
-    ''|null) run ime enable --user 0 "$_i"; run ime set --user 0 "$_i"; say "default IME: none -> $_i" ;;
     "$_i") say "default IME = $_i (ok)" ;;
-    *) say "default IME = $_id kept" ;;
+    ''|null|"$LATIN_IME")
+      run ime enable --user 0 "$_i"
+      run ime set --user 0 "$_i" || { say "ERROR ime set $_i failed"; return 1; }
+      [ "$DRY_RUN" = 1 ] && return 0
+      _id2=$(sget secure default_input_method)
+      [ "$_id2" = "$_i" ] || { say "WARN default IME reads '$_id2' after ime set $_i"; return 1; }
+      say "default IME: ${_id:-none} -> $_i" ;;
+    *) say "default IME = $_id kept"; return 0 ;;
   esac
+  if [ "$_i" != "$LATIN_IME" ] && pkg_installed "${LATIN_IME%%/*}"; then
+    if run pm disable-user --user 0 "${LATIN_IME%%/*}"; then say "AOSP keyboard hidden (disabled for user 0)"
+    else say "WARN could not hide the AOSP keyboard"; fi
+  fi
+}
+
+# Update from a release whose image still carried the GSI's model: Settings' device name and the Bluetooth name were
+# derived from it on that first boot. Follow the new model only while they still read the GSI's name; a name the user
+# typed is never touched. (A fresh install derives both from the new model by itself; the Bluetooth stack has no
+# stored name of its own here and uses the model.)
+identity_names() {
+  _im=$(getprop ro.product.model)
+  if [ -z "$_im" ] || [ "$_im" = "$GSI_DEVICE_NAME" ]; then say "device name: model is '${_im}', nothing to follow"; return 0; fi
+  for _ik in "global device_name" "secure bluetooth_name"; do
+    # shellcheck disable=SC2086
+    _iv=$(sget $_ik)
+    if [ "$_iv" = "$GSI_DEVICE_NAME" ]; then
+      # shellcheck disable=SC2086
+      sput $_ik "$_im" && say "$_ik: '$_iv' -> '$_im'"
+    else
+      say "$_ik = '$_iv' kept"
+    fi
+  done
 }
 
 # Default home. Deferred by post_setup until user_setup_complete=1: a preferred non-system home while the Setup Wizard
@@ -492,6 +562,35 @@ after_setup_reassert() {                  # after_setup_reassert [EINKCTL_PKG]
 # default home, Home, re-assert after a possible restore, one GC16. Run it in the FOREGROUND as the last step: an init
 # service's background children die with its process group. A pending marker survives a reboot during setup, so a
 # boot hook can call it again. POST_SETUP_MAX_S (default 0 = no limit), REASSERT_DELAY_S (default 20).
+# Both launchers fill a dock from their default layout on the first start: Lawnchair (although the ROM sets
+# hotseat_mode=disabled) and the system Launcher3, whose dock is the taskbar on this tablet. Their icons are then drawn
+# in the transparent navigation row, behind the Back button (install test 2026-11-11: Calendar, Gallery, Play Store,
+# WebView Browser Test, Camera). First install only (post_setup); a user's own layout is never touched.
+clear_launcher_docks() {                  # clear_launcher_docks [HOME_PKG]
+  _hp2=${1:-app.lawnchair}
+  if [ "$DRY_RUN" = 1 ]; then say "DRY-RUN: clear the $_hp2 and Launcher3 docks"; return 0; fi
+  command -v sqlite3 >/dev/null 2>&1 || { say "WARN no sqlite3: launcher docks left as they are"; return 1; }
+  for _lp in "$_hp2" com.android.launcher3; do
+    _ld=/data/data/$_lp/databases
+    _lw=0
+    until ls "$_ld"/launcher*.db >/dev/null 2>&1; do
+      _lw=$((_lw + 2)); [ $_lw -gt 60 ] && break; sleep 2
+    done
+    ls "$_ld"/launcher*.db >/dev/null 2>&1 || { say "WARN $_lp has no launcher database after 60 s"; continue; }
+    sleep 3                               # let its first layout pass finish
+    run am force-stop "$_lp"
+    _lo=$(stat -c %u:%g "$_ld")
+    for _db in "$_ld"/launcher*.db; do
+      _ln=$(sqlite3 "$_db" "delete from favorites where container=-101; select changes();" 2>/dev/null | tr -d '\r')
+      chown "$_lo" "$_db"* 2>/dev/null
+      say "$_lp: $(basename "$_db"): ${_ln:-?} dock item(s) removed"
+    done
+    # the system brings Launcher3 back by itself (taskbar, Recents); a kill makes it reload the database now
+    if [ "$_lp" = com.android.launcher3 ]; then _lk=$(pidof com.android.launcher3 2>/dev/null); [ -n "$_lk" ] && run kill $_lk; fi
+  done
+  start_home
+}
+
 post_setup() {                            # post_setup [HOME_PKG] [EINKCTL_PKG]
   _hp=${1:-app.lawnchair}; _ep=${2:-org.b1051c.einkctl}
   if [ -f "$MARK_DIR/post-setup.done" ] && [ "$FORCE" != 1 ]; then say "post-setup already done"; return 0; fi
@@ -509,6 +608,7 @@ post_setup() {                            # post_setup [HOME_PKG] [EINKCTL_PKG]
   sleep 2
   start_home
   sleep "${REASSERT_DELAY_S:-20}"
+  clear_launcher_docks "$_hp"
   after_setup_reassert "$_ep"
   eink_full_refresh
   if [ "$DRY_RUN" != 1 ]; then
@@ -540,7 +640,7 @@ usage() {
   echo "functions: app_einkctl app_einkctl_start app_einkctl_hide_dsu_tile app_einkui app_runtime_overlay"
   echo "           app_all_files_access app_default_home app_su_allow app_grant app_a11y_enable qs_tiles_default"
   echo "           qs_tiles_ensure ime_defaults restart_launcher3 post_setup after_setup_reassert verifier_pause"
-  echo "           verifier_restore eink_full_refresh sys_* (single system steps)"
+  echo "           verifier_restore eink_full_refresh identity_names sys_* (single system steps)"
 }
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -551,7 +651,7 @@ if [ "${INKOGNITO_DEFAULTS_LIB:-0}" != 1 ]; then
   case "$_cmd" in
     system) apply_system_defaults ;;
     stage1) stage1_props ;;
-    app_*|qs_*|ime_*|sys_*|post_setup|after_setup_reassert|restart_launcher3|verifier_pause|verifier_restore|eink_full_refresh|start_home)
+    app_*|qs_*|ime_*|sys_*|identity_names|post_setup|after_setup_reassert|restart_launcher3|verifier_pause|verifier_restore|eink_full_refresh|start_home)
       "$_cmd" "$@" ;;
     -h|--help|help) usage ;;
     *) usage; say "unknown command '$_cmd'"; exit 2 ;;

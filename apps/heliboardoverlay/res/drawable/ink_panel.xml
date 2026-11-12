@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Popups (more keys, key preview): white with a 2dp black outline. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#FFFFFFFF" />
+    <stroke android:width="2dp" android:color="#FF000000" />
+    <corners android:radius="7dp" />
+</shape>

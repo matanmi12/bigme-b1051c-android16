@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.b1051c.overlay.heliboard"
+    android:versionCode="2" android:versionName="0.1.1">
+    <!-- InKognito key look for HeliBoard (style "Rounded" with key borders): a 2dp black outline with 7dp corners
+         instead of the grey bottom shadow, and a short bar under a pressed key. HeliBoard tints these shapes with
+         MULTIPLY, so white keys keep the black outline and the action key (accent) stays solid. Drawn from scratch in
+         the style of Bigme's stock keyboard; no Bigme files. -->
+    <overlay android:targetPackage="helium314.keyboard" android:isStatic="true" android:priority="920" />
+    <application android:hasCode="false" />
+</manifest>

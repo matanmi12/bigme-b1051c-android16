@@ -11,6 +11,7 @@ import html, os, re, sys
 
 dist, name, tag, date = sys.argv[1:5]
 REPO = "https://github.com/matanmi12/bigme-b1051c-android16"
+VER = re.sub(r"^([a-z]+)(\d+)$", r"\1 \2", name.split("-")[2])      # "alpha7" -> "alpha 7"
 src = open(os.path.join(dist, "XDA-POST.md")).read()
 
 title = re.search(r"Suggested thread title:\s*\n\s*\n?\s*(.+)", src).group(1).strip()
@@ -50,7 +51,7 @@ full = "\n\n".join(t.replace("\n\n@@SHOTS@@\n\n", "\n\n") for _, t in sections)
 cards = "\n".join(card(i, h, t) for i, (h, t) in enumerate(sections))
 page = f"""<!doctype html>
 <html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>XDA post alpha 6</title>
+<title>XDA post {VER}</title>
 <style>
 :root {{ --bg:#F7F4E7; --card:#FFFDF6; --ink:#1d1b16; --muted:#6b665a; --line:#d9d3bf; --accent:#1d1b16; --ok:#2f6b3a; }}
 @media (prefers-color-scheme: dark) {{ :root:not([data-theme="light"]) {{ --bg:#16150f; --card:#1f1d16; --ink:#efe9d6;
@@ -70,7 +71,7 @@ pre {{ margin:0; padding:12px 14px; white-space:pre-wrap; word-break:break-word;
 .note {{ margin:0; padding:10px 14px; border-bottom:1px dashed var(--line); color:var(--muted); font-size:.9rem }}
 .steps {{ margin:0 0 20px; padding-inline-start:20px; color:var(--muted) }}
 </style></head><body><main>
-<h1>פוסט XDA: InKognito alpha 6</h1>
+<h1>פוסט XDA: InKognito {VER}</h1>
 <p class="sub">מקומי, לא פורסם. כל קטע מועתק כ-BBCode. בעורך של XDA עוברים קודם למצב BBCode (כפתור ה-[ ]).</p>
 <ol class="steps">
 <li>כותרת השרשור: הקטע הראשון.</li>

@@ -1,6 +1,7 @@
 # Testing the InKognito installer (developer notes, not for the release zip)
 
-Scope: `inkognito.py` and its front ends `flash-inkognito.sh` / `.bat`, alpha 3. Date: 2026-10-27. Host: macOS,
+Scope: `inkognito.py` and its front ends `flash-inkognito.sh` / `.bat`. Written for alpha 3 (2026-10-27), last
+brought up to date for beta 1 (2026-11-12). Host: macOS,
 Python 3.12. Rule: the real adb and mtkclient are never run by the tests. `dev-tests/test_inkognito.py` puts
 `dev-tests/mockbin` first in a reduced PATH and checks that `adb` and `mtk` resolve to the mocks; the mocks log
 every call. (The alpha 2 fastboot scripts and their tests are in `work/rom/release-src-old/`.)
@@ -9,7 +10,7 @@ every call. (The alpha 2 fastboot scripts and their tests are in `work/rom/relea
 
 | Suite | What it does | Inputs (private, read-only) |
 |---|---|---|
-| `unit` | boot/vbmeta/logo builders against the tested alpha 2 images and the stock dump; boot classification (stock, InKognito, Magisk-only, changed kernel); `super` extents (WRITE 2 offset, multi-extent, too big, the stale slot-0 table from Phase A); misc slot and Virtual A/B status; the write guards (forbidden partitions, partitions and ranges not on the write list) | `BIGME_B1051C_system_dump`, `release/…alpha2…`, `work/sdcard`, a device backup (`TEST_DEVICE_BACKUP`) |
+| `unit` | the progress meter (parser on mtkclient's real progress lines from the 2026-11-11 logs, terminal and piped rendering, `Mtk._run` with a stand-in mtkclient: the log keeps every line); boot/vbmeta/logo builders against the tested boot and logo images and the stock dump; boot classification (stock, InKognito, Magisk-only, changed kernel); `super` extents (WRITE 2 offset, multi-extent, too big, the stale slot-0 table from Phase A); misc slot and Virtual A/B status; the write guards (forbidden partitions, partitions and ranges not on the write list) | `BIGME_B1051C_system_dump`, `work/rom/out/images` (the tested boot.img / logo.img; `TEST_TESTED_IMAGES` overrides), `work/sdcard`, a device backup (`TEST_DEVICE_BACKUP`) |
 | `cli` | `--help`, dry runs of install/update/restore-stock/backup, bad arguments, a damaged kit file; asserts **no mock was called** by any dry run, that a dry run without a backup prints no concrete `super` offset, and that a dry run with `--backup` computes `wo 0x72d00000` | as above + `TEST_REL` (a release folder) |
 | `sim` | the whole install → update → install-again (refused) → restore-stock → readback error, against `dev-tests/mockbin/mtk`: a mock mtkclient whose "tablet" is a sparse disk image laid out by the real GPT (`fixtures/printgpt.txt`, UUIDs removed) and filled from the stock dump | as above; about 25 GB temp space |
 
@@ -27,8 +28,16 @@ Run: `TEST_REL=<release folder> TEST_DEVICE_BACKUP=<backups/device-…> python3 
   stock + SD cap); its ramdisk equals the tested alpha 2 ramdisk entry for entry; only the gzip bytes differ.
 - `redact()` removes every ME_ID / SOC_ID / CID / Serial value from the developer's earlier real mtkclient logs.
 
+## Results 2026-11-11 / 2026-11-12 (alpha 7, beta 1)
+
+- `unit` + `cli` + `sim` on the assembled release: 115 passed, 0 failed (alpha 7, both builds).
+- Real hardware (owner's tablet): `restore-stock` and a full `install` of alpha 6 (2026-11-11, run by the owner from
+  the downloaded zip), `update` to alpha 5, alpha 6 and alpha 7. The progress meter ran against the real mtkclient in
+  piped mode (a line every 10%); the self-updating terminal line has only been checked by the unit tests.
+- After `mtk reset` the tablet stays off until the power button is held for 3 to 5 seconds (every flash so far).
+
 ## Not run
 
 - Windows (`flash-inkognito.bat`, mtkclient on Windows): no Windows machine.
 - Python 3.8–3.11: only 3.12 was used (the code avoids newer syntax).
-- The real mtkclient against the tablet, and therefore the first boot of a built image.
+- The image without Google apps on a tablet.

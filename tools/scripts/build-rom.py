@@ -23,7 +23,7 @@
       system-nogapps.img (tag = alpha3 etc. from the name; build them with "image ... work/rom/out/<tag>").
       Refuses when RELEASE_NAME differs from inkognito.py / the docs, or when the dev-tests fail.
 """
-import hashlib, json, os, shutil, struct, subprocess, sys, tarfile, tempfile
+import hashlib, json, os, re, shutil, struct, subprocess, sys, tarfile, tempfile
 
 BIGME = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 E2 = "/opt/homebrew/opt/e2fsprogs/sbin"
@@ -37,7 +37,27 @@ SYSTEM_EDITS = [
     # 2026-10-21: USB debugging stays on, but a computer must be allowed on the tablet first (RSA prompt)
     ("/system/build.prop", [(b"ro.adb.secure=0\n", b"ro.adb.secure=1\n", 2)]),
     ("/system/system_ext/etc/build.prop", [(b"ro.adb.secure=0\n", b"ro.adb.secure=1\n", 1)]),
+    # 2026-11-11 (alpha 7): the device names itself. ro.product.model is derived from the product partition's model
+    # (USB, Settings > About > Model, Google's device list; device_name and the Bluetooth name follow it on a first
+    # boot). NEVER edit ro.build.fingerprint (gate of the eink-compat and launcher3 modules, Google Play) or
+    # ro.product.device / name / brand / manufacturer.
+    ("/system/product/etc/build.prop", [(b"ro.product.product.model=TrebleDroid vanilla\n",
+                                         b"ro.product.product.model=" + b"InKognito B1051C Pro" + b"\n", 1)]),
 ]
+GSI_DISPLAY_ID = b"ro.build.display.id=treble_arm64_bvS-userdebug 16 BP2A.250605.031.A3 250617 test-keys\n"
+
+
+def system_edits(version):
+    """SYSTEM_EDITS plus "Build number" (ro.build.display.id) made from the payload version:
+    InKognito-B1051CPro-alpha7-20261111 -> "InKognito alpha 7 (TrebleDroid 16, BP2A.250605.031.A3)"."""
+    m = re.fullmatch(r"InKognito-B1051CPro-(alpha|beta|rc)(\d+)-\d{8}", version)
+    if not m:
+        die(f"payload version {version!r}: cannot make a build number from it")
+    disp = f"ro.build.display.id=InKognito {m[1]} {m[2]} (TrebleDroid 16, BP2A.250605.031.A3)\n".encode()
+    edits = [(p, list(r)) for p, r in SYSTEM_EDITS]
+    edits[0][1].append((GSI_DISPLAY_ID, disp, 1))
+    assert edits[0][0] == "/system/build.prop"
+    return edits
 
 
 NO_GAPPS = [False]          # build-rom.py image --no-gapps
@@ -189,7 +209,7 @@ def build_image(payload, out):
 
     edited = []
     tmpd = tempfile.mkdtemp()
-    for i, (fsp, reps) in enumerate(SYSTEM_EDITS):
+    for i, (fsp, reps) in enumerate(system_edits(open(os.path.join(payload, "VERSION")).read().strip())):
         orig = os.path.join(tmpd, f"orig{i}")
         debugfs(img, f"dump {fsp} {orig}\n", write=False)
         data = open(orig, "rb").read()

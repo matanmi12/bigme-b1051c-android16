@@ -1,5 +1,6 @@
 #!/bin/bash
 # Launcher3QuickStep with a transparent taskbar on a third-party home screen (org.b1051c.l3.HomeBg).
+# + a "Clear all" button in the Recents action row (org.b1051c.l3.ClearAllAction, hook in RecentsView.init()).
 # Input: the GSI's own Launcher3QuickStep.apk (sha bf92e8d5…, from work/gsi/system-td-arm64-vanilla.img).
 # Steps: apktool d -r (code only) -> smali hooks in TaskbarDragLayerController.updateBackgroundAlpha() and
 # FallbackTaskbarUIController.createAnimToRecentsState(), and no shared uninitialised TaskbarUIController.DEFAULT
@@ -95,6 +96,21 @@ for name in ("TaskbarControllers.smali", "TaskbarActivityContext.smali", "Taskba
     s = SGET.sub(lambda _: new, s)
     open(p, "w").write(s)
     print("DEFAULT replaced:", name, r)
+
+# d) "Clear all" in the Recents action row (2026-11-11): the end of RecentsView.init(actionsView, ...) hands the view
+#    and its OverviewActionsView to ClearAllAction.attach(), which adds the button next to Screenshot / Split.
+RV = "Lcom/android/quickstep/views/RecentsView;"
+p = os.path.join(d, "..", "..", "quickstep", "views", "RecentsView.smali")
+s = open(p).read()
+anchor = ("    iput-object p3, p0, " + RV + "->mDesktopRecentsTransitionController:"
+          "Lcom/android/launcher3/desktop/DesktopRecentsTransitionController;\n\n    return-void\n")
+assert s.count(anchor) == 1, "RecentsView.init() end not found exactly once"
+hook = anchor.replace("    return-void\n",
+    "    iget-object v0, p0, " + RV + "->mActionsView:Lcom/android/quickstep/views/OverviewActionsView;\n\n"
+    "    invoke-static {p0, v0}, Lorg/b1051c/l3/ClearAllAction;->attach(Ljava/lang/Object;Ljava/lang/Object;)V\n\n"
+    "    return-void\n")
+open(p, "w").write(s.replace(anchor, hook))
+print("hook inserted: RecentsView.init")
 PY
 
 # 3. rebuild, add the helper dex (stored, like the original classes.dex), align, sign

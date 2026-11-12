@@ -20,7 +20,7 @@ are added the way Magisk's own boot_patch.sh adds them. Licensed MIT, like the r
 """
 import argparse, datetime, gzip, hashlib, json, os, re, shlex, shutil, struct, subprocess, sys, threading, time, zlib
 
-RELEASE_NAME = "InKognito-B1051CPro-alpha6-20261110"
+RELEASE_NAME = "InKognito-B1051CPro-beta1-20261112"
 HERE = os.path.dirname(os.path.abspath(__file__))
 KIT = os.path.join(HERE, "kit")
 
@@ -577,7 +577,7 @@ class Mtk:
         if re.sub(r"_[ab]$", "", name) in FORBIDDEN:
             raise Stop("internal safety check: refusing to touch partition %s" % name)
 
-    def _run(self, args, catch=False, adb=None):
+    def _run(self, args, catch=False, adb=None, what=None, verify=False):
         if not self.cmd:
             if not self.dry:
                 raise Stop("mtkclient not found. Install it (INSTALL.md, step 2) and either make the 'mtk' command "
@@ -607,12 +607,17 @@ class Mtk:
                 "for about 10 to 12 seconds with the USB cable connected (or press it if the tablet is off).")
             threading.Thread(target=kick, daemon=True).start()
         out = []
+        meter = Meter(what, verify)
         with open(self.log, "a") as fh:
             for l in p.stdout:
                 l = redact(l)
-                out.append(l); fh.write(l)
+                fh.write(l)                          # the log keeps every line, progress included
+                if meter.feed(l):                    # a progress line: one self-updating line on the screen
+                    continue
+                out.append(l)
                 if catch and not self.connected:
                     sys.stdout.write("    | " + l)
+        meter.close()
         rc = p.wait()
         text = "".join(out)
         if rc != 0:
@@ -632,15 +637,15 @@ class Mtk:
                 seen[m.group(1)] = (int(m.group(2), 16), int(m.group(3), 16))
         return seen
 
-    def read_parts(self, parts, files):
+    def read_parts(self, parts, files, verify=False):
         for p in parts:
             self._guard_name(p)
             if p not in GPT:
                 raise Stop("internal: read of unknown partition %s" % p)
-        self._run(["r", ",".join(parts), ",".join(files)])
+        self._run(["r", ",".join(parts), ",".join(files)], what=parts[0] if len(parts) == 1 else None, verify=verify)
 
-    def read_range(self, off, length, path):
-        self._run(["ro", hex(off), hex(length), path])
+    def read_range(self, off, length, path, what=None, verify=False):
+        self._run(["ro", hex(off), hex(length), path], what=what, verify=verify)
 
     def write_part(self, part, path):
         self._guard_name(part)
@@ -648,17 +653,171 @@ class Mtk:
             raise Stop("internal safety check: %s is not on this run's write list" % part)
         if not self.dry and os.path.getsize(path) != GPT[part][1]:
             raise Stop("internal safety check: %s image has the wrong size" % part)
-        self._run(["w", part, path])
+        self._run(["w", part, path], what=part)
 
-    def write_range(self, off, length, path):
+    def write_range(self, off, length, path, what=None):
         if not any(a <= off and off + length <= a + n for a, n in self.allowed_ranges):
             raise Stop("internal safety check: range %#x+%#x is not on this run's write list" % (off, length))
         if not self.dry and os.path.getsize(path) != length:
             raise Stop("internal safety check: file for range %#x has the wrong size" % off)
-        self._run(["wo", hex(off), hex(length), path])
+        self._run(["wo", hex(off), hex(length), path], what=what)
 
     def reset(self):
         self._run(["reset"])
+
+
+# ---- progress meter ---------------------------------------------------------------------------------------------
+# mtkclient reports a transfer on one line that it overwrites in place ("\r"); through the pipe every update arrives
+# as a line of its own (a 12.5 GB backup: 240,000 of them). Real lines (install test, 2026-11-11):
+#   Done |----------| 0.2% Read: (0x10000/0x2800000),0.00 MB/s                        first line of every transfer
+#   Progress: |----------| 0.1% Write: (0x400000/0x12D780000), 14.01 MB/s 05m:38s left
+#   Progress: |████------| 38.0% Read: (0xF30000/0x2800000), 27.85 MB/s
+# All of them go to the log, as before. The screen gets one line that updates itself:
+#   writing system_b part 1: 12% (279 MB / 2.27 GB), 7.5 MB/s, ~5 min left
+_PROGRESS = re.compile(r"^\s*(?:Progress:|Done)\s*\|[^|]*\|\s*([\d.]+)%\s*(Read|Write):?\s*"
+                       r"\(0x([0-9A-Fa-f]+)/0x([0-9A-Fa-f]+)\),\s*([\d.]+)\s*([KMGT]?B)/s"
+                       r"(?:\s+(?:(\d+)h:)?(?:(\d+)m:)?(\d+)s left)?")
+_DUMPING = re.compile(r'Dumping partition "([\w.-]+)"')
+_UNITS = {"B": 1, "KB": 1 << 10, "MB": 1 << 20, "GB": 1 << 30, "TB": 1 << 40}
+
+
+def parse_progress(line):
+    """One mtkclient progress line -> {"kind": "read" | "write", "pct", "done", "total" (bytes), "speed" (bytes/s,
+    mtkclient's own momentary figure), "left" (seconds, or None when mtkclient printed none)}; None for other lines."""
+    m = _PROGRESS.match(line)
+    if not m or int(m.group(4), 16) == 0:
+        return None
+    left = None
+    if m.group(9) is not None:
+        left = int(m.group(7) or 0) * 3600 + int(m.group(8) or 0) * 60 + int(m.group(9))
+    return {"kind": m.group(2).lower(), "pct": float(m.group(1)), "done": int(m.group(3), 16),
+            "total": int(m.group(4), 16), "speed": float(m.group(5)) * _UNITS[m.group(6)], "left": left}
+
+
+def fmt_size(n):
+    """Bytes in the units mtkclient and these docs use (1 GB = 1024 MB)."""
+    if n < 1 << 30:
+        return "%d MB" % round(n / (1 << 20))
+    return ("%.2f GB" if n < 100 << 30 else "%.0f GB") % (n / (1 << 30))
+
+
+def fmt_time(sec):
+    sec = int(round(sec))
+    if sec < 60:
+        return "%d s" % sec
+    if sec < 3600:
+        return "%d min %02d s" % divmod(sec, 60)
+    return "%d h %02d min" % divmod(sec // 60, 60)
+
+
+def fmt_left(sec):
+    if sec < 55:
+        return "~%d s left" % max(5, 5 * int(round(sec / 5.0)))
+    if sec < 3570:
+        return "~%d min left" % int(round(sec / 60.0))
+    return "~%d h %02d min left" % divmod(int(round(sec / 60.0)), 60)
+
+
+class Meter:
+    """Turns mtkclient's progress lines into one line on the screen. On a terminal the line updates in place and a
+    summary stays for the long transfers; without a terminal (output piped to a file) a plain line is printed every
+    10 %. Speed and time left are measured here from the bytes done: mtkclient's own figures jump around and its
+    hours are wrong."""
+    MIN_LIVE = 32 << 20        # terminal: a shorter transfer is over before its line could be read
+    MIN_PLAIN = 256 << 20      # no terminal: only the long transfers are reported
+    KEEP_S = 10                # terminal: a transfer that took at least this long leaves a summary line
+    REDRAW_S = 0.2
+
+    def __init__(self, what=None, verify=False, out=None, tty=None, clock=time.monotonic, width=None):
+        self.what, self.verify, self.clock = what, verify, clock
+        self.out = out if out is not None else sys.stdout
+        if tty is None:
+            try:
+                tty = self.out.isatty()
+            except Exception:
+                tty = False
+        self.tty = tty
+        self.width = width or (shutil.get_terminal_size((100, 24)).columns if tty else 0)
+        self.name = what
+        self.cur, self.done = None, 0   # (kind, total) of the transfer in progress, its bytes so far
+        self.live = 0              # length of the line now on the terminal (0 = none)
+
+    def feed(self, line):
+        """True when the line was a progress line (shown here, not to be printed by the caller)."""
+        p = parse_progress(line)
+        if not p:
+            m = _DUMPING.search(line)
+            if m and not self.what:
+                self.name = m.group(1)
+            return False
+        now = self.clock()
+        if self.cur != (p["kind"], p["total"]) or p["done"] < self.done:      # a new transfer starts
+            self._end_line()
+            self.cur, self.t0, self.d0 = (p["kind"], p["total"]), now, p["done"]
+            self.drawn, self.decile, self.finished = None, 0, False
+        self.done = p["done"]
+        if self.finished:
+            return True
+        if p["done"] >= p["total"]:
+            self.finished = True
+            self._finish(p, now)
+        elif self.tty:
+            if p["total"] >= self.MIN_LIVE and (self.drawn is None or now - self.drawn >= self.REDRAW_S):
+                self._draw(self._text(p, now))
+                self.drawn = now
+        elif p["total"] >= self.MIN_PLAIN and min(int(p["pct"]) // 10, 9) > self.decile:
+            self.decile = int(p["pct"]) // 10
+            self.out.write("    " + self._text(p, now) + "\n"); self.out.flush()
+        return True
+
+    def close(self):
+        """The mtkclient call ended: a line still on the terminal (a transfer that stopped early) stays visible."""
+        self._end_line()
+
+    def _label(self, kind):
+        verb = "checking" if self.verify and kind == "read" else {"read": "reading", "write": "writing"}[kind]
+        return "%s %s" % (verb, self.name or "the tablet")
+
+    def _speed(self, p, now):
+        el = now - self.t0
+        return (p["done"] - self.d0) / el if el >= 1 and p["done"] > self.d0 else p["speed"]
+
+    def _text(self, p, now):
+        sp = self._speed(p, now)
+        s = "%s: %d%% (%s / %s)" % (self._label(p["kind"]), min(int(p["pct"]), 99), fmt_size(p["done"]), fmt_size(p["total"]))
+        if sp > 0:
+            s += ", %.1f MB/s, %s" % (sp / (1 << 20), fmt_left((p["total"] - p["done"]) / sp))
+        return s
+
+    def _finish(self, p, now):
+        el = now - self.t0
+        s = "%s: 100%% (%s) in %s" % (self._label(p["kind"]), fmt_size(p["total"]), fmt_time(el))
+        if el >= 1:
+            s += ", %.1f MB/s" % ((p["total"] - self.d0) / el / (1 << 20))
+        if self.tty:
+            if self.live and el >= self.KEEP_S:
+                self._draw(s); self.out.write("\n"); self.live = 0
+            else:
+                self._erase()
+        elif p["total"] >= self.MIN_PLAIN:
+            self.out.write("    " + s + "\n")
+        self.out.flush()
+
+    def _draw(self, text):
+        text = ("    " + text)[:max(20, self.width - 1)]
+        self.out.write("\r" + text + " " * max(0, self.live - len(text)))
+        self.out.flush()
+        self.live = len(text)
+
+    def _erase(self):
+        if self.live:
+            self.out.write("\r" + " " * self.live + "\r")
+            self.live = 0
+
+    def _end_line(self):
+        if self.live:
+            self.out.write("\n"); self.out.flush()
+            self.live = 0
 
 
 # mtkclient prints the chip's unique IDs and the storage serial while it connects; they never reach the log or screen
@@ -770,7 +929,7 @@ class Run:
     def write_verified(self, part, path):
         self.mtk.write_part(part, path)
         rb = os.path.join(self.work, part + ".readback.bin")
-        self.mtk.read_parts([part], [rb])
+        self.mtk.read_parts([part], [rb], verify=True)
         if not self.dry:
             if sha256_file(rb) != sha256_file(path):
                 raise Stop("READBACK MISMATCH on %s" % part)
@@ -778,9 +937,9 @@ class Run:
             note("%s written and read back OK" % part)
 
     def write_range_verified(self, off, length, path, label):
-        self.mtk.write_range(off, length, path)
+        self.mtk.write_range(off, length, path, what=label)
         rb = os.path.join(self.work, "range.readback.bin")
-        self.mtk.read_range(off, length, rb)
+        self.mtk.read_range(off, length, rb, what=label, verify=True)
         if not self.dry:
             if sha256_file(rb) != sha256_file(path):
                 raise Stop("READBACK MISMATCH on %s" % label)
@@ -872,6 +1031,19 @@ class Run:
 # instead of starting Android.
 POWER_ON = ("    If the screen stays dark or shows the charging picture: hold the power button for 3 to 5 seconds and let go.\n"
             "    Do not hold it for 10 seconds or longer, and do not press it while the boot logo or animation is shown.")
+
+# The restart in step 3 is a precaution: on the first clean install (2026-11-11) the modules' SELinux rules were only
+# loaded from the second start on. alpha 7 / beta 1 fix that; the step stays until another clean install has proven it.
+AFTER_INSTALL = """
+Done. What happens next:
+  1. The first start takes about 5 minutes and restarts once by itself. On e-ink the screen can sit unchanged
+     for a minute or more.
+  2. Google setup appears (without Google: Android's own setup), then InKognito Setup.
+     If the tablet asks "Allow USB debugging?", tap Allow.
+  3. After InKognito Setup, restart the tablet ONCE: hold the power button, then tap Restart.
+  4. When you no longer need the computer, turn USB debugging off (Settings > System > Developer options).
+Keep the backup folder %s: it is your way back (python inkognito.py restore-stock --backup <folder>)."""
+
 
 def ask(prompt):
     """input(), but a closed stdin (no terminal, piped input already used up) cancels instead of a traceback.
@@ -1053,10 +1225,7 @@ def cmd_install(run, update=False):
         say("\nDone. The first start of the new release installs the updated InKognito layer and restarts once by "
             "itself. Your apps and settings stay.")
     else:
-        say("\nDone. The first start takes about 5 minutes and restarts once by itself, then Google setup (or, "
-            "without Google, Android's own setup) appears. On e-ink the screen can sit unchanged for a minute or more.\n"
-            "Keep the backup folder %s: it is your way back (python inkognito.py restore-stock --backup <folder>)."
-            % (run.backup.path if run.backup else ""))
+        say(AFTER_INSTALL % (run.backup.path if run.backup else ""))
 
 
 def cmd_restore(run):
