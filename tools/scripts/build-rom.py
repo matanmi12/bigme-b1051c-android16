@@ -118,6 +118,16 @@ def stage_payload(spec_path, out):
     open(os.path.join(out, "VERSION"), "w").write(spec["version"] + "\n")
     open(os.path.join(out, "MANIFEST.sha256"), "w").write("\n".join(sorted(manifest)) + "\n")
     print(f"staged {len(manifest)} entries -> {out}")
+    # 2026-11-12: the icon pack and the icons module of alpha 2..7 were built from the developer's tablet and named
+    # the apps installed there. The private scanner (not in the public repo) knows the developer's identifiers and
+    # app names; when it is present, a payload with such a hit is refused (third-party noise kinds are not strict).
+    scan = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pii_scan.py")
+    if os.path.isfile(scan):
+        strict = "owner_app,serial,gsf_id,ssid,home_path,company,name_word,sd_uuid,book"
+        r = subprocess.run([sys.executable, "-I", scan, "--strict", strict, out], capture_output=True, text=True)
+        if r.returncode:
+            die("the staged payload carries the developer's own identifiers or app list:\n" + r.stdout[-2500:])
+        print("payload scan: no developer identifiers or personal apps")
 
 
 # ---- image -----------------------------------------------------------------------------------------------------

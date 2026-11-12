@@ -82,9 +82,10 @@
    "sha256": "ddcb9b82d7436272"
   },
   {
-   "dest": "modules/50-b1051c-icons-v0.1.9.zip",
-   "src": "work/icons-bigme/module/b1051c-icons-v0.1.9.zip",
-   "sha256": "cd9be30c208424ea"
+   "dest": "modules/50-b1051c-icons-v0.1.9-rom1.zip",
+   "src": "work/rom/modules/b1051c-icons-v0.1.9-rom1.zip",
+   "sha256": "c5305bf7472f7b7b",
+   "note": "ROM variant: 0.1.9 without the overlays for apps the developer installed for themselves"
   },
   {
    "dest": "modules/60-b1051c-gapps-suw3.zip",
@@ -126,8 +127,9 @@
   },
   {
    "dest": "apps/org.b1051c.iconpack.apk",
-   "src": "work/icons-bigme/iconpack/BigmeIconPack.apk",
-   "sha256": "2440220d66741ae5"
+   "src": "work/icons-bigme/iconpack/BigmeIconPack-rom-beta1.apk",
+   "sha256": "374920dcf990ed3f",
+   "note": "ROM pack (build-iconpack.py --rom): system + ROM apps and a fixed list of widely used apps; never built from user-installed apps"
   },
   {
    "dest": "apps/app.lawnchair.apk",

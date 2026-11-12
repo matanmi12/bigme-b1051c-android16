@@ -25,13 +25,14 @@ stock ROM as a DSU, Bluetooth/audio in depth. Notes in [`docs/STATUS.md`](docs/S
 [`research/phase-d/FEATURES-NEXT.md`](research/phase-d/FEATURES-NEXT.md) (in Hebrew).
 
 Update (2026-11-12): the layer is packaged as the **InKognito** ROM with its own installer; sources in [`rom/`](rom),
-user docs in [`rom/release-src/`](rom/release-src) (README, INSTALL, KNOWN-ISSUES, CHANGELOG). Latest release:
-alpha 6 (see Releases). A full install, updates and going back to stock have been run on one tablet. Since then:
-a HeliBoard keyboard with an e-ink key look and its own refresh handling
-([`apps/heliboardoverlay/`](apps/heliboardoverlay), [`module/b1051c-heliboard/`](module/b1051c-heliboard)), "Clear
-all" in Recents ([`launcher3patch/`](launcher3patch)), the device name, installer progress, and module updates
-through the Magisk app ([`rom/updates/`](rom/updates)). alpha 7 ran as an update on the developer's tablet and was
-not released; **beta 1 is in preparation** and has not been run on a tablet yet.
+user docs in [`rom/release-src/`](rom/release-src) (README, INSTALL, KNOWN-ISSUES, CHANGELOG). A full install, updates
+and going back to stock have been run on one tablet. Since alpha 6: a HeliBoard keyboard with an e-ink key look and
+its own refresh handling ([`apps/heliboardoverlay/`](apps/heliboardoverlay),
+[`module/b1051c-heliboard/`](module/b1051c-heliboard)), "Clear all" in Recents ([`launcher3patch/`](launcher3patch)),
+the device name, installer progress, and module updates through the Magisk app ([`rom/updates/`](rom/updates)).
+**beta 1** runs on the developer's tablet (installed as an update on 2026-11-12); its fresh-install path still waits
+for a second clean install, so **no release is published at the moment**. Open items:
+[`docs/BETA1-FINDINGS.md`](docs/BETA1-FINDINGS.md) (in Hebrew).
 
 ## ⚠️ Read before trying
 This was done on one unit and **can brick yours**. Facts that matter on this device (details in the runbook):

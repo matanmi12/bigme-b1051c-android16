@@ -13,6 +13,8 @@ New:
   Contacts stays.
 - **Icons for the keyboard and Calendar** in the style of the rest of the icon set (Settings, Recents and, with
   the icon pack, the home screen).
+- **Icon pack and icons module made for the ROM:** they cover the system apps, the apps InKognito installs and a
+  fixed list of widely used apps (Kindle, Chrome, Gmail, Keep, Photos, Docs and the like).
 - **Module updates through the Magisk app.** The display module (eink-compat), the Launcher3 module and the
   keyboard module carry an update link. When a newer version of one of them is published, the Magisk app offers
   it, so a fix can arrive without a full release. Nothing is downloaded unless you accept the update. This has

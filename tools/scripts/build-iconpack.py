@@ -3,6 +3,12 @@
 
   python3 -I tools/scripts/build-iconpack.py           # render frames on the device, build, install
   python3 -I tools/scripts/build-iconpack.py --no-install
+  python3 -I tools/scripts/build-iconpack.py --rom     # the pack that ships in the ROM -> iconpack/BigmeIconPack-rom.apk
+
+--rom (2026-11-12): the pack of alpha 2..7 was the developer's own pack, so its appfilter named every app installed
+on the developer's tablet. The ROM pack covers only (a) system apps and the apps the ROM itself installs, as found
+on the connected tablet, and (b) the fixed list ROM_KNOWN below: widely used apps Bigme drew an icon for, with the
+launcher component each of them really has. An app a user installed is never read into it.
 
 Per launchable app (component):
   - Bigme icon (work/icons-bigme/rules.json + approved custom icons in work/icons-bigme/custom/approved.json)
@@ -22,6 +28,25 @@ AJ = SDK + "/platforms/android-35/android.jar"
 KS = BIGME + "/work/app/debug.keystore"
 PKG = "org.b1051c.iconpack"
 LAUNCHERS = {"app.lawnchair", "com.android.launcher3"}
+# apps the ROM installs by itself (provision-stage2.sh APPS) besides the system image
+ROM_APPS = {"app.lawnchair", "org.koreader.launcher", "com.topjohnwu.magisk", "org.b1051c.einkctl", "org.b1051c.sleep"}
+# package, launcher activity: generic, widely used apps with a Bigme drawing (rules.json); components as installed from
+# Google Play / the GSI in 2026-10. Phone and Messaging are hidden by default since beta 1 but can be turned back on.
+ROM_KNOWN = [
+    ("com.amazon.kindle", "com.amazon.kindle.UpgradePage"),
+    ("com.android.chrome", "com.google.android.apps.chrome.Main"),
+    ("com.android.dialer", "com.android.dialer.main.impl.MainActivity"),
+    ("com.android.messaging", "com.android.messaging.ui.conversationlist.ConversationListActivity"),
+    ("com.google.android.apps.bard", "com.google.android.apps.bard.shellapp.BardEntryPointActivity"),
+    ("com.google.android.apps.chromecast.app", "com.google.android.apps.chromecast.app.DiscoveryActivity"),
+    ("com.google.android.apps.docs", "com.google.android.apps.docs.app.NewMainProxyActivity"),
+    ("com.google.android.apps.docs.editors.docs", "com.google.android.apps.docs.app.NewMainProxyActivity"),
+    ("com.google.android.apps.photos", "com.google.android.apps.photos.home.HomeActivity"),
+    ("com.google.android.calendar", "com.android.calendar.AllInOneActivity"),
+    ("com.google.android.gm", "com.google.android.gm.ConversationListActivityGmail"),
+    ("com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"),
+    ("com.google.android.keep", "com.google.android.keep.activities.BrowseActivity"),
+]
 
 
 def run(*a, **kw):
@@ -46,6 +71,7 @@ def bigme_source(pkg, rules, approved):
 
 def main():
     install = "--no-install" not in sys.argv
+    rom = "--rom" in sys.argv
     rules = json.load(open(os.path.join(ICONS, "rules.json")))
     ap = os.path.join(ICONS, "custom", "approved.json")
     approved = json.load(open(ap)) if os.path.exists(ap) else {}
@@ -63,6 +89,18 @@ def main():
                                check=True, capture_output=True).stdout)
     run("tar", "-xf", os.path.join(tmp, "frames.tar"), "-C", tmp)
     index = json.load(open(os.path.join(tmp, "frames", "index.json")))
+    if rom:
+        sys_pk = {l.split(":", 1)[1].strip() for l in adb("pm list packages -s").splitlines() if ":" in l}
+        keep = [e for e in index if e["package"] in sys_pk | ROM_APPS]
+        for e in index:
+            if e not in keep: print(f"{e['package']:45s} left out (--rom: not a system or ROM app)")
+        index = keep
+        have = {(e["package"], e["activity"]) for e in index}
+        for pk, act in ROM_KNOWN:
+            if (pk, act) in have: continue
+            if not bigme_source(pk, rules, approved):
+                print(f"{pk:45s} left out (--rom: no Bigme drawing)"); continue
+            index.append({"package": pk, "activity": act, "file": None})
 
     # 2. resources + appfilter
     res = os.path.join(tmp, "res")
@@ -125,7 +163,7 @@ def main():
     run(BT + "/aapt2", "link", "-o", os.path.join(tmp, "u.apk"), "-I", AJ, "--manifest", man, os.path.join(tmp, "res.zip"),
         "--min-sdk-version", "31", "--target-sdk-version", "35", "--version-code", str(code), "--version-name", "1." + str(code))
     run(BT + "/zipalign", "-f", "-p", "4", os.path.join(tmp, "u.apk"), os.path.join(tmp, "a.apk"))
-    out = os.path.join(ICONS, "iconpack", "BigmeIconPack.apk")
+    out = os.path.join(ICONS, "iconpack", "BigmeIconPack-rom.apk" if rom else "BigmeIconPack.apk")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     run(BT + "/apksigner", "sign", "--ks", KS, "--ks-pass", "pass:android", "--ks-key-alias", "einkctl", "--out", out,
         os.path.join(tmp, "a.apk"))
