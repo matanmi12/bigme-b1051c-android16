@@ -27,8 +27,8 @@ Linux; on Windows use `flash-inkognito.bat` where a step says `bash flash-inkogn
 |---|---|---|
 | 1 | Check the firmware in the tablet's settings ([details](#1-check-your-tablet)). | **B1051C_R_4.9.0** |
 | 2 | Install Python 3.8+, mtkclient and platform-tools ([details](#2-install-python-mtkclient-and-platform-tools)), then run `mtk --help`. | mtkclient's help text |
-| 3 | Unlock the bootloader ([details](#3-unlock-the-bootloader)). This usually erases the tablet. | The tablet starts stock Android again. |
-| 4 | Turn on USB debugging. Bigme hides the Build number, so use Activity Launcher ([details](#4-turn-on-usb-debugging)). Connect the cable, run `adb devices`, and tap Allow on the tablet. | One line that ends in `device` |
+| 3 | Turn on **USB debugging** and **OEM unlocking**. Bigme hides the Build number, so use Activity Launcher ([details](#3-turn-on-usb-debugging-and-oem-unlocking)). Connect the cable, run `adb devices`, and tap Allow on the tablet. | One line that ends in `device` |
+| 4 | Unlock the bootloader: `adb reboot bootloader`, then `fastboot flashing unlock` ([details](#4-unlock-the-bootloader)). This erases the tablet. Do not root it. Afterwards turn on USB debugging again (step 3). | The tablet starts stock Android again, and `adb devices` shows `device`. |
 | 5 | Charge the tablet to 50% or more and free about 20 GB on the computer ([details](#5-charge-the-tablet-and-free-disk-space)). | |
 | 6 | Unzip the download and open a terminal in the unzipped folder ([details](#6-download-and-unzip)): `cd InKognito-B1051CPro-beta1-20261112` | |
 | 7 | Dry run ([details](#7-dry-run)): `bash flash-inkognito.sh --dry-run` | A list of every step. Nothing is run on the tablet. |
@@ -45,10 +45,10 @@ Later: [updating](#11-updating-to-a-newer-release) keeps your data, and
 
 ## How the install works
 
-The installer, `inkognito.py`, talks to the tablet through **mtkclient**, the tool that also unlocks its
-bootloader. mtkclient reaches the tablet through MediaTek's boot ROM, which works even when Android does not.
-There is no fastboot step: on this tablet, fastboot's "fastbootd" mode once started on the wrong slot and left the
-tablet in a boot loop.
+The installer, `inkognito.py`, talks to the tablet through **mtkclient**. mtkclient reaches the tablet through
+MediaTek's boot ROM, which works even when Android does not. The installer has no fastboot step: on this tablet,
+fastboot's "fastbootd" mode once started on the wrong slot and left the tablet in a boot loop. (The one-time
+bootloader unlock in step 4 uses the bootloader's own fastboot mode, which is a different mode.)
 
 In order, the installer:
 
@@ -79,8 +79,8 @@ other device-specific partitions.
 
 1. [Check your tablet](#1-check-your-tablet)
 2. [Install Python, mtkclient and platform-tools](#2-install-python-mtkclient-and-platform-tools)
-3. [Unlock the bootloader](#3-unlock-the-bootloader)
-4. [Turn on USB debugging](#4-turn-on-usb-debugging)
+3. [Turn on USB debugging and OEM unlocking](#3-turn-on-usb-debugging-and-oem-unlocking)
+4. [Unlock the bootloader](#4-unlock-the-bootloader)
 5. [Charge the tablet and free disk space](#5-charge-the-tablet-and-free-disk-space)
 6. [Download and unzip](#6-download-and-unzip)
 7. [Dry run](#7-dry-run)
@@ -97,7 +97,7 @@ other device-specific partitions.
 ## 1. Check your tablet
 
 You need a **Bigme B1051C Pro** on stock firmware **B1051C_R_4.9.0**. Look at the firmware version in the tablet's
-settings (About / system information), or, once adb works (step 4): `adb shell getprop ro.build.versionName`.
+settings (About / system information), or, once adb works (step 3): `adb shell getprop ro.build.versionName`.
 On an older firmware, update with Bigme's own system update first, and let it finish completely (restart once
 after it).
 
@@ -106,30 +106,21 @@ after it).
 - **Python 3.8 or newer**: <https://www.python.org/downloads/> (on Windows, tick "Add python.exe to PATH").
   macOS and most Linux distributions already have it: `python3 --version`.
 - **mtkclient**: <https://github.com/bkerler/mtkclient>. Follow its README, including the USB driver steps for
-  Windows and the udev rules for Linux. If you unlocked the bootloader with it, it is already set up. Check that it
-  runs: `mtk --help` (or `python mtk.py --help` in its folder).
-- **platform-tools** (adb), Google's official package: <https://developer.android.com/tools/releases/platform-tools>.
-  The installer uses adb for its checks and to restart the tablet into the mode mtkclient needs. (fastboot is not
-  used.)
+  Windows and the udev rules for Linux. Check that it runs: `mtk --help` (or `python mtk.py --help` in its
+  folder).
+- **platform-tools** (adb and fastboot), Google's official package:
+  <https://developer.android.com/tools/releases/platform-tools>. The installer uses adb for its checks and to
+  restart the tablet into the mode mtkclient needs. fastboot is needed only once, to unlock the bootloader
+  (step 4).
 
 If the `mtk` command is not on your PATH, tell the installer where mtkclient is, for example
 `--mtk "python C:\mtkclient\mtk.py"`, or put the `mtkclient` folder next to `inkognito.py`.
 
-## 3. Unlock the bootloader
+## 3. Turn on USB debugging and OEM unlocking
 
-InKognito needs an **unlocked bootloader**; the installer does not unlock it. Guide:
-<https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/>. It is written for the HiBreak Pro;
-according to the BigmeB1051CProPatcher project by dbenjaminb, the steps are the same for the B1051C Pro.
-Unlocking usually erases the tablet.
-
-After unlocking, the bootloader shows an "orange state" notice for about 5 seconds at every start. The e-ink
-screen may not display it. That is normal.
-
-## 4. Turn on USB debugging
-
-USB debugging is switched on in Android's **Developer options**, which appear after you tap **Build number**
-seven times. Bigme's own Settings app on the stock firmware does not show the screen with the Build number, so
-open it with a small helper app:
+USB debugging and OEM unlocking are switched on in Android's **Developer options**, which appear after you tap
+**Build number** seven times. Bigme's own Settings app on the stock firmware does not show the screen with the
+Build number, so open it with a small helper app:
 
 1. Connect the tablet to Wi-Fi.
 2. In the tablet's browser, open <https://f-droid.org/packages/de.szalkowski.activitylauncher/> and download
@@ -140,11 +131,40 @@ open it with a small helper app:
 4. Tap **Build number** seven times, until it says you are a developer.
 5. Open **Developer options** (in Settings under System, or again through Activity Launcher) and switch
    **USB debugging** on.
+6. In the same list, switch **OEM unlocking** on. The bootloader unlock in step 4 needs it. If your bootloader
+   is already unlocked, you can skip this.
 
 Alternative to step 2: the app "Settings Shortcut" from Google Play does the same job.
 
 Then connect the tablet directly (no hub), run `adb devices` on the computer, and accept
 **"Allow USB debugging?"** on the tablet. `adb devices` must list one device with the word `device`.
+
+## 4. Unlock the bootloader
+
+InKognito needs an **unlocked bootloader**; the installer does not unlock it. If yours is already unlocked, go
+on to step 5. **Unlocking erases everything on the tablet's internal storage**, so copy what you want to keep
+first.
+
+1. With USB debugging and OEM unlocking on (step 3) and the cable connected, run `adb reboot bootloader`. The
+   tablet restarts into the bootloader's fastboot mode. The e-ink screen may not show anything.
+2. Run `fastboot devices`. It must list one device.
+3. Run `fastboot flashing unlock`. If the tablet asks you to confirm, follow its prompt.
+4. Run `fastboot reboot`. The tablet starts stock Android, erased.
+5. Set it up again and turn USB debugging on again (step 3). OEM unlocking does not matter any more.
+
+Use only `adb reboot bootloader` here, never `adb reboot fastboot`: that starts "fastbootd", the mode that
+once left this tablet on the wrong slot (see "How the install works").
+
+These steps are section 1 of the HiBreak Pro guide by Vasu's Journal,
+<https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/>. The developer's B1051C Pro was
+unlocked this way. **Do only that section, not its rooting sections.** InKognito does not need them. The
+installer makes the boot image itself, on your computer: it starts from the stock boot image of your own tablet
+and adds Magisk the way Magisk's own patcher does. Do **not** download the ready-made, already-patched boot
+image linked in that guide, and do not flash any other patched boot image. A rooted boot image is also refused
+by the installer (see Troubleshooting, "the tablet's boot image is not the stock one").
+
+After unlocking, the bootloader shows an "orange state" notice for about 5 seconds at every start. The e-ink
+screen may not display it. That is normal.
 
 ## 5. Charge the tablet and free disk space
 

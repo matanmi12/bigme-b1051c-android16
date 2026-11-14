@@ -33,7 +33,7 @@ Release `InKognito-B1051CPro-beta1-20261112`. This list will change as testers r
 - **After the installer's final restart the tablet may stay dark or show the charging picture.** Hold power for
   3 to 5 seconds and let go; once more if the charging picture shows (INSTALL.md, Troubleshooting).
 - **USB debugging on Bigme's stock firmware** needs a helper app, because Bigme's settings hide the Build
-  number (INSTALL.md, section 4).
+  number (INSTALL.md, section 3).
 - **mtkclient has to catch the tablet while it starts.** The installer restarts it over adb; without adb, hold
   power for about 12 seconds with the cable connected. The e-ink screen may show nothing while this happens.
 - **Only over stock firmware 4.9.0.** The installer builds the InKognito boot image from your stock one; a boot

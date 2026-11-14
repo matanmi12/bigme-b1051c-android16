@@ -36,6 +36,10 @@ on 2026-11-12; a fresh install of beta 1 has not been run on a tablet yet. Open 
 
 ## ⚠️ Read before trying
 This was done on one unit and **can brick yours**. Facts that matter on this device (details in the runbook):
+- **Bootloader unlock** (needed first; erases the tablet): Developer options → **OEM unlocking** on, then
+  `adb reboot bootloader` and `fastboot flashing unlock` (the bootloader's fastboot, not fastbootd). Step by step:
+  [`rom/release-src/INSTALL.md`](rom/release-src/INSTALL.md), steps 3–4. Do **not** flash someone else's
+  pre-patched boot image: the Magisk boot is built from your own stock `boot` (the InKognito installer does it).
 - Virtual A/B; only **slot B** holds a bootable system after the stock OTAs. **Never `set_active a`**, and do not use
   **fastbootd** (it switched the device to slot A).
 - All writes were done with **mtkclient** (preloader/DA), each with a pre-read and read-back: 1 byte in `vbmeta_b`

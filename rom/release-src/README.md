@@ -82,11 +82,13 @@ _Screenshots will be added here._
 
 - A **Bigme B1051C Pro**. No other model.
 - Stock firmware **B1051C_R_4.9.0**. No other firmware version.
-- An **unlocked bootloader**. InKognito does not unlock it for you. Guide:
-  <https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/> (written for the HiBreak Pro; the
-  steps are the same for the B1051C, according to the BigmeB1051CProPatcher project by dbenjaminb).
-- A computer with **Windows, macOS or Linux**, **Python 3.8+**, **mtkclient** (<https://github.com/bkerler/mtkclient>,
-  the tool used to unlock the bootloader), Android **platform-tools** (adb), a good USB cable and about 20 GB free.
+- An **unlocked bootloader**. InKognito does not unlock it for you: turn on **OEM unlocking** in Developer
+  options, then `adb reboot bootloader` and `fastboot flashing unlock` (INSTALL.md, steps 3 and 4; section 1 of
+  <https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/>, written for the HiBreak Pro). Do
+  **not** root the tablet and do not flash the guide's ready-made boot image: the installer makes the boot
+  image itself from your own stock one, with Magisk.
+- A computer with **Windows, macOS or Linux**, **Python 3.8+**, **mtkclient** (<https://github.com/bkerler/mtkclient>),
+  Android **platform-tools** (adb, and fastboot for the unlock), a good USB cable and about 20 GB free.
 - Battery at **50% or more**.
 - You accept that **everything on the tablet's internal storage is erased**. Your microSD card is not touched.
   The installer backs up every partition it changes first; that backup is your way back.
@@ -116,9 +118,10 @@ vendor, dtbo, lk, preloader, tee, seccfg, nvram, waveform or any other partition
 The ten-step quick start with what you should see after each step, and the full instructions, are in
 **[INSTALL.md](INSTALL.md)**. In short:
 
-1. Unlock the bootloader. Install Python, mtkclient and platform-tools.
-2. Turn on **USB debugging** on the tablet. Bigme's settings hide the Build number; the free app Activity
-   Launcher (F-Droid) opens that screen. Connect the tablet and charge it to at least 50%.
+1. Install Python, mtkclient and platform-tools. Turn on **USB debugging** and **OEM unlocking** on the
+   tablet. Bigme's settings hide the Build number; the free app Activity Launcher (F-Droid) opens that screen.
+2. Unlock the bootloader (`adb reboot bootloader`, `fastboot flashing unlock`; this erases the tablet), set it
+   up again, turn USB debugging on again, connect it and charge it to at least 50%.
 3. Unzip the download and run the installer from that folder. Try a dry run first; it only prints what
    would happen:
    - macOS / Linux: `bash flash-inkognito.sh --dry-run`, then `bash flash-inkognito.sh`

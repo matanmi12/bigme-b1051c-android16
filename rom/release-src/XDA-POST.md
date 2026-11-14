@@ -70,8 +70,8 @@ Not included: other Google or Amazon apps (get them from the Play Store), and an
 [SIZE=5][B]Requirements[/B][/SIZE]
 [LIST]
 [*]Bigme B1051C Pro only, on stock firmware [B]B1051C_R_4.9.0[/B] only
-[*][B]Unlocked bootloader[/B]. Guide (written for the HiBreak Pro; the steps are the same for the B1051C according to dbenjaminb's BigmeB1051CProPatcher): [URL]https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/[/URL]
-[*]A computer with Windows, macOS or Linux, Python 3.8+, mtkclient ([URL]https://github.com/bkerler/mtkclient[/URL]), Android platform-tools (adb) and about 20 GB free
+[*][B]Unlocked bootloader[/B]: OEM unlocking on in Developer options, then adb reboot bootloader and fastboot flashing unlock (section 1 of [URL]https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/[/URL], written for the HiBreak Pro; the B1051C Pro unlocks the same way). [B]Do only the unlock part:[/B] do not root the tablet and do not flash the guide's ready-made boot image. The installer makes the boot image itself from your own stock one, with Magisk, and refuses a rooted one.
+[*]A computer with Windows, macOS or Linux, Python 3.8+, mtkclient ([URL]https://github.com/bkerler/mtkclient[/URL]), Android platform-tools (adb, and fastboot for the unlock) and about 20 GB free
 [*]Battery at 50% or more
 [*]Everything on internal storage is erased. The microSD card is not touched.
 [/LIST]
@@ -87,8 +87,9 @@ Each zip contains one system image (system.img with Google Play, or system-nogap
 [SIZE=5][B]Installation[/B][/SIZE]
 INSTALL.md in the zip starts with a ten-step quick start that says what you should see after each step, followed by the full instructions, updating, troubleshooting and how to go back. Short version:
 [LIST=1]
-[*]Unlock the bootloader. Install Python, mtkclient and platform-tools.
-[*]Turn on USB debugging. Bigme's stock settings hide the Build number: install Activity Launcher from F-Droid ([URL]https://f-droid.org/packages/de.szalkowski.activitylauncher/[/URL]) in the tablet's browser, open Settings > About tablet with it, tap Build number seven times, then switch on USB debugging in Developer options. (Alternative: "Settings Shortcut" from Google Play.)
+[*]Install Python, mtkclient and platform-tools.
+[*]Turn on USB debugging and OEM unlocking. Bigme's stock settings hide the Build number: install Activity Launcher from F-Droid ([URL]https://f-droid.org/packages/de.szalkowski.activitylauncher/[/URL]) in the tablet's browser, open Settings > About tablet with it, tap Build number seven times, then switch on USB debugging and OEM unlocking in Developer options. (Alternative: "Settings Shortcut" from Google Play.)
+[*]Unlock the bootloader: adb reboot bootloader, fastboot flashing unlock, fastboot reboot. This erases the tablet; set it up again and turn USB debugging on again. (Never adb reboot fastboot: fastbootd once left this tablet on the wrong slot.)
 [*]Connect the tablet, accept "Allow USB debugging?", charge it to at least 50%.
 [*]Unzip, open a terminal in that folder, and do a dry run first (it runs neither mtkclient nor adb):
 [CODE]bash flash-inkognito.sh --dry-run      (macOS / Linux)

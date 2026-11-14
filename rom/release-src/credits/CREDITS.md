@@ -61,8 +61,8 @@ License details for each part are in [LICENSES.md](LICENSES.md). The license tex
 
 ## Guides and tools
 
-- **Vasu's Journal** (vbh.ai), the bootloader unlock and root guide for the HiBreak Pro, whose steps also apply to
-  the B1051C Pro: https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/
+- **Vasu's Journal** (vbh.ai), the bootloader unlock and root guide for the HiBreak Pro, whose unlock steps also
+  apply to the B1051C Pro: https://vbh.ai/unlocking-the-bootloader-and-rooting-the-hibreak-pro/
 - **dbenjaminb**, [BigmeB1051CProPatcher](https://github.com/dbenjaminb/BigmeB1051CProPatcher): confirmed that the
   same unlock steps work on the B1051C Pro.
 - **bkerler**, [mtkclient](https://github.com/bkerler/mtkclient): full partition backups before flashing. We
